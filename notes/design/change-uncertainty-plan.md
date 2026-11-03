@@ -143,6 +143,8 @@ method.
 - Local fits reduce height RMSE versus the generic profiles, but R² is modest and annual
   growth still needs repeat measurements.
 - The fit is recorded in `notes/reports/detection-and-allometry-2021.md`.
+- True growth calibration is blocked by data: 9,322 unique UBC tree IDs, zero with more
+  than one measurement date. See `notes/reports/growth-calibration-readiness.md`.
 
 ### Goal
 

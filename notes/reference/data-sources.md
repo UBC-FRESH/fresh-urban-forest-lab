@@ -128,6 +128,17 @@ The Metro Vancouver 2022 classified product is a separate regional source.
 - Strong cross-check for the City product because vegetation is explicitly classified.
 - Trap: large download; plan a tile-level catalog and a local cache, not a single fetch.
 
+## City of Vancouver LiDAR tiles
+
+- The Opendatasoft API exposes 181 tile records per year.
+- `fresh-urban-forest tiles vancouver --year 2018 --bbox ...` and the same for 2022 return
+  the intersecting tiles. The UBC pilot bbox returns **26 tiles** for each year.
+- Direct downloads go to `webtransfer.vancouver.ca`, which currently returns a Cloudflare
+  403 to automated clients. The manifest is still useful for a browser-assisted or manual
+  fetch; the `tiles fetch` path is ready once the host is accessible.
+- Do not treat a failed automated fetch as a missing dataset. Record the manifest and the
+  manual retrieval method.
+
 ## City of Vancouver public trees
 
 - Source: `opendata.vancouver.ca`, dataset `public-trees`.

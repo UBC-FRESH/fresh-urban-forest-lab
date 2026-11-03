@@ -87,6 +87,16 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Added `notes/reports/observed-change-ubc.md` with the comparison and caveats.
 - Dashboard: GREEN.
 
+### P5.0 Vancouver tile discovery and calibration readiness
+
+- Added `vancouver.py` and `fresh-urban-forest tiles vancouver` for the City 2013/2018/2022
+  LiDAR indexes. The UBC pilot bbox returns 26 tiles per year.
+- Recorded that `webtransfer.vancouver.ca` returns Cloudflare 403 to automated clients; the
+  manifest remains usable for a browser-assisted or manual fetch.
+- Added `notes/reports/growth-calibration-readiness.md`: 9,322 unique tree IDs, zero with
+  more than one measurement date, so annual growth calibration is blocked by data.
+- Dashboard: GREEN.
+
 ### P1.7 External LiDAR tile discovery
 
 - Added `fresh_urban_forest.tiles`, `lidarbc`, and `canelevation` modules with one

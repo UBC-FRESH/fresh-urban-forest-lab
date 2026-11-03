@@ -58,6 +58,7 @@ from fresh_urban_forest.validation import (
     write_tuning,
     write_validation,
 )
+from fresh_urban_forest.vancouver import discover_vancouver_tiles
 
 app = typer.Typer(help="Open urban-forest LiDAR, inventory, growth, and 3-D decision support.")
 catalog_app = typer.Typer(help="Inspect and materialize public data sources.")
@@ -117,6 +118,7 @@ LAYER_OPTION = typer.Option(4, "--layer", help="LidarBC ArcGIS layer id (4 is po
 INDEX_OPTION = typer.Option(..., "--index", help="CanElevation tile-index GeoPackage.")
 PROJECT_OPTION = typer.Option(None, "--project", help="Optional CanElevation project filter.")
 PROVIDER_OPTION = typer.Option(None, "--provider", help="Optional CanElevation provider filter.")
+YEAR_OPTION = typer.Option(2022, "--year", help="Vancouver LiDAR year: 2013, 2018, or 2022.")
 MANIFEST_OPTION = typer.Option(..., "--manifest", help="Tile manifest JSON.")
 MAX_DISTANCE_OPTION = typer.Option(5.0, "--max-distance", help="Match distance in metres.")
 MIN_HEIGHTS_OPTION = typer.Option(
@@ -366,6 +368,31 @@ def tiles_lidarbc(
     tiles = discover_lidarbc_tiles(parsed, layer_id=layer)
     write_tile_manifest(make_manifest("lidarbc", parsed, tiles), out)
     console.print(f"LidarBC: {len(tiles)} tiles -> {out}")
+
+
+@tiles_app.command("vancouver")
+def tiles_vancouver(
+    bbox: str = BBOX_OPTION,
+    out: Path = OUT_OPTION,
+    year: int = YEAR_OPTION,
+) -> None:
+    """Discover City of Vancouver LiDAR tiles.
+
+    Parameters
+    ----------
+    bbox : str
+        ``min_lon,min_lat,max_lon,max_lat``.
+    out : Path
+        Output tile manifest JSON.
+    year : int
+        LiDAR year.
+    """
+    parsed = _parse_bbox(bbox)
+    if parsed is None:
+        raise typer.BadParameter("--bbox is required")
+    tiles = discover_vancouver_tiles(year, parsed)
+    write_tile_manifest(make_manifest(f"vancouver-lidar-{year}", parsed, tiles), out)
+    console.print(f"Vancouver {year}: {len(tiles)} tiles -> {out}")
 
 
 @tiles_app.command("canelevation")

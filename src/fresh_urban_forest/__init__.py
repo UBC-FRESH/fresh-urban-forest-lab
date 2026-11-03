@@ -16,6 +16,7 @@ from fresh_urban_forest.allometry import (
     is_native_species,
     species_group,
 )
+from fresh_urban_forest.calibration import fit_allometry, fit_height_diameter
 from fresh_urban_forest.catalog import Catalog, DatasetSource, load_catalog
 from fresh_urban_forest.change import CanopyChange, canopy_change, change_grid
 from fresh_urban_forest.change_product import build_change_product
@@ -61,6 +62,8 @@ from fresh_urban_forest.terrain import (
     canopy_volume_m3,
     read_raster,
 )
+from fresh_urban_forest.validation import tune_detection, validate_detection
+from fresh_urban_forest.vancouver import discover_vancouver_tiles
 
 __all__ = [
     "Building",
@@ -84,6 +87,7 @@ __all__ = [
     "apply_edits",
     "build_change_product",
     "build_dataset",
+    "build_field_packet",
     "build_scene",
     "build_terrain_grid",
     "canopy_change",
@@ -99,10 +103,13 @@ __all__ = [
     "dataset_summary",
     "detect_trees",
     "detected_trees_geojson",
+    "discover_vancouver_tiles",
     "enrich_trees",
     "estimate_crown_width_m",
     "estimate_dbh_cm",
     "estimate_height_m",
+    "fit_allometry",
+    "fit_height_diameter",
     "grow_tree",
     "is_native_species",
     "load_boundary",
@@ -116,7 +123,9 @@ __all__ = [
     "recommend_planting",
     "scenario_summary",
     "species_group",
+    "tune_detection",
+    "validate_detection",
     "write_dataset",
 ]
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"

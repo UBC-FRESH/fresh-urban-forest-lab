@@ -23,12 +23,14 @@ The demo runs offline from a small, derived core-campus dataset.
   carbon.
 - **Detects individual crowns.** A local-maximum plus marker-controlled watershed
   implementation on the CHM, with no R or Cython dependency.
-- **Compares repeat measures.** Gain, loss, stable canopy, net change, and mean height
-  change between two dates, with the acquisition caveats kept visible.
+- **Compares repeat measures.** Three UBC products on a common 2 km mask: 2015↔2016,
+  2015↔2021, and 2016↔2021, with gain/loss/net and height change kept visible.
 - **Projects scenarios.** Plant, remove, replace, and move trees; grow them year by year;
   compare canopy, carbon, diversity, cost, and a transparent DSS score.
 - **Edits a 2D and 3D landscape.** MapLibre for the map, Three.js instanced trees over a
   terrain mesh for the 3D scene, shared selection, and a FastAPI backend.
+- **Answers questions locally.** The `+ Ask` assistant runs the local OpenCode CLI with
+  live dataset, tree, and scenario context.
 
 ## Quick start
 
@@ -58,8 +60,9 @@ fresh-urban-forest build \
 
 ## Status
 
-The prototype is complete through Phase 4 (verify and demo) on `main`. Phase 5 (release
-and public deployment) and Phase 6 (operate and maintain) are planned. `ROADMAP.md` is the
+The prototype is complete through Phase 4 (verify and demo) on `main`. Phase 5 is a
+release candidate at v0.2.0; the tag, release, and Pages deploy await approval. Phase 6
+(operate and maintain) is planned. `ROADMAP.md` is the
 plan of record; the GitHub issues carry the live status.
 
 ## Repository map

@@ -15,7 +15,8 @@ Keep private material out of this directory.
 - `design/change-uncertainty-plan.md`: observed change, completeness, validation, and calibration plan.
 - `reports/detection-and-allometry-2021.md`: first detection validation and local allometry results.
 - `reports/field-validation-packet.md`: Main Mall field packet and verification protocol.
-- `reports/observed-change-ubc.md`: 2015↔2021 and 2016↔2021 observed-change products.
+- `reports/observed-change-ubc.md`: same-mask 2015↔2016, 2015↔2021, and 2016↔2021 observed-change products.
+- `reports/growth-calibration-readiness.md`: why the current inventory cannot support growth calibration.
 - `releases/v0.2.0.md`: draft release notes; not tagged.
 - `reference/data-sources.md`: public UBC, Vancouver, and Metro Vancouver sources, with
   coverage, licences, and traps.

@@ -87,6 +87,11 @@ before downloading:
      --provider BC \
      --out data/raw/tiles/canelevation_ubc.json
 
+   fresh-urban-forest tiles vancouver \
+     --year 2022 \
+     --bbox -123.28,49.23,-123.21,49.29 \
+     --out data/raw/tiles/vancouver_2022_ubc.json
+
    fresh-urban-forest tiles fetch \
      --manifest data/raw/tiles/lidarbc_ubc.json \
      --dest data/raw/tiles

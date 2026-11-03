@@ -41,6 +41,16 @@ in ``fresh_urban_forest.models``; the analysis functions are grouped by concern.
 .. automodule:: fresh_urban_forest.dss
    :members:
 
+.. automodule:: fresh_urban_forest.calibration
+
+.. automodule:: fresh_urban_forest.validation
+
+.. automodule:: fresh_urban_forest.field_packet
+
+.. automodule:: fresh_urban_forest.vancouver
+
+.. automodule:: fresh_urban_forest.tiles
+
 .. automodule:: fresh_urban_forest.dataset
    :members:
 
