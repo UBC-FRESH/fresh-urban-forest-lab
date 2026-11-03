@@ -267,10 +267,16 @@
             <span>Saved Pareto archive</span>
             <select id="opt-saved"></select>
           </label>
-          <div class="button-row">
-            <button id="optimize-load-saved" class="button ghost" type="button">Load saved archive</button>
+          <p class="hint" id="opt-saved-meta">A scenario is one plan. A saved run loads the whole Pareto front.</p>
+          <label class="field">
+            <span>Archive name</span>
+            <input id="opt-archive-name" type="text" maxlength="80" placeholder="Name this archive">
+          </label>
+          <div class="button-row wrap">
+            <button id="optimize-load-saved" class="button ghost" type="button">Load</button>
+            <button id="optimize-rename" class="button ghost" type="button" disabled>Rename</button>
+            <button id="optimize-delete-saved" class="button danger" type="button" disabled>Delete</button>
           </div>
-          <p class="hint" id="opt-saved-hint">A scenario is one plan. A saved run loads the whole Pareto front.</p>
           <div class="inline-fields">
             <label class="field"><span>Sites</span><input id="opt-sites" type="number" value="24" min="4" max="120"></label>
             <label class="field"><span>Scalarizations</span><input id="opt-scalarizations" type="number" value="18" min="2" max="80"></label>
@@ -309,8 +315,18 @@
           <div id="pareto-info" class="pareto-info">
             <p class="muted">Run an optimization to build a front, then orbit, slice, and select a solution.</p>
           </div>
+          <div class="button-row">
+            <button id="pareto-pin" class="button ghost" type="button" disabled>Pin solution</button>
+            <button id="pareto-clear-pins" class="button ghost" type="button" disabled>Clear pins</button>
+          </div>
+          <div id="pareto-compare" class="pareto-compare"></div>
           <button id="pareto-load" class="button primary" type="button" disabled>Load selected as scenario</button>
         </aside>
+        <div id="pareto-axis-labels" class="pareto-axis-labels">
+          <span id="pareto-axis-x">X: --</span>
+          <span id="pareto-axis-y">Y: --</span>
+          <span id="pareto-axis-z">Z: --</span>
+        </div>
         <div id="pareto-legend" class="change-legend"></div>
       </div>
 

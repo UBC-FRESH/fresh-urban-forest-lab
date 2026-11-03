@@ -41,6 +41,7 @@ const state = {
     pollTimer: null,
     filtered: [],
     savedRuns: [],
+    pinned: [],
   },
   previewYear: 0,
   playTimer: null,
@@ -180,10 +181,7 @@ async function init() {
       selectTree,
       switchView,
       loadLight,
-      selectPareto: (index) => {
-        const solution = state.optimize.result?.archive?.solutions?.[index];
-        if (solution) renderParetoInfo(solution);
-      },
+      selectPareto: selectParetoByIndex,
       paretoScreenPositions,
       selectedSummary: () => ({
         id: state.optimize.selected?.solution_id || "",
@@ -847,8 +845,7 @@ function bindControls() {
   $("new-scenario").addEventListener("click", newScenario);
   $("scenario-select").addEventListener("change", async (event) => {
     if (event.target.value) {
-      await loadScenario(event.target.value);
-      switchView("scene");
+      await loadScenario(event.target.value, { focusPareto: true });
     } else {
       showBaseline();
       switchView("map");
@@ -1420,8 +1417,16 @@ function evidenceBadge(evidence) {
 function initOptimizeControls() {
   $("optimize-run").addEventListener("click", runOptimization);
   $("optimize-load-saved").addEventListener("click", loadSavedArchive);
+  $("optimize-rename").addEventListener("click", renameSavedArchive);
+  $("optimize-delete-saved").addEventListener("click", deleteSavedArchive);
+  $("opt-saved").addEventListener("change", () => {
+    const job = state.optimize.savedRuns.find((item) => item.job_id === $("opt-saved").value);
+    if (job) updateSavedArchiveMeta(job);
+  });
   $("optimize-reset").addEventListener("click", resetParetoView);
   $("pareto-load").addEventListener("click", loadParetoScenario);
+  $("pareto-pin").addEventListener("click", pinSelectedSolution);
+  $("pareto-clear-pins").addEventListener("click", clearPinnedSolutions);
   refreshSavedRuns();
   for (const id of ["pareto-x", "pareto-y", "pareto-z", "pareto-colour", "pareto-size"]) {
     $(id).addEventListener("change", drawPareto);
@@ -1515,7 +1520,11 @@ async function runOptimization() {
     state.optimize.jobId = payload.job_id;
     state.optimize.result = null;
     state.optimize.selected = null;
+    state.optimize.pinned = [];
     $("pareto-load").disabled = true;
+    $("pareto-pin").disabled = true;
+    $("pareto-clear-pins").disabled = true;
+    $("pareto-compare").innerHTML = "";
     clearParetoMesh();
     $("pareto-slice").value = "0";
     $("pareto-slice-value").textContent = "all";
@@ -1578,15 +1587,84 @@ async function refreshSavedRuns() {
       ? jobs
           .map(
             (job) =>
-              `<option value="${escapeHtml(job.job_id)}">${escapeHtml(job.job_id)} · ${formatNumber(job.archive_size)} solutions · HV ${formatNumber(job.hypervolume || 0, 4)}</option>`
+              `<option value="${escapeHtml(job.job_id)}">${escapeHtml(job.name || job.job_id)} · ${formatNumber(job.archive_size)} solutions · HV ${formatNumber(job.hypervolume || 0, 4)}</option>`
           )
           .join("")
       : '<option value="">No saved runs yet — run one first</option>';
     if (jobs.some((job) => job.job_id === current)) select.value = current;
+    if (jobs.length) {
+      const selected = jobs.find((job) => job.job_id === select.value) || jobs[0];
+      select.value = selected.job_id;
+      updateSavedArchiveMeta(selected);
+    } else {
+      updateSavedArchiveMeta(null);
+    }
     $("optimize-load-saved").disabled = jobs.length === 0;
   } catch (_error) {
     $("opt-saved").innerHTML = '<option value="">Saved runs unavailable</option>';
     $("optimize-load-saved").disabled = true;
+    updateSavedArchiveMeta(null);
+  }
+}
+
+function updateSavedArchiveMeta(job) {
+  const enabled = Boolean(job);
+  $("optimize-rename").disabled = !enabled;
+  $("optimize-delete-saved").disabled = !enabled;
+  if (!job) {
+    $("opt-archive-name").value = "";
+    $("opt-saved-meta").textContent = "A scenario is one plan. A saved run loads the whole Pareto front.";
+    return;
+  }
+  $("opt-archive-name").value = job.name || job.job_id;
+  const parts = [
+    job.dataset_id || "dataset",
+    `${formatNumber(job.horizon)}-year`,
+    `$${formatNumber(job.budget_cad)} budget`,
+    `max ${formatNumber(job.max_sites)} sites`,
+  ];
+  if (job.saved_utc) parts.push(job.saved_utc.slice(0, 10));
+  $("opt-saved-meta").textContent = `${parts.join(" · ")}. A scenario is one plan; this archive is the whole front.`;
+}
+
+async function renameSavedArchive() {
+  const jobId = $("opt-saved").value;
+  const name = $("opt-archive-name").value.trim();
+  if (!jobId || !name) return;
+  try {
+    await api(`api/optimize/${encodeURIComponent(jobId)}`, {
+      method: "PATCH",
+      body: JSON.stringify({ name }),
+    });
+    await refreshSavedRuns();
+    toast("Archive renamed");
+  } catch (error) {
+    toast(`Could not rename the archive: ${error.message}`, true);
+  }
+}
+
+async function deleteSavedArchive() {
+  const jobId = $("opt-saved").value;
+  if (!jobId || !window.confirm(`Delete saved archive ${jobId}?`)) return;
+  try {
+    await api(`api/optimize/${encodeURIComponent(jobId)}`, { method: "DELETE" });
+    if (state.optimize.jobId === jobId) {
+      state.optimize.jobId = null;
+      state.optimize.result = null;
+      state.optimize.selected = null;
+      state.optimize.pinned = [];
+      clearParetoMesh();
+      $("pareto-load").disabled = true;
+      $("pareto-pin").disabled = true;
+      $("pareto-clear-pins").disabled = true;
+      $("pareto-compare").innerHTML = "";
+      $("pareto-info").innerHTML = '<p class="muted">Archive deleted. Load or run another front.</p>';
+      $("optimize-status").textContent = "idle";
+    }
+    await refreshSavedRuns();
+    toast("Archive deleted");
+  } catch (error) {
+    toast(`Could not delete the archive: ${error.message}`, true);
   }
 }
 
@@ -1599,9 +1677,12 @@ async function loadSavedArchive() {
     if (!payload.result) throw new Error("saved result is unavailable");
     state.optimize.jobId = jobId;
     state.optimize.result = payload.result;
+    state.optimize.pinned = [];
     renderParetoArchive(payload.result);
     $("optimize-status").textContent = "loaded";
-    toast(`Loaded ${jobId}`);
+    const job = state.optimize.savedRuns.find((item) => item.job_id === jobId);
+    updateSavedArchiveMeta(job || null);
+    toast(`Loaded ${job?.name || jobId}`);
   } catch (error) {
     $("optimize-status").textContent = "load error";
     toast(`Could not load the saved archive: ${error.message}`, true);
@@ -1615,8 +1696,10 @@ function renderParetoArchive(result) {
     return;
   }
   populateParetoSelects(archive.objectives || []);
+  state.optimize.pinned = [];
   renderParetoStats({ status: "done", progress: result.scalarizations, total: result.scalarizations, result });
   drawPareto();
+  renderParetoCompare();
   $("optimize-status").textContent = "done";
 }
 
@@ -1704,6 +1787,9 @@ function drawPareto() {
   chart.mesh = mesh;
   state.optimize.mesh = mesh;
   const labels = archive.objectives.map((objective) => objective.label || objective.name);
+  $("pareto-axis-x").textContent = `X: ${labels[xIndex] || ""}`;
+  $("pareto-axis-y").textContent = `Y: ${labels[yIndex] || ""}`;
+  $("pareto-axis-z").textContent = `Z: ${labels[zIndex] || ""}`;
   $("pareto-legend").innerHTML =
     `<span><i class="change-swatch" style="background:hsl(210 68% 48%)"></i>low ${escapeHtml(labels[colourIndex] || "")}</span>` +
     `<span><i class="change-swatch" style="background:hsl(73 68% 48%)"></i>high ${escapeHtml(labels[colourIndex] || "")}</span>` +
@@ -1755,6 +1841,92 @@ function renderParetoInfo(solution) {
     <p class="hint">Planted sites: ${formatNumber((solution.planted || []).length)} · robustness ${formatNumber(Number(solution.robustness || 0), 2)} · id ${escapeHtml(solution.solution_id)}</p>`;
   state.optimize.selected = solution;
   $("pareto-load").disabled = false;
+  $("pareto-pin").disabled = false;
+}
+
+function pinSelectedSolution() {
+  const solution = state.optimize.selected;
+  if (!solution) return;
+  if (state.optimize.pinned.some((item) => item.solution_id === solution.solution_id)) return;
+  if (state.optimize.pinned.length >= 3) state.optimize.pinned.shift();
+  state.optimize.pinned.push(solution);
+  renderParetoCompare();
+  toast(`Pinned ${solution.solution_id.slice(0, 8)}`);
+}
+
+function clearPinnedSolutions() {
+  state.optimize.pinned = [];
+  renderParetoCompare();
+}
+
+function selectParetoByIndex(index) {
+  const solution = state.optimize.result?.archive?.solutions?.[index];
+  if (solution) renderParetoInfo(solution);
+}
+
+async function focusParetoPoint(scenarioName) {
+  const match = /^Pareto ([0-9a-f]{6,})/i.exec(scenarioName || "");
+  if (!match) return false;
+  const prefix = match[1].toLowerCase();
+  const findIndex = (result) => {
+    const solutions = result?.archive?.solutions || [];
+    return solutions.findIndex((solution) =>
+      String(solution.solution_id || "").toLowerCase().startsWith(prefix)
+    );
+  };
+  if (state.optimize.result) {
+    const index = findIndex(state.optimize.result);
+    if (index >= 0) {
+      selectParetoByIndex(index);
+      return true;
+    }
+  }
+  try {
+    const listing = await api("api/optimize");
+    for (const job of (listing.jobs || []).filter((item) => item.status === "done")) {
+      const payload = await api(`api/optimize/${encodeURIComponent(job.job_id)}`);
+      const result = payload.result;
+      const index = findIndex(result);
+      if (index < 0) continue;
+      state.optimize.jobId = job.job_id;
+      state.optimize.result = result;
+      state.optimize.pinned = [];
+      renderParetoArchive(result);
+      selectParetoByIndex(index);
+      $("opt-saved").value = job.job_id;
+      updateSavedArchiveMeta(job);
+      return true;
+    }
+  } catch (_error) {
+    return false;
+  }
+  return false;
+}
+
+function renderParetoCompare() {
+  const pinned = state.optimize.pinned || [];
+  $("pareto-clear-pins").disabled = pinned.length === 0;
+  if (!pinned.length) {
+    $("pareto-compare").innerHTML = '<p class="hint">Pin up to three solutions to compare their objective vectors.</p>';
+    return;
+  }
+  const result = state.optimize.result;
+  const archive = result ? result.archive : null;
+  if (!archive) return;
+  const labels = archive.objectives.map((objective) => objective.label || objective.name);
+  const header = pinned.map((solution) => `<th class="pin-id">${escapeHtml(solution.solution_id.slice(0, 8))}</th>`).join("");
+  const rows = labels
+    .map((label, index) => {
+      const cells = pinned
+        .map((solution) => `<td>${formatNumber(Number(solution.objectives[index] || 0), 2)}</td>`)
+        .join("");
+      return `<tr><td>${escapeHtml(label)}</td>${cells}</tr>`;
+    })
+    .join("");
+  const planted = pinned
+    .map((solution) => `<td>${formatNumber((solution.planted || []).length)}</td>`)
+    .join("");
+  $("pareto-compare").innerHTML = `<table><thead><tr><th>Objective</th>${header}</tr></thead><tbody>${rows}<tr><td>Planted sites</td>${planted}</tr></tbody></table>`;
 }
 
 async function loadParetoScenario() {
@@ -2227,7 +2399,7 @@ function updateMapTrees() {
   }
 }
 
-async function loadScenario(scenarioId) {
+async function loadScenario(scenarioId, { focusPareto = false } = {}) {
   try {
     const scenario = await api(`/api/scenarios/${scenarioId}`);
     state.scenarioId = scenario.scenario_id;
@@ -2242,6 +2414,11 @@ async function loadScenario(scenarioId) {
     $("scenario-revision").textContent = `revision ${scenario.revision}`;
     renderEditList();
     await previewScenario();
+    if (focusPareto && (await focusParetoPoint(scenario.name))) {
+      switchView("optimize");
+      toast(`Loaded ${scenario.name} — source Pareto point selected`);
+      return;
+    }
     switchView("scene");
     toast(`Loaded ${scenario.name}`);
   } catch (error) {

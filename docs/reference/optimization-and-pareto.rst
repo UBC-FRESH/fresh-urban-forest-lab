@@ -100,7 +100,12 @@ A saved archive can also be produced outside the browser. For example:
      --local-iterations 10000 --workers 8
 
 Restart the service, or refresh the Optimize tab after the job finishes, and the archive
-appears in the dropdown.
+appears in the dropdown. Archives can be renamed or deleted from the panel. The panel shows
+the dataset, horizon, budget, site cap, and save date.
+
+Selecting a scenario named ``Pareto <solution>`` from the header jumps back to its source
+archive and highlights that point in the front. Pin up to three solutions to compare their
+objective vectors in a compact table.
 
 .. image:: /_static/pareto-explorer.png
    :alt: Optimize tab with an orbitable Pareto archive and a selected solution
@@ -127,9 +132,11 @@ API and CLI
 Endpoints:
 
 - ``POST /api/optimize`` starts a job.
-- ``GET /api/optimize`` lists jobs.
+- ``GET /api/optimize`` lists jobs and saved archives.
 - ``GET /api/optimize/{job}`` returns status and the full result.
 - ``GET /api/optimize/{job}/solutions`` returns the archive.
+- ``PATCH /api/optimize/{job}`` renames a saved archive.
+- ``DELETE /api/optimize/{job}`` deletes a saved archive.
 - ``POST /api/optimize/{job}/scenario`` loads a solution as a scenario.
 
 The optimizer is an optional extra:

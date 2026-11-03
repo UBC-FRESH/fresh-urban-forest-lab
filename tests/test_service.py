@@ -342,3 +342,9 @@ def test_optimization_job_and_scenario(tmp_path: Path) -> None:
     restored = reloaded.get(f"/api/optimize/{job_id}")
     assert restored.status_code == 200
     assert restored.json()["result"]["archive"]["solutions"]
+    renamed = client.patch(f"/api/optimize/{job_id}", json={"name": "Renamed archive"})
+    assert renamed.status_code == 200
+    assert renamed.json()["name"] == "Renamed archive"
+    deleted = client.delete(f"/api/optimize/{job_id}")
+    assert deleted.status_code == 200
+    assert not saved.exists()

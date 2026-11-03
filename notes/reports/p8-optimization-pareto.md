@@ -173,6 +173,11 @@ Headless Chromium at 1500 x 950 and 900 x 700:
 - completed jobs auto-save to `runtime/optimizations/` and reload through the **Saved
   Pareto archive** dropdown without re-running the solver, including the
   `full-campus-387` archive;
+- saved archives show dataset/horizon/budget/site-cap/date metadata and can be renamed or
+  deleted;
+- up to three solutions can be pinned and compared by objective vector;
+- selecting a `Pareto <id>` scenario from the header jumps back to its source archive and
+  selects that point;
 - selecting any scenario in the global dropdown from the Optimize tab switches to the 3D
   scene, so the loaded scenario is visible instead of leaving the user on an unchanged
   point cloud;

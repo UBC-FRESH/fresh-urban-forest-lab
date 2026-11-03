@@ -258,6 +258,9 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
   `runtime/optimizations/<job_id>.json`, loaded at startup, and available through the
   **Saved Pareto archive** dropdown. The full-campus 387-site archive loads instantly and
   can produce a 385-tree scenario.
+- Added archive metadata, rename/delete controls, a three-solution pin/compare table,
+  objective axis labels, and a jump-back link from a `Pareto <id>` scenario to its source
+  archive point.
 - Fixed the 3D scene ground alignment: the terrain mesh now uses the scene origin instead
   of the grid centre, so trees and buildings are no longer shifted about 1.4 km against the
   terrain; missing DEM cells are filled from their nearest valid neighbour instead of being

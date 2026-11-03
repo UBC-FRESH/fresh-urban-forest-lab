@@ -147,6 +147,7 @@ class ChatRequest(BaseModel):
 class OptimizationRequest(BaseModel):
     """A planting optimization request."""
 
+    name: str = Field(default="", max_length=80)
     sites: int = Field(default=24, ge=4, le=200)
     species: list[str] | None = None
     horizon: int = Field(default=20, ge=1, le=60)
@@ -165,6 +166,12 @@ class SolutionSelection(BaseModel):
     """A selected archive solution."""
 
     solution_id: str = Field(min_length=1, max_length=40)
+
+
+class OptimizationRename(BaseModel):
+    """A saved-archive rename request."""
+
+    name: str = Field(min_length=1, max_length=80)
 
 
 AGENT_GUIDE = """\
@@ -198,6 +205,8 @@ class OptimizationJob:
     ----------
     job_id : str
         Job identifier.
+    name : str
+        Human-readable archive name.
     status : str
         ``queued``, ``running``, ``done``, or ``error``.
     progress : int
@@ -216,9 +225,12 @@ class OptimizationJob:
         Start time.
     finished_utc : str
         Finish time, or an empty string.
+    saved_utc : str
+        Time the result was written to the runtime archive.
     """
 
     job_id: str
+    name: str
     status: str
     progress: int
     total: int
@@ -228,6 +240,7 @@ class OptimizationJob:
     request: dict[str, object]
     started_utc: str
     finished_utc: str = ""
+    saved_utc: str = ""
 
 
 @dataclass
@@ -1059,6 +1072,69 @@ def create_app(
         """
         return {"jobs": [_job_payload(job) for job in state.jobs.values()]}
 
+    @app.patch("/api/optimize/{job_id}")
+    def rename_optimization(job_id: str, payload: OptimizationRename) -> dict[str, object]:
+        """Rename a saved optimization archive.
+
+        Parameters
+        ----------
+        job_id : str
+            Job identifier.
+        payload : OptimizationRename
+            New archive name.
+
+        Returns
+        -------
+        dict
+            Updated job summary.
+
+        Raises
+        ------
+        fastapi.HTTPException
+            When the job is missing, running, or unsaved.
+        """
+        job = state.jobs.get(job_id)
+        if job is None:
+            raise HTTPException(status_code=404, detail="optimization job not found")
+        if job.result is None:
+            raise HTTPException(status_code=409, detail="optimization job is not complete")
+        job.name = payload.name.strip()
+        _save_optimization_result(state, job_id, job.result, name=job.name)
+        job.saved_utc = _utc_now()
+        return _job_payload(job)
+
+    @app.delete("/api/optimize/{job_id}")
+    def delete_optimization(job_id: str) -> dict[str, object]:
+        """Delete a saved optimization archive.
+
+        Parameters
+        ----------
+        job_id : str
+            Job identifier.
+
+        Returns
+        -------
+        dict
+            Deleted job identifier.
+
+        Raises
+        ------
+        fastapi.HTTPException
+            When the job is missing or still running.
+        """
+        job = state.jobs.get(job_id)
+        if job is None:
+            raise HTTPException(status_code=404, detail="optimization job not found")
+        if job.status in {"queued", "running"}:
+            raise HTTPException(status_code=409, detail="optimization job is still running")
+        path = state.runtime_dir / OPTIMIZATION_DIR / f"{job_id}.json"
+        try:
+            path.unlink(missing_ok=True)
+        except OSError as exc:
+            raise HTTPException(status_code=500, detail=f"could not delete archive: {exc}") from exc
+        state.jobs.pop(job_id, None)
+        return {"deleted": job_id}
+
     @app.post("/api/optimize", status_code=202)
     def start_optimization(payload: OptimizationRequest) -> dict[str, object]:
         """Start a background planting optimization.
@@ -1087,6 +1163,7 @@ def create_app(
         request_payload = payload.model_dump()
         job = OptimizationJob(
             job_id=job_id,
+            name=payload.name.strip() or f"Optimization {job_id[-6:]}",
             status="queued",
             progress=0,
             total=payload.scalarizations,
@@ -1669,6 +1746,7 @@ def _job_payload(job: OptimizationJob, *, include_result: bool = False) -> dict[
     """
     payload: dict[str, object] = {
         "job_id": job.job_id,
+        "name": job.name,
         "status": job.status,
         "progress": job.progress,
         "total": job.total,
@@ -1682,6 +1760,27 @@ def _job_payload(job: OptimizationJob, *, include_result: bool = False) -> dict[
         "request": dict(job.request),
         "started_utc": job.started_utc,
         "finished_utc": job.finished_utc,
+        "saved_utc": job.saved_utc,
+        "dataset_id": (
+            str(getattr(getattr(job.result, "problem", None), "dataset_id", ""))
+            if job.result is not None
+            else ""
+        ),
+        "horizon": (
+            int(getattr(getattr(job.result, "problem", None), "horizon", 0))
+            if job.result is not None
+            else _request_int(job.request, "horizon", 0)
+        ),
+        "budget_cad": (
+            float(getattr(getattr(job.result, "problem", None), "budget_cad", 0.0))
+            if job.result is not None
+            else _request_float(job.request, "budget_cad", 0.0)
+        ),
+        "max_sites": (
+            int(getattr(getattr(job.result, "problem", None), "max_sites", 0))
+            if job.result is not None
+            else _request_int(job.request, "max_sites", 0)
+        ),
     }
     if include_result and job.result is not None and hasattr(job.result, "to_dict"):
         payload["result"] = job.result.to_dict()
@@ -1740,7 +1839,7 @@ def _run_optimization_job(state: LabState, job_id: str) -> None:
         job.result = result
         job.archive_size = len(getattr(getattr(result, "archive", None), "solutions", ()))
         try:
-            _save_optimization_result(state, job_id, result)
+            _save_optimization_result(state, job_id, result, name=job.name)
         except OSError as exc:
             job.error = f"result could not be saved: {exc}"
         job.status = "done"
@@ -1751,7 +1850,13 @@ def _run_optimization_job(state: LabState, job_id: str) -> None:
         job.finished_utc = _utc_now()
 
 
-def _save_optimization_result(state: LabState, job_id: str, result: object) -> None:
+def _save_optimization_result(
+    state: LabState,
+    job_id: str,
+    result: object,
+    *,
+    name: str = "",
+) -> None:
     """Persist a completed optimization result for later UI loading.
 
     Parameters
@@ -1762,6 +1867,8 @@ def _save_optimization_result(state: LabState, job_id: str, result: object) -> N
         Job identifier.
     result : object
         Optimization result with a ``to_dict`` method.
+    name : str
+        Human-readable archive name.
     """
     if not hasattr(result, "to_dict"):
         return
@@ -1769,10 +1876,13 @@ def _save_optimization_result(state: LabState, job_id: str, result: object) -> N
     directory.mkdir(parents=True, exist_ok=True)
     path = directory / f"{job_id}.json"
     temporary = path.with_name(path.name + ".tmp")
-    temporary.write_text(
-        json.dumps(result.to_dict(), indent=2) + "\n",
-        encoding="utf-8",
-    )
+    payload = result.to_dict()
+    payload["job"] = {
+        "job_id": job_id,
+        "name": name or job_id,
+        "saved_utc": _utc_now(),
+    }
+    temporary.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
     temporary.replace(path)
 
 
@@ -1798,6 +1908,9 @@ def _load_optimizations(state: LabState) -> None:
         except (OSError, ValueError, KeyError, TypeError):
             continue
         problem = result.problem
+        metadata = payload.get("job", {})
+        name = str(metadata.get("name", path.stem)) if isinstance(metadata, Mapping) else path.stem
+        saved_utc = str(metadata.get("saved_utc", "")) if isinstance(metadata, Mapping) else ""
         request_payload = {
             "sites": len(problem.sites),
             "species": [option.name for option in problem.species],
@@ -1809,6 +1922,7 @@ def _load_optimizations(state: LabState) -> None:
         }
         state.jobs[path.stem] = OptimizationJob(
             job_id=path.stem,
+            name=name,
             status="done",
             progress=result.scalarizations,
             total=result.scalarizations,
@@ -1816,8 +1930,9 @@ def _load_optimizations(state: LabState) -> None:
             result=result,
             error="",
             request=request_payload,
-            started_utc="",
-            finished_utc="",
+            started_utc=saved_utc,
+            finished_utc=saved_utc,
+            saved_utc=saved_utc,
         )
 
 
