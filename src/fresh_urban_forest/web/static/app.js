@@ -837,9 +837,14 @@ function bindControls() {
   $("preview").addEventListener("click", previewScenario);
   $("reset-edits").addEventListener("click", clearEdits);
   $("new-scenario").addEventListener("click", newScenario);
-  $("scenario-select").addEventListener("change", (event) => {
-    if (event.target.value) loadScenario(event.target.value);
-    else showBaseline();
+  $("scenario-select").addEventListener("change", async (event) => {
+    if (event.target.value) {
+      await loadScenario(event.target.value);
+      switchView("scene");
+    } else {
+      showBaseline();
+      switchView("map");
+    }
   });
   $("remove-tree").addEventListener("click", () => {
     if (!state.selectedId) return;
@@ -2185,6 +2190,8 @@ async function loadScenario(scenarioId) {
     $("scenario-revision").textContent = `revision ${scenario.revision}`;
     renderEditList();
     await previewScenario();
+    switchView("scene");
+    toast(`Loaded ${scenario.name}`);
   } catch (error) {
     toast(error.message, true);
   }

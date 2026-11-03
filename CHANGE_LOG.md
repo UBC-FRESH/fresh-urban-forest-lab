@@ -251,6 +251,9 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Surrogate holdout: shade R2 0.91, equity 0.86, native 0.89, diversity -0.41; archive
   always uses exact evaluation.
 - Added `docs/reference/optimization-and-pareto.rst` and the P8 report.
+- Fixed optimizer UI state bugs: requested scalarization count, scenario dropdown sync,
+  load/slice reset, fixed-reference hypervolume, mobile layout, and scenario selection now
+  switches to the 3D scene so the loaded scenario is visible.
 - Tests: 285 passed. Dashboard: GREEN.
 - Limits: weighted-sum finite approximation, Monte Carlo hypervolume, bootstrap robustness,
   precomputed P7 evaluator, and no city-scale claim.
