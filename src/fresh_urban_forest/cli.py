@@ -7,6 +7,7 @@ commands, not a separate implementation.
 
 from __future__ import annotations
 
+import datetime as dt
 import json
 import shutil
 import tempfile
@@ -35,11 +36,24 @@ from fresh_urban_forest.inventory import (
     load_ubc_trees,
     load_vancouver_trees,
 )
+from fresh_urban_forest.irrigation import compare_irrigation
 from fresh_urban_forest.itd import detect_trees, detected_trees_geojson
 from fresh_urban_forest.lidar import PointCloudSummary, canopies_from_pair, summarize_point_cloud
 from fresh_urban_forest.lidarbc import discover_lidarbc_tiles
 from fresh_urban_forest.materialize import materialize_sources, read_materialization_manifest
 from fresh_urban_forest.models import TerrainGrid, UrbanForestDataset
+from fresh_urban_forest.shade import (
+    default_step_hours,
+    shade_period,
+    write_shade_product,
+)
+from fresh_urban_forest.solar import (
+    parse_clock,
+    parse_date,
+    representative_time_grid,
+    time_grid,
+)
+from fresh_urban_forest.species import profile_for_species, site_fit
 from fresh_urban_forest.terrain import (
     RasterData,
     build_terrain_grid,
@@ -60,6 +74,7 @@ from fresh_urban_forest.validation import (
     write_validation,
 )
 from fresh_urban_forest.vancouver import discover_vancouver_tiles
+from fresh_urban_forest.water import compare_water_policies
 
 app = typer.Typer(help="Open urban-forest LiDAR, inventory, growth, and 3-D decision support.")
 catalog_app = typer.Typer(help="Inspect and materialize public data sources.")
@@ -93,6 +108,7 @@ MAX_TREES_OPTION = typer.Option(
     0, "--max-trees", help="Randomly sample at most this many trees; 0 keeps all."
 )
 DATASET_OPTION = typer.Option(..., "--dataset", help="Dataset directory.")
+OPTIONAL_DATASET_OPTION = typer.Option(None, "--dataset", help="Optional dataset directory.")
 HOST_OPTION = typer.Option("127.0.0.1", "--host", help="Bind address.")
 PORT_OPTION = typer.Option(8000, "--port", help="Bind port.")
 ALLOW_REMOTE_OPTION = typer.Option(False, "--allow-remote", help="Allow binding beyond loopback.")
@@ -133,6 +149,22 @@ WINDOWS_OPTION = typer.Option(
     "--windows",
     help="Comma-separated local-maxima windows to test.",
 )
+DATE_OPTION = typer.Option(None, "--date", help="ISO date for a shade request.")
+TIMES_OPTION = typer.Option(
+    None,
+    "--times",
+    help="Comma-separated local clock times, such as 09:00,12:00,15:00.",
+)
+MODE_OPTION = typer.Option("day", "--mode", help="instant, day, or annual.")
+TARGET_HEIGHT_OPTION = typer.Option(
+    1.5, "--target-height", help="Height above ground of the shade target plane."
+)
+SPECIES_OPTION = typer.Option("Acer rubrum", "--species", help="Species name.")
+SUN_FRACTION_OPTION = typer.Option(0.6, "--sun-fraction", help="Sunlit fraction, 0 to 1.")
+SOIL_VOLUME_OPTION = typer.Option(6.0, "--soil-volume", help="Available soil volume in m3.")
+CROWN_AREA_OPTION = typer.Option(20.0, "--crown-area", help="Projected crown area in m2.")
+AGE_OPTION = typer.Option(10.0, "--age", help="Tree age in years.")
+SHADE_HOURS_OPTION = typer.Option(1000.0, "--shade-area-hours", help="Effective shade area-hours.")
 
 
 @catalog_app.command("list")
@@ -679,6 +711,236 @@ def fit_allometry_command(
             f"{group}: n={fit.sample_size} h=1.3+{fit.coefficient:.3f}*dbh^{fit.exponent:.3f} "
             f"rmse={fit.rmse_m} m r2={fit.r2}"
         )
+
+
+@app.command("shade")
+def shade_command(
+    dataset: Path = DATASET_OPTION,
+    date: str | None = DATE_OPTION,
+    mode: str = MODE_OPTION,
+    times: str | None = TIMES_OPTION,
+    target_height: float = TARGET_HEIGHT_OPTION,
+    out_dir: Path = OUT_DIR_OPTION,
+    include_terrain: bool = typer.Option(
+        True, "--include-terrain/--no-terrain", help="Include the coarse terrain horizon."
+    ),
+) -> None:
+    """Build a shade summary, PNG overlay, and NPZ grid for a dataset.
+
+    Parameters
+    ----------
+    dataset : Path
+        Dataset directory.
+    date : str or None
+        ISO date. Defaults to today.
+    mode : str
+        ``instant``, ``day``, or ``annual``.
+    times : str or None
+        Comma-separated local clock times.
+    target_height : float
+        Height above ground of the target plane.
+    out_dir : Path
+        Output directory.
+    include_terrain : bool
+        Include the coarse terrain horizon.
+    """
+    loaded = load_dataset(dataset)
+    _day, whens, step = _cli_shade_whens(date, mode, times)
+    period = shade_period(
+        loaded,
+        whens,
+        target_height_m=target_height,
+        step_hours=step,
+        include_terrain=include_terrain,
+    )
+    path = write_shade_product(period, out_dir)
+    console.print(f"Shade product: {path}")
+    console.print_json(json.dumps(period.metrics))
+
+
+@app.command("species-fit")
+def species_fit_command(
+    species: str = SPECIES_OPTION,
+    sun_fraction: float = SUN_FRACTION_OPTION,
+    soil_volume: float = SOIL_VOLUME_OPTION,
+    out: Path = OUT_OPTION,
+    dataset: Path | None = OPTIONAL_DATASET_OPTION,
+) -> None:
+    """Score a species against a site.
+
+    Parameters
+    ----------
+    species : str
+        Species name.
+    sun_fraction : float
+        Fraction of daylight the site is sunlit.
+    soil_volume : float
+        Available soil volume.
+    out : Path
+        Output JSON path.
+    dataset : Path or None
+        Optional dataset directory, used only for context in the output.
+    """
+    loaded = load_dataset(dataset) if dataset is not None else None
+    profile = profile_for_species(species)
+    fit = site_fit(profile, sun_fraction=sun_fraction, soil_volume_m3=soil_volume)
+    payload = {
+        "dataset_id": loaded.manifest.dataset_id if loaded is not None else "",
+        "profile": profile.to_dict(),
+        "fit": fit.to_dict(),
+    }
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
+    console.print(f"Species fit: {out}")
+
+
+@app.command("water")
+def water_command(
+    species: str = SPECIES_OPTION,
+    sun_fraction: float = SUN_FRACTION_OPTION,
+    soil_volume: float = SOIL_VOLUME_OPTION,
+    crown_area: float = CROWN_AREA_OPTION,
+    age: float = AGE_OPTION,
+    out: Path = OUT_OPTION,
+    dataset: Path | None = OPTIONAL_DATASET_OPTION,
+) -> None:
+    """Build an annual water balance and policy comparison.
+
+    Parameters
+    ----------
+    species : str
+        Species name.
+    sun_fraction : float
+        Fraction of daylight the site is sunlit.
+    soil_volume : float
+        Available soil volume.
+    crown_area : float
+        Projected crown area.
+    age : float
+        Tree age.
+    out : Path
+        Output JSON path.
+    dataset : Path or None
+        Optional dataset directory, used only for context in the output.
+    """
+    loaded = load_dataset(dataset) if dataset is not None else None
+    profile = profile_for_species(species)
+    options = compare_water_policies(
+        profile,
+        crown_area_m2=crown_area,
+        soil_volume_m3=soil_volume,
+        sun_fraction=sun_fraction,
+        age_years=age,
+    )
+    payload = {
+        "dataset_id": loaded.manifest.dataset_id if loaded is not None else "",
+        "policies": [option.to_dict() for option in options],
+    }
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
+    console.print(f"Water balance: {out}")
+
+
+@app.command("irrigation")
+def irrigation_command(
+    species: str = SPECIES_OPTION,
+    sun_fraction: float = SUN_FRACTION_OPTION,
+    soil_volume: float = SOIL_VOLUME_OPTION,
+    crown_area: float = CROWN_AREA_OPTION,
+    age: float = AGE_OPTION,
+    shade_area_hours: float = SHADE_HOURS_OPTION,
+    out: Path = OUT_OPTION,
+    dataset: Path | None = OPTIONAL_DATASET_OPTION,
+) -> None:
+    """Compare irrigation policies and cost per shade-hour.
+
+    Parameters
+    ----------
+    species : str
+        Species name.
+    sun_fraction : float
+        Fraction of daylight the site is sunlit.
+    soil_volume : float
+        Available soil volume.
+    crown_area : float
+        Projected crown area.
+    age : float
+        Tree age.
+    shade_area_hours : float
+        Effective shade area-hours.
+    out : Path
+        Output JSON path.
+    dataset : Path or None
+        Optional dataset directory, used only for context in the output.
+    """
+    loaded = load_dataset(dataset) if dataset is not None else None
+    profile = profile_for_species(species)
+    options = compare_irrigation(
+        profile,
+        crown_area_m2=crown_area,
+        soil_volume_m3=soil_volume,
+        sun_fraction=sun_fraction,
+        shade_area_hours=shade_area_hours,
+        age_years=age,
+    )
+    payload = {
+        "dataset_id": loaded.manifest.dataset_id if loaded is not None else "",
+        "options": [option.to_dict() for option in options],
+    }
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
+    console.print(f"Irrigation options: {out}")
+
+
+def _cli_shade_whens(
+    date_value: str | None,
+    mode: str,
+    times_value: str | None,
+) -> tuple[dt.date, tuple[dt.datetime, ...], float]:
+    """Build CLI shade times.
+
+    Parameters
+    ----------
+    date_value : str or None
+        ISO date, or ``None`` for today.
+    mode : str
+        ``instant``, ``day``, or ``annual``.
+    times_value : str or None
+        Comma-separated clock times.
+
+    Returns
+    -------
+    tuple
+        Date, aware datetimes, and step hours.
+
+    Raises
+    ------
+    typer.BadParameter
+        When the date or a time is invalid.
+    """
+    try:
+        day = parse_date(date_value) if date_value else dt.date.today()
+    except ValueError as exc:
+        raise typer.BadParameter(str(exc)) from exc
+    if mode == "annual":
+        return (day, representative_time_grid(day.year), 3.0)
+    raw = [part.strip() for part in (times_value or "").split(",") if part.strip()]
+    if not raw:
+        raw = (
+            ["12:00"]
+            if mode == "instant"
+            else ["08:00", "10:00", "12:00", "14:00", "16:00", "18:00"]
+        )
+    if mode == "instant":
+        raw = raw[:1]
+    try:
+        for value in raw:
+            parse_clock(value)
+        whens = time_grid(day, times=raw)
+    except ValueError as exc:
+        raise typer.BadParameter(str(exc)) from exc
+    step = 1.0 if mode == "instant" else default_step_hours(whens)
+    return (day, whens, step)
 
 
 def _detection_grid(

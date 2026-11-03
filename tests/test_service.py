@@ -234,3 +234,52 @@ def test_index_serves_the_shell(tmp_path: Path) -> None:
     response = client.get("/")
     assert response.status_code == 200
     assert "FRESH Urban Forest Lab" in response.text
+
+
+def test_light_solar_shade_species_and_water_endpoints(tmp_path: Path) -> None:
+    """The light and species endpoints return coherent, evidence-labelled payloads."""
+    client = _client(tmp_path)
+    solar = client.get("/api/solar", params={"date": "2026-06-21", "time": "12:00"})
+    assert solar.status_code == 200
+    assert solar.json()["position"]["is_daylight"] is True
+    shade = client.get(
+        "/api/shade",
+        params={"date": "2026-06-21", "mode": "day", "times": "09:00,12:00,15:00"},
+    )
+    assert shade.status_code == 200
+    metrics = shade.json()["metrics"]
+    assert abs(metrics["sunlit_fraction"] + metrics["shade_fraction"] - 1.0) < 1e-6
+    assert shade.json()["legend"]
+    png = client.get(
+        "/api/shade.png",
+        params={"date": "2026-06-21", "mode": "day", "times": "09:00,12:00,15:00"},
+    )
+    assert png.status_code == 200
+    assert png.content.startswith(b"\x89PNG")
+    profiles = client.get("/api/species").json()["profiles"]
+    assert len(profiles) >= 10
+    fit = client.get("/api/species/fit", params={"species": "Acer rubrum"}).json()
+    assert "fit" in fit
+    assert "profile" in fit
+    water = client.get("/api/water", params={"species": "Acer rubrum"}).json()
+    assert water["balance"]["policy"] == "moisture_trigger"
+    assert len(water["policies"]) == 5
+    irrigation = client.get("/api/irrigation", params={"species": "Acer rubrum"}).json()
+    assert len(irrigation["options"]) == 5
+    card = client.get(
+        "/api/light/tree/test:2",
+        params={"date": "2026-06-21", "mode": "day", "times": "09:00,12:00,15:00"},
+    )
+    assert card.status_code == 200
+    payload = card.json()
+    assert payload["shade"]["tree_id"] == "test:2"
+    assert payload["fit"]["species"] == "Acer rubrum"
+    assert payload["growth"]["points"]
+    assert payload["irrigation"]
+    cached = client.get(
+        "/api/light/tree/test:2",
+        params={"date": "2026-06-21", "mode": "day", "times": "09:00,12:00,15:00"},
+    )
+    assert cached.status_code == 200
+    assert client.get("/api/light/tree/missing").status_code == 404
+    assert client.get("/api/shade", params={"date": "not-a-date"}).status_code == 400

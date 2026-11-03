@@ -100,3 +100,80 @@ def test_bad_bbox_is_rejected(tmp_path: Path) -> None:
         ],
     )
     assert result.exit_code != 0
+
+
+def test_light_species_water_and_irrigation_commands(tmp_path: Path) -> None:
+    """The light and species commands write their documented products."""
+    make_dataset(tmp_path / "light")
+    dataset = str(tmp_path / "light" / "dataset")
+    shade = RUNNER.invoke(
+        app,
+        [
+            "shade",
+            "--dataset",
+            dataset,
+            "--date",
+            "2026-06-21",
+            "--mode",
+            "day",
+            "--times",
+            "09:00,12:00,15:00",
+            "--out-dir",
+            str(tmp_path / "shade"),
+        ],
+    )
+    assert shade.exit_code == 0, shade.stdout
+    assert (tmp_path / "shade" / "shade.json").exists()
+    assert (tmp_path / "shade" / "shade.png").exists()
+    fit = RUNNER.invoke(
+        app,
+        [
+            "species-fit",
+            "--dataset",
+            dataset,
+            "--species",
+            "Acer rubrum",
+            "--out",
+            str(tmp_path / "fit.json"),
+        ],
+    )
+    assert fit.exit_code == 0, fit.stdout
+    assert (tmp_path / "fit.json").exists()
+    water = RUNNER.invoke(
+        app,
+        [
+            "water",
+            "--dataset",
+            dataset,
+            "--species",
+            "Acer rubrum",
+            "--out",
+            str(tmp_path / "water.json"),
+        ],
+    )
+    assert water.exit_code == 0, water.stdout
+    assert (tmp_path / "water.json").exists()
+    irrigation = RUNNER.invoke(
+        app,
+        [
+            "irrigation",
+            "--dataset",
+            dataset,
+            "--species",
+            "Acer rubrum",
+            "--out",
+            str(tmp_path / "irrigation.json"),
+        ],
+    )
+    assert irrigation.exit_code == 0, irrigation.stdout
+    assert (tmp_path / "irrigation.json").exists()
+
+
+def test_bad_shade_date_is_rejected(tmp_path: Path) -> None:
+    """An invalid shade date is a usage error."""
+    make_dataset(tmp_path / "bad-date")
+    result = RUNNER.invoke(
+        app,
+        ["shade", "--dataset", str(tmp_path / "bad-date" / "dataset"), "--date", "nope"],
+    )
+    assert result.exit_code != 0

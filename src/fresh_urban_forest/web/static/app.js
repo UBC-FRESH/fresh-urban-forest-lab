@@ -23,6 +23,15 @@ const state = {
   changeData: null,
   changeProduct: "change.json",
   changeProductsLoaded: false,
+  lightMap: null,
+  lightData: null,
+  lightDate: "2026-06-21",
+  lightTime: 12,
+  lightMode: "instant",
+  lightTimer: null,
+  lightDebounce: null,
+  lightRequest: 0,
+  lastSolar: null,
   previewYear: 0,
   playTimer: null,
 };
@@ -153,7 +162,10 @@ async function init() {
     renderBaselineTimeline(dataset.metrics);
     initMap();
     bindControls();
+    initLightControls();
+    updateSunForTime();
     updateHud();
+    window.__freshLab = { selectTree, switchView, loadLight };
     await loadAssistantInfo();
   } catch (error) {
     console.error(error);
@@ -415,6 +427,8 @@ function ensureThree() {
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.05;
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
   const scene = new THREE.Scene();
   scene.background = new THREE.Color("#dfe7dc");
@@ -434,7 +448,22 @@ function ensureThree() {
   scene.add(ambient);
   const sun = new THREE.DirectionalLight(0xfff4dc, 1.8);
   sun.position.set(-320, 520, 240);
+  sun.castShadow = true;
+  sun.shadow.mapSize.set(1024, 1024);
+  sun.shadow.camera.left = -420;
+  sun.shadow.camera.right = 420;
+  sun.shadow.camera.top = 420;
+  sun.shadow.camera.bottom = -420;
+  sun.shadow.camera.near = 1;
+  sun.shadow.camera.far = 2400;
   scene.add(sun);
+  scene.add(sun.target);
+  const sunSphere = new THREE.Mesh(
+    new THREE.SphereGeometry(9, 18, 12),
+    new THREE.MeshBasicMaterial({ color: 0xffe6a0 })
+  );
+  sunSphere.position.set(-520, 620, 320);
+  scene.add(sunSphere);
 
   const terrain = buildTerrainMesh();
   scene.add(terrain);
@@ -453,6 +482,8 @@ function ensureThree() {
     trunkMeshes: [],
     treeGroups: new Map(),
     selectedMarker: null,
+    sunLight: sun,
+    sunSphere,
   };
   state.three = three;
   const raycaster = new THREE.Raycaster();
@@ -504,6 +535,7 @@ function ensureThree() {
     state.three.camera.updateProjectionMatrix();
   });
   rebuildThreeTrees(state.scene.trees);
+  applySun();
   animateThree();
   return three;
 }
@@ -598,6 +630,8 @@ function buildBuildingMeshes() {
     });
     const mesh = new THREE.Mesh(geometry, material);
     mesh.position.y = Number(building.base_z) || 0;
+    mesh.castShadow = true;
+    mesh.receiveShadow = true;
     mesh.userData.kind = "building";
     mesh.name = building.name || building.id || "building";
     meshes.push(mesh);
@@ -637,6 +671,10 @@ function rebuildThreeTrees(trees) {
     const trunkMaterial = new THREE.MeshStandardMaterial({ color: 0x6d5a45, roughness: 1 });
     const crowns = new THREE.InstancedMesh(crownGeometry, crownMaterial, groupTrees.length);
     const trunks = new THREE.InstancedMesh(trunkGeometry, trunkMaterial, groupTrees.length);
+    crowns.castShadow = true;
+    crowns.receiveShadow = true;
+    trunks.castShadow = true;
+    trunks.receiveShadow = true;
     crowns.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
     trunks.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
     const matrix = new THREE.Matrix4();
@@ -729,6 +767,7 @@ function selectTree(treeId) {
   $("remove-tree").disabled = false;
   $("replace-tree").disabled = false;
   $("move-tree").disabled = false;
+  loadTreeLight(treeId);
 }
 
 function updateMapSelection() {
@@ -1030,12 +1069,307 @@ function switchView(view) {
       }
     }, 60);
   }
+  if (view === "light") {
+    ensureLightView();
+    window.setTimeout(() => {
+      if (state.lightMap) state.lightMap.resize();
+    }, 60);
+  }
   if (view === "change") {
     ensureChangeView();
     window.setTimeout(() => {
       if (state.changeMap) state.changeMap.resize();
     }, 60);
   }
+}
+
+function initLightControls() {
+  const dateInput = $("light-date");
+  dateInput.value = state.lightDate;
+  const timeInput = $("light-time");
+  timeInput.value = String(state.lightTime);
+  $("light-time-value").textContent = formatClock(state.lightTime);
+  timeInput.addEventListener("input", () => {
+    state.lightTime = Number(timeInput.value);
+    $("light-time-value").textContent = formatClock(state.lightTime);
+    updateSunForTime();
+    debounceLoadLight();
+  });
+  dateInput.addEventListener("change", () => {
+    state.lightDate = dateInput.value;
+    loadLight();
+  });
+  $("light-mode").addEventListener("change", (event) => {
+    state.lightMode = event.target.value;
+    loadLight();
+  });
+  $("light-refresh").addEventListener("click", loadLight);
+  $("light-play").addEventListener("click", toggleLightPlay);
+}
+
+function formatClock(value) {
+  const hour = Math.floor(value);
+  const minute = Math.round((value - hour) * 60);
+  return `${String(hour).padStart(2, "0")}:${String(minute).padStart(2, "0")}`;
+}
+
+function debounceLoadLight() {
+  window.clearTimeout(state.lightDebounce);
+  state.lightDebounce = window.setTimeout(loadLight, 420);
+}
+
+function ensureLightView() {
+  if (state.lightMap) {
+    loadLight();
+    return;
+  }
+  const [west, south, east, north] = state.scene.bounds_wgs84;
+  const coordinates = state.scene.corners_wgs84 || [
+    [west, north],
+    [east, north],
+    [east, south],
+    [west, south],
+  ];
+  const map = new maplibregl.Map({
+    container: "map-light",
+    style: {
+      version: 8,
+      sources: {
+        canopy: { type: "image", url: "api/canopy.png?width=1400", coordinates },
+        shade: { type: "image", url: "api/shade.png?width=1400", coordinates },
+        buildings: { type: "geojson", data: buildingFeatures() },
+        boundary: { type: "geojson", data: boundaryFeatures() },
+      },
+      layers: [
+        { id: "background", type: "background", paint: { "background-color": "#e6eae2" } },
+        {
+          id: "canopy",
+          type: "raster",
+          source: "canopy",
+          paint: { "raster-opacity": 0.24, "raster-resampling": "linear" },
+        },
+        {
+          id: "shade",
+          type: "raster",
+          source: "shade",
+          paint: { "raster-opacity": 0.92, "raster-resampling": "nearest" },
+        },
+        {
+          id: "buildings-outline",
+          type: "line",
+          source: "buildings",
+          paint: { "line-color": "#8b948a", "line-width": 0.7, "line-opacity": 0.75 },
+        },
+        {
+          id: "boundary",
+          type: "line",
+          source: "boundary",
+          paint: { "line-color": "#2f6b4f", "line-width": 1.3, "line-dasharray": [2, 2] },
+        },
+      ],
+    },
+    center: [(west + east) / 2, (south + north) / 2],
+    zoom: 14,
+    attributionControl: false,
+  });
+  map.addControl(new maplibregl.NavigationControl(), "bottom-right");
+  map.on("load", () => {
+    map.fitBounds(
+      [
+        [west, south],
+        [east, north],
+      ],
+      { padding: 36, duration: 0 }
+    );
+    loadLight();
+  });
+  state.lightMap = map;
+}
+
+async function loadLight() {
+  if (!state.lightMap || !state.lightMap.getSource("shade")) return;
+  const request = ++state.lightRequest;
+  const mode = $("light-mode").value;
+  const date = $("light-date").value || state.lightDate;
+  const params = new URLSearchParams({ date, mode });
+  if (mode === "instant") params.set("times", formatClock(state.lightTime));
+  if (mode === "day") params.set("times", "09:00,12:00,15:00,18:00");
+  $("light-status").textContent = "computing";
+  try {
+    const data = await api(`api/shade?${params.toString()}`);
+    if (request !== state.lightRequest) return;
+    state.lightData = data;
+    renderLightStats(data);
+    renderLightLegend(data.legend || []);
+    const url = `api/shade.png?${params.toString()}&v=${encodeURIComponent(data.image_version || Date.now())}`;
+    updateLightImage(url, data.image_corners_wgs84);
+    updateSunFromData(data);
+    $("light-status").textContent = mode === "annual" ? "annual sample" : mode;
+  } catch (error) {
+    if (request !== state.lightRequest) return;
+    $("light-status").textContent = "unavailable";
+    $("light-stats").innerHTML =
+      '<div class="change-empty">The shade engine could not build this period.</div>';
+    toast(`Shade request failed: ${error.message}`, true);
+  }
+}
+
+function updateLightImage(url, coordinates) {
+  if (!state.lightMap) return;
+  const source = state.lightMap.getSource("shade");
+  if (!source) return;
+  try {
+    source.updateImage({ url, coordinates });
+  } catch (_error) {
+    if (state.lightMap.getLayer("shade")) state.lightMap.removeLayer("shade");
+    if (state.lightMap.getSource("shade")) state.lightMap.removeSource("shade");
+    state.lightMap.addSource("shade", { type: "image", url, coordinates });
+    state.lightMap.addLayer(
+      {
+        id: "shade",
+        type: "raster",
+        source: "shade",
+        paint: { "raster-opacity": 0.92, "raster-resampling": "nearest" },
+      },
+      "buildings-outline"
+    );
+  }
+}
+
+function renderLightStats(data) {
+  const metrics = data.metrics || {};
+  const solar = data.solar && data.solar.length ? data.solar[0] : {};
+  $("light-stats").innerHTML = `
+    <div class="change-stat"><span>Sun altitude</span><strong>${formatNumber(solar.altitude_deg, 0)}°</strong></div>
+    <div class="change-stat"><span>Sunlit</span><strong>${formatNumber(Number(metrics.sunlit_fraction || 0) * 100, 0)}%</strong></div>
+    <div class="change-stat"><span>Tree shade</span><strong>${formatNumber(Number(metrics.tree_shade_fraction || 0) * 100, 1)}%</strong></div>
+    <div class="change-stat"><span>Building shade</span><strong>${formatNumber(Number(metrics.building_shade_fraction || 0) * 100, 1)}%</strong></div>
+    <div class="change-stat"><span>Marginal tree</span><strong>${formatNumber(Number(metrics.marginal_tree_shade_fraction || 0) * 100, 1)}%</strong></div>
+    <div class="change-stat"><span>Annual estimate</span><strong>${formatCompact(Number(metrics.annual_shade_hours_estimate || 0), " h")}</strong></div>`;
+}
+
+function renderLightLegend(legend) {
+  $("light-legend").innerHTML = legend
+    .map(
+      (item) =>
+        `<span><i class="change-swatch" style="background:${item.colour}"></i>${escapeHtml(item.label)}</span>`
+    )
+    .join("");
+}
+
+function updateSunFromData(data) {
+  const solar = data.solar && data.solar.length ? data.solar[0] : null;
+  if (solar) updateSun(Number(solar.altitude_deg), Number(solar.azimuth_deg));
+}
+
+async function updateSunForTime() {
+  try {
+    const params = new URLSearchParams({
+      date: $("light-date").value || state.lightDate,
+      time: formatClock(state.lightTime),
+    });
+    const data = await api(`api/solar?${params.toString()}`);
+    const position = data.position || {};
+    updateSun(Number(position.altitude_deg || 0), Number(position.azimuth_deg || 0));
+  } catch (_error) {
+    // The 3D scene keeps its last sun position.
+  }
+}
+
+function updateSun(altitude, azimuth) {
+  state.lastSolar = { altitude, azimuth };
+  $("sun-readout").textContent = `Sun ${altitude.toFixed(0)}° / ${azimuth.toFixed(0)}°`;
+  const three = state.three;
+  if (!three) return;
+  const radius = 760;
+  const alt = (altitude * Math.PI) / 180;
+  const az = (azimuth * Math.PI) / 180;
+  const x = Math.sin(az) * Math.cos(alt) * radius;
+  const y = Math.sin(alt) * radius;
+  const z = Math.cos(az) * Math.cos(alt) * radius;
+  three.sunLight.position.set(x, y, z);
+  three.sunLight.target.position.set(0, 0, 0);
+  three.sunLight.target.updateMatrixWorld();
+  three.sunLight.intensity = altitude > 0 ? 0.35 + 1.65 * Math.min(1, altitude / 65) : 0.06;
+  three.sunSphere.position.set(x, y, z);
+  three.sunSphere.visible = altitude > -6;
+  three.sunSphere.material.color.set(altitude > 0 ? 0xffe6a0 : 0x667788);
+}
+
+function applySun() {
+  if (state.lastSolar) updateSun(state.lastSolar.altitude, state.lastSolar.azimuth);
+}
+
+function toggleLightPlay() {
+  if (state.lightTimer) {
+    window.clearInterval(state.lightTimer);
+    state.lightTimer = null;
+    $("light-play").textContent = "Play day";
+    return;
+  }
+  state.lightMode = "instant";
+  $("light-mode").value = "instant";
+  state.lightTime = 6;
+  $("light-play").textContent = "Stop day";
+  state.lightTimer = window.setInterval(() => {
+    state.lightTime = Math.min(21, state.lightTime + 0.5);
+    $("light-time").value = String(state.lightTime);
+    $("light-time-value").textContent = formatClock(state.lightTime);
+    updateSunForTime();
+    if (Math.abs(state.lightTime % 2) < 0.01) loadLight();
+    if (state.lightTime >= 21) {
+      window.clearInterval(state.lightTimer);
+      state.lightTimer = null;
+      $("light-play").textContent = "Play day";
+      loadLight();
+    }
+  }, 420);
+}
+
+async function loadTreeLight(treeId) {
+  const container = $("tree-light");
+  container.innerHTML = '<p class="muted">Calculating shade and water…</p>';
+  const params = new URLSearchParams({
+    date: $("light-date").value || state.lightDate,
+    mode: "day",
+    times: "09:00,12:00,15:00",
+  });
+  try {
+    const data = await api(`api/light/tree/${encodeURIComponent(treeId)}?${params.toString()}`);
+    if (state.selectedId !== treeId) return;
+    renderTreeLight(data);
+  } catch (error) {
+    if (state.selectedId !== treeId) return;
+    container.innerHTML = `<p class="hint">${escapeHtml(error.message)}</p>`;
+  }
+}
+
+function renderTreeLight(data) {
+  const shade = data.shade || {};
+  const fit = data.fit || {};
+  const water = data.water || {};
+  const growth = (data.growth && data.growth.response) || {};
+  const options = data.irrigation || [];
+  const best = options.find((option) => option.recommendation === "best balance") || options[0] || {};
+  const evidence = fit.evidence || shade.evidence || {};
+  $("tree-light").innerHTML = `
+    <div class="mini-grid">
+      <div class="mini-card"><span>Sun at base</span><strong>${formatNumber(Number(shade.sun_fraction_at_base || 0) * 100, 0)}%</strong></div>
+      <div class="mini-card"><span>Marginal shade</span><strong>${formatCompact(Number(shade.marginal_shade_area_hours || 0), " m²h")}</strong></div>
+      <div class="mini-card"><span>Shade efficiency</span><strong>${formatNumber(Number(shade.shade_efficiency_m2h_per_m3 || 0), 1)}</strong></div>
+      <div class="mini-card"><span>Species fit</span><strong>${formatNumber(Number(fit.score || 0), 2)}</strong></div>
+      <div class="mini-card"><span>Vigour</span><strong>${formatNumber(Number(growth.vigor_score || 0), 2)}</strong></div>
+      <div class="mini-card"><span>Stress days</span><strong>${formatNumber(Number(water.stress_days || 0))}</strong></div>
+      <div class="mini-card"><span>Water cost</span><strong>$${formatNumber(Number(water.annual_cost_cad || 0))}</strong></div>
+      <div class="mini-card"><span>Best policy</span><strong>${escapeHtml(best.policy || "n/a")}</strong></div>
+    </div>
+    ${evidenceBadge(evidence)}
+    <p class="hint">${escapeHtml((fit.limiting_factors || []).length ? `Limiting: ${(fit.limiting_factors || []).join(", ")}` : "No major trait limitation in this screen.")}</p>`;
+}
+
+function evidenceBadge(evidence) {
+  if (!evidence || !evidence.tier) return "";
+  return `<span class="evidence-badge">evidence <strong>${escapeHtml(evidence.tier)}</strong> · ${escapeHtml(evidence.method || "")}</span>`;
 }
 
 async function populateChangeProducts() {

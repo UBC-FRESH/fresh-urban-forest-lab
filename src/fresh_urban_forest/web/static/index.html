@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>FRESH Urban Forest Lab</title>
   <link rel="stylesheet" href="static/vendor/maplibre-gl.css">
-  <link rel="stylesheet" href="static/styles.css?v=20261103b">
+  <link rel="stylesheet" href="static/styles.css?v=p7a">
   <script src="static/vendor/maplibre-gl.js"></script>
   <script type="importmap">
     {
@@ -98,6 +98,9 @@
         <div id="tree-detail" class="tree-detail">
           <p class="muted">Click a tree on the map or in the 3D scene.</p>
         </div>
+        <div id="tree-light" class="tree-light">
+          <p class="muted">Select a tree for its shade and water card.</p>
+        </div>
         <div class="button-row wrap">
           <button id="remove-tree" class="button danger" type="button" disabled>Remove</button>
           <button id="replace-tree" class="button ghost" type="button" disabled>Replace</button>
@@ -148,6 +151,7 @@
       <nav class="view-tabs" role="tablist" aria-label="View">
         <button class="tab active" data-view="map" role="tab" aria-selected="true">2D map</button>
         <button class="tab" data-view="scene" role="tab" aria-selected="false">3D scene</button>
+        <button class="tab" data-view="light" role="tab" aria-selected="false">Light</button>
         <button class="tab" data-view="change" role="tab" aria-selected="false">Change</button>
         <button class="tab" data-view="analytics" role="tab" aria-selected="false">Analytics</button>
         <div class="layer-toggles">
@@ -168,8 +172,45 @@
         <canvas id="scene-canvas"></canvas>
         <div class="scene-hud">
           <span>Drag to orbit, scroll to zoom, click a crown to inspect.</span>
+          <span id="sun-readout" class="sun-readout">Sun: --</span>
           <button id="scene-reset" class="button tiny ghost" type="button">Reset view</button>
         </div>
+      </div>
+
+      <div id="view-light" class="view">
+        <div id="map-light"></div>
+        <aside class="change-panel light-panel" id="light-panel">
+          <div class="panel-heading">
+            <h2>Sun and shade</h2>
+            <span id="light-status" class="muted">loading</span>
+          </div>
+          <label class="field">
+            <span>Date</span>
+            <input id="light-date" type="date" value="2026-06-21">
+          </label>
+          <label class="field">
+            <span>Time <output id="light-time-value">12:00</output></span>
+            <input id="light-time" type="range" min="5" max="21" value="12" step="0.5">
+          </label>
+          <label class="field">
+            <span>Period</span>
+            <select id="light-mode">
+              <option value="instant" selected>Instant</option>
+              <option value="day">Day</option>
+              <option value="annual">Annual sample</option>
+            </select>
+          </label>
+          <div class="button-row">
+            <button id="light-play" class="button tiny ghost" type="button">Play day</button>
+            <button id="light-refresh" class="button tiny primary" type="button">Refresh</button>
+          </div>
+          <div id="light-stats" class="change-stats"></div>
+          <p class="hint" id="light-note">
+            Shade is a projected 2.5-D surface, not a temperature. Building shade and
+            canopy shade are separated; overlap is counted once in the combined total.
+          </p>
+        </aside>
+        <div class="change-legend" id="light-legend"></div>
       </div>
 
       <div id="view-change" class="view">
@@ -262,6 +303,6 @@
   </aside>
 
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
-  <script type="module" src="static/app.js?v=20261103b"></script>
+  <script type="module" src="static/app.js?v=p7a"></script>
 </body>
 </html>
