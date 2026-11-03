@@ -189,6 +189,11 @@ Goal: deliver a working local web application with a 2D map, a 3D terrain and in
   - [x] Vendored MapLibre and Three.js
   - [x] Loopback-only default and `--allow-remote`
   - [x] Demo dataset in `data/demo/ubc_core`
+- [x] P3.7 Local LLM assistant and 3D building context (#37)
+  - [x] `/api/agent` and `/api/agent/chat` with a sanitized subprocess environment
+  - [x] `+ Ask` pill, pop-up chat panel, quick prompts, markdown, and tool-action chips
+  - [x] Browser context for the dataset, selected tree, scenario, metrics, and view
+  - [x] Terrain-based building base elevation and extruded 3D footprints
 
 Acceptance criteria:
 
@@ -287,3 +292,4 @@ Acceptance criteria:
 5. Phase 5 is planned. It needs maintainer approval before a tag, release, Pages setting change, or live deployment.
 6. Phase 6 is planned. The first review should decide whether to add a planting-site entity, a work-order log, and a fitted local growth model.
 7. Phases 0 to 4 merged as PR #36 (`1e0a9b0`). The parent issues #1 to #5 and their child issues #8 to #35 are closed. Subsequent hygiene commits on `main` fixed the editable-install ignore, the documentation package install, and the Pages deferral. CI and the Docs workflow are green on `main` as of `dc9f599`.
+8. P3.7 (#37) added the local OpenCode assistant and fixed 3D buildings by sampling terrain elevation at each footprint centroid and extruding the footprint geometry. The assistant is opt-in with `--allow-agent` and runs the local `opencode` CLI with a sanitized environment. The reverse-proxy path-prefix fix is also on `main`.

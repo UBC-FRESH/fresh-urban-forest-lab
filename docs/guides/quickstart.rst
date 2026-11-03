@@ -12,10 +12,13 @@ Install and run the demo
    python -m venv .venv
    . .venv/bin/activate
    python -m pip install -e ".[dev,web]"
-   fresh-urban-forest serve --dataset data/demo/ubc_core --port 8000
+   fresh-urban-forest serve --dataset data/demo/ubc_core --port 8000 --allow-agent
 
-Open ``http://127.0.0.1:8000``. The 2D map, the 3D scene, the scenario editor, and the
-planting advisor are all served from the same process.
+Open ``http://127.0.0.1:8000``. The 2D map, the 3D scene, the scenario editor, the
+planting advisor, and the optional ``+ Ask`` assistant are all served from the same
+process. The assistant is off by default; ``--allow-agent`` enables the local
+``opencode`` CLI. It receives the current dataset, selected tree, scenario, and metrics as
+context, and can read the repository docs while answering.
 
 .. image:: /_static/demo-map.png
    :alt: 2D canopy map over the UBC core campus

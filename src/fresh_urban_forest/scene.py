@@ -13,7 +13,7 @@ from collections.abc import Sequence
 import numpy as np
 
 from fresh_urban_forest.allometry import species_group, tree_carbon_kg, tree_crown_volume_m3
-from fresh_urban_forest.models import TreeRecord, UrbanForestDataset
+from fresh_urban_forest.models import TerrainGrid, TreeRecord, UrbanForestDataset
 from fresh_urban_forest.terrain import project_lonlat, unproject_xy
 
 
@@ -73,6 +73,7 @@ def build_scene(
                 [_local_point(lon, lat, origin_x, origin_y, grid.crs) for lon, lat in ring]
                 for ring in building.rings
             ],
+            "base_z": _building_base_z(building.rings, grid, origin_z),
         }
         for building in dataset.buildings
     ]
@@ -166,6 +167,38 @@ def _tree_payload(
         "carbon_kg": round(tree_carbon_kg(tree), 3),
         "color": _color(group, bool(tree.native)),
     }
+
+
+def _building_base_z(
+    rings: tuple[tuple[tuple[float, float], ...], ...],
+    grid: TerrainGrid,
+    origin_z: float,
+) -> float:
+    """Estimate a building base elevation from the terrain grid.
+
+    Parameters
+    ----------
+    rings : tuple of tuple of tuple of float
+        Building rings in WGS84.
+    grid : TerrainGrid
+        Terrain grid that supplies the base elevation.
+    origin_z : float
+        Scene vertical origin.
+
+    Returns
+    -------
+    float
+        Base elevation relative to the scene origin, or zero when the ring is empty.
+    """
+    if not rings or not rings[0]:
+        return 0.0
+    lon = sum(point[0] for point in rings[0]) / len(rings[0])
+    lat = sum(point[1] for point in rings[0]) / len(rings[0])
+    x, y = project_lonlat(lon, lat, grid.crs)
+    left, bottom, right, top = grid.bounds
+    col = min(max(int((x - left) / max(right - left, 1e-9) * grid.width), 0), grid.width - 1)
+    row = min(max(int((top - y) / max(top - bottom, 1e-9) * grid.height), 0), grid.height - 1)
+    return round(float(grid.elevation[row, col]) - origin_z, 2)
 
 
 def _local_point(lon: float, lat: float, origin_x: float, origin_y: float, crs: str) -> list[float]:

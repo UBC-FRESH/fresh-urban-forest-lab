@@ -29,6 +29,9 @@
     </div>
     <div class="header-actions">
       <span id="status-pill" class="pill">connecting</span>
+      <button id="assistant-button" class="assistant-button" type="button" hidden>
+        <span aria-hidden="true">✦</span> Ask
+      </button>
       <select id="scenario-select" aria-label="Scenario">
         <option value="">Baseline</option>
       </select>
@@ -172,6 +175,38 @@
       </div>
     </section>
   </main>
+
+  <aside id="assistant-panel" class="assistant-panel" hidden aria-label="Urban forest assistant">
+    <div class="assistant-head">
+      <div>
+        <strong>Urban forest assistant</strong>
+        <span id="assistant-model" class="assistant-model">checking…</span>
+      </div>
+      <div class="assistant-head-actions">
+        <button id="assistant-new" class="button ghost tiny" type="button">New</button>
+        <button id="assistant-close" class="button ghost tiny" type="button" aria-label="Close assistant">×</button>
+      </div>
+    </div>
+    <div id="assistant-log" class="assistant-log" aria-live="polite">
+      <p class="hint">
+        Ask about the dataset, canopy metrics, a selected tree, a scenario, or the
+        method behind a number. Try “Summarize the current scenario” or “Where should
+        we plant next?”
+      </p>
+    </div>
+    <div class="assistant-quick">
+      <button type="button" data-assistant-prompt="What does canopy cover mean in this dataset?">Canopy cover</button>
+      <button type="button" data-assistant-prompt="Summarize the current scenario and its main trade-offs.">Scenario summary</button>
+      <button type="button" data-assistant-prompt="Where should we plant next, and why?">Planting advice</button>
+      <button type="button" data-assistant-prompt="How was carbon estimated, and what are the limits?">Carbon method</button>
+    </div>
+    <form id="assistant-form" class="assistant-form">
+      <label class="sr-only" for="assistant-input">Message the assistant</label>
+      <textarea id="assistant-input" rows="2" placeholder="Ask about the dataset, a tree, or a scenario…" spellcheck="false"></textarea>
+      <button id="assistant-send" class="button primary" type="submit">Send</button>
+    </form>
+    <p id="assistant-status" class="assistant-status"></p>
+  </aside>
 
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
   <script type="module" src="static/app.js"></script>

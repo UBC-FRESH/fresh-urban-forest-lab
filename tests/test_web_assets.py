@@ -36,6 +36,10 @@ def test_app_script_has_the_expected_endpoints_and_layers() -> None:
         "InstancedMesh",
         "OrbitControls",
         "maplibregl.Map",
+        "api/agent/chat",
+        "renderAssistantMarkdown",
+        "ExtrudeGeometry",
+        "base_z",
     ):
         assert marker in script
     assert "eval(" not in script

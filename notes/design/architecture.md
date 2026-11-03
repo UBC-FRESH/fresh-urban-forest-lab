@@ -88,6 +88,16 @@ adapter. The core contracts do not import it.
 - No multi-user auth, work orders, or risk assessment.
 - The demo is a downsampled core-campus snapshot, not the full source coverage.
 
+## Assistant
+
+The `+ Ask` pill opens a pop-up chat panel. The browser sends the message, an optional
+session id, and a compact context object (view, dataset, selected tree, scenario, metrics,
+and recommendation count). The FastAPI service runs the local `opencode` CLI with a
+sanitized environment and returns the parsed text, session id, and tool-action chips. The
+assistant is opt-in (`--allow-agent`), has a configurable model and timeout, and never
+gets cloud or session credentials from the parent process. It is a local research aid, not
+an authenticated multi-user service.
+
 ## Extension points
 
 - `growth.py`: swap the allometric model for an adapter over `fresh-fvsbc` or a fitted

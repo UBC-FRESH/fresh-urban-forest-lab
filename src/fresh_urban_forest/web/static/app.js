@@ -18,6 +18,7 @@ const state = {
   selectedSourceReady: false,
   three: null,
   result: null,
+  assistant: { enabled: false, available: false, busy: false, session: null },
 };
 
 const $ = (id) => document.getElementById(id);
@@ -146,6 +147,7 @@ async function init() {
     initMap();
     bindControls();
     updateHud();
+    await loadAssistantInfo();
   } catch (error) {
     console.error(error);
     setStatus("offline", true);
@@ -517,33 +519,40 @@ function buildTerrainMesh() {
 
 function buildBuildingMeshes() {
   const meshes = [];
-  const [left, bottom, right, top] = state.scene.bounds;
-  const spanX = right - left;
-  const spanZ = top - bottom;
   for (const building of state.scene.buildings || []) {
     const ring = (building.rings_local || [])[0] || [];
     if (ring.length < 3) continue;
-    const xs = ring.map((point) => point[0]);
-    const ys = ring.map((point) => point[1]);
-    const minX = Math.min(...xs);
-    const maxX = Math.max(...xs);
-    const minY = Math.min(...ys);
-    const maxY = Math.max(...ys);
-    const width = Math.max(maxX - minX, 1.5);
-    const depth = Math.max(maxY - minY, 1.5);
-    const centerX = (minX + maxX) / 2;
-    const centerY = (minY + maxY) / 2;
-    const geometry = new THREE.BoxGeometry(width, building.height_m || 12, depth);
+    const height = Math.max(Number(building.height_m) || 10, 2);
+    const shape = new THREE.Shape();
+    ring.forEach((point, index) => {
+      const x = Number(point[0]);
+      const y = -Number(point[1]);
+      if (index === 0) shape.moveTo(x, y);
+      else shape.lineTo(x, y);
+    });
+    shape.closePath();
+    let geometry;
+    try {
+      geometry = new THREE.ExtrudeGeometry(shape, {
+        depth: height,
+        bevelEnabled: false,
+        curveSegments: 1,
+      });
+      geometry.rotateX(-Math.PI / 2);
+    } catch (_error) {
+      continue;
+    }
     const material = new THREE.MeshStandardMaterial({
-      color: 0xbcc4ba,
-      roughness: 0.9,
-      metalness: 0.02,
+      color: 0xc3c9bd,
+      roughness: 0.82,
+      metalness: 0.03,
       transparent: true,
-      opacity: 0.86,
+      opacity: 0.78,
     });
     const mesh = new THREE.Mesh(geometry, material);
-    mesh.position.set(centerX, (building.height_m || 12) / 2, centerY);
+    mesh.position.y = Number(building.base_z) || 0;
     mesh.userData.kind = "building";
+    mesh.name = building.name || building.id || "building";
     meshes.push(mesh);
   }
   return meshes;
@@ -684,6 +693,19 @@ function bindControls() {
   document.querySelectorAll(".tab").forEach((tab) => {
     tab.addEventListener("click", () => switchView(tab.dataset.view));
   });
+  $("assistant-button").addEventListener("click", openAssistant);
+  $("assistant-close").addEventListener("click", closeAssistant);
+  $("assistant-new").addEventListener("click", newAssistantChat);
+  $("assistant-form").addEventListener("submit", (event) => {
+    event.preventDefault();
+    const input = $("assistant-input");
+    const message = input.value;
+    input.value = "";
+    sendAssistantMessage(message);
+  });
+  document.querySelectorAll("[data-assistant-prompt]").forEach((button) => {
+    button.addEventListener("click", () => sendAssistantMessage(button.dataset.assistantPrompt));
+  });
   $("scenario-years").addEventListener("input", (event) => {
     state.years = Number(event.target.value);
     $("scenario-years-value").textContent = `${state.years} year${state.years === 1 ? "" : "s"}`;
@@ -732,6 +754,189 @@ function bindControls() {
       state.map.setLayoutProperty("buildings-outline", "visibility", visibility);
     }
   });
+}
+
+async function loadAssistantInfo() {
+  try {
+    const info = await api("api/agent");
+    state.assistant.enabled = Boolean(info.enabled);
+    state.assistant.available = Boolean(info.available);
+    if (!info.enabled) {
+      $("assistant-button").hidden = true;
+      return;
+    }
+    $("assistant-button").hidden = false;
+    const model = info.model ? String(info.model).split("/").pop() : "agent";
+    $("assistant-model").textContent = info.available ? model : "opencode unavailable";
+    if (!info.available) {
+      $("assistant-input").disabled = true;
+      $("assistant-send").disabled = true;
+      $("assistant-status").textContent = "opencode is not on the service PATH";
+    }
+  } catch (error) {
+    $("assistant-button").hidden = true;
+    console.warn("Assistant info unavailable", error);
+  }
+}
+
+function openAssistant() {
+  if (!state.assistant.enabled) return;
+  $("assistant-panel").hidden = false;
+  $("assistant-button").setAttribute("aria-expanded", "true");
+  $("assistant-input").focus();
+}
+
+function closeAssistant() {
+  $("assistant-panel").hidden = true;
+  $("assistant-button").setAttribute("aria-expanded", "false");
+}
+
+function newAssistantChat() {
+  state.assistant.session = null;
+  const log = $("assistant-log");
+  log.replaceChildren();
+  const hint = document.createElement("p");
+  hint.className = "hint";
+  hint.textContent =
+    "New conversation. Ask about the dataset, a selected tree, a scenario, or the method behind a number.";
+  log.append(hint);
+  $("assistant-status").textContent = "";
+  $("assistant-input").focus();
+}
+
+function appendAssistantMessage(role, content, options = {}) {
+  const node = document.createElement("div");
+  node.className = `assistant-msg ${role}`;
+  if (options.html) {
+    node.innerHTML = content;
+  } else {
+    node.textContent = content;
+  }
+  $("assistant-log").append(node);
+  $("assistant-log").scrollTop = $("assistant-log").scrollHeight;
+  return node;
+}
+
+function renderAssistantMarkdown(text) {
+  const value = String(text || "");
+  return value
+    .split(/```/)
+    .map((segment, index) => {
+      if (index % 2 === 1) {
+        return `<pre><code>${escapeHtml(segment.trim())}</code></pre>`;
+      }
+      return renderAssistantInline(segment);
+    })
+    .join("");
+}
+
+function renderAssistantInline(text) {
+  let escaped = escapeHtml(text);
+  escaped = escaped.replace(/`([^`]+)`/g, "<code>$1</code>");
+  escaped = escaped.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
+  escaped = escaped.replace(
+    /\[([^\]]+)\]\((https?:\/\/[^)\s]+|\/[^)\s]+)\)|(https?:\/\/[^\s<]+|\/api\/[^\s<]+)/g,
+    (_match, label, href, bare) => {
+      const url = href || bare;
+      if (!url) return _match;
+      return `<a href="${url}" target="_blank" rel="noreferrer">${label || url}</a>`;
+    }
+  );
+  return escaped.replace(/\n/g, "<br>");
+}
+
+function assistantContext() {
+  const selected = state.treeById.get(state.selectedId);
+  const metrics = state.result?.final || state.dataset?.metrics || null;
+  const activeTab = document.querySelector(".tab.active")?.dataset.view || "map";
+  return {
+    view: activeTab,
+    dataset_id: state.dataset?.dataset_id || null,
+    dataset_name: state.dataset?.name || null,
+    baseline_metrics: state.dataset?.metrics || null,
+    selected_tree: selected
+      ? {
+          id: selected.id,
+          species: selected.species,
+          common_name: selected.common_name,
+          dbh_cm: selected.dbh_cm,
+          height_m: selected.height,
+          crown_width_m: selected.crown_width,
+          native: selected.native,
+          carbon_kg: selected.carbon_kg,
+        }
+      : null,
+    scenario_id: state.scenarioId || null,
+    scenario_edits: state.edits.length,
+    scenario_years: state.years,
+    scenario_result: state.result
+      ? {
+          score: state.result.score,
+          cost_cad: state.result.cost_cad,
+          baseline: state.result.baseline,
+          final: state.result.final,
+          notes: state.result.notes,
+        }
+      : null,
+    recommendations: state.recommendations.length,
+    current_metrics: metrics,
+  };
+}
+
+async function sendAssistantMessage(text) {
+  if (!state.assistant.enabled || state.assistant.busy) return;
+  if (!state.assistant.available) {
+    $("assistant-status").textContent = "The assistant process is not available.";
+    return;
+  }
+  const message = String(text || "").trim();
+  if (!message) return;
+  appendAssistantMessage("user", message);
+  const thinking = appendAssistantMessage("agent", "thinking…");
+  thinking.classList.add("thinking");
+  state.assistant.busy = true;
+  $("assistant-send").disabled = true;
+  $("assistant-status").textContent = "Running the local assistant…";
+  try {
+    const payload = await api("api/agent/chat", {
+      method: "POST",
+      body: JSON.stringify({
+        message,
+        session: state.assistant.session,
+        context: assistantContext(),
+      }),
+    });
+    state.assistant.session = payload.session || state.assistant.session;
+    thinking.remove();
+    const reply = appendAssistantMessage(
+      "agent",
+      renderAssistantMarkdown(payload.reply || "(no reply)"),
+      { html: true }
+    );
+    if (Array.isArray(payload.actions) && payload.actions.length) {
+      const row = document.createElement("div");
+      row.className = "assistant-actions";
+      for (const action of payload.actions) {
+        const chip = document.createElement("span");
+        chip.className = "assistant-action";
+        chip.textContent = `${action.tool}${action.summary ? `: ${action.summary}` : ""}`;
+        chip.title = chip.textContent;
+        row.append(chip);
+      }
+      reply.append(row);
+    }
+    $("assistant-status").textContent = "";
+  } catch (error) {
+    thinking.remove();
+    const node = appendAssistantMessage("error", `Assistant unavailable: ${error.message}`);
+    node.classList.add("error");
+    $("assistant-status").textContent = "";
+  } finally {
+    state.assistant.busy = false;
+    $("assistant-send").disabled = false;
+    $("assistant-input").focus();
+    $("assistant-log").scrollTop = $("assistant-log").scrollHeight;
+  }
 }
 
 function switchView(view) {

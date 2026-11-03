@@ -52,6 +52,18 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Vendored MapLibre and Three.js for an offline demo.
 - Dashboard: GREEN.
 
+### P3.7 Local assistant and 3D building context
+
+- Added `/api/agent` and `/api/agent/chat`; the assistant runs the local `opencode` CLI
+  with `--allow-agent`, `--agent-model`, and `--agent-timeout`.
+- Added the `+ Ask` pill and pop-up chat panel with quick prompts, markdown rendering,
+  tool-action chips, session continuity, and live browser context.
+- Fixed 3D buildings: the scene payload now carries a terrain-sampled `base_z`, and the
+  browser extrudes each footprint instead of placing a floating box.
+- Made all static and API URLs relative so the app works behind a reverse-proxy path
+  prefix (for example a code-server `/proxy/8101/` path).
+- Dashboard: GREEN; 196 tests.
+
 ### P4 Verify and demo
 
 - Added 190 tests across unit, spatial, CLI, service, and static layers.

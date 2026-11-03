@@ -65,6 +65,19 @@ HOST_OPTION = typer.Option("127.0.0.1", "--host", help="Bind address.")
 PORT_OPTION = typer.Option(8000, "--port", help="Bind port.")
 ALLOW_REMOTE_OPTION = typer.Option(False, "--allow-remote", help="Allow binding beyond loopback.")
 RUNTIME_OPTION = typer.Option(None, "--runtime", help="Scenario runtime directory.")
+ALLOW_AGENT_OPTION = typer.Option(
+    False, "--allow-agent", help="Enable the local OpenCode assistant."
+)
+AGENT_MODEL_OPTION = typer.Option(
+    "opencode-go/deepseek-v4.1-flash",
+    "--agent-model",
+    help="Model identifier for the assistant.",
+)
+AGENT_TIMEOUT_OPTION = typer.Option(
+    300.0,
+    "--agent-timeout",
+    help="Assistant subprocess timeout in seconds.",
+)
 EARLIER_OPTION = typer.Option(..., "--earlier", help="Earlier dataset directory.")
 LATER_OPTION = typer.Option(..., "--later", help="Later dataset directory.")
 MIN_HEIGHT_OPTION = typer.Option(3.0, "--min-height", help="Minimum canopy height in metres.")
@@ -242,6 +255,9 @@ def serve(
     port: int = PORT_OPTION,
     allow_remote: bool = ALLOW_REMOTE_OPTION,
     runtime: Path | None = RUNTIME_OPTION,
+    allow_agent: bool = ALLOW_AGENT_OPTION,
+    agent_model: str = AGENT_MODEL_OPTION,
+    agent_timeout: float = AGENT_TIMEOUT_OPTION,
 ) -> None:
     """Serve the local decision-support application.
 
@@ -257,6 +273,12 @@ def serve(
         Allow a non-loopback bind address.
     runtime : Path or None
         Scenario runtime directory.
+    allow_agent : bool
+        Enable the local OpenCode assistant.
+    agent_model : str
+        Model identifier for the assistant.
+    agent_timeout : float
+        Assistant subprocess timeout in seconds.
     """
     if host not in {"127.0.0.1", "localhost", "::1"} and not allow_remote:
         raise typer.BadParameter("refusing a non-loopback bind without --allow-remote")
@@ -264,7 +286,13 @@ def serve(
 
     from fresh_urban_forest.service import create_app
 
-    app_instance = create_app(load_dataset(dataset), runtime_dir=runtime)
+    app_instance = create_app(
+        load_dataset(dataset),
+        runtime_dir=runtime,
+        allow_agent=allow_agent,
+        agent_model=agent_model,
+        agent_timeout=agent_timeout,
+    )
     uvicorn.run(app_instance, host=host, port=port)
 
 

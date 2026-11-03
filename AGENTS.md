@@ -145,3 +145,7 @@ Record the result in the changelog entry for the milestone.
   reproducible screenshots.
 - **Say what the prototype is not.** It is not an i-Tree replacement and not a calibrated
   FVS growth model. Reason: both claims would be false and would damage trust.
+- **The assistant is opt-in and local.** `--allow-agent` enables the OpenCode CLI behind
+  the `+ Ask` panel. It runs with a sanitized environment and no authentication; do not
+  expose it on an untrusted network. Reason: a shell-capable agent plus an unauthenticated
+  web app is a security boundary.

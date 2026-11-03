@@ -12,7 +12,11 @@ import datetime as dt
 import io
 import json
 import math
+import os
+import shutil
+import subprocess
 import uuid
+from collections.abc import Mapping
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Literal
@@ -47,6 +51,8 @@ from fresh_urban_forest.models import (
     scenario_to_dict,
 )
 from fresh_urban_forest.scene import build_scene
+
+DEFAULT_AGENT_MODEL = "opencode-go/deepseek-v4.1-flash"
 
 
 class EditInput(BaseModel):
@@ -95,6 +101,37 @@ class ScenarioStore(BaseModel):
     scenarios: list[dict[str, object]] = Field(default_factory=list)
 
 
+class ChatRequest(BaseModel):
+    """One assistant turn from the browser."""
+
+    message: str = Field(min_length=1, max_length=8000)
+    session: str | None = Field(default=None, max_length=200)
+    context: dict[str, object] | None = None
+
+
+AGENT_GUIDE = """\
+You are the FRESH Urban Forest Lab assistant. Help the user understand the current
+UBC urban-forest dataset, canopy metrics, tree records, scenarios, planting
+recommendations, methods, and data caveats. The web UI has a 2D map, a 3D scene,
+a scenario editor, and a planting advisor.
+
+Useful commands you may run from the repository root:
+- `fresh-urban-forest info --dataset data/demo/ubc_core`
+- `fresh-urban-forest detect-trees --dataset data/demo/ubc_core --out tmp/detected.geojson`
+- `python -m pytest tests/test_growth_dss.py`
+Read `docs/reference/methods.md` (or the RST source) and `notes/reference/data-sources.md`
+when the question is methodological.
+
+Rules:
+- Use only values in the current UI context or values you obtain by running a command.
+- Do not invent tree counts, canopy values, species, scenario results, or file paths.
+- Do not claim you changed the UI or saved a scenario. Explain the UI steps instead.
+- Be explicit that growth and carbon are estimates, not calibrated i-Tree/FVS results.
+- Keep answers short and concrete; prefer short bullet lists in the narrow chat panel.
+- Do not print credentials, environment secrets, or full raw data tables.
+"""
+
+
 @dataclass
 class LabState:
     """Runtime state shared by the request handlers.
@@ -115,6 +152,10 @@ class LabState:
     runtime_dir: Path
     scenarios: dict[str, Scenario] = field(default_factory=dict)
     results: dict[str, ScenarioResult] = field(default_factory=dict)
+    allow_agent: bool = False
+    agent_model: str = DEFAULT_AGENT_MODEL
+    agent_timeout: float = 300.0
+    workspace: Path = field(default_factory=Path.cwd)
 
 
 def create_app(
@@ -122,6 +163,10 @@ def create_app(
     *,
     runtime_dir: Path | None = None,
     static_dir: Path | None = None,
+    allow_agent: bool = False,
+    agent_model: str = DEFAULT_AGENT_MODEL,
+    agent_timeout: float = 300.0,
+    workspace: Path | None = None,
 ) -> FastAPI:
     """Create the FastAPI application.
 
@@ -133,6 +178,14 @@ def create_app(
         Scenario directory. Defaults to ``runtime`` under the current working directory.
     static_dir : Path or None
         Optional static asset directory, used by tests.
+    allow_agent : bool
+        Enable the local OpenCode assistant.
+    agent_model : str
+        Model identifier passed to ``opencode run``.
+    agent_timeout : float
+        Assistant subprocess timeout in seconds.
+    workspace : Path or None
+        Working directory for the assistant. Defaults to the repository root.
 
     Returns
     -------
@@ -141,7 +194,15 @@ def create_app(
     """
     runtime = runtime_dir or Path.cwd() / "runtime"
     runtime.mkdir(parents=True, exist_ok=True)
-    state = LabState(dataset=dataset, runtime_dir=runtime)
+    assistant_workspace = (workspace or Path(__file__).resolve().parents[2]).resolve()
+    state = LabState(
+        dataset=dataset,
+        runtime_dir=runtime,
+        allow_agent=allow_agent,
+        agent_model=agent_model,
+        agent_timeout=agent_timeout,
+        workspace=assistant_workspace,
+    )
     _load_scenarios(state)
     app = FastAPI(title="FRESH Urban Forest Lab", version="0.1.0")
     app.state.lab = state
@@ -161,6 +222,95 @@ def create_app(
     def health() -> dict[str, object]:
         """Return a liveness and dataset summary response."""
         return {"status": "ok", "dataset_id": state.dataset.manifest.dataset_id}
+
+    @app.get("/api/agent")
+    def agent_info() -> dict[str, object]:
+        """Return assistant availability and configuration.
+
+        Returns
+        -------
+        dict
+            Enabled flag, model, working directory, executable availability, and timeout.
+        """
+        return {
+            "enabled": state.allow_agent,
+            "model": state.agent_model,
+            "cwd": str(state.workspace),
+            "available": shutil.which("opencode") is not None,
+            "timeout": state.agent_timeout,
+        }
+
+    @app.post("/api/agent/chat")
+    def agent_chat(body: ChatRequest) -> dict[str, object]:
+        """Run one assistant turn through the local OpenCode CLI.
+
+        Parameters
+        ----------
+        body : ChatRequest
+            User message, optional session id, and optional UI context.
+
+        Returns
+        -------
+        dict
+            Assistant reply, session id, and tool actions.
+
+        Raises
+        ------
+        fastapi.HTTPException
+            When the assistant is disabled, unavailable, times out, or returns no text.
+        """
+        if not state.allow_agent:
+            raise HTTPException(
+                status_code=403,
+                detail="the assistant is disabled; start the service with --allow-agent",
+            )
+        executable = shutil.which("opencode")
+        if executable is None:
+            raise HTTPException(status_code=503, detail="opencode is not on the service PATH")
+        context = json.dumps(body.context or {}, ensure_ascii=False)[:5000]
+        prompt = f"{AGENT_GUIDE}\n\nCurrent UI context (JSON): {context}\n\nUser: {body.message}"
+        command = [
+            executable,
+            "run",
+            "--model",
+            state.agent_model,
+            "--format",
+            "json",
+            "--auto",
+        ]
+        if body.session and body.session.startswith("ses"):
+            command.extend(["--session", body.session])
+        command.append(prompt)
+        try:
+            completed = subprocess.run(
+                command,
+                cwd=str(state.workspace),
+                env=_agent_environment(state.workspace),
+                capture_output=True,
+                text=True,
+                timeout=state.agent_timeout,
+                check=False,
+            )
+        except subprocess.TimeoutExpired as exc:
+            raise HTTPException(
+                status_code=504,
+                detail=f"the assistant did not answer within {state.agent_timeout:g} seconds",
+            ) from exc
+        except OSError as exc:
+            raise HTTPException(status_code=503, detail=f"could not start opencode: {exc}") from exc
+        reply, session_id, actions, errors = _parse_agent_events(completed.stdout)
+        if not reply:
+            detail = (
+                errors[-1]
+                if errors
+                else (completed.stderr.strip() or "the assistant returned no text")
+            )
+            raise HTTPException(status_code=502, detail=detail[:500])
+        return {
+            "reply": reply,
+            "session": session_id or body.session,
+            "actions": actions,
+        }
 
     @app.get("/api/dataset")
     def dataset_info() -> dict[str, object]:
@@ -528,6 +678,102 @@ def create_app(
         return FileResponse(path, media_type="text/csv", filename=path.name)
 
     return app
+
+
+def _agent_environment(workspace: Path) -> dict[str, str]:
+    """Build a sanitized environment for the assistant subprocess.
+
+    Parameters
+    ----------
+    workspace : Path
+        Repository root that supplies the package source.
+
+    Returns
+    -------
+    dict of str to str
+        Environment variables with session and cloud credentials removed.
+    """
+    environment = dict(os.environ)
+    paths = [str(workspace / "src")]
+    if environment.get("PYTHONPATH"):
+        paths.append(environment["PYTHONPATH"])
+    environment["PYTHONPATH"] = os.pathsep.join(paths)
+    environment["FRESH_URBAN_FOREST_WORKSPACE"] = str(workspace)
+    for name in (
+        "OPENCODE_SESSION_ID",
+        "OPENCODE_TERMINAL",
+        "AWS_ACCESS_KEY_ID",
+        "AWS_SECRET_ACCESS_KEY",
+        "AWS_SESSION_TOKEN",
+        "AWS_DEFAULT_REGION",
+        "S3_ENDPOINT_URL",
+        "GLOBUS_ACCESS_TOKEN",
+        "GLOBUS_REFRESH_TOKEN",
+    ):
+        environment.pop(name, None)
+    return environment
+
+
+def _parse_agent_events(stdout: str) -> tuple[str, str | None, list[dict[str, str]], list[str]]:
+    """Parse the JSON-lines output of ``opencode run --format json``.
+
+    Parameters
+    ----------
+    stdout : str
+        Captured standard output.
+
+    Returns
+    -------
+    tuple
+        Reply text, session id, tool actions, and error messages.
+    """
+    texts: list[str] = []
+    actions: list[dict[str, str]] = []
+    errors: list[str] = []
+    session_id: str | None = None
+    for line in stdout.splitlines():
+        try:
+            event = json.loads(line)
+        except json.JSONDecodeError:
+            continue
+        if not isinstance(event, Mapping):
+            continue
+        candidate = event.get("sessionID")
+        if isinstance(candidate, str) and candidate.startswith("ses"):
+            session_id = candidate
+        event_type = event.get("type")
+        if event_type == "error":
+            failure = event.get("error")
+            if isinstance(failure, Mapping) and isinstance(failure.get("message"), str):
+                errors.append(str(failure["message"]))
+            continue
+        part = event.get("part")
+        if not isinstance(part, Mapping):
+            continue
+        if event_type == "text":
+            text = part.get("text")
+            if isinstance(text, str) and text.strip():
+                texts.append(text.strip())
+        elif event_type == "tool_use":
+            tool = part.get("tool")
+            state = part.get("state")
+            summary = ""
+            if isinstance(state, Mapping):
+                title = state.get("title")
+                if isinstance(title, str):
+                    summary = title
+                inputs = state.get("input")
+                if isinstance(inputs, Mapping):
+                    for key in ("command", "filePath", "path", "pattern", "url", "description"):
+                        value = inputs.get(key)
+                        if isinstance(value, str) and value.strip():
+                            summary = value.strip()
+                            break
+            if isinstance(tool, str):
+                action = {"tool": tool, "summary": summary[:160]}
+                if action not in actions:
+                    actions.append(action)
+    return "\n\n".join(texts).strip(), session_id, actions[-12:], errors
 
 
 def _load_scenarios(state: LabState) -> None:
