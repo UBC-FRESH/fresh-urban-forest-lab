@@ -13,8 +13,8 @@ This roadmap is the plan of record and the issue tracker map for FRESH Urban For
 | P4 Verify and demo | #5 | `feature/p0-p4-prototype` | complete |
 | P5 Release and public deployment | #6 | `feature/p5-release` | planned |
 | P6 Operate and maintain | #7 | `feature/p6-operate` | planned |
-| P7 Solar shade and species-fit engine | #40 | `feature/p7-shade-species` | pr-open |
-| P8 Spatio-temporal optimization and Pareto explorer | #41 | `feature/p8-optimize-pareto` | planned |
+| P7 Solar shade and species-fit engine | #40 | `feature/p7-shade-species` | complete |
+| P8 Spatio-temporal optimization and Pareto explorer | #41 | `feature/p8-optimize-pareto` | pr-open |
 | P9 Off-inventory and private-canopy augmentation | #42 | `feature/p9-off-inventory` | planned |
 | P10 Bird habitat and demography | #43 | `feature/p10-birds` | planned |
 | P11 Integration and v0.3 release candidate | #44 | `feature/p11-integration` | planned |
@@ -299,7 +299,7 @@ Acceptance criteria:
 
 Parent issue: #40
 Branch: `feature/p7-shade-species`
-Status: pr-open
+Status: complete
 
 Goal: model daily, seasonal, and annual solar exposure with terrain, buildings, and trees, then turn that into tree-level marginal shade, species fit, growth, vigour, drought stress, and irrigation cost.
 
@@ -334,18 +334,18 @@ Phase 7 verification:
 
 Parent issue: #41
 Branch: `feature/p8-optimize-pareto`
-Status: planned
+Status: pr-open
 
 Goal: solve many spatio-temporal planting, removal, species, and irrigation problems, compile a fuzzy Pareto archive, and explore the high-dimensional tradeoff space as an interactive 3D solution cloud.
 
 Plan: `notes/design/urban-canopy-program-plan.md`.
 
-- [ ] P8.1 Decision model and objective schema
-- [ ] P8.2 Fast evaluator and surrogate
-- [ ] P8.3 Parallel solver and job orchestration
-- [ ] P8.4 Pareto archive and fuzzy dominance
-- [ ] P8.5 3D solution-space explorer
-- [ ] P8.6 Benchmark, sensitivity, and report
+- [x] P8.1 Decision model and objective schema
+- [x] P8.2 Fast evaluator and surrogate
+- [x] P8.3 Parallel solver and job orchestration
+- [x] P8.4 Pareto archive and fuzzy dominance
+- [x] P8.5 3D solution-space explorer
+- [x] P8.6 Benchmark, sensitivity, and report
 
 Acceptance criteria:
 

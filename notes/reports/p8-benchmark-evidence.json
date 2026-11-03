@@ -1,0 +1,101 @@
+{
+  "dataset": "data/processed/ubc_lidar_2021",
+  "tree_records": 9324,
+  "problem": {
+    "sites": 387,
+    "species": 6,
+    "objectives": 7,
+    "horizon": 30,
+    "budget_cad": 8000000,
+    "max_sites": 387
+  },
+  "archive_run": {
+    "scalarizations": 72,
+    "population": 40,
+    "generations": 100,
+    "local_iterations": 10000,
+    "workers": 8,
+    "seed": 42,
+    "runtime_s": 100.944,
+    "evaluations": 1010952,
+    "archive_solutions": 71,
+    "hypervolume": 0.0508,
+    "planted_range": [
+      0,
+      387
+    ]
+  },
+  "convergence_all_sites": {
+    "engine": "fresh-solutions.run_to_convergence",
+    "population": 80,
+    "generations": 500,
+    "local_iterations_per_round": 2000,
+    "patience_rounds": 8,
+    "min_relative_improvement": 1e-05,
+    "max_evaluations": 1000000,
+    "seed": 1,
+    "runtime_s": 79.797,
+    "evaluations": 112116,
+    "rounds": 36,
+    "converged": true,
+    "stop_reason": "patience",
+    "objective": -0.293285,
+    "planted": 333,
+    "objectives": [
+      21049182.2283,
+      19515624.4375,
+      0.5015,
+      1.7624,
+      24607.2097,
+      5092409.8005,
+      4447998.1003
+    ]
+  },
+  "convergence_40_sites": [
+    {
+      "seed": 1,
+      "runtime_s": 44.433,
+      "evaluations": 66093,
+      "rounds": 13,
+      "converged": true,
+      "stop_reason": "patience",
+      "objective": -0.240911,
+      "planted": 40
+    },
+    {
+      "seed": 2,
+      "runtime_s": 42.356,
+      "evaluations": 60090,
+      "rounds": 10,
+      "converged": true,
+      "stop_reason": "patience",
+      "objective": -0.239939,
+      "planted": 40
+    }
+  ],
+  "ui_qa": {
+    "viewports": [
+      "1500x950",
+      "900x700"
+    ],
+    "console_errors": 0,
+    "page_errors": 0,
+    "failed_requests": 0,
+    "checks": [
+      "run",
+      "tab switch during run",
+      "actual canvas click",
+      "axis/colour/size/slice",
+      "load as scenario",
+      "scenario dropdown",
+      "slice reset",
+      "load reset",
+      "rapid tabs",
+      "resize"
+    ]
+  },
+  "notes": [
+    "Hypervolume uses a fixed problem-scale reference, not the current archive ideal/nadir.",
+    "Z* is the best balanced weighted-scalar objective, not a global optimum proof."
+  ]
+}

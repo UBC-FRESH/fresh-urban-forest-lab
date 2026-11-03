@@ -12,6 +12,7 @@ import json
 import shutil
 import tempfile
 import zipfile
+from collections.abc import Mapping
 from dataclasses import asdict
 from pathlib import Path
 
@@ -165,6 +166,23 @@ SOIL_VOLUME_OPTION = typer.Option(6.0, "--soil-volume", help="Available soil vol
 CROWN_AREA_OPTION = typer.Option(20.0, "--crown-area", help="Projected crown area in m2.")
 AGE_OPTION = typer.Option(10.0, "--age", help="Tree age in years.")
 SHADE_HOURS_OPTION = typer.Option(1000.0, "--shade-area-hours", help="Effective shade area-hours.")
+SITES_OPTION = typer.Option(24, "--sites", help="Candidate sites in the optimization problem.")
+BUDGET_OPTION = typer.Option(60_000.0, "--budget", help="Budget constraint in CAD.")
+MAX_SITES_OPTION = typer.Option(40, "--max-sites", help="Maximum planted sites.")
+POPULATION_OPTION = typer.Option(20, "--population", help="Fresh Solutions population size.")
+GENERATIONS_OPTION = typer.Option(5, "--generations", help="Fresh Solutions generations.")
+SCALARIZATIONS_OPTION = typer.Option(
+    18, "--scalarizations", help="Number of weighted scalarizations."
+)
+LOCAL_ITERATIONS_OPTION = typer.Option(
+    120, "--local-iterations", help="Fresh Solutions local-search iterations."
+)
+OPTIMIZE_WORKERS_OPTION = typer.Option(2, "--workers", help="Parallel scalarization workers.")
+SURROGATE_SAMPLES_OPTION = typer.Option(
+    0, "--surrogate-samples", help="Fit a screening surrogate on this many samples."
+)
+ARCHIVE_OPTION = typer.Option(..., "--archive", help="Optimization result JSON.")
+TRACE_OPTION = typer.Option(False, "--trace", help="Keep per-scalarization convergence histories.")
 
 
 @catalog_app.command("list")
@@ -941,6 +959,128 @@ def _cli_shade_whens(
         raise typer.BadParameter(str(exc)) from exc
     step = 1.0 if mode == "instant" else default_step_hours(whens)
     return (day, whens, step)
+
+
+@app.command("optimize")
+def optimize_command(
+    dataset: Path = DATASET_OPTION,
+    out: Path = OUT_OPTION,
+    sites: int = SITES_OPTION,
+    horizon: int = typer.Option(20, "--horizon", help="Projection horizon in years."),
+    budget: float = BUDGET_OPTION,
+    max_sites: int = MAX_SITES_OPTION,
+    population: int = POPULATION_OPTION,
+    generations: int = GENERATIONS_OPTION,
+    scalarizations: int = SCALARIZATIONS_OPTION,
+    local_iterations: int = LOCAL_ITERATIONS_OPTION,
+    workers: int = OPTIMIZE_WORKERS_OPTION,
+    seed: int = typer.Option(42, "--seed", help="Search seed."),
+    surrogate_samples: int = SURROGATE_SAMPLES_OPTION,
+    trace: bool = TRACE_OPTION,
+) -> None:
+    """Solve a planting problem with Fresh Solutions and write the archive.
+
+    Parameters
+    ----------
+    dataset : Path
+        Dataset directory.
+    out : Path
+        Output result JSON.
+    sites : int
+        Number of candidate sites.
+    horizon : int
+        Projection horizon.
+    budget : float
+        Budget constraint in CAD.
+    max_sites : int
+        Maximum planted sites.
+    population : int
+        Fresh Solutions population size.
+    generations : int
+        Fresh Solutions generations.
+    scalarizations : int
+        Number of weighted scalarizations.
+    local_iterations : int
+        Local-search iterations per scalarization.
+    workers : int
+        Parallel scalarization workers.
+    seed : int
+        Search seed.
+    surrogate_samples : int
+        Optional screening surrogate sample count.
+    trace : bool
+        Keep per-scalarization convergence histories.
+    """
+    from fresh_urban_forest.optimize import build_problem, run_optimization, write_result
+
+    loaded = load_dataset(dataset)
+    problem = build_problem(
+        loaded,
+        site_count=sites,
+        horizon=horizon,
+        budget_cad=budget,
+        max_sites=max_sites,
+        seed=seed,
+    )
+    result = run_optimization(
+        problem,
+        population_size=population,
+        generations=generations,
+        scalarizations=scalarizations,
+        local_iterations=local_iterations,
+        workers=workers,
+        seed=seed,
+        surrogate_samples=surrogate_samples,
+        trace=trace,
+    )
+    path = write_result(result, out)
+    console.print(f"Optimization result: {path}")
+    console.print(
+        f"archive={len(result.archive.solutions)} hypervolume={result.archive.hypervolume:.4f} "
+        f"evaluations={result.evaluations} runtime={result.runtime_s:.2f}s"
+    )
+
+
+@app.command("pareto")
+def pareto_command(
+    archive: Path = ARCHIVE_OPTION,
+    out: Path = OUT_OPTION,
+) -> None:
+    """Summarise a saved optimization archive.
+
+    Parameters
+    ----------
+    archive : Path
+        Optimization result JSON.
+    out : Path
+        Output summary JSON.
+    """
+    payload = json.loads(archive.read_text(encoding="utf-8"))
+    archive_payload = payload.get("archive", {})
+    if not isinstance(archive_payload, Mapping):
+        raise typer.BadParameter("archive payload is not an object")
+    solutions = archive_payload.get("solutions", [])
+    if not isinstance(solutions, list):
+        raise typer.BadParameter("archive solutions are not a list")
+    summary = {
+        "problem_id": archive_payload.get("problem_id", ""),
+        "objectives": archive_payload.get("objectives", []),
+        "solution_count": len(solutions),
+        "hypervolume": archive_payload.get("hypervolume", 0.0),
+        "top_robust": sorted(
+            solutions,
+            key=lambda item: (
+                float(item.get("robustness", 0.0)) if isinstance(item, Mapping) else 0.0
+            ),
+            reverse=True,
+        )[:5],
+    }
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")
+    console.print(
+        f"Archive: {summary['solution_count']} solutions, "
+        f"hypervolume {summary['hypervolume']} -> {out}"
+    )
 
 
 def _detection_grid(
