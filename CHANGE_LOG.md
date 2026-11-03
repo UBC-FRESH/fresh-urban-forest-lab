@@ -196,3 +196,16 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
   documentation.
 - Dashboard: GREEN.
 - Close-out report: `notes/reports/p4-closeout.md`.
+
+### P7-P11 programme planning
+
+- Completed a rapid peer-reviewed and grey-literature review of tree/building shade,
+  species selection, growth and drought stress, irrigation, multi-objective optimization,
+  Pareto visualization, off-inventory/private canopy, and urban bird habitat.
+- Wrote the detailed programme plan in `notes/design/urban-canopy-program-plan.md`.
+- Recorded the proposed marginal-shade and evidence-tier decision in ADR 0005.
+- Queued P7-P11 as parent issues #40-#44 with planned branches and task checklists.
+- Added the public research-agenda page to the docs and `llms.txt`.
+- Recommendation: P7 shade/species, P8 optimization/Pareto, P9 off-inventory, P10 birds,
+  P11 integration. No phase is active and no code behavior changed.
+- Dashboard: GREEN (lint, format, types, tests, validator, docs).

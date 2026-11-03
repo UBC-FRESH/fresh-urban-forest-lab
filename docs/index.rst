@@ -25,6 +25,7 @@ act, and cite it in their reports. Start with the repository's ``AGENTS.md`` and
    reference/data-contracts
    reference/architecture
    reference/project-status
+   reference/research-agenda
    reference/methods
    reference/change-products
    reference/validation-and-calibration

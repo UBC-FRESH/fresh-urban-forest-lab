@@ -13,15 +13,20 @@ This roadmap is the plan of record and the issue tracker map for FRESH Urban For
 | P4 Verify and demo | #5 | `feature/p0-p4-prototype` | complete |
 | P5 Release and public deployment | #6 | `feature/p5-release` | planned |
 | P6 Operate and maintain | #7 | `feature/p6-operate` | planned |
+| P7 Solar shade and species-fit engine | #40 | `feature/p7-shade-species` | planned |
+| P8 Spatio-temporal optimization and Pareto explorer | #41 | `feature/p8-optimize-pareto` | planned |
+| P9 Off-inventory and private-canopy augmentation | #42 | `feature/p9-off-inventory` | planned |
+| P10 Bird habitat and demography | #43 | `feature/p10-birds` | planned |
+| P11 Integration and v0.3 release candidate | #44 | `feature/p11-integration` | planned |
 
 ## Lifecycle Map
 
 | Stage | Phases | Exit criteria |
 | --- | --- | --- |
-| Scope and design | P0 | Sources, licences, architecture, and ADRs recorded |
-| Build | P1, P2, P3 | A dataset, a growth/DSS core, and a working 2D/3D app |
-| Verify | P4 | Dashboard green, real data built, browser checked, method notes written |
-| Release and deploy | P5 | Tag, release notes, Pages, clean-clone verification |
+| Scope and design | P0, P7.1 | Sources, licences, architecture, evidence review, and ADRs recorded |
+| Build | P1, P2, P3, P7, P8, P9, P10 | A dataset, a growth/DSS core, a working 2D/3D app, and the shade/optimization/canopy/bird layers |
+| Verify | P4, P11 | Dashboard green, real data built, browser checked, method notes written, benchmark reproduced |
+| Release and deploy | P5, P11.4 | Tag, release notes, Pages, clean-clone verification |
 | Operate and maintain | P6 | Review cadence, source triage, contract migration policy |
 
 ## Conventions
@@ -290,6 +295,162 @@ Acceptance criteria:
 - New sources are accepted or rejected against a written rule.
 - A schema change has a migration note.
 
+## Phase 7: Solar shade and species-fit engine
+
+Parent issue: #40
+Branch: `feature/p7-shade-species`
+Status: planned
+
+Goal: model daily, seasonal, and annual solar exposure with terrain, buildings, and trees, then turn that into tree-level marginal shade, species fit, growth, vigour, drought stress, and irrigation cost.
+
+Plan: `notes/design/urban-canopy-program-plan.md`.
+Evidence: `notes/reference/literature-review-shade-optimization-biodiversity.md`.
+
+- [ ] P7.1 Evidence review and method lock
+- [ ] P7.2 Solar geometry and shadow kernel
+- [ ] P7.3 Shade accounting and marginal contribution
+- [ ] P7.4 Species traits and site fit
+- [ ] P7.5 Coupled light-water-growth-vigour model
+- [ ] P7.6 Irrigation policy and cost
+- [ ] P7.7 Shade and species UI
+- [ ] P7.8 Validation, uncertainty, and report
+
+Acceptance criteria:
+
+- A date/time request returns a georeferenced shadow raster and shade metrics.
+- A full-year aggregate returns seasonal and annual shade-hours with uncertainty.
+- A tree shade card separates building shade, canopy shade, and marginal tree shade.
+- A species list is ranked by site fit with limiting factors and evidence tiers.
+- A water/irrigation card gives stress days and a cost range.
+- The dashboard is green and the docs describe the method and limits.
+
+Phase 7 verification:
+
+- `python scripts/dashboard.py`
+- `fresh-urban-forest shade --dataset data/demo/ubc_core --date 2026-06-21 --times 08:00,12:00,16:00 --out tmp/shade`
+- `fresh-urban-forest species-fit --dataset data/demo/ubc_core --species "Acer rubrum" --out tmp/fit.json`
+
+## Phase 8: Spatio-temporal optimization and Pareto explorer
+
+Parent issue: #41
+Branch: `feature/p8-optimize-pareto`
+Status: planned
+
+Goal: solve many spatio-temporal planting, removal, species, and irrigation problems, compile a fuzzy Pareto archive, and explore the high-dimensional tradeoff space as an interactive 3D solution cloud.
+
+Plan: `notes/design/urban-canopy-program-plan.md`.
+
+- [ ] P8.1 Decision model and objective schema
+- [ ] P8.2 Fast evaluator and surrogate
+- [ ] P8.3 Parallel solver and job orchestration
+- [ ] P8.4 Pareto archive and fuzzy dominance
+- [ ] P8.5 3D solution-space explorer
+- [ ] P8.6 Benchmark, sensitivity, and report
+
+Acceptance criteria:
+
+- A 100-site, 5-species, 20-year problem with at least four objectives solves end to end.
+- The archive is non-dominated, reproducible from a seed, and carries uncertainty.
+- The UI can orbit, slice, brush, and load a solution as a scenario.
+- The benchmark reports hypervolume, runtime, and surrogate error.
+- The dashboard is green.
+
+Phase 8 verification:
+
+- `python scripts/dashboard.py`
+- `fresh-urban-forest optimize --problem data/demo/ubc_core/optimization_example.json --workers 8 --out tmp/optimize`
+- `fresh-urban-forest pareto --archive tmp/optimize/archive.json --slices 3 --out tmp/pareto`
+
+## Phase 9: Off-inventory and private-canopy augmentation
+
+Parent issue: #42
+Branch: `feature/p9-off-inventory`
+Status: planned
+
+Goal: detect and reconcile trees missing from the official inventory, estimate the value of including them, and keep private-property data safe.
+
+Plan: `notes/design/urban-canopy-program-plan.md`.
+Evidence: `notes/reference/literature-review-shade-optimization-biodiversity.md`.
+
+- [ ] P9.1 Terminology, privacy, and data governance
+- [ ] P9.2 Land mask and ownership proxy
+- [ ] P9.3 Off-inventory detection and attribution
+- [ ] P9.4 Inventory reconciliation and update workflow
+- [ ] P9.5 Value-of-information experiment
+- [ ] P9.6 UI, confidence layer, and report
+
+Acceptance criteria:
+
+- An off-inventory layer exists for the pilot with confidence and land class.
+- Reconciliation separates unmatched, missed, and false-positive cases.
+- A value-of-information experiment reports whether the plan changes.
+- No private owner data is tracked or exposed.
+- The dashboard is green.
+
+Phase 9 verification:
+
+- `python scripts/dashboard.py`
+- `fresh-urban-forest off-inventory --dataset data/processed/ubc_lidar_2021 --parcels data/raw/parcels --out tmp/off_inventory`
+
+## Phase 10: Bird habitat and demography
+
+Parent issue: #43
+Branch: `feature/p10-birds`
+Status: planned
+
+Goal: connect 3D canopy structure and management scenarios to bird habitat, relative abundance, and a prior-driven demographic projection with explicit uncertainty.
+
+Plan: `notes/design/urban-canopy-program-plan.md`.
+Evidence: `notes/reference/literature-review-shade-optimization-biodiversity.md`.
+
+- [ ] P10.1 Bird data and evidence tier
+- [ ] P10.2 3D habitat metrics
+- [ ] P10.3 Habitat and relative-abundance model
+- [ ] P10.4 Demographic layer and lambda
+- [ ] P10.5 Scenario UI and reporting
+- [ ] P10.6 Validation and expert review
+
+Acceptance criteria:
+
+- A scenario returns habitat metrics and relative abundance with uncertainty.
+- A demographic projection returns survival curves and lambda with intervals.
+- The UI labels the evidence tier and does not imply site-specific survival.
+- An expert review is recorded.
+- The dashboard is green.
+
+Phase 10 verification:
+
+- `python scripts/dashboard.py`
+- `fresh-urban-forest birds --dataset data/demo/ubc_core --observations data/raw/ebird.csv --out tmp/birds`
+
+## Phase 11: Integration and v0.3 release candidate
+
+Parent issue: #44
+Branch: `feature/p11-integration`
+Status: planned
+
+Goal: make the shade, species, optimization, off-inventory, and bird layers one coherent lab, document them, benchmark them, and queue a v0.3 release candidate.
+
+Plan: `notes/design/urban-canopy-program-plan.md`.
+
+- [ ] P11.1 Unified scenario and evidence contract
+- [ ] P11.2 Integrated UI and exports
+- [ ] P11.3 Benchmark, reproducibility, and docs
+- [ ] P11.4 v0.3 release candidate
+
+Acceptance criteria:
+
+- A user can run a scenario and see shade, water, cost, birds, and a Pareto archive.
+- A clean clone reproduces the benchmark from a manifest.
+- The docs describe every method and limit.
+- The release candidate is queued; no tag exists without approval.
+
+Phase 11 verification:
+
+- `python scripts/dashboard.py`
+- `python scripts/check_workflow.py`
+- `fresh-urban-forest serve --dataset data/demo/ubc_core --port 8000`
+
 ## Detailed Next Steps Notes
 
 1. The repository was created from `UBC-FRESH/ubc-fresh-dev-workflow` on 2026-11-03. The seed's dashboard, validator, docs, and agent contract are retained.
@@ -301,3 +462,5 @@ Acceptance criteria:
 7. Phases 0 to 4 merged as PR #36 (`1e0a9b0`). The parent issues #1 to #5 and their child issues #8 to #35 are closed. Subsequent hygiene commits on `main` fixed the editable-install ignore, the documentation package install, and the Pages deferral. CI and the Docs workflow are green on `main` as of `dc9f599`.
 8. P3.7 (#37) added the local OpenCode assistant and fixed 3D buildings by sampling terrain elevation at each footprint centroid and extruding the footprint geometry. The assistant is opt-in with `--allow-agent` and runs the local `opencode` CLI with a sanitized environment. The reverse-proxy path-prefix fix is also on `main`.
 9. P1.7 (#38) added external tile discovery. The UBC pilot bbox returned 34 LidarBC point-cloud tiles and 15 CanElevation tiles. The CanElevation 2016 Lower Mainland tiles duplicate the LidarBC 2016 coverage, so they are a COPC/cloud-optimised alternative rather than an independent repeat measure. One 6.04 MB LidarBC tile was downloaded and summarised as a QA check.
+10. The P7-P11 programme is queued as planned phases (#40-#44) with the detailed plan in `notes/design/urban-canopy-program-plan.md` and the rapid evidence review in `notes/reference/literature-review-shade-optimization-biodiversity.md`. The recommended order is P7 shade/species, P8 optimization/Pareto, P9 off-inventory, P10 birds, P11 integration. No phase is active.
+11. The P7-P11 queue does not block the v0.2.0 release candidate. P5 remains the release gate; its tag, release, and settings actions still need explicit maintainer approval.

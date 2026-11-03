@@ -13,6 +13,8 @@ Keep private material out of this directory.
 
 - `design/architecture.md`: the layer diagram, contracts, and deliberate simplifications.
 - `design/change-uncertainty-plan.md`: observed change, completeness, validation, and calibration plan.
+- `design/urban-canopy-program-plan.md`: the queued P7-P11 programme for shade, species fit, optimization, off-inventory canopy, and birds.
+- `reference/literature-review-shade-optimization-biodiversity.md`: rapid peer-reviewed and grey-literature review, novelty assessment, and citations.
 - `reports/detection-and-allometry-2021.md`: first detection validation and local allometry results.
 - `reports/field-validation-packet.md`: Main Mall field packet and verification/analysis protocol.
 - `reports/observed-change-ubc.md`: same-mask 2015↔2016, 2015↔2021, and 2016↔2021 observed-change products.
@@ -27,3 +29,4 @@ Keep private material out of this directory.
 - `adr/0002-standalone-core.md`: keep the core independent of other lab systems.
 - `adr/0003-lidar-and-change-methods.md`: CHM detection and repeat-measures change.
 - `adr/0004-scenario-model.md`: immutable dataset plus append-only scenario edits.
+- `adr/0005-marginal-shade-and-evidence-tiers.md`: proposed decision to model marginal shade and label every output with an evidence tier.
