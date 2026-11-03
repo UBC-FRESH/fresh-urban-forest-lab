@@ -27,6 +27,7 @@ from fresh_urban_forest.catalog import DatasetSource, load_catalog
 from fresh_urban_forest.change import canopy_change
 from fresh_urban_forest.change_product import build_change_product
 from fresh_urban_forest.dataset import build_dataset, dataset_summary, load_dataset
+from fresh_urban_forest.field_analysis import analyze_field_packet, write_field_analysis
 from fresh_urban_forest.field_packet import build_field_packet
 from fresh_urban_forest.inventory import (
     load_boundary,
@@ -120,6 +121,7 @@ PROJECT_OPTION = typer.Option(None, "--project", help="Optional CanElevation pro
 PROVIDER_OPTION = typer.Option(None, "--provider", help="Optional CanElevation provider filter.")
 YEAR_OPTION = typer.Option(2022, "--year", help="Vancouver LiDAR year: 2013, 2018, or 2022.")
 MANIFEST_OPTION = typer.Option(..., "--manifest", help="Tile manifest JSON.")
+PACKET_OPTION = typer.Option(..., "--packet", help="Field packet directory.")
 MAX_DISTANCE_OPTION = typer.Option(5.0, "--max-distance", help="Match distance in metres.")
 MIN_HEIGHTS_OPTION = typer.Option(
     "3,4,5",
@@ -578,6 +580,29 @@ def field_packet_command(
         validation=validation,
     )
     console.print(f"Field packet: {path}")
+
+
+@app.command("analyze-field-packet")
+def analyze_field_packet_command(
+    packet: Path = PACKET_OPTION,
+    out_dir: Path = OUT_DIR_OPTION,
+) -> None:
+    """Analyse a completed field-validation packet.
+
+    Parameters
+    ----------
+    packet : Path
+        Packet directory with completed CSV files.
+    out_dir : Path
+        Output directory for JSON and Markdown.
+    """
+    result = analyze_field_packet(packet)
+    path = write_field_analysis(result, out_dir)
+    console.print(f"Field analysis: {path}")
+    console.print(
+        f"precision={result.precision} precision_merged={result.precision_including_merged} "
+        f"recall={result.recall} height_bias={result.mean_height_bias_m} m"
+    )
 
 
 @app.command("tune-detection")

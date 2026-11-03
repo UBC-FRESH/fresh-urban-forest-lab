@@ -26,9 +26,20 @@ fresh-urban-forest field-packet \
 
 - `field_trees.geojson`: inventory trees.
 - `detected_crowns.geojson`: detected crowns.
-- `field_checks.csv`: one row per inventory tree, with measured flags, detected match, and
-  blank `field_verified` / `field_notes` columns.
+- `field_checks.csv`: one row per inventory tree, with measured flags, detected match,
+  blank field measurement columns, and `field_verified` / `field_notes`.
+- `detected_checks.csv`: one row per detected crown, with blank `field_status` and
+  `field_notes`. Use `real`, `merged`, or `false_positive`.
 - `README.md`: field protocol.
+
+After the field crew completes the CSVs:
+
+```bash
+fresh-urban-forest analyze-field-packet   --packet data/processed/field_packet_mainmall   --out-dir data/processed/field_packet_mainmall/analysis
+```
+
+The analysis reports precision, precision including merged crowns, recall, missing and new
+trees, and height/crown bias. It only uses field-verified rows.
 
 ## Why this matters
 

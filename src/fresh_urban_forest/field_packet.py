@@ -91,6 +91,9 @@ def build_field_packet(
                 "detected_crown_radius_m",
                 "match_distance_m",
                 "field_verified",
+                "field_dbh_cm",
+                "field_height_m",
+                "field_crown_width_m",
                 "field_notes",
             ]
         )
@@ -112,6 +115,34 @@ def build_field_packet(
                     match.detected_height_m if match else "",
                     match.detected_crown_radius_m if match else "",
                     match.distance_m if match else "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                ]
+            )
+    with (out_dir / "detected_checks.csv").open("w", encoding="utf-8", newline="") as handle:
+        writer = csv.writer(handle)
+        writer.writerow(
+            [
+                "detected_id",
+                "lon",
+                "lat",
+                "detected_height_m",
+                "detected_crown_radius_m",
+                "field_status",
+                "field_notes",
+            ]
+        )
+        for crown in selected_detected:
+            writer.writerow(
+                [
+                    crown.tree_id,
+                    crown.lon,
+                    crown.lat,
+                    crown.height_m,
+                    crown.crown_radius_m,
                     "",
                     "",
                 ]
@@ -236,7 +267,10 @@ every detected crown inside a small area, not to treat the citywide inventory as
 
 - `field_trees.geojson`: inventory trees in the patch.
 - `detected_crowns.geojson`: CHM-detected crowns in the patch.
-- `field_checks.csv`: one row per inventory tree with measured flags and match fields.
+- `field_checks.csv`: one row per inventory tree with measured flags, match fields, and
+  blank field measurement columns.
+- `detected_checks.csv`: one row per detected crown with a blank `field_status` column.
+  Use `real`, `merged`, or `false_positive`.
 
 ## Field steps
 
@@ -245,7 +279,8 @@ every detected crown inside a small area, not to treat the citywide inventory as
    `no`, or `missing` in the CSV.
 3. Add any live tree that is not in the inventory as a new row with a temporary ID.
 4. For each detected crown, decide whether it is a real tree, a merged crown, or a
-   false positive. Record the decision in `field_notes`.
+   false positive in `detected_checks.csv`. Record the decision in `field_status` and
+   notes in `field_notes`.
 5. Re-measure DBH, height, and crown width for a subsample, especially trees currently
    flagged as imputed.
 6. Return the completed CSV and a photo log.

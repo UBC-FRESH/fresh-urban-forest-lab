@@ -14,7 +14,7 @@ Keep private material out of this directory.
 - `design/architecture.md`: the layer diagram, contracts, and deliberate simplifications.
 - `design/change-uncertainty-plan.md`: observed change, completeness, validation, and calibration plan.
 - `reports/detection-and-allometry-2021.md`: first detection validation and local allometry results.
-- `reports/field-validation-packet.md`: Main Mall field packet and verification protocol.
+- `reports/field-validation-packet.md`: Main Mall field packet and verification/analysis protocol.
 - `reports/observed-change-ubc.md`: same-mask 2015↔2016, 2015↔2021, and 2016↔2021 observed-change products.
 - `reports/observed-change-vancouver.md`: City 2018↔2022 product and browser-assisted tile retrieval.
 - `reports/growth-calibration-readiness.md`: why the current inventory cannot support growth calibration.

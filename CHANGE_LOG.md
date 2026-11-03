@@ -65,6 +65,14 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Added draft `notes/releases/v0.2.0.md`; no tag or release was created.
 - Dashboard: GREEN.
 
+### P5.0 field packet analysis
+
+- Added `field_analysis.py` and `fresh-urban-forest analyze-field-packet`.
+- Added `detected_checks.csv` and field measurement columns to the field packet.
+- The analysis reports precision, precision including merged crowns, recall, missing/new
+  trees, and height/crown bias, using field-verified rows only.
+- Dashboard: GREEN.
+
 ### P5.0 field validation packet
 
 - Added `field_packet.py` and `fresh-urban-forest field-packet`.

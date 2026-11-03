@@ -143,8 +143,17 @@ Generate a small patch packet for field verification:
      --max-trees 200 \
      --out-dir data/processed/field_packet_mainmall
 
-The packet contains inventory trees, detected crowns, a CSV checklist, and a field
-protocol. It is the path to a complete-reference patch and a defensible precision estimate.
+The packet contains inventory trees, detected crowns, a CSV checklist, a detected-crown
+checklist, and a field protocol. After field work, analyse it with:
+
+.. code-block:: bash
+
+   fresh-urban-forest analyze-field-packet \
+     --packet data/processed/field_packet_mainmall \
+     --out-dir data/processed/field_packet_mainmall/analysis
+
+It reports precision, recall, missing/new trees, and height/crown bias from the
+field-verified rows only.
 
 Repeat measures
 ---------------
