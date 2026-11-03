@@ -106,6 +106,7 @@ def project_scenario(
     *,
     competition: float = 1.0,
     climate: float = 1.0,
+    collect_trees: bool = False,
 ) -> ScenarioResult:
     """Apply a scenario and project it forward year by year.
 
@@ -119,6 +120,8 @@ def project_scenario(
         Competition multiplier for annual growth.
     climate : float
         Site-productivity multiplier for annual growth.
+    collect_trees : bool
+        When ``True``, keep the tree population at every year for interactive previews.
 
     Returns
     -------
@@ -142,6 +145,7 @@ def project_scenario(
     timeline: list[tuple[int, CanopyMetrics]] = []
     baseline_metrics = metrics(projected)
     timeline.append((0, baseline_metrics))
+    tree_timeline: list[tuple[TreeRecord, ...]] = [projected] if collect_trees else []
     current = projected
     for year in range(1, max(0, scenario.years) + 1):
         current = tuple(
@@ -155,6 +159,8 @@ def project_scenario(
             for tree in current
         )
         timeline.append((year, metrics(current)))
+        if collect_trees:
+            tree_timeline.append(current)
     cost = scenario_cost(scenario)
     score = score_projection(
         baseline_metrics,
@@ -174,6 +180,7 @@ def project_scenario(
         cost=round(cost, 2),
         score=round(score, 2),
         notes=notes,
+        tree_timeline=tuple(tree_timeline),
     )
 
 
@@ -198,6 +205,49 @@ def competition_for_tree(tree: TreeRecord) -> float:
     if 0 <= exposure <= 5:
         return 0.75 + 0.07 * exposure
     return 1.0
+
+
+def project_trees_to_year(
+    dataset: UrbanForestDataset,
+    scenario: Scenario,
+    year: int,
+    *,
+    competition: float = 1.0,
+    climate: float = 1.0,
+) -> tuple[TreeRecord, ...]:
+    """Apply a scenario and grow the population to one year.
+
+    Parameters
+    ----------
+    dataset : UrbanForestDataset
+        Baseline dataset.
+    scenario : Scenario
+        Scenario to apply.
+    year : int
+        Target year, clamped to the scenario horizon.
+    competition : float
+        Competition multiplier.
+    climate : float
+        Site-productivity multiplier.
+
+    Returns
+    -------
+    tuple of TreeRecord
+        Tree population at the requested year.
+    """
+    current = apply_edits(dataset.trees, scenario.edits, dataset.terrain)
+    for _ in range(max(0, min(year, scenario.years))):
+        current = tuple(
+            grow_tree(
+                tree,
+                1,
+                competition=competition * competition_for_tree(tree),
+            )
+            if tree.status not in {"removed", "dead"}
+            else tree
+            for tree in current
+        )
+    return current
 
 
 def scenario_cost(scenario: Scenario) -> float:
@@ -369,4 +419,6 @@ def _metrics_dict(metrics: CanopyMetrics) -> dict[str, object]:
         "p95_height_m": metrics.p95_height_m,
         "total_carbon_kg": metrics.total_carbon_kg,
         "shannon_index": metrics.shannon_index,
+        "size_classes": [list(item) for item in metrics.size_classes],
+        "species_composition": [list(item) for item in metrics.species_composition],
     }

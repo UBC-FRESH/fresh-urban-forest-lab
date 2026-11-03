@@ -117,6 +117,38 @@ def test_scenario_lifecycle(tmp_path: Path) -> None:
     assert geojson.json()["type"] == "FeatureCollection"
 
 
+def test_scenario_year_scene_and_comparison(tmp_path: Path) -> None:
+    """A scene can be requested at a projection year and scenarios can be compared."""
+    client = _client(tmp_path)
+    created = client.post(
+        "/api/scenarios",
+        json={
+            "name": "Year scene",
+            "years": 5,
+            "edits": [
+                {
+                    "kind": "plant",
+                    "tree_id": "plant:year",
+                    "lon": -123.25,
+                    "lat": 49.26,
+                    "species": "Acer macrophyllum",
+                    "dbh_cm": 6.0,
+                }
+            ],
+        },
+    ).json()
+    scenario_id = created["scenario_id"]
+    client.post(f"/api/scenarios/{scenario_id}/project")
+    scene_zero = client.get("/api/scene", params={"scenario_id": scenario_id, "year": 0}).json()
+    scene_five = client.get("/api/scene", params={"scenario_id": scenario_id, "year": 5}).json()
+    zero_tree = next(tree for tree in scene_zero["trees"] if tree["id"] == "plant:year")
+    five_tree = next(tree for tree in scene_five["trees"] if tree["id"] == "plant:year")
+    assert five_tree["height"] > zero_tree["height"]
+    comparison = client.get("/api/scenario-comparison").json()
+    assert comparison["scenarios"][0]["scenario_id"] == scenario_id
+    assert comparison["scenarios"][0]["final_cover_pct"] > 0
+
+
 def test_recommend_and_not_found(tmp_path: Path) -> None:
     """The recommender returns edits and unknown scenarios are 404."""
     client = _client(tmp_path)

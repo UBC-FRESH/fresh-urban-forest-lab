@@ -71,9 +71,18 @@
           <input id="scenario-years" type="range" min="0" max="60" value="25" step="1">
           <output id="scenario-years-value">25 years</output>
         </label>
+        <label class="field">
+          <span>Preview year</span>
+          <input id="preview-year" type="range" min="0" max="25" value="0" step="1">
+          <output id="preview-year-value">0</output>
+        </label>
         <div class="button-row">
           <button id="preview" class="button primary" type="button">Preview scenario</button>
           <button id="reset-edits" class="button ghost" type="button">Clear edits</button>
+        </div>
+        <div class="button-row">
+          <button id="export-geojson" class="button ghost" type="button" disabled>Export GeoJSON</button>
+          <button id="export-csv" class="button ghost" type="button" disabled>Export CSV</button>
         </div>
         <div id="edit-list" class="edit-list" aria-live="polite"></div>
       </section>
@@ -102,7 +111,21 @@
         </div>
         <label class="field">
           <span>Species</span>
-          <input id="plant-species" type="text" value="Acer macrophyllum" maxlength="120">
+          <input id="plant-species" type="text" value="Acer macrophyllum" maxlength="120" list="species-options">
+          <datalist id="species-options">
+            <option value="Acer macrophyllum">Bigleaf maple (native)</option>
+            <option value="Thuja plicata">Western red cedar (native)</option>
+            <option value="Pseudotsuga menziesii">Douglas-fir (native)</option>
+            <option value="Tsuga heterophylla">Western hemlock (native)</option>
+            <option value="Quercus rubra">Red oak</option>
+            <option value="Acer rubrum">Red maple</option>
+            <option value="Prunus serrulata">Japanese cherry</option>
+            <option value="Betula papyrifera">Paper birch (native)</option>
+            <option value="Gleditsia triacanthos">Honey locust</option>
+            <option value="Liquidambar styraciflua">Sweetgum</option>
+            <option value="Tilia cordata">Littleleaf linden</option>
+            <option value="Pyrus calleryana">Callery pear</option>
+          </datalist>
         </label>
         <div class="inline-fields">
           <label class="field"><span>Count</span><input id="plant-count" type="number" value="40" min="1" max="500"></label>

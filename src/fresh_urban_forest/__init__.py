@@ -119,6 +119,7 @@ __all__ = [
     "load_ubc_trees",
     "load_vancouver_trees",
     "project_scenario",
+    "project_trees_to_year",
     "read_raster",
     "recommend_planting",
     "scenario_summary",

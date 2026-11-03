@@ -43,6 +43,9 @@ def test_app_script_has_the_expected_endpoints_and_layers() -> None:
         "renderChangeStats",
         "change-product",
         "switchChangeProduct",
+        "preview-year",
+        "loadSceneAtYear",
+        "scenario-comparison",
     ):
         assert marker in script
     assert "eval(" not in script

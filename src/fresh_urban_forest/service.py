@@ -38,7 +38,7 @@ from fresh_urban_forest.dss import (
     metric_delta,
     recommend_planting,
 )
-from fresh_urban_forest.growth import project_scenario, scenario_summary
+from fresh_urban_forest.growth import project_scenario, project_trees_to_year, scenario_summary
 from fresh_urban_forest.metrics import compare_metrics
 from fresh_urban_forest.models import (
     CanopyMetrics,
@@ -153,6 +153,7 @@ class LabState:
     runtime_dir: Path
     scenarios: dict[str, Scenario] = field(default_factory=dict)
     results: dict[str, ScenarioResult] = field(default_factory=dict)
+    tree_cache: dict[tuple[str, int], tuple[TreeRecord, ...]] = field(default_factory=dict)
     allow_agent: bool = False
     agent_model: str = DEFAULT_AGENT_MODEL
     agent_timeout: float = 300.0
@@ -496,13 +497,19 @@ def create_app(
         }
 
     @app.get("/api/scene")
-    def scene(scenario_id: str | None = None) -> dict[str, object]:
+    def scene(
+        scenario_id: str | None = None,
+        year: int | None = Query(default=None, ge=0, le=100),
+    ) -> dict[str, object]:
         """Return the scene payload for the baseline or a projected scenario.
 
         Parameters
         ----------
         scenario_id : str or None
             Optional scenario identifier.
+        year : int or None
+            Optional projection year. ``None`` uses the scenario horizon; zero shows the
+            edited baseline.
 
         Returns
         -------
@@ -511,7 +518,18 @@ def create_app(
         """
         if scenario_id:
             result = _ensure_result(state, scenario_id)
-            return build_scene(state.dataset, result.final_trees)
+            target = result.scenario.years if year is None else year
+            if 0 <= target < len(result.tree_timeline):
+                return build_scene(state.dataset, result.tree_timeline[target])
+            key = (scenario_id, target)
+            if key not in state.tree_cache:
+                scenario = _scenario_or_404(state, scenario_id)
+                state.tree_cache[key] = project_trees_to_year(
+                    state.dataset,
+                    scenario,
+                    target,
+                )
+            return build_scene(state.dataset, state.tree_cache[key])
         return build_scene(state.dataset)
 
     @app.get("/api/canopy.png")
@@ -553,6 +571,38 @@ def create_app(
             media_type="image/png",
             headers={"Cache-Control": "public, max-age=3600"},
         )
+
+    @app.get("/api/scenario-comparison")
+    def scenario_comparison() -> dict[str, object]:
+        """Project and compare all saved scenarios.
+
+        Returns
+        -------
+        dict
+            Compact baseline/final metrics, score, and cost for every scenario.
+        """
+        rows: list[dict[str, object]] = []
+        for scenario in state.scenarios.values():
+            result = _ensure_result(state, scenario.scenario_id)
+            baseline = result.metrics_by_year[0][1]
+            final = result.metrics_by_year[-1][1]
+            rows.append(
+                {
+                    "scenario_id": scenario.scenario_id,
+                    "name": scenario.name,
+                    "years": scenario.years,
+                    "edits": len(scenario.edits),
+                    "cost_cad": result.cost,
+                    "score": result.score,
+                    "baseline_cover_pct": baseline.canopy_cover_pct,
+                    "final_cover_pct": final.canopy_cover_pct,
+                    "final_volume_m3": final.canopy_volume_m3,
+                    "final_carbon_kg": final.total_carbon_kg,
+                    "final_native_fraction": final.native_fraction,
+                }
+            )
+        rows.sort(key=lambda row: float(str(row["score"])), reverse=True)
+        return {"scenarios": rows}
 
     @app.get("/api/scenarios")
     def list_scenarios() -> dict[str, object]:
@@ -642,6 +692,8 @@ def create_app(
         )
         state.scenarios[scenario_id] = updated
         state.results.pop(scenario_id, None)
+        for key in [key for key in state.tree_cache if key[0] == scenario_id]:
+            state.tree_cache.pop(key, None)
         _save_scenario(state, updated)
         return _scenario_payload(updated)
 
@@ -1021,7 +1073,7 @@ def _ensure_result(state: LabState, scenario_id: str) -> ScenarioResult:
     if scenario_id in state.results:
         return state.results[scenario_id]
     scenario = _scenario_or_404(state, scenario_id)
-    result_value = project_scenario(state.dataset, scenario)
+    result_value = project_scenario(state.dataset, scenario, collect_trees=True)
     state.results[scenario_id] = result_value
     return result_value
 

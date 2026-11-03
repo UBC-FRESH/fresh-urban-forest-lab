@@ -391,6 +391,8 @@ class ScenarioResult:
         Decision-support score, higher is better.
     notes : tuple of str
         Assumptions and caveats.
+    tree_timeline : tuple of tuple of TreeRecord
+        Optional tree populations indexed by year, from zero to the scenario horizon.
     """
 
     scenario: Scenario
@@ -399,6 +401,7 @@ class ScenarioResult:
     cost: float
     score: float
     notes: tuple[str, ...] = ()
+    tree_timeline: tuple[tuple[TreeRecord, ...], ...] = ()
 
 
 def metrics_to_dict(metrics: CanopyMetrics) -> dict[str, object]:

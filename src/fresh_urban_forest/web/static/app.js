@@ -23,6 +23,7 @@ const state = {
   changeData: null,
   changeProduct: "change.json",
   changeProductsLoaded: false,
+  previewYear: 0,
 };
 
 const $ = (id) => document.getElementById(id);
@@ -742,6 +743,19 @@ function bindControls() {
   $("scenario-years").addEventListener("input", (event) => {
     state.years = Number(event.target.value);
     $("scenario-years-value").textContent = `${state.years} year${state.years === 1 ? "" : "s"}`;
+    $("preview-year").max = String(state.years);
+  });
+  $("preview-year").addEventListener("input", (event) => {
+    const year = Number(event.target.value);
+    state.previewYear = year;
+    $("preview-year-value").textContent = `${year} year${year === 1 ? "" : "s"}`;
+    loadSceneAtYear(year);
+  });
+  $("export-geojson").addEventListener("click", () => {
+    if (state.scenarioId) window.location.href = `api/scenarios/${state.scenarioId}/export.geojson`;
+  });
+  $("export-csv").addEventListener("click", () => {
+    if (state.scenarioId) window.location.href = `api/scenarios/${state.scenarioId}/export.csv`;
   });
   $("preview").addEventListener("click", previewScenario);
   $("reset-edits").addEventListener("click", clearEdits);
@@ -1264,6 +1278,36 @@ function renderEditList() {
   });
 }
 
+function updateExportButtons() {
+  const enabled = Boolean(state.scenarioId);
+  $("export-geojson").disabled = !enabled;
+  $("export-csv").disabled = !enabled;
+}
+
+async function loadSceneAtYear(year) {
+  if (!state.scenarioId) return;
+  try {
+    const scene = await api(
+      `api/scene?scenario_id=${encodeURIComponent(state.scenarioId)}&year=${year}`
+    );
+    state.scene = scene;
+    state.treeById = new Map(scene.trees.map((tree) => [tree.id, tree]));
+    updateMapTrees();
+    rebuildThreeTrees(scene.trees);
+    const item = state.result?.timeline?.find((entry) => Number(entry.year) === year);
+    if (item) {
+      renderKPIs(item);
+      renderComposition(item);
+      renderSize(item);
+    }
+    if (state.result) {
+      $("scenario-verdict").textContent = `${state.result.name} · year ${year} · score ${state.result.score}`;
+    }
+  } catch (error) {
+    toast(error.message, true);
+  }
+}
+
 function clearEdits() {
   state.edits = [];
   state.sentEditCount = 0;
@@ -1273,6 +1317,7 @@ function clearEdits() {
   $("scenario-select").value = "";
   renderEditList();
   $("scenario-revision").textContent = "baseline";
+  updateExportButtons();
   showBaseline();
 }
 
@@ -1286,6 +1331,7 @@ function newScenario() {
   $("scenario-select").value = "";
   $("scenario-revision").textContent = "draft";
   renderEditList();
+  updateExportButtons();
   showBaseline();
 }
 
@@ -1322,7 +1368,13 @@ async function previewScenario() {
     await ensureScenario();
     const result = await api(`/api/scenarios/${state.scenarioId}/project`, { method: "POST" });
     state.result = result;
-    const scene = await api(`/api/scene?scenario_id=${encodeURIComponent(state.scenarioId)}`);
+    state.previewYear = result.years;
+    $("preview-year").max = String(result.years);
+    $("preview-year").value = String(result.years);
+    $("preview-year-value").textContent = `${result.years} year${result.years === 1 ? "" : "s"}`;
+    const scene = await api(
+      `api/scene?scenario_id=${encodeURIComponent(state.scenarioId)}&year=${result.years}`
+    );
     state.scene = scene;
     state.treeById = new Map(scene.trees.map((tree) => [tree.id, tree]));
     updateMapTrees();
@@ -1343,6 +1395,7 @@ async function previewScenario() {
       <span class="delta ${volumeDelta < 0 ? "negative" : ""}"><b>${volumeDelta >= 0 ? "+" : ""}${formatCompact(volumeDelta)}</b> m³</span>
       <span class="delta ${carbonDelta < 0 ? "negative" : ""}"><b>${carbonDelta >= 0 ? "+" : ""}${formatCompact(carbonDelta)}</b> t carbon</span>
       <span class="delta ${nativeDelta < 0 ? "negative" : ""}"><b>${nativeDelta >= 0 ? "+" : ""}${nativeDelta.toFixed(0)}%</b> native</span>`;
+    updateExportButtons();
     await renderComparison();
     setStatus("live");
     toast(`Projected ${result.years} years in ${result.timeline.length - 1} annual steps.`);
@@ -1490,24 +1543,30 @@ function resetCamera() {
 }
 
 async function renderComparison() {
-  const payload = await api("/api/scenarios");
-  state.scenarios = payload.scenarios || [];
-  renderScenarioOptions();
   const container = $("comparison-list");
-  if (!state.scenarios.length) {
-    container.innerHTML = '<p class="muted">No scenarios yet.</p>';
-    return;
-  }
-  const best = [...state.scenarios].sort((a, b) => (b.score || 0) - (a.score || 0))[0];
-  container.innerHTML = state.scenarios
-    .map(
-      (scenario) => `
-        <div class="comparison-card ${scenario.scenario_id === best.scenario_id ? "best" : ""}">
-          <div><strong>${escapeHtml(scenario.name)}</strong><br><span class="muted">${scenario.years} years · ${scenario.edit_count} edits</span></div>
-          <div><strong>${scenario.score == null ? "—" : scenario.score.toFixed(1)}</strong><br><span class="muted">score</span></div>
+  try {
+    const payload = await api("api/scenario-comparison");
+    const rows = payload.scenarios || [];
+    if (!rows.length) {
+      container.innerHTML = '<p class="muted">No scenarios yet.</p>';
+      return;
+    }
+    const best = rows[0];
+    container.innerHTML = rows
+      .map(
+        (row) => `
+        <div class="comparison-card ${row.scenario_id === best.scenario_id ? "best" : ""}">
+          <div>
+            <strong>${escapeHtml(row.name)}</strong><br>
+            <span class="muted">${row.years} years · ${row.edits} edits · ${formatCompact(row.final_cover_pct, "%")} cover · ${formatCompact(row.final_volume_m3)} m³</span>
+          </div>
+          <div><strong>${Number(row.score).toFixed(1)}</strong><br><span class="muted">score</span></div>
         </div>`
-    )
-    .join("");
+      )
+      .join("");
+  } catch (error) {
+    container.innerHTML = '<p class="muted">Comparison unavailable.</p>';
+  }
 }
 
 function updateHud() {

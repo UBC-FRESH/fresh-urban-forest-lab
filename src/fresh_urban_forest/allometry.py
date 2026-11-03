@@ -15,6 +15,7 @@ from __future__ import annotations
 import math
 import re
 from dataclasses import dataclass
+from functools import lru_cache
 
 from fresh_urban_forest.models import SpeciesGroup, TreeRecord
 
@@ -266,6 +267,7 @@ PROFILES: dict[SpeciesGroup, GrowthProfile] = {
 }
 
 
+@lru_cache(maxsize=4096)
 def species_group(name: str) -> SpeciesGroup:
     """Classify a species name into a broad growth group.
 
@@ -309,6 +311,7 @@ def _matches_word(text: str, word: str) -> bool:
     return re.search(rf"\b{re.escape(word)}\b", text) is not None
 
 
+@lru_cache(maxsize=4096)
 def is_native_species(name: str) -> bool:
     """Return whether a species name matches the local native-species list.
 
@@ -328,6 +331,7 @@ def is_native_species(name: str) -> bool:
     return any(word in text for word in NATIVE_WORDS)
 
 
+@lru_cache(maxsize=4096)
 def profile_for(name: str) -> GrowthProfile:
     """Return the growth profile for a species name.
 
