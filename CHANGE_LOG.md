@@ -65,6 +65,14 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Added draft `notes/releases/v0.2.0.md`; no tag or release was created.
 - Dashboard: GREEN.
 
+### P5.0 field validation packet
+
+- Added `field_packet.py` and `fresh-urban-forest field-packet`.
+- Generated a Main Mall packet: 200 inventory trees, 3,966 detected crowns, 1,268 matches,
+  with GeoJSON, CSV checklist, and a field protocol.
+- Added `notes/reports/field-validation-packet.md`.
+- Dashboard: GREEN.
+
 ### P1.7 External LiDAR tile discovery
 
 - Added `fresh_urban_forest.tiles`, `lidarbc`, and `canelevation` modules with one

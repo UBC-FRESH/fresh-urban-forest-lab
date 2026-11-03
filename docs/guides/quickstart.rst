@@ -111,6 +111,25 @@ The product writes ``change.json``, ``change.png``, and ``change_grid.npz``. The
 exposes them at ``/api/change`` and ``/api/change.png``. The product compares only cells
 valid in both dates and reports the overlap area; outside that overlap it is transparent.
 
+Field validation packet
+-----------------------
+
+Generate a small patch packet for field verification:
+
+.. code-block:: bash
+
+   fresh-urban-forest field-packet \
+     --dataset data/processed/ubc_lidar_2021 \
+     --chm data/raw/ubc/lidar_2021/CHM_1m.tif \
+     --bbox -123.255,49.258,-123.245,49.265 \
+     --min-height 3 \
+     --window 6 \
+     --max-trees 200 \
+     --out-dir data/processed/field_packet_mainmall
+
+The packet contains inventory trees, detected crowns, a CSV checklist, and a field
+protocol. It is the path to a complete-reference patch and a defensible precision estimate.
+
 Repeat measures
 ---------------
 

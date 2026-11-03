@@ -27,6 +27,7 @@ from fresh_urban_forest.catalog import DatasetSource, load_catalog
 from fresh_urban_forest.change import canopy_change
 from fresh_urban_forest.change_product import build_change_product
 from fresh_urban_forest.dataset import build_dataset, dataset_summary, load_dataset
+from fresh_urban_forest.field_packet import build_field_packet
 from fresh_urban_forest.inventory import (
     load_boundary,
     load_buildings,
@@ -495,6 +496,61 @@ def change_command(
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(asdict(result), indent=2) + "\n", encoding="utf-8")
     console.print_json(json.dumps(asdict(result)))
+
+
+@app.command("field-packet")
+def field_packet_command(
+    dataset: Path = DATASET_OPTION,
+    out_dir: Path = OUT_DIR_OPTION,
+    bbox: str = BBOX_OPTION,
+    chm: Path | None = CHM_OPTION,
+    min_height: float = MIN_HEIGHT_OPTION,
+    window: float = WINDOW_OPTION,
+    max_trees: int = typer.Option(150, "--max-trees", help="Maximum trees in the packet."),
+    max_distance: float = MAX_DISTANCE_OPTION,
+) -> None:
+    """Create a field-validation packet for a small reference patch.
+
+    Parameters
+    ----------
+    dataset : Path
+        Dataset directory.
+    out_dir : Path
+        Output packet directory.
+    bbox : str
+        Patch bounding box ``min_lon,min_lat,max_lon,max_lat``.
+    chm : Path or None
+        Optional full-resolution CHM.
+    min_height : float
+        Minimum detected canopy height.
+    window : float
+        Local-maxima window.
+    max_trees : int
+        Maximum inventory trees in the checklist.
+    max_distance : float
+        Match distance in metres.
+    """
+    parsed = _parse_bbox(bbox)
+    if parsed is None:
+        raise typer.BadParameter("--bbox is required")
+    loaded = load_dataset(dataset)
+    grid = _detection_grid(loaded, chm, parsed)
+    detected = detect_trees(grid, min_height_m=min_height, window_m=window)
+    validation = validate_detection(
+        detected,
+        loaded.trees,
+        max_distance_m=max_distance,
+        bbox_wgs84=parsed,
+    )
+    path = build_field_packet(
+        loaded.trees,
+        detected,
+        bbox_wgs84=parsed,
+        out_dir=out_dir,
+        max_trees=max_trees,
+        validation=validation,
+    )
+    console.print(f"Field packet: {path}")
 
 
 @app.command("tune-detection")

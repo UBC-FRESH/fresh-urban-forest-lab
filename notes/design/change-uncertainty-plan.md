@@ -110,8 +110,9 @@ rests on measured versus imputed tree attributes.
   precision 0.217, recall 0.569, F1 0.315, mean height bias +1.78 m, RMSE 5.04 m.
 - Tuned run: `min-height=3`, `window=6` gives 9,678 detected, 2,314 matches, precision
   0.239, recall 0.476, F1 0.318 on the full core; the Main Mall patch reaches F1 0.366.
-- The detector over-segments; the inventory is incomplete. The next step is a complete
-  reference patch.
+- The detector over-segments; the inventory is incomplete. A Main Mall field packet is
+  generated (200 inventory trees, 3,966 detected crowns, 1,268 matches) and ready for
+  field verification.
 
 ### Goal
 
