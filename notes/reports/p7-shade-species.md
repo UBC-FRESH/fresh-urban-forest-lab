@@ -5,7 +5,6 @@ Phase: P7
 Parent issue: #40
 Branch: `feature/p7-shade-species`
 Implementation head: `8849e56`
-PR queue head: `b3ed32a`
 Pull request: #53
 Status: ready for review
 
