@@ -15,6 +15,7 @@ Keep private material out of this directory.
 - `design/change-uncertainty-plan.md`: observed change, completeness, validation, and calibration plan.
 - `design/urban-canopy-program-plan.md`: the queued P7-P11 programme for shade, species fit, optimization, off-inventory canopy, and birds.
 - `reference/literature-review-shade-optimization-biodiversity.md`: rapid peer-reviewed and grey-literature review, novelty assessment, and citations.
+- `reference/shade-review-protocol.md`: P7.1 search protocol, screening log, capability comparison, and frozen claim.
 - `reports/detection-and-allometry-2021.md`: first detection validation and local allometry results.
 - `reports/field-validation-packet.md`: Main Mall field packet and verification/analysis protocol.
 - `reports/observed-change-ubc.md`: same-mask 2015↔2016, 2015↔2021, and 2016↔2021 observed-change products.

@@ -1,8 +1,8 @@
 # ADR 0005: Model marginal shade and carry an evidence tier
 
-Status: proposed
+Status: accepted
 Date: 2026-11-03
-Issues: #40, #41, #42, #43, #44
+Issues: #40, #41, #42, #43, #44, #45-#52
 
 ## Context
 
