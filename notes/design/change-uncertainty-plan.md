@@ -61,8 +61,9 @@ A change directory added to a dataset:
 - `build_change_product`, `/api/change`, `/api/change.png`, and the Change tab are
   implemented.
 - The first UBC product uses LidarBC 2016 core tiles and the UBC 2021 CHM.
-- Result: 2.68M m² earlier canopy, 2.77M m² later canopy over 2.61M m² of overlap;
-  +125,932 m² gain, -37,635 m² loss, +88,298 m² net, +1.21 m mean height on stable canopy.
+- Result at 1 m: 2.01M m² earlier canopy, 2.15M m² later canopy over 3.58M m² of
+  overlap; +200,131 m² gain, -68,387 m² loss, +131,744 m² net, +1.585 m mean height on
+  stable canopy.
 - Caveat: the 2016 and 2021 vertical datums and acquisition seasons differ; the result is
   a screening product, not a calibrated growth estimate.
 

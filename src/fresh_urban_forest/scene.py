@@ -58,10 +58,13 @@ def build_scene(
     origin_lon, origin_lat = unproject_xy(origin_x, origin_y, grid.crs)
     corner_lons: list[float] = []
     corner_lats: list[float] = []
-    for corner_x, corner_y in ((left, bottom), (right, bottom), (right, top), (left, top)):
+    image_corners: list[list[float]] = []
+    # MapLibre image sources expect top-left, top-right, bottom-right, bottom-left.
+    for corner_x, corner_y in ((left, top), (right, top), (right, bottom), (left, bottom)):
         lon, lat = unproject_xy(corner_x, corner_y, grid.crs)
         corner_lons.append(lon)
         corner_lats.append(lat)
+        image_corners.append([lon, lat])
     tree_payload = [_tree_payload(tree, origin_x, origin_y, origin_z) for tree in population]
     building_payload = [
         {
@@ -94,6 +97,7 @@ def build_scene(
             max(corner_lons),
             max(corner_lats),
         ],
+        "corners_wgs84": image_corners,
         "terrain": {
             "width": grid.width,
             "height": grid.height,

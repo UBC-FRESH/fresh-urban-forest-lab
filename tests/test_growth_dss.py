@@ -176,6 +176,9 @@ def test_dataset_round_trip_and_scene(tmp_path: Path) -> None:
     assert isinstance(terrain, dict)
     assert terrain["width"] == loaded.terrain.width
     assert "bounds_wgs84" in scene
+    corners = scene["corners_wgs84"]
+    assert isinstance(corners, list)
+    assert len(corners) == 4
     buildings = scene["buildings"]
     assert isinstance(buildings, list)
     assert buildings

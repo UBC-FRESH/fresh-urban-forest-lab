@@ -282,7 +282,7 @@ function renderTimeline(timeline) {
 
 function initMap() {
   const [west, south, east, north] = state.scene.bounds_wgs84;
-  const coordinates = [
+  const coordinates = state.scene.corners_wgs84 || [
     [west, north],
     [east, north],
     [east, south],
@@ -1008,7 +1008,7 @@ async function ensureChangeView() {
     renderChangeStats(data);
     renderChangeLegend(data.legend || []);
     const [west, south, east, north] = data.valid_bounds_wgs84 || data.bounds_wgs84;
-    const coordinates = [
+    const coordinates = data.image_corners_wgs84 || data.corners_wgs84 || [
       [west, north],
       [east, north],
       [east, south],
@@ -1019,6 +1019,11 @@ async function ensureChangeView() {
       style: {
         version: 8,
         sources: {
+          canopy: {
+            type: "image",
+            url: "api/canopy.png?width=1400",
+            coordinates: state.scene.corners_wgs84 || coordinates,
+          },
           change: { type: "image", url: "api/change.png", coordinates },
           buildings: { type: "geojson", data: buildingFeatures() },
           boundary: { type: "geojson", data: boundaryFeatures() },
@@ -1026,10 +1031,16 @@ async function ensureChangeView() {
         layers: [
           { id: "background", type: "background", paint: { "background-color": "#e6eae2" } },
           {
+            id: "canopy",
+            type: "raster",
+            source: "canopy",
+            paint: { "raster-opacity": 0.28, "raster-resampling": "linear" },
+          },
+          {
             id: "change",
             type: "raster",
             source: "change",
-            paint: { "raster-opacity": 0.92, "raster-resampling": "nearest" },
+            paint: { "raster-opacity": 0.88, "raster-resampling": "nearest" },
           },
           {
             id: "buildings-outline",

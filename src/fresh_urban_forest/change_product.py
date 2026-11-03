@@ -84,12 +84,14 @@ def build_change_product(
     )
     valid = np.isfinite(earlier.canopy_height) & np.isfinite(later.canopy_height)
     valid_area = float(np.count_nonzero(valid) * cell_area)
+    crop = _valid_crop(valid)
+    row0, row1, col0, col1 = crop
     out_dir.mkdir(parents=True, exist_ok=True)
     _write_png(
-        classes,
-        valid,
-        earlier.canopy_height,
-        later.canopy_height,
+        classes[row0 : row1 + 1, col0 : col1 + 1],
+        valid[row0 : row1 + 1, col0 : col1 + 1],
+        earlier.canopy_height[row0 : row1 + 1, col0 : col1 + 1],
+        later.canopy_height[row0 : row1 + 1, col0 : col1 + 1],
         threshold_m,
         out_dir / "change.png",
     )
@@ -104,6 +106,8 @@ def build_change_product(
     west, south = unproject_xy(earlier.bounds[0], earlier.bounds[1], earlier.crs)
     east, north = unproject_xy(earlier.bounds[2], earlier.bounds[3], earlier.crs)
     valid_bounds, valid_bounds_wgs84 = _valid_bounds(earlier, valid)
+    image_bounds = _crop_bounds(earlier, crop)
+    image_corners = _corners_for_bounds(earlier, image_bounds)
     payload = {
         "schema_version": CHANGE_SCHEMA_VERSION,
         "earlier_label": earlier_label,
@@ -111,6 +115,11 @@ def build_change_product(
         "crs": earlier.crs,
         "bounds": list(earlier.bounds),
         "bounds_wgs84": [min(west, east), min(south, north), max(west, east), max(south, north)],
+        "corners_wgs84": _image_corners(earlier),
+        "image_bounds": list(image_bounds),
+        "image_corners_wgs84": image_corners,
+        "image_width": col1 - col0 + 1,
+        "image_height": row1 - row0 + 1,
         "valid_bounds": list(valid_bounds),
         "valid_bounds_wgs84": list(valid_bounds_wgs84),
         "width": earlier.width,
@@ -129,6 +138,102 @@ def build_change_product(
     path = out_dir / "change.json"
     path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
     return path
+
+
+def _valid_crop(valid: np.ndarray) -> tuple[int, int, int, int]:
+    """Return the row/column crop around valid cells.
+
+    Parameters
+    ----------
+    valid : numpy.ndarray
+        Boolean validity mask.
+
+    Returns
+    -------
+    tuple of int
+        ``(row0, row1, col0, col1)`` inclusive. Falls back to the full array.
+    """
+    rows, cols = np.nonzero(valid)
+    if rows.size == 0:
+        return (0, valid.shape[0] - 1, 0, valid.shape[1] - 1)
+    return (int(rows.min()), int(rows.max()), int(cols.min()), int(cols.max()))
+
+
+def _crop_bounds(
+    grid: TerrainGrid,
+    crop: tuple[int, int, int, int],
+) -> tuple[float, float, float, float]:
+    """Convert an inclusive row/column crop to projected bounds.
+
+    Parameters
+    ----------
+    grid : TerrainGrid
+        Grid transform.
+    crop : tuple of int
+        ``(row0, row1, col0, col1)``.
+
+    Returns
+    -------
+    tuple of float
+        Projected bounds.
+    """
+    row0, row1, col0, col1 = crop
+    left, bottom, right, top = grid.bounds
+    dx = (right - left) / grid.width
+    dy = (top - bottom) / grid.height
+    return (
+        left + col0 * dx,
+        top - (row1 + 1) * dy,
+        left + (col1 + 1) * dx,
+        top - row0 * dy,
+    )
+
+
+def _corners_for_bounds(
+    grid: TerrainGrid,
+    bounds: tuple[float, float, float, float],
+) -> list[list[float]]:
+    """Return image corners for projected bounds in MapLibre order.
+
+    Parameters
+    ----------
+    grid : TerrainGrid
+        Grid that supplies the CRS.
+    bounds : tuple of float
+        Projected bounds.
+
+    Returns
+    -------
+    list of list of float
+        Top-left, top-right, bottom-right, bottom-left in WGS84.
+    """
+    left, bottom, right, top = bounds
+    corners: list[list[float]] = []
+    for x, y in ((left, top), (right, top), (right, bottom), (left, bottom)):
+        lon, lat = unproject_xy(x, y, grid.crs)
+        corners.append([lon, lat])
+    return corners
+
+
+def _image_corners(grid: TerrainGrid) -> list[list[float]]:
+    """Return the four image corners in MapLibre order.
+
+    Parameters
+    ----------
+    grid : TerrainGrid
+        Grid that supplies bounds and CRS.
+
+    Returns
+    -------
+    list of list of float
+        Top-left, top-right, bottom-right, bottom-left in WGS84.
+    """
+    left, bottom, right, top = grid.bounds
+    corners: list[list[float]] = []
+    for x, y in ((left, top), (right, top), (right, bottom), (left, bottom)):
+        lon, lat = unproject_xy(x, y, grid.crs)
+        corners.append([lon, lat])
+    return corners
 
 
 def _valid_bounds(

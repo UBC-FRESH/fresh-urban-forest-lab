@@ -50,6 +50,7 @@ def test_build_change_product_writes_summary_png_and_grid(tmp_path: Path) -> Non
     assert payload["legend"]
     assert payload["bounds_wgs84"][0] < payload["bounds_wgs84"][2]
     assert payload["valid_bounds_wgs84"][0] < payload["valid_bounds_wgs84"][2]
+    assert len(payload["corners_wgs84"]) == 4
     assert (tmp_path / "change.png").read_bytes().startswith(b"\x89PNG")
     assert (tmp_path / "change_grid.npz").exists()
 
