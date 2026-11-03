@@ -1,0 +1,14 @@
+# FRESH Urban Forest Lab
+
+> Agent-facing index for FRESH Urban Forest Lab. Read the linked pages before you change the project.
+
+## Start here
+
+- [Home](index.html): the documentation home for the project.
+- [Quick start](guides/quickstart.html): run the demo, build a dataset, and serve the app.
+- [Public data](guides/data.html): UBC, Vancouver, and Metro Vancouver sources and licences.
+- [Data contracts](reference/data-contracts.html): the dataset directory, tree record, scenario, and scene payload.
+- [Methods](reference/methods.html): cover, volume, growth, carbon, detection, change, and DSS assumptions.
+- [Software landscape](reference/software-landscape.html): what we borrowed, what we refused to copy, and why.
+- [Session protocol](agents/session-protocol.html): the bounded agent workflow for this repository.
+- [API reference](api/index.html): every public function, with its parameters, types, and return values.

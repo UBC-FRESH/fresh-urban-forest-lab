@@ -1,0 +1,177 @@
+schema_version: fresh-urban-forest.sources.v1
+updated_utc: "2026-11-03"
+notes: >
+  Public sources selected for the UBC and Metro Vancouver pilot. Direct URLs are
+  recorded where the publisher offers a stable file endpoint. Catalog entries point at
+  the landing page so a human can confirm the licence and the current release before a
+  large download. Every fetch is hashed and recorded in a materialization manifest.
+sources:
+  - source_id: ubc_campus_trees
+    title: UBC Vancouver campus tree inventory
+    publisher: UBC Campus and Community Planning / UBC Geodata
+    url: https://github.com/UBCGeodata/ubc-geospatial-opendata
+    download_url: https://raw.githubusercontent.com/UBCGeodata/ubc-geospatial-opendata/master/ubcv/landscape/geojson/ubcv_campus_trees.geojson
+    filename: ubcv_campus_trees.geojson
+    media_type: application/geo+json
+    licence: PDDL-1.0
+    access_mode: direct_http
+    native_crs: EPSG:4326
+    products: [tree_inventory]
+    notes: >
+      Point locations, taxa, DBH, height, and crown width where measured. Several
+      records are location-only. The source is a living snapshot rather than a fixed
+      annual release.
+  - source_id: ubc_buildings
+    title: UBC Vancouver building footprints
+    publisher: UBC Campus and Community Planning / UBC Geodata
+    url: https://github.com/UBCGeodata/ubc-geospatial-opendata
+    download_url: https://raw.githubusercontent.com/UBCGeodata/ubc-geospatial-opendata/master/ubcv/locations/geojson/ubcv_buildings.geojson
+    filename: ubcv_buildings.geojson
+    media_type: application/geo+json
+    licence: PDDL-1.0
+    access_mode: direct_http
+    native_crs: EPSG:4326
+    products: [buildings]
+    notes: Building footprints and heights for context and planting constraints.
+  - source_id: ubc_legal_boundary
+    title: UBC Vancouver legal boundary
+    publisher: UBC Campus and Community Planning / UBC Geodata
+    url: https://github.com/UBCGeodata/ubc-geospatial-opendata
+    download_url: https://raw.githubusercontent.com/UBCGeodata/ubc-geospatial-opendata/master/ubcv/planning/geojson/ubcv_legal_boundary.geojson
+    filename: ubcv_legal_boundary.geojson
+    media_type: application/geo+json
+    licence: PDDL-1.0
+    access_mode: direct_http
+    native_crs: EPSG:4326
+    products: [boundary]
+    notes: Campus analysis boundary.
+  - source_id: ubc_lidar_2021_chm_1m
+    title: UBC Vancouver LiDAR canopy height model, 1 m, 2021
+    publisher: UBC Campus and Community Planning / UBC Library Abacus
+    url: https://hdl.handle.net/11272.1/AB2/Y5KQNB
+    download_url: https://abacus.library.ubc.ca/api/access/datafile/97079
+    filename: CHM_1m.zip
+    media_type: application/zip
+    licence: UBC-Abacus-open-access
+    access_mode: direct_http
+    native_crs: EPSG:3157
+    products: [canopy_height]
+    notes: >
+      LiDAR acquired 2021-06-23 by Eagle Mapping. The CHM is a 1 m raster derived from
+      the classified point cloud. Check the Abacus record for the current licence terms.
+  - source_id: ubc_lidar_2021_dem_1m
+    title: UBC Vancouver LiDAR digital elevation model, 1 m, 2021
+    publisher: UBC Campus and Community Planning / UBC Library Abacus
+    url: https://hdl.handle.net/11272.1/AB2/Y5KQNB
+    download_url: https://abacus.library.ubc.ca/api/access/datafile/97081
+    filename: DEM_1m.zip
+    media_type: application/zip
+    licence: UBC-Abacus-open-access
+    access_mode: direct_http
+    native_crs: EPSG:3157
+    products: [terrain]
+    notes: Bare-earth DEM at 1 m.
+  - source_id: ubc_lidar_2021_dsm_1m
+    title: UBC Vancouver LiDAR digital surface model, 1 m, 2021
+    publisher: UBC Campus and Community Planning / UBC Library Abacus
+    url: https://hdl.handle.net/11272.1/AB2/Y5KQNB
+    download_url: https://abacus.library.ubc.ca/api/access/datafile/97083
+    filename: DSM_1m.zip
+    media_type: application/zip
+    licence: UBC-Abacus-open-access
+    access_mode: direct_http
+    native_crs: EPSG:3157
+    products: [surface]
+    notes: First-return DSM at 1 m.
+  - source_id: ubc_lidar_2021_laz_e480_n5456
+    title: UBC Vancouver LiDAR LAZ tile E480 N5456, 2021
+    publisher: UBC Campus and Community Planning / UBC Library Abacus
+    url: https://hdl.handle.net/11272.1/AB2/Y5KQNB
+    download_url: https://abacus.library.ubc.ca/api/access/datafile/97041
+    filename: E480_N5456.laz
+    media_type: application/vnd.laszip
+    licence: UBC-Abacus-open-access
+    access_mode: direct_http
+    native_crs: EPSG:3157
+    products: [point_cloud]
+    notes: >
+      A 1 km tile on the west side of campus and Pacific Spirit Park. Useful for
+      point-cloud ingestion tests without downloading the multi-gigabyte full coverage.
+  - source_id: vancouver_public_trees
+    title: City of Vancouver public trees
+    publisher: City of Vancouver
+    url: https://opendata.vancouver.ca/explore/dataset/public-trees/
+    download_url: https://opendata.vancouver.ca/api/explore/v2.1/catalog/datasets/public-trees/exports/csv?delimiter=%2C&limit=-1
+    filename: vancouver_public_trees.csv
+    media_type: text/csv
+    licence: OGL-Vancouver
+    access_mode: direct_http
+    native_crs: EPSG:4326
+    products: [tree_inventory]
+    notes: >
+      Public boulevard and park trees. The export is refreshed on weekdays and can be
+      large; filter to a study area after download.
+  - source_id: vancouver_lidar_2022
+    title: City of Vancouver LiDAR 2022
+    publisher: City of Vancouver
+    url: https://opendata.vancouver.ca/explore/dataset/lidar-2022/
+    download_url:
+    filename:
+    media_type: application/zip
+    licence: OGL-Vancouver
+    access_mode: catalog
+    native_crs: EPSG:3157
+    products: [point_cloud, canopy_height, terrain]
+    notes: >
+      134 square kilometres, 49 points per square metre, 181 tiled LAS downloads.
+      Acquired 2022-09-07 and 2022-09-09. Use the portal's per-tile URLs.
+  - source_id: vancouver_lidar_2018
+    title: City of Vancouver LiDAR 2018
+    publisher: City of Vancouver
+    url: https://opendata.vancouver.ca/explore/dataset/lidar-2018/
+    download_url:
+    filename:
+    media_type: application/zip
+    licence: OGL-Vancouver
+    access_mode: catalog
+    native_crs: EPSG:3157
+    products: [point_cloud, canopy_height, terrain]
+    notes: 30 points per square metre; a useful repeat acquisition for change detection.
+  - source_id: vancouver_lidar_2013
+    title: City of Vancouver LiDAR 2013
+    publisher: City of Vancouver
+    url: https://opendata.vancouver.ca/explore/dataset/lidar-2013/
+    download_url:
+    filename:
+    media_type: application/zip
+    licence: OGL-Vancouver
+    access_mode: catalog
+    native_crs: EPSG:3157
+    products: [point_cloud, canopy_height, terrain]
+    notes: At least 12 points per square metre; the earliest citywide repeat in the pilot.
+  - source_id: metrovancouver_lidar_2022
+    title: Metro Vancouver classified LiDAR 2022
+    publisher: Metro Vancouver
+    url: https://open-data-portal-metrovancouver.hub.arcgis.com/
+    download_url:
+    filename:
+    media_type: application/zip
+    licence: Metro-Vancouver-open-data
+    access_mode: catalog
+    native_crs: EPSG:3157
+    products: [point_cloud, canopy_height, terrain]
+    notes: >
+      Regional classified LAS, about 16.5 GB for the Vancouver/UBC/UEL area. The
+      classified vegetation classes make it a strong cross-check for the City product.
+  - source_id: ubc_lidar_2015
+    title: UBC Vancouver LiDAR 2015
+    publisher: UBC Campus and Community Planning / UBC Library Abacus
+    url: https://hdl.handle.net/11272.1/AB2/KET75X
+    download_url:
+    filename:
+    media_type: application/zip
+    licence: UBC-Abacus-open-access
+    access_mode: catalog
+    native_crs: EPSG:3157
+    products: [point_cloud, terrain]
+    notes: Earlier campus acquisition for repeat-measures change analysis.

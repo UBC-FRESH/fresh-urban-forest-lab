@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FRESH Urban Forest Lab</title>
+  <link rel="stylesheet" href="/static/vendor/maplibre-gl.css">
+  <link rel="stylesheet" href="/static/styles.css">
+  <script src="/static/vendor/maplibre-gl.js"></script>
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "/static/vendor/three/three.module.js",
+        "three/addons/": "/static/vendor/three/"
+      }
+    }
+  </script>
+</head>
+<body>
+  <header class="app-header">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 40 40" role="img"><path d="M20 3 8 17h7l-6 9h9v11h4V26h9l-6-9h7L20 3Z" fill="currentColor"/></svg>
+      </div>
+      <div>
+        <h1>FRESH Urban Forest Lab</h1>
+        <p id="dataset-name">Loading a public dataset...</p>
+      </div>
+    </div>
+    <div class="header-actions">
+      <span id="status-pill" class="pill">connecting</span>
+      <select id="scenario-select" aria-label="Scenario">
+        <option value="">Baseline</option>
+      </select>
+      <button id="new-scenario" class="button ghost" type="button">New scenario</button>
+    </div>
+  </header>
+
+  <main class="app-shell">
+    <aside class="sidebar">
+      <section class="panel">
+        <div class="panel-heading">
+          <h2>Current canopy</h2>
+          <span class="muted" id="metric-date">inventory</span>
+        </div>
+        <div class="kpi-grid">
+          <article class="kpi"><span>Canopy cover</span><strong id="kpi-cover">--</strong><small>percent of campus</small></article>
+          <article class="kpi"><span>Trees</span><strong id="kpi-trees">--</strong><small>live records</small></article>
+          <article class="kpi"><span>Canopy volume</span><strong id="kpi-volume">--</strong><small>cubic metres</small></article>
+          <article class="kpi"><span>Carbon</span><strong id="kpi-carbon">--</strong><small>tonnes above ground</small></article>
+          <article class="kpi"><span>Species</span><strong id="kpi-species">--</strong><small>distinct labels</small></article>
+          <article class="kpi"><span>Native share</span><strong id="kpi-native">--</strong><small>of live trees</small></article>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-heading">
+          <h2>Scenario</h2>
+          <span id="scenario-revision" class="muted">baseline</span>
+        </div>
+        <label class="field">
+          <span>Name</span>
+          <input id="scenario-name" type="text" value="Campus canopy 2050" maxlength="120">
+        </label>
+        <label class="field">
+          <span>Projection horizon</span>
+          <input id="scenario-years" type="range" min="0" max="60" value="25" step="1">
+          <output id="scenario-years-value">25 years</output>
+        </label>
+        <div class="button-row">
+          <button id="preview" class="button primary" type="button">Preview scenario</button>
+          <button id="reset-edits" class="button ghost" type="button">Clear edits</button>
+        </div>
+        <div id="edit-list" class="edit-list" aria-live="polite"></div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-heading">
+          <h2>Tree inspector</h2>
+          <span id="selected-label" class="muted">nothing selected</span>
+        </div>
+        <div id="tree-detail" class="tree-detail">
+          <p class="muted">Click a tree on the map or in the 3D scene.</p>
+        </div>
+        <div class="button-row wrap">
+          <button id="remove-tree" class="button danger" type="button" disabled>Remove</button>
+          <button id="replace-tree" class="button ghost" type="button" disabled>Replace</button>
+          <button id="move-tree" class="button ghost" type="button" disabled>Move</button>
+          <button id="plant-tree" class="button primary" type="button">Plant mode</button>
+        </div>
+        <p id="mode-hint" class="hint" hidden>Click an open place on the map or terrain to plant.</p>
+      </section>
+
+      <section class="panel">
+        <div class="panel-heading">
+          <h2>Planting advisor</h2>
+          <span class="muted">explainable</span>
+        </div>
+        <label class="field">
+          <span>Species</span>
+          <input id="plant-species" type="text" value="Acer macrophyllum" maxlength="120">
+        </label>
+        <div class="inline-fields">
+          <label class="field"><span>Count</span><input id="plant-count" type="number" value="40" min="1" max="500"></label>
+          <label class="field"><span>Budget</span><input id="plant-budget" type="number" value="60000" min="0" step="1000"></label>
+        </div>
+        <button id="recommend" class="button primary" type="button">Find planting sites</button>
+        <div id="recommend-list" class="edit-list"></div>
+        <button id="apply-recommend" class="button ghost" type="button" disabled>Apply all recommendations</button>
+      </section>
+    </aside>
+
+    <section class="stage">
+      <nav class="view-tabs" role="tablist" aria-label="View">
+        <button class="tab active" data-view="map" role="tab" aria-selected="true">2D map</button>
+        <button class="tab" data-view="scene" role="tab" aria-selected="false">3D scene</button>
+        <button class="tab" data-view="analytics" role="tab" aria-selected="false">Analytics</button>
+        <div class="layer-toggles">
+          <label><input id="toggle-canopy" type="checkbox" checked> canopy</label>
+          <label><input id="toggle-hillshade" type="checkbox" checked> terrain</label>
+          <label><input id="toggle-buildings" type="checkbox" checked> buildings</label>
+        </div>
+      </nav>
+
+      <div id="view-map" class="view active">
+        <div id="map"></div>
+        <div class="map-hud">
+          <span id="map-hint">Click a tree to inspect it.</span>
+        </div>
+      </div>
+
+      <div id="view-scene" class="view">
+        <canvas id="scene-canvas"></canvas>
+        <div class="scene-hud">
+          <span>Drag to orbit, scroll to zoom, click a crown to inspect.</span>
+          <button id="scene-reset" class="button tiny ghost" type="button">Reset view</button>
+        </div>
+      </div>
+
+      <div id="view-analytics" class="view analytics">
+        <div class="analytics-grid">
+          <article class="chart-card">
+            <div class="panel-heading"><h2>Canopy trajectory</h2><span class="muted">scenario years</span></div>
+            <svg id="timeline-chart" viewBox="0 0 640 220" role="img" aria-label="Canopy cover over time"></svg>
+          </article>
+          <article class="chart-card">
+            <div class="panel-heading"><h2>Species composition</h2><span class="muted">top 12</span></div>
+            <div id="composition-chart" class="bars"></div>
+          </article>
+          <article class="chart-card">
+            <div class="panel-heading"><h2>Size classes</h2><span class="muted">DBH cm</span></div>
+            <div id="size-chart" class="bars"></div>
+          </article>
+          <article class="chart-card">
+            <div class="panel-heading"><h2>Scenario comparison</h2><span class="muted">score and cost</span></div>
+            <div id="comparison-list" class="comparison-list"></div>
+          </article>
+        </div>
+      </div>
+
+      <div class="timeline-strip">
+        <div>
+          <span class="eyebrow">Scenario outcome</span>
+          <strong id="scenario-verdict">Baseline dataset</strong>
+        </div>
+        <div class="delta-strip" id="delta-strip">
+          <span class="delta"><b>--</b> cover</span>
+          <span class="delta"><b>--</b> volume</span>
+          <span class="delta"><b>--</b> carbon</span>
+          <span class="delta"><b>--</b> native</span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script type="module" src="/static/app.js"></script>
+</body>
+</html>

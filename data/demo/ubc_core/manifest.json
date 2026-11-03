@@ -1,0 +1,240 @@
+{
+  "schema_version": "fresh-urban-forest.dataset.v1",
+  "dataset_id": "ubc-core-demo-20261103",
+  "name": "UBC Vancouver core demonstration",
+  "generated_utc": "2026-11-03T03:05:29Z",
+  "crs": "EPSG:3157",
+  "bounds": [
+    480411.0,
+    5451920.0,
+    486201.0,
+    5458722.0
+  ],
+  "tree_count": 4907,
+  "metrics": {
+    "tree_count": 4861,
+    "species_count": 351,
+    "native_fraction": 0.25591442090104916,
+    "canopy_cover_pct": 66.563,
+    "canopy_volume_m3": 294201110.558,
+    "mean_height_m": 11.787,
+    "p95_height_m": 31.34,
+    "total_carbon_kg": 1995207.567,
+    "shannon_index": 4.3501,
+    "size_classes": [
+      [
+        "0-10",
+        1751
+      ],
+      [
+        "10-20",
+        986
+      ],
+      [
+        "20-30",
+        557
+      ],
+      [
+        "30-50",
+        768
+      ],
+      [
+        "50-80",
+        606
+      ],
+      [
+        "80+",
+        193
+      ]
+    ],
+    "species_composition": [
+      [
+        "Thuja plicata",
+        432
+      ],
+      [
+        "Pseudotsuga menziesii",
+        254
+      ],
+      [
+        "Acer platanoides",
+        248
+      ],
+      [
+        "Acer circinatum",
+        243
+      ],
+      [
+        "Acer palmatum",
+        210
+      ],
+      [
+        "Quercus rubra",
+        176
+      ],
+      [
+        "Prunus serrulata",
+        143
+      ],
+      [
+        "Pinus nigra",
+        142
+      ],
+      [
+        "Cercidiphyllum japonicum",
+        141
+      ],
+      [
+        "Acer rubrum",
+        134
+      ],
+      [
+        "Unknown",
+        122
+      ],
+      [
+        "Liquidambar styraciflua",
+        121
+      ],
+      [
+        "Cornus kousa",
+        117
+      ],
+      [
+        "Quercus palustris",
+        109
+      ],
+      [
+        "Liriodendron tulipifera",
+        91
+      ],
+      [
+        "Tsuga heterophylla",
+        86
+      ],
+      [
+        "Acer x freemanii",
+        80
+      ],
+      [
+        "Parrotia persica",
+        70
+      ],
+      [
+        "Platanus x hispanica",
+        70
+      ],
+      [
+        "Tilia cordata",
+        66
+      ],
+      [
+        "Fagus sylvatica 'Dawyck'",
+        46
+      ],
+      [
+        "Stewartia pseudocamellia",
+        46
+      ],
+      [
+        "Carpinus betulus 'Fastigiata'",
+        44
+      ],
+      [
+        "Styrax japonicus",
+        40
+      ],
+      [
+        "Picea omorika",
+        39
+      ],
+      [
+        "Magnolia grandiflora",
+        35
+      ],
+      [
+        "Pyrus calleryana",
+        35
+      ],
+      [
+        "Quercus robur",
+        34
+      ],
+      [
+        "Zelkova serrata",
+        33
+      ],
+      [
+        "Ginkgo biloba",
+        29
+      ]
+    ]
+  },
+  "sources": [
+    {
+      "source_id": "ubc_buildings",
+      "title": "UBC Vancouver building footprints",
+      "publisher": "UBC Campus and Community Planning / UBC Geodata",
+      "url": "https://github.com/UBCGeodata/ubc-geospatial-opendata",
+      "licence": "PDDL-1.0",
+      "access_mode": "direct_http",
+      "retrieved_utc": "2026-11-03T03:05:29Z",
+      "checksum": "",
+      "notes": "Building footprints and heights for context and planting constraints."
+    },
+    {
+      "source_id": "ubc_campus_trees",
+      "title": "UBC Vancouver campus tree inventory",
+      "publisher": "UBC Campus and Community Planning / UBC Geodata",
+      "url": "https://github.com/UBCGeodata/ubc-geospatial-opendata",
+      "licence": "PDDL-1.0",
+      "access_mode": "direct_http",
+      "retrieved_utc": "2026-11-03T03:05:29Z",
+      "checksum": "",
+      "notes": "Point locations, taxa, DBH, height, and crown width where measured. Several records are location-only. The source is a living snapshot rather than a fixed annual release."
+    },
+    {
+      "source_id": "ubc_legal_boundary",
+      "title": "UBC Vancouver legal boundary",
+      "publisher": "UBC Campus and Community Planning / UBC Geodata",
+      "url": "https://github.com/UBCGeodata/ubc-geospatial-opendata",
+      "licence": "PDDL-1.0",
+      "access_mode": "direct_http",
+      "retrieved_utc": "2026-11-03T03:05:29Z",
+      "checksum": "",
+      "notes": "Campus analysis boundary."
+    },
+    {
+      "source_id": "ubc_lidar_2021_chm_1m",
+      "title": "UBC Vancouver LiDAR canopy height model, 1 m, 2021",
+      "publisher": "UBC Campus and Community Planning / UBC Library Abacus",
+      "url": "https://hdl.handle.net/11272.1/AB2/Y5KQNB",
+      "licence": "UBC-Abacus-open-access",
+      "access_mode": "direct_http",
+      "retrieved_utc": "2026-11-03T03:05:29Z",
+      "checksum": "",
+      "notes": "LiDAR acquired 2021-06-23 by Eagle Mapping. The CHM is a 1 m raster derived from the classified point cloud. Check the Abacus record for the current licence terms."
+    },
+    {
+      "source_id": "ubc_lidar_2021_dem_1m",
+      "title": "UBC Vancouver LiDAR digital elevation model, 1 m, 2021",
+      "publisher": "UBC Campus and Community Planning / UBC Library Abacus",
+      "url": "https://hdl.handle.net/11272.1/AB2/Y5KQNB",
+      "licence": "UBC-Abacus-open-access",
+      "access_mode": "direct_http",
+      "retrieved_utc": "2026-11-03T03:05:29Z",
+      "checksum": "",
+      "notes": "Bare-earth DEM at 1 m."
+    }
+  ],
+  "files": {
+    "manifest": "manifest.json",
+    "trees": "trees.json",
+    "metrics": "metrics.json",
+    "terrain": "terrain.npz",
+    "terrain_meta": "terrain.json",
+    "buildings": "buildings.geojson",
+    "boundary": "boundary.geojson",
+    "detected_trees": "detected_trees.geojson"
+  }
+}

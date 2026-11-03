@@ -1,0 +1,159 @@
+{
+  "tree_count": 4861,
+  "species_count": 351,
+  "native_fraction": 0.25591442090104916,
+  "canopy_cover_pct": 66.563,
+  "canopy_volume_m3": 294201110.558,
+  "mean_height_m": 11.787,
+  "p95_height_m": 31.34,
+  "total_carbon_kg": 1995207.567,
+  "shannon_index": 4.3501,
+  "size_classes": [
+    [
+      "0-10",
+      1751
+    ],
+    [
+      "10-20",
+      986
+    ],
+    [
+      "20-30",
+      557
+    ],
+    [
+      "30-50",
+      768
+    ],
+    [
+      "50-80",
+      606
+    ],
+    [
+      "80+",
+      193
+    ]
+  ],
+  "species_composition": [
+    [
+      "Thuja plicata",
+      432
+    ],
+    [
+      "Pseudotsuga menziesii",
+      254
+    ],
+    [
+      "Acer platanoides",
+      248
+    ],
+    [
+      "Acer circinatum",
+      243
+    ],
+    [
+      "Acer palmatum",
+      210
+    ],
+    [
+      "Quercus rubra",
+      176
+    ],
+    [
+      "Prunus serrulata",
+      143
+    ],
+    [
+      "Pinus nigra",
+      142
+    ],
+    [
+      "Cercidiphyllum japonicum",
+      141
+    ],
+    [
+      "Acer rubrum",
+      134
+    ],
+    [
+      "Unknown",
+      122
+    ],
+    [
+      "Liquidambar styraciflua",
+      121
+    ],
+    [
+      "Cornus kousa",
+      117
+    ],
+    [
+      "Quercus palustris",
+      109
+    ],
+    [
+      "Liriodendron tulipifera",
+      91
+    ],
+    [
+      "Tsuga heterophylla",
+      86
+    ],
+    [
+      "Acer x freemanii",
+      80
+    ],
+    [
+      "Parrotia persica",
+      70
+    ],
+    [
+      "Platanus x hispanica",
+      70
+    ],
+    [
+      "Tilia cordata",
+      66
+    ],
+    [
+      "Fagus sylvatica 'Dawyck'",
+      46
+    ],
+    [
+      "Stewartia pseudocamellia",
+      46
+    ],
+    [
+      "Carpinus betulus 'Fastigiata'",
+      44
+    ],
+    [
+      "Styrax japonicus",
+      40
+    ],
+    [
+      "Picea omorika",
+      39
+    ],
+    [
+      "Magnolia grandiflora",
+      35
+    ],
+    [
+      "Pyrus calleryana",
+      35
+    ],
+    [
+      "Quercus robur",
+      34
+    ],
+    [
+      "Zelkova serrata",
+      33
+    ],
+    [
+      "Ginkgo biloba",
+      29
+    ]
+  ]
+}

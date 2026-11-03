@@ -1,0 +1,18 @@
+cff-version: 1.2.0
+message: "If you use this prototype, please cite the repository and the underlying data sources."
+title: "FRESH Urban Forest Lab"
+abstract: "An open, reproducible urban-forest modelling and decision-support lab. It links public LiDAR, tree inventories, and individual-tree growth models to a 2D and 3D editing front end so planners can measure canopy structure and test management scenarios."
+authors:
+  - name: "UBC FRESH Lab"
+repository-code: "https://github.com/UBC-FRESH/fresh-urban-forest-lab"
+url: "https://github.com/UBC-FRESH/fresh-urban-forest-lab"
+license: "MIT"
+version: "0.1.0"
+date-released: "2026-11-03"
+keywords:
+  - urban forest
+  - LiDAR
+  - tree inventory
+  - canopy structure
+  - decision support
+  - 3D visualization

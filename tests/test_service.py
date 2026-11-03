@@ -1,0 +1,131 @@
+"""Contract tests for the FastAPI service."""
+
+from __future__ import annotations
+
+from pathlib import Path
+
+from fastapi.testclient import TestClient
+
+from fresh_urban_forest.service import create_app
+from tests.fixtures import make_dataset
+
+
+def _client(tmp_path: Path) -> TestClient:
+    """Build a test client over a synthetic dataset."""
+    dataset = make_dataset(tmp_path)
+    return TestClient(create_app(dataset, runtime_dir=tmp_path / "runtime"))
+
+
+def test_health_dataset_metrics_and_trees(tmp_path: Path) -> None:
+    """Core read endpoints return the dataset and filtered trees."""
+    client = _client(tmp_path)
+    assert client.get("/api/health").json()["status"] == "ok"
+    dataset = client.get("/api/dataset").json()
+    assert dataset["tree_count"] > 0
+    metrics = client.get("/api/metrics").json()
+    assert metrics["tree_count"] > 0
+    trees = client.get("/api/trees", params={"limit": 3}).json()
+    assert trees["returned"] == 3
+    assert trees["total"] > 3
+    species = client.get("/api/trees", params={"species": "thuja"}).json()
+    assert all("Thuja" in feature["properties"]["species"] for feature in species["features"])
+    removed = client.get("/api/trees", params={"status": "removed"}).json()
+    assert removed["returned"] == 0
+    bbox = client.get(
+        "/api/trees",
+        params={"min_lon": -180, "min_lat": -90, "max_lon": 180, "max_lat": 90, "limit": 1},
+    ).json()
+    assert bbox["returned"] == 1
+
+
+def test_scene_and_image_endpoints(tmp_path: Path) -> None:
+    """Scene and PNG endpoints return usable payloads."""
+    client = _client(tmp_path)
+    scene = client.get("/api/scene").json()
+    assert "terrain" in scene
+    assert "trees" in scene
+    canopy = client.get("/api/canopy.png", params={"width": 128})
+    assert canopy.status_code == 200
+    assert canopy.headers["content-type"] == "image/png"
+    assert canopy.content.startswith(b"\x89PNG")
+    hillshade = client.get("/api/hillshade.png", params={"width": 128})
+    assert hillshade.status_code == 200
+    assert hillshade.content.startswith(b"\x89PNG")
+
+
+def test_scenario_lifecycle(tmp_path: Path) -> None:
+    """A scenario can be created, patched, projected, compared, and exported."""
+    client = _client(tmp_path)
+    first_tree = client.get("/api/trees", params={"limit": 1}).json()["features"][0]["properties"]
+    created = client.post(
+        "/api/scenarios",
+        json={
+            "name": "Test scenario",
+            "years": 3,
+            "edits": [{"kind": "remove", "tree_id": first_tree["tree_id"]}],
+        },
+    )
+    assert created.status_code == 201
+    scenario = created.json()
+    scenario_id = scenario["scenario_id"]
+    assert scenario["edit_count"] == 1
+    patched = client.patch(
+        f"/api/scenarios/{scenario_id}",
+        json={
+            "revision": scenario["revision"],
+            "edits": [
+                {
+                    "kind": "plant",
+                    "tree_id": "plant:test",
+                    "lon": -123.25,
+                    "lat": 49.26,
+                    "species": "Acer macrophyllum",
+                    "dbh_cm": 6.0,
+                }
+            ],
+        },
+    )
+    assert patched.status_code == 200
+    assert patched.json()["revision"] == 1
+    conflict = client.patch(f"/api/scenarios/{scenario_id}", json={"revision": 0, "edits": []})
+    assert conflict.status_code == 409
+    listed = client.get("/api/scenarios").json()
+    assert listed["scenarios"]
+    projected = client.post(f"/api/scenarios/{scenario_id}/project")
+    assert projected.status_code == 200
+    assert len(projected.json()["timeline"]) == 4
+    result = client.get(f"/api/scenarios/{scenario_id}/result").json()
+    assert "deltas" in result
+    compared = client.get(f"/api/scenarios/{scenario_id}/compare").json()
+    assert compared["ranking"]
+    scene = client.get("/api/scene", params={"scenario_id": scenario_id}).json()
+    assert len(scene["trees"]) >= len(client.get("/api/scene").json()["trees"])
+    csv = client.get(f"/api/scenarios/{scenario_id}/export.csv")
+    assert csv.status_code == 200
+    assert csv.text.startswith("year,")
+    geojson = client.get(f"/api/scenarios/{scenario_id}/export.geojson")
+    assert geojson.status_code == 200
+    assert geojson.json()["type"] == "FeatureCollection"
+
+
+def test_recommend_and_not_found(tmp_path: Path) -> None:
+    """The recommender returns edits and unknown scenarios are 404."""
+    client = _client(tmp_path)
+    response = client.post(
+        "/api/dss/recommend",
+        json={"count": 5, "species": "Acer macrophyllum", "budget_cad": 5000},
+    )
+    assert response.status_code == 200
+    payload = response.json()
+    assert payload["edits"]
+    assert payload["candidates"]
+    assert client.get("/api/scenarios/missing").status_code == 404
+    assert client.get("/api/scenarios/missing/result").status_code == 404
+
+
+def test_index_serves_the_shell(tmp_path: Path) -> None:
+    """The root route serves the single-page shell."""
+    client = _client(tmp_path)
+    response = client.get("/")
+    assert response.status_code == 200
+    assert "FRESH Urban Forest Lab" in response.text

@@ -1,0 +1,38 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# Coverage, runtime, and Hypothesis records
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
+runtime/
+.hypothesis/
+
+# Environments
+.venv/
+venv/
+
+# Builds
+_build/
+docs/_build/
+build/
+dist/
+
+# Local work and private or generated material
+tmp/
+local/
+data/private/
+data/raw/
+data/processed/
+outputs/
+
+# Editors and OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
