@@ -1464,6 +1464,8 @@ function ensureOptimizeChart() {
     new THREE.LineBasicMaterial({ color: 0x8fa68a, transparent: true, opacity: 0.55 })
   );
   scene.add(box);
+  const axes = buildParetoAxes();
+  scene.add(axes);
   const raycaster = new THREE.Raycaster();
   const pointer = new THREE.Vector2();
   canvas.addEventListener("click", (event) => {
@@ -1478,7 +1480,7 @@ function ensureOptimizeChart() {
     const solutions = state.optimize.mesh.userData.solutions || [];
     if (index !== undefined && solutions[index]) renderParetoInfo(solutions[index]);
   });
-  const chart = { renderer, scene, camera, controls, canvas, mesh: null };
+  const chart = { renderer, scene, camera, controls, canvas, mesh: null, axes };
   window.addEventListener("resize", () => {
     if (!chart.canvas.clientWidth) return;
     renderer.setSize(chart.canvas.clientWidth, Math.max(chart.canvas.clientHeight, 1), false);
@@ -1486,14 +1488,82 @@ function ensureOptimizeChart() {
     camera.updateProjectionMatrix();
   });
   state.optimize.chart = chart;
+  updateParetoAxes(chart, { x: "X", y: "Y", z: "Z" });
   animatePareto();
   return chart;
+}
+
+function buildParetoAxes() {
+  const group = new THREE.Group();
+  const origin = new THREE.Vector3(0, 0, 0);
+  const end = 1.8;
+  const axes = [
+    [new THREE.Vector3(end, 0, 0), 0xc85555],
+    [new THREE.Vector3(0, end, 0), 0x5f9f54],
+    [new THREE.Vector3(0, 0, end), 0x4d7fc4],
+  ];
+  for (const [target, colour] of axes) {
+    const geometry = new THREE.BufferGeometry().setFromPoints([origin, target]);
+    const material = new THREE.LineBasicMaterial({ color: colour, transparent: true, opacity: 0.9 });
+    group.add(new THREE.Line(geometry, material));
+    const cone = new THREE.Mesh(
+      new THREE.ConeGeometry(0.07, 0.2, 10),
+      new THREE.MeshBasicMaterial({ color: colour })
+    );
+    cone.position.copy(target);
+    cone.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), target.clone().sub(origin).normalize());
+    group.add(cone);
+  }
+  return group;
+}
+
+function updateParetoAxes(chart, labels) {
+  chart.axisLabelText = labels;
+  $("pareto-axis-x").textContent = `X: ${labels.x || "X"}`;
+  $("pareto-axis-y").textContent = `Y: ${labels.y || "Y"}`;
+  $("pareto-axis-z").textContent = `Z: ${labels.z || "Z"}`;
+}
+
+function positionParetoAxisLabels(chart) {
+  if (!chart.axisLabelText) return;
+  const endpoints = [
+    [2.08, 0, 0],
+    [0, 2.08, 0],
+    [0, 0, 2.08],
+  ];
+  const ids = ["pareto-axis-x", "pareto-axis-y", "pareto-axis-z"];
+  const point = new THREE.Vector3();
+  endpoints.forEach((endpoint, index) => {
+    point.set(endpoint[0], endpoint[1], endpoint[2]);
+    point.project(chart.camera);
+    const element = $(ids[index]);
+    if (point.z > 1) {
+      element.style.display = "none";
+      return;
+    }
+    element.style.display = "";
+    const panel = document.querySelector(".optimize-panel");
+    const panelRect = panel?.getBoundingClientRect();
+    const canvasRect = chart.canvas.getBoundingClientRect();
+    const minLeft = panelRect
+      ? panelRect.right - canvasRect.left + element.offsetWidth / 2 + 8
+      : 8 + element.offsetWidth / 2;
+    const maxLeft = chart.canvas.clientWidth - element.offsetWidth / 2 - 8;
+    const left = Math.max(minLeft, Math.min(maxLeft, (point.x * 0.5 + 0.5) * chart.canvas.clientWidth));
+    const top = Math.max(
+      12,
+      Math.min(chart.canvas.clientHeight - 12, (-point.y * 0.5 + 0.5) * chart.canvas.clientHeight)
+    );
+    element.style.left = `${left}px`;
+    element.style.top = `${top}px`;
+  });
 }
 
 function animatePareto() {
   const chart = state.optimize.chart;
   if (!chart) return;
   chart.controls.update();
+  positionParetoAxisLabels(chart);
   chart.renderer.render(chart.scene, chart.camera);
   requestAnimationFrame(animatePareto);
 }
@@ -1790,6 +1860,7 @@ function drawPareto() {
   $("pareto-axis-x").textContent = `X: ${labels[xIndex] || ""}`;
   $("pareto-axis-y").textContent = `Y: ${labels[yIndex] || ""}`;
   $("pareto-axis-z").textContent = `Z: ${labels[zIndex] || ""}`;
+  updateParetoAxes(chart, { x: labels[xIndex], y: labels[yIndex], z: labels[zIndex] });
   $("pareto-legend").innerHTML =
     `<span><i class="change-swatch" style="background:hsl(210 68% 48%)"></i>low ${escapeHtml(labels[colourIndex] || "")}</span>` +
     `<span><i class="change-swatch" style="background:hsl(73 68% 48%)"></i>high ${escapeHtml(labels[colourIndex] || "")}</span>` +

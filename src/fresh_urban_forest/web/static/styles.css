@@ -461,21 +461,25 @@ select:focus, input:focus { outline: 2px solid #b8d3ae; outline-offset: 1px; }
 .pareto-info strong { color: var(--green); font-family: var(--mono); }
 .pareto-axis-labels {
   position: absolute;
-  top: 14px;
-  right: 14px;
+  inset: 0;
   z-index: 5;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  padding: 7px 9px;
-  border: 1px solid var(--line);
-  border-radius: 9px;
-  background: rgba(255, 255, 255, 0.88);
-  color: var(--ink-soft);
-  font-size: 0.66rem;
-  backdrop-filter: blur(8px);
+  pointer-events: none;
 }
-.pareto-axis-labels span { display: flex; align-items: center; gap: 6px; }
+.pareto-axis-labels span {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transform: translate(-50%, -50%);
+  padding: 3px 7px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--ink-soft);
+  font-size: 0.64rem;
+  white-space: nowrap;
+  box-shadow: 0 1px 4px rgba(23, 35, 29, 0.08);
+}
 .pareto-axis-labels span::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--green); }
 .pareto-axis-labels #pareto-axis-x::before { background: #c85555; }
 .pareto-axis-labels #pareto-axis-y::before { background: #5f9f54; }
@@ -486,9 +490,7 @@ select:focus, input:focus { outline: 2px solid #b8d3ae; outline-offset: 1px; }
 .pareto-compare th:first-child, .pareto-compare td:first-child { text-align: left; color: var(--ink-soft); }
 .pareto-compare th { color: var(--ink-soft); font-weight: 650; }
 .pareto-compare .pin-id { font-family: var(--mono); color: var(--green); }
-@media (max-width: 980px) {
-  .pareto-axis-labels { top: auto; bottom: 78px; right: 10px; }
-}
+
 .pareto-info .mini-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
 .pareto-info .mini-card { padding: 5px; border: 1px solid #e3e9de; border-radius: 7px; background: #ffffff; }
 .pareto-info .mini-card span { display: block; color: var(--ink-soft); font-size: 0.58rem; text-transform: uppercase; letter-spacing: 0.05em; }

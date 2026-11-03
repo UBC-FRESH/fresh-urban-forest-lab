@@ -167,6 +167,8 @@ Headless Chromium at 1500 x 950 and 900 x 700:
 - Optimize tab loads and runs 12-site / 6-scalarisation and 16-site / 8-scalarisation jobs;
 - archive renders as a 3D point cloud;
 - X/Y/Z, colour, size, and slice controls work;
+- the cube has colored axis lines and on-cube X/Y/Z labels that track the selected
+  objectives;
 - an actual canvas click selects a sphere and enables the load button;
 - **Load selected as scenario** creates a scenario, selects it in the scenario dropdown, and
   previews it;

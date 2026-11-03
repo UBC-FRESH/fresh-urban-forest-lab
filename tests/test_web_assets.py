@@ -25,6 +25,9 @@ def test_static_shell_has_required_hooks() -> None:
         "pareto-canvas",
         "optimize-run",
         "pareto-x",
+        "pareto-axis-x",
+        "pareto-axis-y",
+        "pareto-axis-z",
     ):
         assert marker in html
     assert "static/vendor/maplibre-gl.js" in html
@@ -65,6 +68,8 @@ def test_app_script_has_the_expected_endpoints_and_layers() -> None:
         "runOptimization",
         "drawPareto",
         "loadParetoScenario",
+        "positionParetoAxisLabels",
+        "updateParetoAxes",
     ):
         assert marker in script
     assert "eval(" not in script
