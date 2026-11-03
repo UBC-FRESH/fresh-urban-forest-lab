@@ -14,7 +14,7 @@ This roadmap is the plan of record and the issue tracker map for FRESH Urban For
 | P5 Release and public deployment | #6 | `feature/p5-release` | planned |
 | P6 Operate and maintain | #7 | `feature/p6-operate` | planned |
 | P7 Solar shade and species-fit engine | #40 | `feature/p7-shade-species` | complete |
-| P8 Spatio-temporal optimization and Pareto explorer | #41 | `feature/p8-optimize-pareto` | active |
+| P8 Spatio-temporal optimization and Pareto explorer | #41 | `feature/p8-optimize-pareto` | pr-open |
 | P9 Off-inventory and private-canopy augmentation | #42 | `feature/p9-off-inventory` | planned |
 | P10 Bird habitat and demography | #43 | `feature/p10-birds` | planned |
 | P11 Integration and v0.3 release candidate | #44 | `feature/p11-integration` | planned |
@@ -334,7 +334,7 @@ Phase 7 verification:
 
 Parent issue: #41
 Branch: `feature/p8-optimize-pareto`
-Status: active
+Status: pr-open
 
 Goal: solve many spatio-temporal planting, removal, species, and irrigation problems, compile a fuzzy Pareto archive, and explore the high-dimensional tradeoff space as an interactive 3D solution cloud.
 
