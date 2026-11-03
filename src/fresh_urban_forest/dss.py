@@ -90,6 +90,8 @@ def recommend_planting(
     budget_cad: float | None = None,
     grid_m: float = 8.0,
     max_slope_percent: float = 18.0,
+    center_lonlat: tuple[float, float] | None = None,
+    radius_m: float | None = None,
 ) -> tuple[PlantingCandidate, ...]:
     """Rank open planting sites in a dataset.
 
@@ -107,6 +109,10 @@ def recommend_planting(
         Candidate grid spacing in metres.
     max_slope_percent : float
         Maximum slope allowed at a candidate.
+    center_lonlat : tuple of float or None
+        Optional WGS84 centre for a planting-zone search.
+    radius_m : float or None
+        Optional search radius around ``center_lonlat``.
 
     Returns
     -------
@@ -120,6 +126,9 @@ def recommend_planting(
     if count == 0:
         return ()
     grid = dataset.terrain
+    center_xy: tuple[float, float] | None = None
+    if center_lonlat is not None:
+        center_xy = project_lonlat(center_lonlat[0], center_lonlat[1], grid.crs)
     left, bottom, right, top = grid.bounds
     step = max(grid_m, 1.0)
     cols = max(1, int((right - left) // step))
@@ -139,6 +148,12 @@ def recommend_planting(
     for row in range(rows):
         for col in range(cols):
             x, y = grid_cell_center(grid, min(row, grid.height - 1), min(col, grid.width - 1))
+            if (
+                center_xy is not None
+                and radius_m is not None
+                and math.hypot(x - center_xy[0], y - center_xy[1]) > radius_m
+            ):
+                continue
             if boundary is not None and not boundary.contains(Point(x, y)):
                 continue
             elevation, canopy, slope = _grid_sample_xy(grid, x, y)

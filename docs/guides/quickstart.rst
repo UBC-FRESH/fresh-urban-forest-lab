@@ -169,6 +169,20 @@ The result reports gain, loss, stable canopy, net change, and mean height change
 stable canopy. It is a thresholded area comparison, not a growth estimate. Read
 :doc:`../reference/methods` before interpreting it.
 
+Scenario studio
+---------------
+
+After the app is open:
+
+1. Remove, replace, move, or plant a tree.
+2. Use **Plant a zone** and click the map to search within a radius.
+3. Preview the scenario.
+4. Scrub **Preview year** or press **Play years** to animate.
+5. Open **Analytics** to compare scenarios.
+6. Export GeoJSON or the annual CSV.
+
+See :doc:`web-app` for the full UI tour.
+
 Where the data comes from
 -------------------------
 

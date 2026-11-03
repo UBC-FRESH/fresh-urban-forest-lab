@@ -94,6 +94,9 @@ class PlantingRequest(BaseModel):
     common_name: str = ""
     budget_cad: float | None = Field(default=None, ge=0.0)
     grid_m: float = Field(default=8.0, ge=2.0, le=50.0)
+    center_lon: float | None = Field(default=None, ge=-180.0, le=180.0)
+    center_lat: float | None = Field(default=None, ge=-90.0, le=90.0)
+    radius_m: float | None = Field(default=None, ge=5.0, le=5000.0)
 
 
 class ScenarioStore(BaseModel):
@@ -775,12 +778,19 @@ def create_app(
         dict
             Candidates, plant edits, and the assumed unit cost.
         """
+        center = (
+            (payload.center_lon, payload.center_lat)
+            if payload.center_lon is not None and payload.center_lat is not None
+            else None
+        )
         candidates = recommend_planting(
             state.dataset,
             count=payload.count,
             species=payload.species,
             budget_cad=payload.budget_cad,
             grid_m=payload.grid_m,
+            center_lonlat=center,
+            radius_m=payload.radius_m,
         )
         edits = candidates_to_edits(
             candidates,

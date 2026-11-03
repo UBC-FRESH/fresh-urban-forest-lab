@@ -140,6 +140,21 @@ def test_planting_candidates_and_exports(tmp_path: Path) -> None:
     budgeted = recommend_planting(dataset, count=100, budget_cad=1500.0)
     assert len(budgeted) <= 2
     assert recommend_planting(dataset, count=0) == ()
+    center = candidates[0]
+    local = recommend_planting(
+        dataset,
+        count=5,
+        grid_m=10.0,
+        center_lonlat=(center.lon, center.lat),
+        radius_m=25.0,
+    )
+    assert local
+    from fresh_urban_forest.terrain import project_lonlat
+
+    cx, cy = project_lonlat(center.lon, center.lat, dataset.terrain.crs)
+    for candidate in local:
+        x, y = project_lonlat(candidate.lon, candidate.lat, dataset.terrain.crs)
+        assert ((x - cx) ** 2 + (y - cy) ** 2) ** 0.5 <= 25.0 + 1.0
     scenario = Scenario(
         scenario_id="s",
         name="s",

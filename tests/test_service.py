@@ -160,6 +160,19 @@ def test_recommend_and_not_found(tmp_path: Path) -> None:
     payload = response.json()
     assert payload["edits"]
     assert payload["candidates"]
+    center = payload["candidates"][0]
+    centered = client.post(
+        "/api/dss/recommend",
+        json={
+            "count": 3,
+            "species": "Acer macrophyllum",
+            "center_lon": center["lon"],
+            "center_lat": center["lat"],
+            "radius_m": 50,
+        },
+    )
+    assert centered.status_code == 200
+    assert centered.json()["candidates"]
     assert client.get("/api/scenarios/missing").status_code == 404
     assert client.get("/api/scenarios/missing/result").status_code == 404
 

@@ -46,6 +46,9 @@ def test_app_script_has_the_expected_endpoints_and_layers() -> None:
         "preview-year",
         "loadSceneAtYear",
         "scenario-comparison",
+        "plant-zone",
+        "play-year",
+        "togglePlay",
     ):
         assert marker in script
     assert "eval(" not in script

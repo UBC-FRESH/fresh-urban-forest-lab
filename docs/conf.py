@@ -25,4 +25,11 @@ napoleon_use_rtype = False
 
 html_theme = "sphinx_rtd_theme"
 html_title = "FRESH Urban Forest Lab"
+html_baseurl = "https://ubc-fresh.github.io/fresh-urban-forest-lab/"
 html_extra_path = ["llms.txt"]
+html_show_sourcelink = False
+html_theme_options = {
+    "navigation_depth": 3,
+    "collapse_navigation": False,
+    "sticky_navigation": True,
+}

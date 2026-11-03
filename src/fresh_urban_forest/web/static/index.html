@@ -77,6 +77,9 @@
           <output id="preview-year-value">0</output>
         </label>
         <div class="button-row">
+          <button id="play-year" class="button tiny ghost" type="button">Play years</button>
+        </div>
+        <div class="button-row">
           <button id="preview" class="button primary" type="button">Preview scenario</button>
           <button id="reset-edits" class="button ghost" type="button">Clear edits</button>
         </div>
@@ -131,7 +134,11 @@
           <label class="field"><span>Count</span><input id="plant-count" type="number" value="40" min="1" max="500"></label>
           <label class="field"><span>Budget</span><input id="plant-budget" type="number" value="60000" min="0" step="1000"></label>
         </div>
-        <button id="recommend" class="button primary" type="button">Find planting sites</button>
+        <label class="field"><span>Zone radius (m)</span><input id="plant-radius" type="number" value="250" min="10" max="5000" step="10"></label>
+        <div class="button-row">
+          <button id="recommend" class="button primary" type="button">Find planting sites</button>
+          <button id="plant-zone" class="button ghost" type="button">Plant a zone</button>
+        </div>
         <div id="recommend-list" class="edit-list"></div>
         <button id="apply-recommend" class="button ghost" type="button" disabled>Apply all recommendations</button>
       </section>

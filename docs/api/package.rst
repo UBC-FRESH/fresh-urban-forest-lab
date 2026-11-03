@@ -29,6 +29,15 @@ in ``fresh_urban_forest.models``; the analysis functions are grouped by concern.
 .. automodule:: fresh_urban_forest.change
    :members:
 
+.. automodule:: fresh_urban_forest.change_product
+   :members:
+
+.. automodule:: fresh_urban_forest.completeness
+   :members:
+
+.. automodule:: fresh_urban_forest.field_analysis
+   :members:
+
 .. automodule:: fresh_urban_forest.allometry
    :members:
 

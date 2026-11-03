@@ -15,13 +15,24 @@ act, and cite it in their reports. Start with the repository's ``AGENTS.md`` and
 
    guides/quickstart
    guides/data
+   guides/web-app
+   guides/cli
 
 .. toctree::
    :maxdepth: 2
    :caption: Reference
 
    reference/data-contracts
+   reference/architecture
+   reference/project-status
    reference/methods
+   reference/change-products
+   reference/validation-and-calibration
+   reference/assistant
+   reference/deployment
+   reference/reproducibility
+   reference/testing
+   reference/limitations
    reference/software-landscape
 
 .. toctree::

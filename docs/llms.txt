@@ -6,9 +6,23 @@
 
 - [Home](index.html): the documentation home for the project.
 - [Quick start](guides/quickstart.html): run the demo, build a dataset, and serve the app.
-- [Public data](guides/data.html): UBC, Vancouver, and Metro Vancouver sources and licences.
-- [Data contracts](reference/data-contracts.html): the dataset directory, tree record, scenario, and scene payload.
+- [Web application](guides/web-app.html): 2D map, 3D scene, Change tab, scenario studio, assistant.
+- [CLI](guides/cli.html): every command with examples.
+- [Public data](guides/data.html): UBC, Vancouver, Metro Vancouver, LidarBC, and CanElevation sources and licences.
+
+## Reference
+
+- [Architecture](reference/architecture.html): layers, modules, contracts, and extension points.
+- [Project status](reference/project-status.html): phases, release candidate, repository map, known gaps.
+- [Data contracts](reference/data-contracts.html): dataset directory, tree record, scenario, scene payload.
 - [Methods](reference/methods.html): cover, volume, growth, carbon, detection, change, and DSS assumptions.
+- [Change products](reference/change-products.html): observed change, masks, metrics, and the UBC/City products.
+- [Validation and calibration](reference/validation-and-calibration.html): detection accuracy, field packets, allometry, growth gap.
+- [Assistant](reference/assistant.html): the + Ask assistant, endpoints, context, and security boundary.
+- [Deployment](reference/deployment.html): local, reverse proxy, Cloudflare/CWL, Pages.
+- [Reproducibility](reference/reproducibility.html): provenance, commands, and what is tracked.
+- [Testing](reference/testing.html): test layers, dashboard, browser checks.
+- [Limitations](reference/limitations.html): what the prototype does not claim.
 - [Software landscape](reference/software-landscape.html): what we borrowed, what we refused to copy, and why.
 - [Session protocol](agents/session-protocol.html): the bounded agent workflow for this repository.
 - [API reference](api/index.html): every public function, with its parameters, types, and return values.

@@ -24,6 +24,7 @@ const state = {
   changeProduct: "change.json",
   changeProductsLoaded: false,
   previewYear: 0,
+  playTimer: null,
 };
 
 const $ = (id) => document.getElementById(id);
@@ -381,6 +382,10 @@ function initMap() {
     selectTree(feature.properties.tree_id);
   });
   map.on("click", (event) => {
+    if (state.mode === "zone") {
+      placeAt(event.lngLat.lng, event.lngLat.lat);
+      return;
+    }
     const hits = map.queryRenderedFeatures(event.point, { layers: ["trees"] });
     if (hits.length) return;
     if (state.mode === "plant" || state.mode === "move") {
@@ -458,6 +463,15 @@ function ensureThree() {
     pointer.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
     pointer.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
     raycaster.setFromCamera(pointer, camera);
+    if (state.mode === "zone") {
+      const terrainHits = raycaster.intersectObject(terrain, false);
+      if (!terrainHits.length) return;
+      const local = terrainHits[0].point;
+      const origin = state.scene.origin_lonlat;
+      const metres = state.scene.meters_per_degree;
+      placeAt(origin[0] + local.x / metres[0], origin[1] + local.z / metres[1]);
+      return;
+    }
     const targets = [...three.crownMeshes, ...three.trunkMeshes, terrain];
     const hits = raycaster.intersectObjects(targets, false);
     if (!hits.length) return;
@@ -749,6 +763,11 @@ function bindControls() {
     const year = Number(event.target.value);
     state.previewYear = year;
     $("preview-year-value").textContent = `${year} year${year === 1 ? "" : "s"}`;
+    if (state.playTimer) {
+      window.clearInterval(state.playTimer);
+      state.playTimer = null;
+      $("play-year").textContent = "Play years";
+    }
     loadSceneAtYear(year);
   });
   $("export-geojson").addEventListener("click", () => {
@@ -781,7 +800,9 @@ function bindControls() {
   });
   $("move-tree").addEventListener("click", () => setMode("move"));
   $("plant-tree").addEventListener("click", () => setMode("plant"));
-  $("recommend").addEventListener("click", recommendPlanting);
+  $("recommend").addEventListener("click", () => recommendPlanting());
+  $("plant-zone").addEventListener("click", () => setMode("zone"));
+  $("play-year").addEventListener("click", togglePlay);
   $("apply-recommend").addEventListener("click", applyRecommendations);
   $("scene-reset").addEventListener("click", resetCamera);
   $("toggle-canopy").addEventListener("change", (event) => {
@@ -1175,7 +1196,9 @@ function setMode(mode) {
   $("mode-hint").textContent =
     state.mode === "move"
       ? "Click a new place on the map or terrain to move the selected tree."
-      : "Click an open place on the map or terrain to plant.";
+      : state.mode === "zone"
+        ? "Click a point on the map or terrain to centre a planting zone."
+        : "Click an open place on the map or terrain to plant.";
   $("plant-tree").classList.toggle("primary", state.mode !== "plant");
   if (state.map) state.map.getCanvas().style.cursor = active ? "crosshair" : "";
 }
@@ -1196,6 +1219,8 @@ function placeAt(lon, lat) {
       note: "Planting placed in the prototype",
     };
     addEdit(edit, { optimisticTree: true });
+  } else if (state.mode === "zone") {
+    recommendPlanting([lon, lat]);
   } else if (state.mode === "move" && state.selectedId) {
     addEdit({
       kind: "move",
@@ -1276,6 +1301,35 @@ function renderEditList() {
       renderEditList();
     });
   });
+}
+
+function togglePlay() {
+  if (state.playTimer) {
+    window.clearInterval(state.playTimer);
+    state.playTimer = null;
+    $("play-year").textContent = "Play years";
+    return;
+  }
+  if (!state.result) {
+    toast("Preview a scenario before playing the years.");
+    return;
+  }
+  const max = Number($("preview-year").max) || state.result.years;
+  let year = Number($("preview-year").value);
+  if (year >= max) year = 0;
+  $("play-year").textContent = "Pause";
+  state.playTimer = window.setInterval(() => {
+    year += 1;
+    if (year > max) {
+      window.clearInterval(state.playTimer);
+      state.playTimer = null;
+      $("play-year").textContent = "Play years";
+      return;
+    }
+    $("preview-year").value = String(year);
+    $("preview-year-value").textContent = `${year} year${year === 1 ? "" : "s"}`;
+    loadSceneAtYear(year);
+  }, 700);
 }
 
 function updateExportButtons() {
@@ -1466,10 +1520,11 @@ function renderScenarioOptions() {
   select.value = current;
 }
 
-async function recommendPlanting() {
+async function recommendPlanting(center = null) {
   try {
     const count = Number($("plant-count").value || 40);
     const budget = Number($("plant-budget").value || 0);
+    const radius = Number($("plant-radius").value || 250);
     const payload = await api("/api/dss/recommend", {
       method: "POST",
       body: JSON.stringify({
@@ -1477,6 +1532,9 @@ async function recommendPlanting() {
         species: $("plant-species").value,
         common_name: $("plant-species").value,
         budget_cad: budget || null,
+        center_lon: center ? center[0] : null,
+        center_lat: center ? center[1] : null,
+        radius_m: center ? radius : null,
       }),
     });
     state.recommendations = payload.edits || [];
@@ -1493,7 +1551,12 @@ async function recommendPlanting() {
       .join("");
     $("apply-recommend").disabled = !state.recommendations.length;
     renderRecommendationCandidates(payload.candidates || []);
-    toast(`${payload.candidates.length} sites ranked. ${payload.edits.length} fit the budget.`);
+    setMode(null);
+    toast(
+      center
+        ? `${payload.candidates.length} sites ranked within ${radius} m. ${payload.edits.length} fit the budget.`
+        : `${payload.candidates.length} sites ranked. ${payload.edits.length} fit the budget.`
+    );
   } catch (error) {
     toast(error.message, true);
   }
