@@ -152,6 +152,14 @@ selector, and a 3D sun position. The selected tree card shows marginal shade, sh
 efficiency, species fit, vigour, stress days, water cost, and the best irrigation policy.
 The map separates building shade, tree shade, overlap, and terrain shade in its legend.
 
+.. image:: /_static/light-shadow.png
+   :alt: Light tab with building and tree shade on the UBC core demo
+   :width: 100%
+
+.. image:: /_static/tree-light-card.png
+   :alt: Selected-tree shade, species, water, and irrigation card
+   :width: 100%
+
 Limitations
 -----------
 
