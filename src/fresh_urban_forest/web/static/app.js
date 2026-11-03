@@ -547,7 +547,8 @@ function buildBuildingMeshes() {
       roughness: 0.82,
       metalness: 0.03,
       transparent: true,
-      opacity: 0.78,
+      opacity: 0.55,
+      depthWrite: false,
     });
     const mesh = new THREE.Mesh(geometry, material);
     mesh.position.y = Number(building.base_z) || 0;
