@@ -40,6 +40,7 @@ const state = {
     mesh: null,
     pollTimer: null,
     filtered: [],
+    savedRuns: [],
   },
   previewYear: 0,
   playTimer: null,
@@ -184,6 +185,11 @@ async function init() {
         if (solution) renderParetoInfo(solution);
       },
       paretoScreenPositions,
+      selectedSummary: () => ({
+        id: state.optimize.selected?.solution_id || "",
+        planted: state.optimize.selected?.planted?.length || 0,
+        archive_first_planted: state.optimize.result?.archive?.solutions?.[0]?.planted?.length || 0,
+      }),
     };
     await loadAssistantInfo();
   } catch (error) {
@@ -1411,8 +1417,10 @@ function evidenceBadge(evidence) {
 
 function initOptimizeControls() {
   $("optimize-run").addEventListener("click", runOptimization);
+  $("optimize-load-saved").addEventListener("click", loadSavedArchive);
   $("optimize-reset").addEventListener("click", resetParetoView);
   $("pareto-load").addEventListener("click", loadParetoScenario);
+  refreshSavedRuns();
   for (const id of ["pareto-x", "pareto-y", "pareto-z", "pareto-colour", "pareto-size"]) {
     $(id).addEventListener("change", drawPareto);
   }
@@ -1530,6 +1538,7 @@ async function pollOptimization(jobId) {
       state.optimize.result = payload.result;
       renderParetoArchive(payload.result);
       $("optimize-run").disabled = false;
+      refreshSavedRuns();
       return;
     }
     if (payload.status === "error") {
@@ -1554,6 +1563,47 @@ function renderParetoStats(payload) {
     <div class="change-stat"><span>Archive</span><strong>${formatNumber(solutions || payload.archive_size || 0)}</strong></div>
     <div class="change-stat"><span>Hypervolume</span><strong>${hypervolume.toFixed(4)}</strong></div>
     <div class="change-stat"><span>Status</span><strong>${escapeHtml(payload.status)}</strong></div>`;
+}
+
+async function refreshSavedRuns() {
+  try {
+    const payload = await api("api/optimize");
+    const jobs = (payload.jobs || []).filter((job) => job.status === "done");
+    state.optimize.savedRuns = jobs;
+    const select = $("opt-saved");
+    const current = select.value || state.optimize.jobId || "";
+    select.innerHTML = jobs.length
+      ? jobs
+          .map(
+            (job) =>
+              `<option value="${escapeHtml(job.job_id)}">${escapeHtml(job.job_id)} · ${formatNumber(job.archive_size)} solutions · HV ${formatNumber(job.hypervolume || 0, 4)}</option>`
+          )
+          .join("")
+      : '<option value="">No saved runs yet — run one first</option>';
+    if (jobs.some((job) => job.job_id === current)) select.value = current;
+    $("optimize-load-saved").disabled = jobs.length === 0;
+  } catch (_error) {
+    $("opt-saved").innerHTML = '<option value="">Saved runs unavailable</option>';
+    $("optimize-load-saved").disabled = true;
+  }
+}
+
+async function loadSavedArchive() {
+  const jobId = $("opt-saved").value;
+  if (!jobId) return;
+  $("optimize-status").textContent = "loading archive";
+  try {
+    const payload = await api(`api/optimize/${encodeURIComponent(jobId)}`);
+    if (!payload.result) throw new Error("saved result is unavailable");
+    state.optimize.jobId = jobId;
+    state.optimize.result = payload.result;
+    renderParetoArchive(payload.result);
+    $("optimize-status").textContent = "loaded";
+    toast(`Loaded ${jobId}`);
+  } catch (error) {
+    $("optimize-status").textContent = "load error";
+    toast(`Could not load the saved archive: ${error.message}`, true);
+  }
 }
 
 function renderParetoArchive(result) {

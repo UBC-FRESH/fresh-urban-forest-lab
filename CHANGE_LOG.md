@@ -254,6 +254,10 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Fixed optimizer UI state bugs: requested scalarization count, scenario dropdown sync,
   load/slice reset, fixed-reference hypervolume, mobile layout, and scenario selection now
   switches to the 3D scene so the loaded scenario is visible.
+- Added saved Pareto archives: completed jobs are written to
+  `runtime/optimizations/<job_id>.json`, loaded at startup, and available through the
+  **Saved Pareto archive** dropdown. The full-campus 387-site archive loads instantly and
+  can produce a 385-tree scenario.
 - Tests: 285 passed. Dashboard: GREEN.
 - Limits: weighted-sum finite approximation, Monte Carlo hypervolume, bootstrap robustness,
   precomputed P7 evaluator, and no city-scale claim.

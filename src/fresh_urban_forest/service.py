@@ -84,6 +84,7 @@ from fresh_urban_forest.water import (
 )
 
 DEFAULT_AGENT_MODEL = "opencode-go/deepseek-v4.1-flash"
+OPTIMIZATION_DIR = "optimizations"
 
 
 class EditInput(BaseModel):
@@ -309,6 +310,7 @@ def create_app(
         dataset_root=dataset_root.resolve() if dataset_root is not None else None,
     )
     _load_scenarios(state)
+    _load_optimizations(state)
     app = FastAPI(title="FRESH Urban Forest Lab", version="0.1.0")
     app.state.lab = state
 
@@ -1671,6 +1673,11 @@ def _job_payload(job: OptimizationJob, *, include_result: bool = False) -> dict[
         "progress": job.progress,
         "total": job.total,
         "archive_size": job.archive_size,
+        "hypervolume": (
+            float(getattr(getattr(job.result, "archive", None), "hypervolume", 0.0))
+            if job.result is not None
+            else 0.0
+        ),
         "error": job.error,
         "request": dict(job.request),
         "started_utc": job.started_utc,
@@ -1732,12 +1739,86 @@ def _run_optimization_job(state: LabState, job_id: str) -> None:
         )
         job.result = result
         job.archive_size = len(getattr(getattr(result, "archive", None), "solutions", ()))
+        try:
+            _save_optimization_result(state, job_id, result)
+        except OSError as exc:
+            job.error = f"result could not be saved: {exc}"
         job.status = "done"
     except Exception as exc:
         job.status = "error"
         job.error = str(exc)[:500]
     finally:
         job.finished_utc = _utc_now()
+
+
+def _save_optimization_result(state: LabState, job_id: str, result: object) -> None:
+    """Persist a completed optimization result for later UI loading.
+
+    Parameters
+    ----------
+    state : LabState
+        Application state.
+    job_id : str
+        Job identifier.
+    result : object
+        Optimization result with a ``to_dict`` method.
+    """
+    if not hasattr(result, "to_dict"):
+        return
+    directory = state.runtime_dir / OPTIMIZATION_DIR
+    directory.mkdir(parents=True, exist_ok=True)
+    path = directory / f"{job_id}.json"
+    temporary = path.with_name(path.name + ".tmp")
+    temporary.write_text(
+        json.dumps(result.to_dict(), indent=2) + "\n",
+        encoding="utf-8",
+    )
+    temporary.replace(path)
+
+
+def _load_optimizations(state: LabState) -> None:
+    """Load saved optimization results from the runtime directory.
+
+    Parameters
+    ----------
+    state : LabState
+        Application state to populate.
+    """
+    from fresh_urban_forest.optimize import result_from_dict
+
+    directory = state.runtime_dir / OPTIMIZATION_DIR
+    if not directory.exists():
+        return
+    for path in sorted(directory.glob("*.json")):
+        try:
+            payload = json.loads(path.read_text(encoding="utf-8"))
+            if not isinstance(payload, Mapping):
+                continue
+            result = result_from_dict(payload)
+        except (OSError, ValueError, KeyError, TypeError):
+            continue
+        problem = result.problem
+        request_payload = {
+            "sites": len(problem.sites),
+            "species": [option.name for option in problem.species],
+            "horizon": problem.horizon,
+            "budget_cad": problem.budget_cad,
+            "max_sites": problem.max_sites,
+            "seed": problem.seed,
+            "scalarizations": result.scalarizations,
+        }
+        state.jobs[path.stem] = OptimizationJob(
+            job_id=path.stem,
+            status="done",
+            progress=result.scalarizations,
+            total=result.scalarizations,
+            archive_size=len(result.archive.solutions),
+            result=result,
+            error="",
+            request=request_payload,
+            started_utc="",
+            finished_utc="",
+        )
 
 
 def _request_int(request: Mapping[str, object], key: str, default: int) -> int:

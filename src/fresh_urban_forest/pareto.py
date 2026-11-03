@@ -8,7 +8,7 @@ Hypervolume is Monte Carlo because the default problem has seven objectives.
 from __future__ import annotations
 
 import math
-from collections.abc import Sequence
+from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
 
 import numpy as np
@@ -150,6 +150,111 @@ def non_dominated_indices(
             continue
         keep.append(index)
     return keep
+
+
+def solution_from_dict(payload: object) -> Solution:
+    """Reconstruct one solution from an archive payload.
+
+    Parameters
+    ----------
+    payload : object
+        Mapping produced by :meth:`Solution.to_dict`.
+
+    Returns
+    -------
+    Solution
+        Reconstructed solution.
+
+    Raises
+    ------
+    ValueError
+        When the payload is malformed.
+    """
+    if not isinstance(payload, Mapping):
+        raise ValueError("solution payload must be a mapping")
+    decisions_raw = payload.get("decisions", [])
+    objectives_raw = payload.get("objectives", [])
+    planted_raw = payload.get("planted", [])
+    metrics_raw = payload.get("metrics", {})
+    if not isinstance(decisions_raw, list) or not isinstance(objectives_raw, list):
+        raise ValueError("solution decisions and objectives must be lists")
+    decisions = tuple(int(value) for value in decisions_raw)
+    objectives = tuple(float(value) for value in objectives_raw)
+    metrics = (
+        {str(key): float(value) for key, value in metrics_raw.items()}
+        if isinstance(metrics_raw, Mapping)
+        else {}
+    )
+    planted = (
+        tuple(
+            (str(item[0]), str(item[1]))
+            for item in planted_raw
+            if isinstance(item, (list, tuple)) and len(item) >= 2
+        )
+        if isinstance(planted_raw, list)
+        else ()
+    )
+    return Solution(
+        solution_id=str(payload.get("solution_id", "")),
+        decisions=decisions,
+        objectives=objectives,
+        metrics=metrics,
+        constraint_violation=float(payload.get("constraint_violation", 0.0)),
+        planted=planted,
+    )
+
+
+def archive_from_dict(payload: object) -> ParetoArchive:
+    """Reconstruct a Pareto archive from a JSON payload.
+
+    Parameters
+    ----------
+    payload : object
+        Mapping produced by :meth:`ParetoArchive.to_dict`.
+
+    Returns
+    -------
+    ParetoArchive
+        Reconstructed archive.
+
+    Raises
+    ------
+    ValueError
+        When the payload is malformed.
+    """
+    if not isinstance(payload, Mapping):
+        raise ValueError("archive payload must be a mapping")
+    objectives_raw = payload.get("objectives", [])
+    solutions_raw = payload.get("solutions", [])
+    if not isinstance(objectives_raw, list) or not isinstance(solutions_raw, list):
+        raise ValueError("archive objectives and solutions must be lists")
+    objectives = tuple(
+        Objective(
+            name=str(item.get("name", "")),
+            label=str(item.get("label", "")),
+            direction="min" if str(item.get("direction", "max")) == "min" else "max",
+        )
+        for item in objectives_raw
+        if isinstance(item, Mapping)
+    )
+    solutions = tuple(solution_from_dict(item) for item in solutions_raw)
+    robustness = tuple(
+        float(item.get("robustness", 0.0)) for item in solutions_raw if isinstance(item, Mapping)
+    )
+    ideal_raw = payload.get("ideal", [])
+    nadir_raw = payload.get("nadir", [])
+    ideal = tuple(float(value) for value in ideal_raw) if isinstance(ideal_raw, list) else ()
+    nadir = tuple(float(value) for value in nadir_raw) if isinstance(nadir_raw, list) else ()
+    return ParetoArchive(
+        problem_id=str(payload.get("problem_id", "problem")),
+        objectives=objectives,
+        solutions=solutions,
+        ideal=ideal,
+        nadir=nadir,
+        hypervolume=float(payload.get("hypervolume", 0.0)),
+        robustness=robustness,
+        evidence=ARCHIVE_EVIDENCE,
+    )
 
 
 def build_archive(problem: OptimizationProblem, solutions: list[Solution]) -> ParetoArchive:

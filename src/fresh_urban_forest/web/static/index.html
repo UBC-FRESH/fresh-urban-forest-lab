@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>FRESH Urban Forest Lab</title>
   <link rel="stylesheet" href="static/vendor/maplibre-gl.css">
-  <link rel="stylesheet" href="static/styles.css?v=p8a">
+  <link rel="stylesheet" href="static/styles.css?v=p8b">
   <script src="static/vendor/maplibre-gl.js"></script>
   <script type="importmap">
     {
@@ -263,6 +263,14 @@
             <h2>Pareto solution space</h2>
             <span id="optimize-status" class="muted">idle</span>
           </div>
+          <label class="field">
+            <span>Saved Pareto archive</span>
+            <select id="opt-saved"></select>
+          </label>
+          <div class="button-row">
+            <button id="optimize-load-saved" class="button ghost" type="button">Load saved archive</button>
+          </div>
+          <p class="hint" id="opt-saved-hint">A scenario is one plan. A saved run loads the whole Pareto front.</p>
           <div class="inline-fields">
             <label class="field"><span>Sites</span><input id="opt-sites" type="number" value="24" min="4" max="120"></label>
             <label class="field"><span>Scalarizations</span><input id="opt-scalarizations" type="number" value="18" min="2" max="80"></label>
@@ -354,6 +362,6 @@
   </aside>
 
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
-  <script type="module" src="static/app.js?v=p8a"></script>
+  <script type="module" src="static/app.js?v=p8b"></script>
 </body>
 </html>

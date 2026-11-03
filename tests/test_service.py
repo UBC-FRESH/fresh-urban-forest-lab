@@ -328,3 +328,17 @@ def test_optimization_job_and_scenario(tmp_path: Path) -> None:
     assert scenario.json()["scenario_id"].startswith("scenario-")
     assert client.get("/api/optimize").json()["jobs"]
     assert client.get("/api/optimize/missing").status_code == 404
+    saved = tmp_path / "runtime" / "optimizations" / f"{job_id}.json"
+    assert saved.exists()
+    dataset = make_dataset(tmp_path / "reload")
+    reloaded = TestClient(
+        create_app(
+            dataset,
+            runtime_dir=tmp_path / "runtime",
+            dataset_root=tmp_path / "reload" / "dataset",
+        )
+    )
+    assert any(job["job_id"] == job_id for job in reloaded.get("/api/optimize").json()["jobs"])
+    restored = reloaded.get(f"/api/optimize/{job_id}")
+    assert restored.status_code == 200
+    assert restored.json()["result"]["archive"]["solutions"]

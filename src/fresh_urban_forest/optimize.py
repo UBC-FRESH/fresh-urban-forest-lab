@@ -1141,6 +1141,66 @@ def write_result(result: OptimizationResult, path: Path) -> Path:
     return path
 
 
+def result_from_dict(payload: Mapping[str, object]) -> OptimizationResult:
+    """Reconstruct an optimization result from a saved JSON payload.
+
+    Parameters
+    ----------
+    payload : mapping
+        Mapping produced by :meth:`OptimizationResult.to_dict`.
+
+    Returns
+    -------
+    OptimizationResult
+        Reconstructed result.
+
+    Raises
+    ------
+    ValueError
+        When the payload is missing a problem or archive.
+    """
+    from fresh_urban_forest.pareto import archive_from_dict
+
+    problem_payload = payload.get("problem")
+    archive_payload = payload.get("archive")
+    if not isinstance(problem_payload, Mapping) or not isinstance(archive_payload, Mapping):
+        raise ValueError("result needs a problem and an archive")
+    problem = problem_from_dict(problem_payload)
+    archive = archive_from_dict(archive_payload)
+    history_raw = payload.get("history", [])
+    history: list[dict[str, float]] = []
+    if isinstance(history_raw, list):
+        for row in history_raw:
+            if isinstance(row, Mapping):
+                history.append({str(key): _as_float(value, 0.0) for key, value in row.items()})
+    convergence_raw = payload.get("convergence", [])
+    convergence: list[tuple[float, ...]] = []
+    if isinstance(convergence_raw, list):
+        for row in convergence_raw:
+            if isinstance(row, list):
+                convergence.append(tuple(_as_float(value, 0.0) for value in row))
+    surrogate_raw = payload.get("surrogate")
+    surrogate = (
+        {str(key): value for key, value in surrogate_raw.items()}
+        if isinstance(surrogate_raw, Mapping)
+        else None
+    )
+    return OptimizationResult(
+        problem=problem,
+        archive=archive,
+        generations=_as_int(payload.get("generations"), 0),
+        population_size=_as_int(payload.get("population_size"), 0),
+        evaluations=_as_int(payload.get("evaluations"), 0),
+        runtime_s=_as_float(payload.get("runtime_s"), 0.0),
+        history=tuple(history),
+        seed=_as_int(payload.get("seed"), problem.seed),
+        scalarizations=_as_int(payload.get("scalarizations"), len(archive.solutions)),
+        surrogate=surrogate,
+        convergence=tuple(convergence),
+        evidence=PROBLEM_EVIDENCE,
+    )
+
+
 def problem_from_dict(payload: Mapping[str, object]) -> OptimizationProblem:
     """Build a problem from a JSON mapping.
 

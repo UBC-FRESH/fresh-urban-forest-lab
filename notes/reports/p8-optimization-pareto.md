@@ -170,6 +170,9 @@ Headless Chromium at 1500 x 950 and 900 x 700:
 - an actual canvas click selects a sphere and enables the load button;
 - **Load selected as scenario** creates a scenario, selects it in the scenario dropdown, and
   previews it;
+- completed jobs auto-save to `runtime/optimizations/` and reload through the **Saved
+  Pareto archive** dropdown without re-running the solver, including the
+  `full-campus-387` archive;
 - selecting any scenario in the global dropdown from the Optimize tab switches to the 3D
   scene, so the loaded scenario is visible instead of leaving the user on an unchanged
   point cloud;

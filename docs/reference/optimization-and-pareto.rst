@@ -71,6 +71,37 @@ The **Optimize** tab:
 
 The viewer uses vendored Three.js and `OrbitControls`; there is no external service.
 
+Saved runs and scenarios
+------------------------
+
+A **scenario** is one tree population. A **Pareto archive** is the population of
+non-dominated solutions from one optimization run. They are different objects.
+
+Completed optimization jobs are written to:
+
+.. code-block:: text
+
+   runtime/optimizations/<job_id>.json
+
+On startup, every JSON file in that directory is loaded as a completed job. The
+**Saved Pareto archive** dropdown in the Optimize tab lists those jobs with their archive
+size and hypervolume. Select one and press **Load saved archive** to view the front again
+without re-running the solver. Then click a sphere and **Load selected as scenario** to
+turn one solution into a scenario.
+
+A saved archive can also be produced outside the browser. For example:
+
+.. code-block:: bash
+
+   fresh-urban-forest optimize --dataset data/processed/ubc_lidar_2021 \
+     --out runtime/optimizations/full-campus-387.json \
+     --sites 387 --max-sites 387 --horizon 30 --budget 8000000 \
+     --scalarizations 72 --population 40 --generations 100 \
+     --local-iterations 10000 --workers 8
+
+Restart the service, or refresh the Optimize tab after the job finishes, and the archive
+appears in the dropdown.
+
 .. image:: /_static/pareto-explorer.png
    :alt: Optimize tab with an orbitable Pareto archive and a selected solution
    :width: 100%
