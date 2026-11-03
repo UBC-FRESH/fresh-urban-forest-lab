@@ -41,6 +41,7 @@ dependencies = [
 
 [project.optional-dependencies]
 fvs = ["fresh-fvsbc>=0.20.0"]
+optimize = ["fresh-solutions @ git+https://github.com/UBC-FRESH/fresh-solutions.git@v0.8.0"]
 web = ["fastapi>=0.110", "uvicorn>=0.29", "pillow>=10"]
 dev = [
   "pytest>=8.2",
