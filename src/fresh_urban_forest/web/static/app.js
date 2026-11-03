@@ -183,6 +183,7 @@ async function init() {
         const solution = state.optimize.result?.archive?.solutions?.[index];
         if (solution) renderParetoInfo(solution);
       },
+      paretoScreenPositions,
     };
     await loadAssistantInfo();
   } catch (error) {
@@ -1458,6 +1459,12 @@ function ensureOptimizeChart() {
     if (index !== undefined && solutions[index]) renderParetoInfo(solutions[index]);
   });
   const chart = { renderer, scene, camera, controls, canvas, mesh: null };
+  window.addEventListener("resize", () => {
+    if (!chart.canvas.clientWidth) return;
+    renderer.setSize(chart.canvas.clientWidth, Math.max(chart.canvas.clientHeight, 1), false);
+    camera.aspect = chart.canvas.clientWidth / Math.max(chart.canvas.clientHeight, 1);
+    camera.updateProjectionMatrix();
+  });
   state.optimize.chart = chart;
   animatePareto();
   return chart;
@@ -1485,12 +1492,18 @@ async function runOptimization() {
         generations: Number($("opt-generations").value),
         workers: Number($("opt-workers").value),
         budget_cad: Number($("opt-budget").value),
-        horizon: 20,
+        max_sites: Number($("opt-max-sites").value),
+        horizon: 30,
         seed: 42,
       }),
     });
     state.optimize.jobId = payload.job_id;
     state.optimize.result = null;
+    state.optimize.selected = null;
+    $("pareto-load").disabled = true;
+    clearParetoMesh();
+    $("pareto-slice").value = "0";
+    $("pareto-slice-value").textContent = "all";
     $("optimize-status").textContent = "queued";
     pollOptimization(payload.job_id);
   } catch (error) {
@@ -1505,7 +1518,8 @@ async function pollOptimization(jobId) {
   window.clearTimeout(state.optimize.pollTimer);
   try {
     const payload = await api(`api/optimize/${encodeURIComponent(jobId)}`);
-    $("optimize-status").textContent = payload.status;
+    $("optimize-status").textContent =
+      payload.status === "running" ? `running ${payload.progress}/${payload.total}` : payload.status;
     renderParetoStats(payload);
     if (payload.status === "done" && payload.result) {
       state.optimize.result = payload.result;
@@ -1533,7 +1547,7 @@ function renderParetoStats(payload) {
   $("optimize-stats").innerHTML = `
     <div class="change-stat"><span>Progress</span><strong>${formatNumber(payload.progress)}/${formatNumber(payload.total)}</strong></div>
     <div class="change-stat"><span>Archive</span><strong>${formatNumber(solutions || payload.archive_size || 0)}</strong></div>
-    <div class="change-stat"><span>Hypervolume</span><strong>${hypervolume.toFixed(3)}</strong></div>
+    <div class="change-stat"><span>Hypervolume</span><strong>${hypervolume.toFixed(4)}</strong></div>
     <div class="change-stat"><span>Status</span><strong>${escapeHtml(payload.status)}</strong></div>`;
 }
 
@@ -1603,13 +1617,7 @@ function drawPareto() {
     }))
     .filter((point) => threshold <= 0 || point.slice >= threshold);
   state.optimize.filtered = filtered.map((point) => point.solution);
-  if (chart.mesh) {
-    chart.scene.remove(chart.mesh);
-    chart.mesh.geometry.dispose();
-    chart.mesh.material.dispose();
-    chart.mesh = null;
-    state.optimize.mesh = null;
-  }
+  clearParetoMesh();
   if (!filtered.length) {
     $("pareto-info").innerHTML = '<p class="hint">The slice is empty. Lower the slice threshold.</p>';
     chart.renderer.render(chart.scene, chart.camera);
@@ -1645,6 +1653,36 @@ function drawPareto() {
     `<span>${filtered.length} of ${solutions.length} solutions</span>`;
   $("pareto-info").innerHTML = `<p class="muted">${filtered.length} visible solutions. Click a sphere to inspect it.</p>`;
   chart.renderer.render(chart.scene, chart.camera);
+}
+
+function clearParetoMesh() {
+  const chart = state.optimize.chart;
+  if (chart && chart.mesh) {
+    chart.scene.remove(chart.mesh);
+    chart.mesh.geometry.dispose();
+    chart.mesh.material.dispose();
+    chart.mesh = null;
+  }
+  state.optimize.mesh = null;
+}
+
+function paretoScreenPositions() {
+  const chart = state.optimize.chart;
+  const mesh = state.optimize.mesh;
+  if (!chart || !mesh) return [];
+  const matrix = new THREE.Matrix4();
+  const point = new THREE.Vector3();
+  const result = [];
+  for (let index = 0; index < mesh.count; index += 1) {
+    mesh.getMatrixAt(index, matrix);
+    point.setFromMatrixPosition(matrix);
+    point.project(chart.camera);
+    result.push({
+      x: (point.x * 0.5 + 0.5) * chart.canvas.clientWidth,
+      y: (-point.y * 0.5 + 0.5) * chart.canvas.clientHeight,
+    });
+  }
+  return result;
 }
 
 function renderParetoInfo(solution) {
@@ -2141,6 +2179,7 @@ async function loadScenario(scenarioId) {
     state.sentEditCount = state.edits.length;
     state.years = scenario.years;
     $("scenario-name").value = scenario.name;
+    $("scenario-select").value = scenario.scenario_id;
     $("scenario-years").value = String(scenario.years);
     $("scenario-years-value").textContent = `${scenario.years} years`;
     $("scenario-revision").textContent = `revision ${scenario.revision}`;

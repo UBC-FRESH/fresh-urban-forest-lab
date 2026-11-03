@@ -150,6 +150,7 @@ class OptimizationRequest(BaseModel):
     species: list[str] | None = None
     horizon: int = Field(default=20, ge=1, le=60)
     budget_cad: float = Field(default=60_000.0, ge=0.0)
+    max_sites: int = Field(default=40, ge=1, le=500)
     generations: int = Field(default=5, ge=1, le=40)
     population: int = Field(default=20, ge=4, le=200)
     scalarizations: int = Field(default=18, ge=2, le=500)
@@ -1709,6 +1710,7 @@ def _run_optimization_job(state: LabState, job_id: str) -> None:
             species=species,
             horizon=_request_int(request, "horizon", 20),
             budget_cad=_request_float(request, "budget_cad", 60_000.0),
+            max_sites=_request_int(request, "max_sites", 40),
             seed=_request_int(request, "seed", 42),
         )
 

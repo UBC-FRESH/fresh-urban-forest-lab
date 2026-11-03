@@ -168,6 +168,7 @@ AGE_OPTION = typer.Option(10.0, "--age", help="Tree age in years.")
 SHADE_HOURS_OPTION = typer.Option(1000.0, "--shade-area-hours", help="Effective shade area-hours.")
 SITES_OPTION = typer.Option(24, "--sites", help="Candidate sites in the optimization problem.")
 BUDGET_OPTION = typer.Option(60_000.0, "--budget", help="Budget constraint in CAD.")
+MAX_SITES_OPTION = typer.Option(40, "--max-sites", help="Maximum planted sites.")
 POPULATION_OPTION = typer.Option(20, "--population", help="Fresh Solutions population size.")
 GENERATIONS_OPTION = typer.Option(5, "--generations", help="Fresh Solutions generations.")
 SCALARIZATIONS_OPTION = typer.Option(
@@ -181,6 +182,7 @@ SURROGATE_SAMPLES_OPTION = typer.Option(
     0, "--surrogate-samples", help="Fit a screening surrogate on this many samples."
 )
 ARCHIVE_OPTION = typer.Option(..., "--archive", help="Optimization result JSON.")
+TRACE_OPTION = typer.Option(False, "--trace", help="Keep per-scalarization convergence histories.")
 
 
 @catalog_app.command("list")
@@ -966,6 +968,7 @@ def optimize_command(
     sites: int = SITES_OPTION,
     horizon: int = typer.Option(20, "--horizon", help="Projection horizon in years."),
     budget: float = BUDGET_OPTION,
+    max_sites: int = MAX_SITES_OPTION,
     population: int = POPULATION_OPTION,
     generations: int = GENERATIONS_OPTION,
     scalarizations: int = SCALARIZATIONS_OPTION,
@@ -973,6 +976,7 @@ def optimize_command(
     workers: int = OPTIMIZE_WORKERS_OPTION,
     seed: int = typer.Option(42, "--seed", help="Search seed."),
     surrogate_samples: int = SURROGATE_SAMPLES_OPTION,
+    trace: bool = TRACE_OPTION,
 ) -> None:
     """Solve a planting problem with Fresh Solutions and write the archive.
 
@@ -988,6 +992,8 @@ def optimize_command(
         Projection horizon.
     budget : float
         Budget constraint in CAD.
+    max_sites : int
+        Maximum planted sites.
     population : int
         Fresh Solutions population size.
     generations : int
@@ -1002,6 +1008,8 @@ def optimize_command(
         Search seed.
     surrogate_samples : int
         Optional screening surrogate sample count.
+    trace : bool
+        Keep per-scalarization convergence histories.
     """
     from fresh_urban_forest.optimize import build_problem, run_optimization, write_result
 
@@ -1011,6 +1019,7 @@ def optimize_command(
         site_count=sites,
         horizon=horizon,
         budget_cad=budget,
+        max_sites=max_sites,
         seed=seed,
     )
     result = run_optimization(
@@ -1022,6 +1031,7 @@ def optimize_command(
         workers=workers,
         seed=seed,
         surrogate_samples=surrogate_samples,
+        trace=trace,
     )
     path = write_result(result, out)
     console.print(f"Optimization result: {path}")

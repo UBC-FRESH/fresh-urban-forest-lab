@@ -189,7 +189,7 @@ def build_archive(problem: OptimizationProblem, solutions: list[Solution]) -> Pa
     front = [candidates[index] for index in indices]
     ideal, nadir = _ideal_nadir(front, problem.objectives)
     robustness = _fuzzy_robustness(front, problem.objectives, ideal, nadir, seed=problem.seed)
-    hypervolume = _hypervolume(front, problem.objectives, ideal, nadir, seed=problem.seed)
+    hypervolume = _hypervolume(front, problem.objectives, problem, seed=problem.seed)
     return ParetoArchive(
         problem_id=problem.problem_id,
         objectives=problem.objectives,
@@ -220,41 +220,74 @@ def _ideal_nadir(
     return (tuple(ideal), tuple(nadir))
 
 
-def _normalise(
+def _problem_scales(problem: OptimizationProblem) -> tuple[float, ...]:
+    """Return fixed objective scales for comparable hypervolume.
+
+    Parameters
+    ----------
+    problem : OptimizationProblem
+        Problem definition.
+
+    Returns
+    -------
+    tuple of float
+        Positive scales in objective order.
+    """
+    max_shade = sum(
+        max((option.shade_m2h for option in problem.species), default=1.0) for _ in problem.sites
+    )
+    max_carbon = sum(
+        max((option.carbon_kg for option in problem.species), default=1.0) for _ in problem.sites
+    )
+    max_cost = sum(
+        max((option.cost_cad for option in problem.species), default=1.0) for _ in problem.sites
+    )
+    max_water = sum(
+        max((option.water_l for option in problem.species), default=1.0) for _ in problem.sites
+    )
+    return (
+        max(max_shade, 1.0),
+        max(max_shade, 1.0),
+        1.0,
+        math.log(max(len(problem.species), 2)),
+        max(max_carbon, 1.0),
+        max(max_cost, 1.0),
+        max(max_water, 1.0),
+    )
+
+
+def _fixed_normalise(
     solution: Solution,
     objectives: tuple[Objective, ...],
-    ideal: tuple[float, ...],
-    nadir: tuple[float, ...],
+    scales: tuple[float, ...],
 ) -> tuple[float, ...]:
-    """Normalise a solution to [0, 1], best = 0."""
+    """Normalise a solution against fixed problem scales, best = 0."""
     values: list[float] = []
-    for index, _objective in enumerate(objectives):
-        span = abs(nadir[index] - ideal[index])
-        if span <= 1e-12:
-            values.append(0.0)
-            continue
-        raw = (solution.objectives[index] - ideal[index]) / (nadir[index] - ideal[index])
-        values.append(max(0.0, min(1.0, raw)))
+    for index, objective in enumerate(objectives):
+        scale = max(scales[index], 1e-9)
+        raw = solution.objectives[index] / scale
+        value = 1.0 - raw if objective.direction == "max" else raw
+        values.append(max(0.0, min(1.0, value)))
     return tuple(values)
 
 
 def _hypervolume(
     solutions: list[Solution],
     objectives: tuple[Objective, ...],
-    ideal: tuple[float, ...],
-    nadir: tuple[float, ...],
+    problem: OptimizationProblem,
     *,
     seed: int,
     samples: int = 20_000,
 ) -> float:
-    """Estimate normalized hypervolume with Monte Carlo sampling."""
+    """Estimate fixed-reference hypervolume with Monte Carlo sampling."""
     if not solutions:
         return 0.0
     dimensions = len(objectives)
     rng = np.random.default_rng(seed)
     points = rng.random((samples, dimensions))
+    scales = _problem_scales(problem)
     normalized = np.asarray(
-        [_normalise(solution, objectives, ideal, nadir) for solution in solutions],
+        [_fixed_normalise(solution, objectives, scales) for solution in solutions],
         dtype=np.float64,
     )
     dominated = np.any(

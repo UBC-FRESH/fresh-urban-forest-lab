@@ -251,10 +251,12 @@ select:focus, input:focus { outline: 2px solid #b8d3ae; outline-offset: 1px; }
 .maplibregl-popup-content { border-radius: 10px; font-size: 0.76rem; padding: 9px 11px; }
 
 @media (max-width: 980px) {
-  .app-shell { grid-template-columns: 1fr; grid-template-rows: minmax(260px, 38vh) minmax(0, 1fr); }
+  .app-shell { grid-template-columns: 1fr; grid-template-rows: minmax(220px, 32vh) minmax(0, 1fr); }
   .sidebar { border-right: 0; border-bottom: 1px solid var(--line); }
   .analytics-grid { grid-template-columns: 1fr; }
   .layer-toggles { display: none; }
+  .optimize-panel, .change-panel { max-height: calc(100% - 24px); overflow-y: auto; }
+  .view-tabs { overflow-x: auto; }
 }
 
 /* --------------------------------------------------------------- assistant */

@@ -21,7 +21,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import TYPE_CHECKING, Literal
 
-from fresh_solutions import (  # type: ignore[import-untyped]  # upstream lacks py.typed
+from fresh_solutions import (
     Change,
     Evaluation,
     HybridResult,
@@ -347,6 +347,8 @@ class OptimizationResult:
         Number of weighted scalarizations solved through Fresh Solutions.
     surrogate : mapping of str to object or None
         Optional surrogate report.
+    convergence : tuple of tuple of float
+        Optional best-objective history for each scalarization.
     evidence : Evidence
         Method and tier.
     """
@@ -361,6 +363,7 @@ class OptimizationResult:
     seed: int
     scalarizations: int
     surrogate: Mapping[str, object] | None
+    convergence: tuple[tuple[float, ...], ...]
     evidence: Evidence
 
     def to_dict(self) -> dict[str, object]:
@@ -382,6 +385,7 @@ class OptimizationResult:
             "seed": self.seed,
             "scalarizations": self.scalarizations,
             "surrogate": dict(self.surrogate) if self.surrogate is not None else None,
+            "convergence": [list(row) for row in self.convergence],
             "evidence": self.evidence.to_dict(),
         }
 
@@ -881,6 +885,7 @@ def run_optimization(
     checkpoint_path: Path | None = None,
     progress: Callable[[int, int, int], None] | None = None,
     surrogate_samples: int = 0,
+    trace: bool = False,
 ) -> OptimizationResult:
     """Solve many weighted scalarizations with Fresh Solutions and build an archive.
 
@@ -906,6 +911,8 @@ def run_optimization(
         Callback ``(scalarization, scalarizations, archive_size)``.
     surrogate_samples : int
         When positive, fit and report a screening surrogate.
+    trace : bool
+        Keep each scalarization's best-objective history for convergence analysis.
 
     Returns
     -------
@@ -941,10 +948,13 @@ def run_optimization(
     solutions: list[Solution] = []
     evaluations = 0
     history: list[dict[str, float]] = []
+    convergence: list[tuple[float, ...]] = []
     for index, (result, assignment) in enumerate(raw_results):
         solution = evaluate_solution(problem, assignment)
         solutions.append(solution)
         evaluations += result.evaluations
+        if trace:
+            convergence.append(tuple(float(value) for value in result.history))
         archive = build_archive(problem, solutions)
         history.append(
             {
@@ -976,6 +986,7 @@ def run_optimization(
         seed=base_seed,
         scalarizations=len(weights),
         surrogate=surrogate,
+        convergence=tuple(convergence),
         evidence=PROBLEM_EVIDENCE,
     )
 
@@ -1018,15 +1029,16 @@ def _weight_vectors(count: int, requested: int, seed: int) -> tuple[tuple[float,
     tuple of tuple of float
         Normalised weight vectors.
     """
-    total = max(count, min(500, requested))
+    total = max(1, min(500, requested))
     rng = random.Random(seed)
     vectors: list[tuple[float, ...]] = []
-    for index in range(count):
+    for index in range(min(count, total)):
         vector = [0.0] * count
         vector[index] = 1.0
         vectors.append(tuple(vector))
-    balanced = tuple(1.0 / count for _ in range(count))
-    vectors.append(balanced)
+    if len(vectors) < total:
+        balanced = tuple(1.0 / count for _ in range(count))
+        vectors.append(balanced)
     while len(vectors) < total:
         raw = [-math.log(max(rng.random(), 1e-12)) for _ in range(count)]
         denominator = sum(raw)

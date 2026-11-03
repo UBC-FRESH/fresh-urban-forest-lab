@@ -241,9 +241,13 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Added `optimize` and `pareto` CLI commands and the `/api/optimize` job endpoints.
 - Added the Optimize tab: job controls, 3D orbitable archive, axis/colour/size/slice
   controls, solution inspector, and load-as-scenario.
-- Benchmark: 48 sites / 72 scalarizations / 7 objectives / 37,224 evaluations; 5.08 s on
-  one worker and 3.57 s on four workers (1.42x), same archive and hypervolume.
-- Small 24-site run: 13 archive solutions, hypervolume 0.0106, 0.33 s on one worker.
+- Benchmark: 48 sites / 72 scalarizations / 7 objectives / 37,224 evaluations; 5.34 s on
+  one worker and 3.64 s on four workers (1.47x), same archive and hypervolume.
+- Whole-campus run: 387 sites / 72 scalarizations / 1,010,952 evaluations / 71 archive
+  solutions / hypervolume 0.0508 / 100.94 s.
+- Z* convergence: balanced scalarization, 387 sites, 112,116 evaluations, 36 rounds,
+  patience stop, best scalar objective -0.293285, 333 planted sites.
+- Small 24-site run: 13 archive solutions, hypervolume 0.0006, 0.34 s on one worker.
 - Surrogate holdout: shade R2 0.91, equity 0.86, native 0.89, diversity -0.41; archive
   always uses exact evaluation.
 - Added `docs/reference/optimization-and-pareto.rst` and the P8 report.
