@@ -50,6 +50,30 @@ in ``fresh_urban_forest.models``; the analysis functions are grouped by concern.
 .. automodule:: fresh_urban_forest.dss
    :members:
 
+.. automodule:: fresh_urban_forest.evidence
+   :members:
+
+.. automodule:: fresh_urban_forest.solar
+   :members:
+
+.. automodule:: fresh_urban_forest.shadow
+   :members:
+
+.. automodule:: fresh_urban_forest.shade
+   :members:
+
+.. automodule:: fresh_urban_forest.species
+   :members:
+
+.. automodule:: fresh_urban_forest.water
+   :members:
+
+.. automodule:: fresh_urban_forest.vigor
+   :members:
+
+.. automodule:: fresh_urban_forest.irrigation
+   :members:
+
 .. automodule:: fresh_urban_forest.calibration
 
 .. automodule:: fresh_urban_forest.validation

@@ -20,6 +20,7 @@ from collections.abc import Awaitable, Callable, Mapping
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Literal
+from zoneinfo import ZoneInfo
 
 import numpy as np
 from fastapi import FastAPI, HTTPException, Query, Request
@@ -39,6 +40,7 @@ from fresh_urban_forest.dss import (
     recommend_planting,
 )
 from fresh_urban_forest.growth import project_scenario, project_trees_to_year, scenario_summary
+from fresh_urban_forest.irrigation import compare_irrigation
 from fresh_urban_forest.metrics import compare_metrics
 from fresh_urban_forest.models import (
     CanopyMetrics,
@@ -52,6 +54,33 @@ from fresh_urban_forest.models import (
     scenario_to_dict,
 )
 from fresh_urban_forest.scene import build_scene
+from fresh_urban_forest.shade import (
+    ShadePeriod,
+    default_step_hours,
+    shade_at_tree,
+    shade_period,
+    shade_png,
+)
+from fresh_urban_forest.solar import (
+    DEFAULT_TIMES,
+    DEFAULT_TIMEZONE,
+    parse_clock,
+    parse_date,
+    representative_time_grid,
+    solar_position,
+    time_grid,
+)
+from fresh_urban_forest.species import (
+    all_profiles,
+    profile_for_species,
+    site_fit,
+)
+from fresh_urban_forest.terrain import unproject_xy
+from fresh_urban_forest.vigor import growth_response, project_species_growth
+from fresh_urban_forest.water import (
+    compare_water_policies,
+    simulate_water_balance,
+)
 
 DEFAULT_AGENT_MODEL = "opencode-go/deepseek-v4.1-flash"
 
@@ -157,6 +186,7 @@ class LabState:
     scenarios: dict[str, Scenario] = field(default_factory=dict)
     results: dict[str, ScenarioResult] = field(default_factory=dict)
     tree_cache: dict[tuple[str, int], tuple[TreeRecord, ...]] = field(default_factory=dict)
+    light_cache: dict[tuple[str, str, str, str], dict[str, object]] = field(default_factory=dict)
     allow_agent: bool = False
     agent_model: str = DEFAULT_AGENT_MODEL
     agent_timeout: float = 300.0
@@ -575,6 +605,382 @@ def create_app(
             headers={"Cache-Control": "public, max-age=3600"},
         )
 
+    @app.get("/api/solar")
+    def solar(
+        date: str | None = Query(default=None),
+        time: str = Query(default="12:00"),
+        timezone: str = Query(default=DEFAULT_TIMEZONE),
+    ) -> dict[str, object]:
+        """Return the solar position for one date and time.
+
+        Parameters
+        ----------
+        date : str or None
+            ISO date. Defaults to today.
+        time : str
+            Clock time, such as ``14:30``.
+        timezone : str
+            IANA timezone name.
+
+        Returns
+        -------
+        dict
+            Solar position and daylight metadata.
+
+        Raises
+        ------
+        fastapi.HTTPException
+            When the date or time is invalid.
+        """
+        try:
+            day = parse_date(date) if date else dt.date.today()
+            when = dt.datetime.combine(day, parse_clock(time), tzinfo=_zone(timezone))
+        except ValueError as exc:
+            raise HTTPException(status_code=400, detail=str(exc)) from exc
+        left, bottom, right, top = state.dataset.terrain.bounds
+        lon, lat = unproject_xy(
+            (left + right) / 2.0, (bottom + top) / 2.0, state.dataset.terrain.crs
+        )
+        position = solar_position(when, lon, lat)
+        return {
+            "date": day.isoformat(),
+            "time": time,
+            "timezone": timezone,
+            "position": position.to_dict(),
+        }
+
+    @app.get("/api/shade")
+    def shade(
+        date: str | None = Query(default=None),
+        mode: Literal["instant", "day", "annual"] = Query(default="day"),
+        times: str | None = Query(default=None),
+        target_height_m: float = Query(default=1.5, ge=0.1, le=20.0),
+        include_terrain: bool = Query(default=True),
+    ) -> dict[str, object]:
+        """Return a shaded-area summary for a date and time mode.
+
+        Parameters
+        ----------
+        date : str or None
+            ISO date. Defaults to today.
+        mode : str
+            ``instant``, ``day``, or ``annual``.
+        times : str or None
+            Comma-separated clock times.
+        target_height_m : float
+            Height above ground of the target plane.
+        include_terrain : bool
+            Include the coarse terrain horizon.
+
+        Returns
+        -------
+        dict
+            Metrics, solar positions, image corners, legend, and evidence.
+        """
+        day, whens, step = _shade_whens(date, mode, times)
+        period = shade_period(
+            state.dataset,
+            whens,
+            target_height_m=target_height_m,
+            step_hours=step,
+            include_terrain=include_terrain,
+        )
+        return _shade_payload(state.dataset, period, day=day, mode=mode, timezone=DEFAULT_TIMEZONE)
+
+    @app.get("/api/shade.png")
+    def shade_image(
+        date: str | None = Query(default=None),
+        mode: Literal["instant", "day", "annual"] = Query(default="day"),
+        times: str | None = Query(default=None),
+        target_height_m: float = Query(default=1.5, ge=0.1, le=20.0),
+        include_terrain: bool = Query(default=True),
+    ) -> Response:
+        """Return the aggregated shade overlay as a PNG.
+
+        Parameters
+        ----------
+        date : str or None
+            ISO date. Defaults to today.
+        mode : str
+            ``instant``, ``day``, or ``annual``.
+        times : str or None
+            Comma-separated clock times.
+        target_height_m : float
+            Height above ground of the target plane.
+        include_terrain : bool
+            Include the coarse terrain horizon.
+
+        Returns
+        -------
+        fastapi.responses.Response
+            PNG image with no-store caching.
+        """
+        _, whens, step = _shade_whens(date, mode, times)
+        period = shade_period(
+            state.dataset,
+            whens,
+            target_height_m=target_height_m,
+            step_hours=step,
+            include_terrain=include_terrain,
+        )
+        return Response(
+            content=shade_png(period),
+            media_type="image/png",
+            headers={"Cache-Control": "no-store, max-age=0"},
+        )
+
+    @app.get("/api/light/tree/{tree_id}")
+    def tree_light(
+        tree_id: str,
+        date: str | None = Query(default=None),
+        mode: Literal["instant", "day", "annual"] = Query(default="day"),
+        times: str | None = Query(default=None),
+    ) -> dict[str, object]:
+        """Return the shade, species, water, irrigation, and growth cards for one tree.
+
+        Parameters
+        ----------
+        tree_id : str
+            Tree identifier.
+        date : str or None
+            ISO date. Defaults to today.
+        mode : str
+            ``instant``, ``day``, or ``annual``.
+        times : str or None
+            Comma-separated clock times.
+
+        Returns
+        -------
+        dict
+            A tree-level light and water card.
+
+        Raises
+        ------
+        fastapi.HTTPException
+            When the tree does not exist or has no projected coordinates.
+        """
+        tree = _tree_or_404(state.dataset, tree_id)
+        day, whens, step = _shade_whens(date, mode, times)
+        key = (tree_id, day.isoformat(), mode, times or "")
+        cached = state.light_cache.get(key)
+        if cached is not None:
+            return cached
+        card = shade_at_tree(
+            state.dataset,
+            tree,
+            whens,
+            step_hours=step,
+            include_terrain=True,
+        )
+        sun_fraction = float(str(card["sun_fraction_at_base"]))
+        crown_width = max(float(tree.crown_width_m or 6.0), 0.5)
+        crown_area = math.pi * (crown_width / 2.0) ** 2
+        soil_volume = max(1.0, crown_area * 0.45)
+        profile = profile_for_species(tree.species or tree.common_name)
+        fit = site_fit(
+            profile,
+            sun_fraction=sun_fraction,
+            soil_volume_m3=soil_volume,
+            water_availability=0.55,
+            heat_exposure=max(0.0, 1.0 - sun_fraction) * 0.4 + 0.3,
+            space_available_m=max(crown_width * 1.4, 4.0),
+        )
+        irrigation = compare_irrigation(
+            profile,
+            crown_area_m2=crown_area,
+            soil_volume_m3=soil_volume,
+            sun_fraction=sun_fraction,
+            shade_area_hours=float(str(card["marginal_shade_area_hours"])),
+            age_years=10.0,
+        )
+        water = next(
+            (option.balance for option in irrigation if option.recommendation == "best balance"),
+            irrigation[0].balance,
+        )
+        response = growth_response(
+            profile,
+            sun_fraction=sun_fraction,
+            water=water,
+            soil_volume_m3=soil_volume,
+            heat_exposure=max(0.0, 1.0 - sun_fraction) * 0.4 + 0.3,
+        )
+        growth = project_species_growth(
+            profile,
+            response,
+            initial_dbh_cm=float(tree.dbh_cm or 6.0),
+            years=20,
+        )
+        payload: dict[str, object] = {
+            "tree": _tree_feature(tree)["properties"],
+            "shade": card,
+            "species": profile.to_dict(),
+            "fit": fit.to_dict(),
+            "water": water.to_dict(),
+            "irrigation": [option.to_dict() for option in irrigation],
+            "growth": growth.to_dict(),
+            "assumptions": {
+                "soil_volume_m3": round(soil_volume, 2),
+                "crown_area_m2": round(crown_area, 2),
+                "sun_fraction": round(sun_fraction, 3),
+                "date": day.isoformat(),
+                "mode": mode,
+            },
+        }
+        state.light_cache[key] = payload
+        return payload
+
+    @app.get("/api/species")
+    def species_profiles() -> dict[str, object]:
+        """Return the built-in species trait profiles.
+
+        Returns
+        -------
+        dict
+            Profiles and the shared evidence note.
+        """
+        return {
+            "profiles": [profile.to_dict() for profile in all_profiles()],
+            "evidence": all_profiles()[0].source if all_profiles() else "",
+        }
+
+    @app.get("/api/species/fit")
+    def species_fit(
+        species: str = Query(default="Acer rubrum"),
+        sun_fraction: float = Query(default=0.6, ge=0.0, le=1.0),
+        soil_volume_m3: float = Query(default=6.0, ge=0.1, le=100.0),
+        water_availability: float = Query(default=0.55, ge=0.0, le=1.0),
+        heat_exposure: float = Query(default=0.5, ge=0.0, le=1.0),
+        space_available_m: float = Query(default=10.0, ge=0.1, le=100.0),
+    ) -> dict[str, object]:
+        """Return a species site-fit card.
+
+        Parameters
+        ----------
+        species : str
+            Species name.
+        sun_fraction : float
+            Fraction of daylight the site is sunlit.
+        soil_volume_m3 : float
+            Available soil volume.
+        water_availability : float
+            Relative water availability.
+        heat_exposure : float
+            Relative heat exposure.
+        space_available_m : float
+            Available growing space.
+
+        Returns
+        -------
+        dict
+            Profile and fit.
+        """
+        profile = profile_for_species(species)
+        fit = site_fit(
+            profile,
+            sun_fraction=sun_fraction,
+            soil_volume_m3=soil_volume_m3,
+            water_availability=water_availability,
+            heat_exposure=heat_exposure,
+            space_available_m=space_available_m,
+        )
+        return {"profile": profile.to_dict(), "fit": fit.to_dict()}
+
+    @app.get("/api/water")
+    def water(
+        species: str = Query(default="Acer rubrum"),
+        sun_fraction: float = Query(default=0.6, ge=0.0, le=1.0),
+        soil_volume_m3: float = Query(default=6.0, ge=0.1, le=100.0),
+        crown_area_m2: float = Query(default=20.0, ge=0.5, le=400.0),
+        age_years: float = Query(default=10.0, ge=0.0, le=100.0),
+        policy: Literal["none", "establishment", "fixed", "moisture_trigger", "deficit"] = Query(
+            default="moisture_trigger"
+        ),
+    ) -> dict[str, object]:
+        """Return one annual tree water balance.
+
+        Parameters
+        ----------
+        species : str
+            Species name.
+        sun_fraction : float
+            Fraction of daylight the site is sunlit.
+        soil_volume_m3 : float
+            Available soil volume.
+        crown_area_m2 : float
+            Projected crown area.
+        age_years : float
+            Tree age.
+        policy : str
+            Irrigation policy.
+
+        Returns
+        -------
+        dict
+            Water balance and policy comparison.
+        """
+        profile = profile_for_species(species)
+        balance = simulate_water_balance(
+            profile,
+            crown_area_m2=crown_area_m2,
+            soil_volume_m3=soil_volume_m3,
+            sun_fraction=sun_fraction,
+            policy=policy,
+            age_years=age_years,
+        )
+        options = compare_water_policies(
+            profile,
+            crown_area_m2=crown_area_m2,
+            soil_volume_m3=soil_volume_m3,
+            sun_fraction=sun_fraction,
+            age_years=age_years,
+        )
+        return {
+            "balance": balance.to_dict(),
+            "policies": [option.to_dict() for option in options],
+        }
+
+    @app.get("/api/irrigation")
+    def irrigation(
+        species: str = Query(default="Acer rubrum"),
+        sun_fraction: float = Query(default=0.6, ge=0.0, le=1.0),
+        soil_volume_m3: float = Query(default=6.0, ge=0.1, le=100.0),
+        crown_area_m2: float = Query(default=20.0, ge=0.5, le=400.0),
+        shade_area_hours: float = Query(default=1000.0, ge=0.0),
+        age_years: float = Query(default=10.0, ge=0.0, le=100.0),
+    ) -> dict[str, object]:
+        """Return irrigation options and cost per effective shade-hour.
+
+        Parameters
+        ----------
+        species : str
+            Species name.
+        sun_fraction : float
+            Fraction of daylight the site is sunlit.
+        soil_volume_m3 : float
+            Available soil volume.
+        crown_area_m2 : float
+            Projected crown area.
+        shade_area_hours : float
+            Effective shade area-hours supported by the tree.
+        age_years : float
+            Tree age.
+
+        Returns
+        -------
+        dict
+            Ranked irrigation options.
+        """
+        profile = profile_for_species(species)
+        options = compare_irrigation(
+            profile,
+            crown_area_m2=crown_area_m2,
+            soil_volume_m3=soil_volume_m3,
+            sun_fraction=sun_fraction,
+            shade_area_hours=shade_area_hours,
+            age_years=age_years,
+        )
+        return {"options": [option.to_dict() for option in options]}
+
     @app.get("/api/scenario-comparison")
     def scenario_comparison() -> dict[str, object]:
         """Project and compare all saved scenarios.
@@ -854,6 +1260,170 @@ def create_app(
         return FileResponse(path, media_type="text/csv", filename=path.name)
 
     return app
+
+
+def _shade_whens(
+    date_value: str | None,
+    mode: Literal["instant", "day", "annual"],
+    times_value: str | None,
+) -> tuple[dt.date, tuple[dt.datetime, ...], float]:
+    """Build the sample times for a shade request.
+
+    Parameters
+    ----------
+    date_value : str or None
+        ISO date, or ``None`` for today.
+    mode : str
+        ``instant``, ``day``, or ``annual``.
+    times_value : str or None
+        Comma-separated clock times.
+
+    Returns
+    -------
+    tuple
+        Date, aware datetimes, and step hours.
+
+    Raises
+    ------
+    fastapi.HTTPException
+        When the date or a time is invalid.
+    """
+    try:
+        day = parse_date(date_value) if date_value else dt.date.today()
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+    if mode == "annual":
+        return (
+            day,
+            representative_time_grid(day.year),
+            3.0,
+        )
+    raw = [part.strip() for part in (times_value or "").split(",") if part.strip()]
+    if not raw:
+        raw = ["12:00"] if mode == "instant" else list(DEFAULT_TIMES)
+    if mode == "instant":
+        raw = raw[:1]
+    try:
+        whens = time_grid(day, times=raw)
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+    step = 1.0 if mode == "instant" else default_step_hours(whens)
+    return (day, whens, step)
+
+
+def _shade_payload(
+    dataset: UrbanForestDataset,
+    period: ShadePeriod,
+    *,
+    day: dt.date,
+    mode: str,
+    timezone: str,
+) -> dict[str, object]:
+    """Build the JSON payload for a shade period.
+
+    Parameters
+    ----------
+    dataset : UrbanForestDataset
+        Dataset that supplies the image corners.
+    period : ShadePeriod
+        Aggregated period.
+    day : datetime.date
+        Requested date.
+    mode : str
+        Requested mode.
+    timezone : str
+        IANA timezone name.
+
+    Returns
+    -------
+    dict
+        Period summary plus georeferencing, legend, and evidence.
+    """
+    payload = period.to_dict()
+    left, bottom, right, top = dataset.terrain.bounds
+    lon, lat = unproject_xy((left + right) / 2.0, (bottom + top) / 2.0, dataset.terrain.crs)
+    payload.update(
+        {
+            "date": day.isoformat(),
+            "solar": [solar_position(when, lon, lat).to_dict() for when in period.whens],
+            "mode": mode,
+            "timezone": timezone,
+            "bounds": list(dataset.terrain.bounds),
+            "image_corners_wgs84": _grid_corners(dataset),
+            "legend": [
+                {"label": "building shade", "colour": "#2b5eaa"},
+                {"label": "tree shade", "colour": "#2d7d48"},
+                {"label": "overlap", "colour": "#183644"},
+                {"label": "terrain shade", "colour": "#5a5a5a"},
+            ],
+        }
+    )
+    return payload
+
+
+def _grid_corners(dataset: UrbanForestDataset) -> list[list[float]]:
+    """Return the image corners in MapLibre order.
+
+    Parameters
+    ----------
+    dataset : UrbanForestDataset
+        Dataset that supplies the terrain bounds.
+
+    Returns
+    -------
+    list of list of float
+        Top-left, top-right, bottom-right, and bottom-left in WGS84.
+    """
+    left, bottom, right, top = dataset.terrain.bounds
+    return [
+        list(unproject_xy(x, y, dataset.terrain.crs))
+        for x, y in ((left, top), (right, top), (right, bottom), (left, bottom))
+    ]
+
+
+def _tree_or_404(dataset: UrbanForestDataset, tree_id: str) -> TreeRecord:
+    """Return a tree or raise a 404.
+
+    Parameters
+    ----------
+    dataset : UrbanForestDataset
+        Dataset to search.
+    tree_id : str
+        Tree identifier.
+
+    Returns
+    -------
+    TreeRecord
+        The tree.
+
+    Raises
+    ------
+    fastapi.HTTPException
+        When the tree does not exist.
+    """
+    for tree in dataset.trees:
+        if tree.tree_id == tree_id:
+            return tree
+    raise HTTPException(status_code=404, detail="tree not found")
+
+
+def _zone(name: str) -> ZoneInfo:
+    """Return a timezone, falling back to UTC.
+
+    Parameters
+    ----------
+    name : str
+        IANA timezone name.
+
+    Returns
+    -------
+    zoneinfo.ZoneInfo
+        The timezone.
+    """
+    try:
+        return ZoneInfo(name)
+    except Exception:
+        return ZoneInfo("UTC")
 
 
 def _read_json_object(path: Path) -> dict[str, object]:

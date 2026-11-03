@@ -18,6 +18,9 @@ def test_static_shell_has_required_hooks() -> None:
         "plant-tree",
         "recommend",
         'data-view="scene"',
+        'data-view="light"',
+        "light-date",
+        "tree-light",
     ):
         assert marker in html
     assert "static/vendor/maplibre-gl.js" in html
@@ -49,6 +52,11 @@ def test_app_script_has_the_expected_endpoints_and_layers() -> None:
         "plant-zone",
         "play-year",
         "togglePlay",
+        "api/shade",
+        "loadTreeLight",
+        "updateSun",
+        "light-mode",
+        "renderLightStats",
     ):
         assert marker in script
     assert "eval(" not in script
