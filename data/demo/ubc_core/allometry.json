@@ -1,0 +1,36 @@
+{
+  "schema_version": "fresh-urban-forest.allometry.v1",
+  "method": "log-log fit of height - 1.3 against DBH, by species group",
+  "fits": {
+    "conifer": {
+      "group": "conifer",
+      "coefficient": 0.656025,
+      "exponent": 0.823413,
+      "sample_size": 1313,
+      "rmse_m": 7.42,
+      "r2": 0.3417,
+      "dbh_min_cm": 1.0,
+      "dbh_max_cm": 614.0
+    },
+    "deciduous": {
+      "group": "deciduous",
+      "coefficient": 0.695197,
+      "exponent": 0.744618,
+      "sample_size": 2762,
+      "rmse_m": 4.87,
+      "r2": 0.4923,
+      "dbh_min_cm": 1.0,
+      "dbh_max_cm": 180.0
+    },
+    "unknown": {
+      "group": "unknown",
+      "coefficient": 0.79096,
+      "exponent": 0.662765,
+      "sample_size": 463,
+      "rmse_m": 3.034,
+      "r2": 0.497,
+      "dbh_min_cm": 2.0,
+      "dbh_max_cm": 160.0
+    }
+  }
+}

@@ -13,6 +13,7 @@ from pathlib import Path
 
 import numpy as np
 import rasterio
+from affine import Affine
 from numpy.typing import NDArray
 from pyproj import Transformer
 
@@ -31,7 +32,7 @@ class RasterData:
         Source path.
     crs : str
         CRS string.
-    transform : object
+    transform : Affine
         Affine transform from rasterio.
     bounds : tuple of float
         ``(left, bottom, right, top)``.
@@ -43,7 +44,7 @@ class RasterData:
 
     path: Path
     crs: str
-    transform: object
+    transform: Affine
     bounds: tuple[float, float, float, float]
     array: NDArray[np.float32]
     cell_area_m2: float
@@ -178,6 +179,51 @@ def unproject_xy(x: float, y: float, crs: str) -> tuple[float, float]:
     """
     lon, lat = _transformer_from(crs).transform(x, y)
     return (float(lon), float(lat))
+
+
+def crop_raster(
+    raster: RasterData,
+    bounds: tuple[float, float, float, float],
+) -> RasterData:
+    """Crop a raster to projected bounds.
+
+    Parameters
+    ----------
+    raster : RasterData
+        Raster to crop.
+    bounds : tuple of float
+        ``(left, bottom, right, top)`` in the raster CRS.
+
+    Returns
+    -------
+    RasterData
+        Cropped raster with an updated transform and bounds.
+    """
+    window = rasterio.windows.from_bounds(*bounds, transform=raster.transform)
+    window = window.round_offsets().round_lengths()
+    row0 = max(0, int(window.row_off))
+    col0 = max(0, int(window.col_off))
+    row1 = min(raster.array.shape[0], row0 + max(1, int(window.height)))
+    col1 = min(raster.array.shape[1], col0 + max(1, int(window.width)))
+    cropped = np.asarray(raster.array[row0:row1, col0:col1], dtype=np.float32)
+    cropped_transform = rasterio.windows.transform(
+        rasterio.windows.Window(col0, row0, col1 - col0, row1 - row0),
+        raster.transform,
+    )
+    cropped_bounds = (
+        float(raster.bounds[0] + col0 * float(raster.transform.a)),
+        float(raster.bounds[3] + row1 * float(raster.transform.e)),
+        float(raster.bounds[0] + col1 * float(raster.transform.a)),
+        float(raster.bounds[3] + row0 * float(raster.transform.e)),
+    )
+    return RasterData(
+        path=raster.path,
+        crs=raster.crs,
+        transform=cropped_transform,
+        bounds=cropped_bounds,
+        array=cropped,
+        cell_area_m2=raster.cell_area_m2,
+    )
 
 
 def sample_raster(

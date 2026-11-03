@@ -13,6 +13,7 @@ Keep private material out of this directory.
 
 - `design/architecture.md`: the layer diagram, contracts, and deliberate simplifications.
 - `design/change-uncertainty-plan.md`: observed change, completeness, validation, and calibration plan.
+- `reports/detection-and-allometry-2021.md`: first detection validation and local allometry results.
 - `reference/data-sources.md`: public UBC, Vancouver, and Metro Vancouver sources, with
   coverage, licences, and traps.
 - `reference/software-landscape.md`: comparable inventory, LiDAR, growth, and DSS systems;

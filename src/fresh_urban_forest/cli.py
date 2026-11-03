@@ -18,6 +18,7 @@ import typer
 from rich.console import Console
 from rich.table import Table
 
+from fresh_urban_forest.calibration import fit_allometry, write_allometry
 from fresh_urban_forest.canelevation import (
     discover_canelevation_tiles,
     download_canelevation_index,
@@ -36,13 +37,20 @@ from fresh_urban_forest.itd import detect_trees, detected_trees_geojson
 from fresh_urban_forest.lidar import PointCloudSummary, canopies_from_pair, summarize_point_cloud
 from fresh_urban_forest.lidarbc import discover_lidarbc_tiles
 from fresh_urban_forest.materialize import materialize_sources, read_materialization_manifest
-from fresh_urban_forest.terrain import RasterData, read_raster
+from fresh_urban_forest.terrain import (
+    RasterData,
+    build_terrain_grid,
+    crop_raster,
+    project_lonlat,
+    read_raster,
+)
 from fresh_urban_forest.tiles import (
     download_tiles,
     make_manifest,
     read_tile_manifest,
     write_tile_manifest,
 )
+from fresh_urban_forest.validation import validate_detection, write_validation
 
 app = typer.Typer(help="Open urban-forest LiDAR, inventory, growth, and 3-D decision support.")
 catalog_app = typer.Typer(help="Inspect and materialize public data sources.")
@@ -103,6 +111,7 @@ INDEX_OPTION = typer.Option(..., "--index", help="CanElevation tile-index GeoPac
 PROJECT_OPTION = typer.Option(None, "--project", help="Optional CanElevation project filter.")
 PROVIDER_OPTION = typer.Option(None, "--provider", help="Optional CanElevation provider filter.")
 MANIFEST_OPTION = typer.Option(..., "--manifest", help="Tile manifest JSON.")
+MAX_DISTANCE_OPTION = typer.Option(5.0, "--max-distance", help="Match distance in metres.")
 
 
 @catalog_app.command("list")
@@ -470,6 +479,97 @@ def change_command(
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(asdict(result), indent=2) + "\n", encoding="utf-8")
     console.print_json(json.dumps(asdict(result)))
+
+
+@app.command("fit-allometry")
+def fit_allometry_command(
+    dataset: Path = DATASET_OPTION,
+    out: Path = OUT_OPTION,
+    min_samples: int = typer.Option(20, "--min-samples", help="Minimum measured trees per group."),
+) -> None:
+    """Fit local height-diameter curves from measured inventory trees.
+
+    Parameters
+    ----------
+    dataset : Path
+        Dataset directory.
+    out : Path
+        Output JSON path.
+    min_samples : int
+        Minimum measured trees per species group.
+    """
+    loaded = load_dataset(dataset)
+    fits = fit_allometry(loaded.trees, min_samples=min_samples)
+    write_allometry(fits, out)
+    for group, fit in fits.items():
+        console.print(
+            f"{group}: n={fit.sample_size} h=1.3+{fit.coefficient:.3f}*dbh^{fit.exponent:.3f} "
+            f"rmse={fit.rmse_m} m r2={fit.r2}"
+        )
+
+
+@app.command("validate-detection")
+def validate_detection_command(
+    dataset: Path = DATASET_OPTION,
+    out_dir: Path = OUT_DIR_OPTION,
+    chm: Path | None = CHM_OPTION,
+    bbox: str | None = BBOX_OPTION,
+    min_height: float = MIN_HEIGHT_OPTION,
+    window: float = WINDOW_OPTION,
+    max_distance: float = MAX_DISTANCE_OPTION,
+) -> None:
+    """Validate CHM tree detection against the inventory.
+
+    Parameters
+    ----------
+    dataset : Path
+        Dataset directory.
+    out_dir : Path
+        Output directory for the validation JSON and GeoJSON.
+    chm : Path or None
+        Optional full-resolution CHM raster. When omitted, the dataset terrain grid is used.
+    bbox : str or None
+        Optional WGS84 bounding box.
+    min_height : float
+        Minimum detected canopy height in metres.
+    window : float
+        Local-maxima window in metres.
+    max_distance : float
+        Maximum match distance in metres.
+    """
+    loaded = load_dataset(dataset)
+    parsed = _parse_bbox(bbox)
+    if chm is not None:
+        raster = read_raster(_resolve_raster(chm))
+        if parsed is not None:
+            xs, ys = [], []
+            for lon, lat in (
+                (parsed[0], parsed[1]),
+                (parsed[2], parsed[1]),
+                (parsed[2], parsed[3]),
+                (parsed[0], parsed[3]),
+            ):
+                x, y = project_lonlat(lon, lat, raster.crs)
+                xs.append(x)
+                ys.append(y)
+            raster = crop_raster(raster, (min(xs), min(ys), max(xs), max(ys)))
+        grid = build_terrain_grid(raster, raster, max_size=900)
+    else:
+        grid = loaded.terrain
+    detected = detect_trees(grid, min_height_m=min_height, window_m=window)
+    result = validate_detection(
+        detected,
+        loaded.trees,
+        max_distance_m=max_distance,
+        bbox_wgs84=parsed,
+    )
+    path = write_validation(result, out_dir)
+    console.print(f"Validation: {path}")
+    console.print(
+        f"detected={result.detected_count} inventory={result.inventory_count} "
+        f"matched={result.matched_count} precision={result.precision} recall={result.recall} "
+        f"f1={result.f1} height_bias={result.mean_height_delta_m} m"
+    )
 
 
 @app.command("build-change")

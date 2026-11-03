@@ -2,7 +2,7 @@
   "schema_version": "fresh-urban-forest.dataset.v1",
   "dataset_id": "ubc-core-demo-20261103",
   "name": "UBC Vancouver core demonstration",
-  "generated_utc": "2026-11-03T05:46:49Z",
+  "generated_utc": "2026-11-03T06:16:49Z",
   "crs": "EPSG:3157",
   "bounds": [
     480411.0,
@@ -19,7 +19,7 @@
     "canopy_volume_m3": 294201110.558,
     "mean_height_m": 11.787,
     "p95_height_m": 31.34,
-    "total_carbon_kg": 1995207.567,
+    "total_carbon_kg": 1996768.208,
     "shannon_index": 4.3501,
     "size_classes": [
       [
@@ -28,15 +28,15 @@
       ],
       [
         "10-20",
-        986
+        978
       ],
       [
         "20-30",
-        557
+        564
       ],
       [
         "30-50",
-        768
+        769
       ],
       [
         "50-80",
@@ -178,7 +178,7 @@
       "url": "https://github.com/UBCGeodata/ubc-geospatial-opendata",
       "licence": "PDDL-1.0",
       "access_mode": "direct_http",
-      "retrieved_utc": "2026-11-03T05:46:49Z",
+      "retrieved_utc": "2026-11-03T06:16:49Z",
       "checksum": "",
       "notes": "Building footprints and heights for context and planting constraints."
     },
@@ -189,7 +189,7 @@
       "url": "https://github.com/UBCGeodata/ubc-geospatial-opendata",
       "licence": "PDDL-1.0",
       "access_mode": "direct_http",
-      "retrieved_utc": "2026-11-03T05:46:49Z",
+      "retrieved_utc": "2026-11-03T06:16:49Z",
       "checksum": "",
       "notes": "Point locations, taxa, DBH, height, and crown width where measured. Several records are location-only. The source is a living snapshot rather than a fixed annual release."
     },
@@ -200,7 +200,7 @@
       "url": "https://github.com/UBCGeodata/ubc-geospatial-opendata",
       "licence": "PDDL-1.0",
       "access_mode": "direct_http",
-      "retrieved_utc": "2026-11-03T05:46:49Z",
+      "retrieved_utc": "2026-11-03T06:16:49Z",
       "checksum": "",
       "notes": "Campus analysis boundary."
     },
@@ -211,7 +211,7 @@
       "url": "https://hdl.handle.net/11272.1/AB2/Y5KQNB",
       "licence": "UBC-Abacus-open-access",
       "access_mode": "direct_http",
-      "retrieved_utc": "2026-11-03T05:46:49Z",
+      "retrieved_utc": "2026-11-03T06:16:49Z",
       "checksum": "",
       "notes": "LiDAR acquired 2021-06-23 by Eagle Mapping. The CHM is a 1 m raster derived from the classified point cloud. Check the Abacus record for the current licence terms."
     },
@@ -222,7 +222,7 @@
       "url": "https://hdl.handle.net/11272.1/AB2/Y5KQNB",
       "licence": "UBC-Abacus-open-access",
       "access_mode": "direct_http",
-      "retrieved_utc": "2026-11-03T05:46:49Z",
+      "retrieved_utc": "2026-11-03T06:16:49Z",
       "checksum": "",
       "notes": "Bare-earth DEM at 1 m."
     }
@@ -237,6 +237,7 @@
     "boundary": "boundary.geojson",
     "change": "change.json",
     "change_png": "change.png",
-    "change_grid": "change_grid.npz"
+    "change_grid": "change_grid.npz",
+    "allometry": "allometry.json"
   }
 }

@@ -73,6 +73,19 @@ canopy, net change, and mean height change on stable canopy. The acquisition dat
 leaf-on/leaf-off status, and vertical datum belong in the report. A raw difference is not a
 growth rate.
 
+Validation
+----------
+
+`fresh-urban-forest validate-detection` matches detected crowns to the inventory with a
+greedy nearest rule and reports precision, recall, height bias, and crown-radius bias. The
+first UBC core-campus run found substantial over-segmentation (12,715 detected crowns
+versus 4,861 inventory trees), recall 0.569, precision 0.217, and a +1.78 m height bias.
+Precision is not a clean accuracy estimate because the inventory itself is incomplete.
+
+`fresh-urban-forest fit-allometry` fits a local height-diameter power law by species group
+from measured trees. The local fits reduce height RMSE versus the generic profiles, but
+they are not a growth calibration. Annual growth still needs repeat measurements.
+
 Decision support
 ----------------
 

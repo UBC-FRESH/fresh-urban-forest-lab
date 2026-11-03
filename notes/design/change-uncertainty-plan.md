@@ -102,6 +102,14 @@ rests on measured versus imputed tree attributes.
 
 ## Workstream 3: LiDAR detection validation
 
+### Current status
+
+- `validate-detection` and `validation.py` are implemented.
+- First core-campus run: 12,715 detected crowns, 4,861 inventory trees, 2,764 matches,
+  precision 0.217, recall 0.569, F1 0.315, mean height bias +1.78 m, RMSE 5.04 m.
+- The detector over-segments; the inventory is incomplete. The next run needs a 1 m grid
+  and a complete reference patch.
+
 ### Goal
 
 Assess `detect_trees` against the UBC inventory instead of presenting it as a plausible
@@ -122,6 +130,13 @@ method.
 - At least one real UBC tile is assessed.
 
 ## Workstream 4: Local growth calibration
+
+### Current status
+
+- `fit-allometry` and `calibration.py` are implemented for height-diameter curves.
+- Local fits reduce height RMSE versus the generic profiles, but R² is modest and annual
+  growth still needs repeat measurements.
+- The fit is recorded in `notes/reports/detection-and-allometry-2021.md`.
 
 ### Goal
 

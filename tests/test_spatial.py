@@ -22,6 +22,7 @@ from fresh_urban_forest.terrain import (
     build_terrain_grid,
     canopy_cover_pct,
     canopy_volume_m3,
+    crop_raster,
     height_percentiles,
     project_lonlat,
     read_raster,
@@ -80,6 +81,16 @@ def test_sample_raster_and_grid(tmp_path: Path) -> None:
     assert elevation >= 0.0
     assert canopy >= 0.0
     assert slope >= 0.0
+
+
+def test_crop_raster_to_bounds(tmp_path: Path) -> None:
+    """A raster crop keeps the requested projected window."""
+    values = np.arange(100, dtype=np.float32).reshape(10, 10)
+    raster = make_raster(tmp_path / "grid.tif", values)
+    cropped = crop_raster(raster, (20.0, 20.0, 70.0, 70.0))
+    assert cropped.array.shape == (5, 5)
+    assert cropped.bounds == (20.0, 20.0, 70.0, 70.0)
+    assert cropped.array[0, 0] == values[3, 2]
 
 
 def test_canopy_summary_functions() -> None:

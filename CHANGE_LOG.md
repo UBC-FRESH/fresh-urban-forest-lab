@@ -46,6 +46,18 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Added the detailed plan in `notes/design/change-uncertainty-plan.md`.
 - Dashboard: GREEN; tests include the change product, API, and completeness summary.
 
+### P5.0 detection validation and local allometry
+
+- Added `validation.py` and `fresh-urban-forest validate-detection`.
+- First UBC core-campus assessment: 12,715 detected crowns, 4,861 inventory trees, 2,764
+  matches, precision 0.217, recall 0.569, F1 0.315, height bias +1.78 m, RMSE 5.04 m.
+  The detector over-segments; the inventory is incomplete.
+- Added `calibration.py` and `fresh-urban-forest fit-allometry`.
+- Local height-diameter fits reduce RMSE versus the generic profiles: conifer 7.42 vs
+  12.38 m, deciduous 4.87 vs 7.18 m, unknown 3.03 vs 7.16 m. R² remains modest.
+- Added `notes/reports/detection-and-allometry-2021.md`.
+- Dashboard: GREEN.
+
 ### P1.7 External LiDAR tile discovery
 
 - Added `fresh_urban_forest.tiles`, `lidarbc`, and `canelevation` modules with one

@@ -13,6 +13,7 @@ biomass; roots and dead wood are excluded.
 from __future__ import annotations
 
 import math
+import re
 from dataclasses import dataclass
 
 from fresh_urban_forest.models import SpeciesGroup, TreeRecord
@@ -281,11 +282,31 @@ def species_group(name: str) -> SpeciesGroup:
     text = name.strip().lower()
     if not text:
         return "unknown"
-    if any(word in text for word in CONIFER_WORDS):
+    if any(_matches_word(text, word) for word in CONIFER_WORDS):
         return "conifer"
-    if any(word in text for word in DECIDUOUS_WORDS):
+    if any(_matches_word(text, word) for word in DECIDUOUS_WORDS):
         return "deciduous"
     return "unknown"
+
+
+def _matches_word(text: str, word: str) -> bool:
+    """Match a keyword as a whole word or exact phrase.
+
+    Parameters
+    ----------
+    text : str
+        Lower-case haystack.
+    word : str
+        Keyword or phrase.
+
+    Returns
+    -------
+    bool
+        ``True`` when the keyword occurs as a word or phrase.
+    """
+    if " " in word:
+        return word in text
+    return re.search(rf"\b{re.escape(word)}\b", text) is not None
 
 
 def is_native_species(name: str) -> bool:
