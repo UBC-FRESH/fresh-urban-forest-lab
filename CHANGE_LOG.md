@@ -228,3 +228,25 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Tests: 268 passed. Dashboard: GREEN.
 - Limits: no field shade survey, no Radiance/SOLWEIG benchmark, 2.5-D crowns, priors for
   species/water, and a scaled annual estimate.
+
+### P8 optimization and Pareto explorer
+
+- Added `optimize.py`: candidate sites, species options, seven objectives, three constraints,
+  exact evaluation, weighted scalarisation jobs, and solution-to-scenario edits.
+- Added `pareto.py`: dominance, non-dominated archive, approximate hypervolume, bootstrap
+  robustness, and objective slices.
+- Added `surrogate.py`: aggregate features and a validated ridge screening surrogate.
+- Delegated hard combinatorial search to **Fresh Solutions v0.8.0** through the optional
+  `optimize` extra. No custom metaheuristic engine was added.
+- Added `optimize` and `pareto` CLI commands and the `/api/optimize` job endpoints.
+- Added the Optimize tab: job controls, 3D orbitable archive, axis/colour/size/slice
+  controls, solution inspector, and load-as-scenario.
+- Benchmark: 48 sites / 72 scalarizations / 7 objectives / 37,224 evaluations; 5.08 s on
+  one worker and 3.57 s on four workers (1.42x), same archive and hypervolume.
+- Small 24-site run: 13 archive solutions, hypervolume 0.0106, 0.33 s on one worker.
+- Surrogate holdout: shade R2 0.91, equity 0.86, native 0.89, diversity -0.41; archive
+  always uses exact evaluation.
+- Added `docs/reference/optimization-and-pareto.rst` and the P8 report.
+- Tests: 285 passed. Dashboard: GREEN.
+- Limits: weighted-sum finite approximation, Monte Carlo hypervolume, bootstrap robustness,
+  precomputed P7 evaluator, and no city-scale claim.

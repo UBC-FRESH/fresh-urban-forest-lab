@@ -63,7 +63,7 @@ Known gaps
 - City coverage is two core tiles, not the whole city.
 - No accounts, work orders, risk assessment, or mobile field app.
 - No tagged release yet. The documentation site is live on GitHub Pages.
-- P7 is active. P8-P11 remain planned. See :doc:`research-agenda` and :doc:`shade-and-species`.
+- P7 is complete. P8 is active. P9-P11 remain planned. See :doc:`research-agenda`, :doc:`shade-and-species`, and :doc:`optimization-and-pareto`.
 
 Release actions
 ---------------

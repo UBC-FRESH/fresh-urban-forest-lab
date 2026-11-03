@@ -340,12 +340,12 @@ Goal: solve many spatio-temporal planting, removal, species, and irrigation prob
 
 Plan: `notes/design/urban-canopy-program-plan.md`.
 
-- [ ] P8.1 Decision model and objective schema
-- [ ] P8.2 Fast evaluator and surrogate
-- [ ] P8.3 Parallel solver and job orchestration
-- [ ] P8.4 Pareto archive and fuzzy dominance
-- [ ] P8.5 3D solution-space explorer
-- [ ] P8.6 Benchmark, sensitivity, and report
+- [x] P8.1 Decision model and objective schema
+- [x] P8.2 Fast evaluator and surrogate
+- [x] P8.3 Parallel solver and job orchestration
+- [x] P8.4 Pareto archive and fuzzy dominance
+- [x] P8.5 3D solution-space explorer
+- [x] P8.6 Benchmark, sensitivity, and report
 
 Acceptance criteria:
 
