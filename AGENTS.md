@@ -146,6 +146,8 @@ Record the result in the changelog entry for the milestone.
 - **Say what the prototype is not.** It is not an i-Tree replacement and not a calibrated
   FVS growth model. Reason: both claims would be false and would damage trust.
 - **The assistant is opt-in and local.** `--allow-agent` enables the OpenCode CLI behind
-  the `+ Ask` panel. It runs with a sanitized environment and no authentication; do not
-  expose it on an untrusted network. Reason: a shell-capable agent plus an unauthenticated
-  web app is a security boundary.
+  the `+ Ask` panel. It runs with a sanitized environment and no application-level login.
+  The deployment boundary is the Cloudflare Zero Trust gateway with UBC CWL that fronts
+  the whole dev server; the app does not add a second auth layer. Keep the assistant
+  behind that gateway, and do not expose the raw port directly. Reason: a shell-capable
+  agent still needs the same access control as the rest of the dev server.

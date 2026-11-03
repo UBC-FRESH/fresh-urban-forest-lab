@@ -95,8 +95,10 @@ session id, and a compact context object (view, dataset, selected tree, scenario
 and recommendation count). The FastAPI service runs the local `opencode` CLI with a
 sanitized environment and returns the parsed text, session id, and tool-action chips. The
 assistant is opt-in (`--allow-agent`), has a configurable model and timeout, and never
-gets cloud or session credentials from the parent process. It is a local research aid, not
-an authenticated multi-user service.
+gets cloud or session credentials from the parent process. It is a local research aid.
+The deployment boundary is the Cloudflare Zero Trust gateway with UBC CWL that fronts the
+whole dev server; the app itself does not add a second login layer, and the raw port must
+not be exposed directly.
 
 ## Extension points
 

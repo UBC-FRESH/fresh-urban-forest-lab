@@ -49,3 +49,6 @@ Project-specific guardrails
 - Keep the demo dataset small and derived; do not commit the raw LiDAR products.
 - Keep the web shell offline-capable; vendor its JavaScript assets.
 - Do not describe the prototype as an i-Tree replacement or a calibrated FVS model.
+- The `+ Ask` assistant is opt-in and runs with a sanitized environment. The access
+  boundary is the Cloudflare Zero Trust gateway with UBC CWL that fronts the whole dev
+  server; keep the raw service port behind that gateway.
