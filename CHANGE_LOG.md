@@ -209,3 +209,22 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Recommendation: P7 shade/species, P8 optimization/Pareto, P9 off-inventory, P10 birds,
   P11 integration. No phase is active and no code behavior changed.
 - Dashboard: GREEN (lint, format, types, tests, validator, docs).
+
+### P7 Solar shade and species-fit engine
+
+- Added NOAA solar position, projected building/tree/terrain shadows, time-integrated
+  sunlit/building/tree/overlap/marginal-shade arrays, and a 1.5 m target plane.
+- Added 12 species trait profiles, site-fit scoring, a single-bucket water balance,
+  growth/vigour modifiers, irrigation-policy comparison, and cost per shade-hour.
+- Added `shade`, `species-fit`, `water`, and `irrigation` CLI commands and the
+  `/api/solar`, `/api/shade`, `/api/shade.png`, `/api/light/tree/{id}`, `/api/species`,
+  `/api/species/fit`, `/api/water`, and `/api/irrigation` endpoints.
+- Added the Light tab, georeferenced shadow overlay, 3D sun, tree shade/water card, and
+  evidence badges.
+- UBC core demo, 2026-06-21, 3-time sample: 6.82% shade, 2.54% tree shade, 0.50% marginal
+  tree shade. The 6-time sample gives 7.23% shade with stable tree/marginal fractions.
+- Added `docs/reference/shade-and-species.rst`, the review protocol, and
+  `notes/reports/p7-shade-species.md`.
+- Tests: 268 passed. Dashboard: GREEN.
+- Limits: no field shade survey, no Radiance/SOLWEIG benchmark, 2.5-D crowns, priors for
+  species/water, and a scaled annual estimate.

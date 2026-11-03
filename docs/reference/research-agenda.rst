@@ -1,7 +1,7 @@
 Research agenda: shade, optimization, off-inventory canopy, and birds
 =====================================================================
 
-Status: queued programme, 2026-11-03. P7 to P11 are planned; no phase is active.
+Status: P7 is active; P8 to P11 are planned. Updated 2026-11-03.
 The detailed plan is
 `notes/design/urban-canopy-program-plan.md <https://github.com/UBC-FRESH/fresh-urban-forest-lab/blob/main/notes/design/urban-canopy-program-plan.md>`_
 and the evidence review is

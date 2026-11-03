@@ -306,14 +306,14 @@ Goal: model daily, seasonal, and annual solar exposure with terrain, buildings, 
 Plan: `notes/design/urban-canopy-program-plan.md`.
 Evidence: `notes/reference/literature-review-shade-optimization-biodiversity.md`.
 
-- [ ] P7.1 Evidence review and method lock (#45)
-- [ ] P7.2 Solar geometry and shadow kernel (#46)
-- [ ] P7.3 Shade accounting and marginal contribution (#47)
-- [ ] P7.4 Species traits and site fit (#48)
-- [ ] P7.5 Coupled light-water-growth-vigour model (#49)
-- [ ] P7.6 Irrigation policy and cost (#50)
-- [ ] P7.7 Shade and species UI (#51)
-- [ ] P7.8 Validation, uncertainty, and report (#52)
+- [x] P7.1 Evidence review and method lock (#45)
+- [x] P7.2 Solar geometry and shadow kernel (#46)
+- [x] P7.3 Shade accounting and marginal contribution (#47)
+- [x] P7.4 Species traits and site fit (#48)
+- [x] P7.5 Coupled light-water-growth-vigour model (#49)
+- [x] P7.6 Irrigation policy and cost (#50)
+- [x] P7.7 Shade and species UI (#51)
+- [x] P7.8 Validation, uncertainty, and report (#52)
 
 Acceptance criteria:
 
