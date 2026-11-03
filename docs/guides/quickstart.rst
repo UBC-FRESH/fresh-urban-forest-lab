@@ -68,6 +68,33 @@ Inspect and analyse
      --dataset data/processed/ubc_lidar_2021 \
      --out data/processed/ubc_lidar_2021/detected_trees.geojson
 
+External tile discovery
+-----------------------
+
+LidarBC and CanElevation expose public tile indexes. Query an AOI and write a manifest
+before downloading:
+
+.. code-block:: bash
+
+   fresh-urban-forest tiles lidarbc \
+     --bbox -123.28,49.23,-123.21,49.29 \
+     --out data/raw/tiles/lidarbc_ubc.json
+
+   fresh-urban-forest tiles index --dest data/raw/canelevation
+   fresh-urban-forest tiles canelevation \
+     --index data/raw/canelevation/Index_LiDARtiles_tuileslidar.gpkg \
+     --bbox -123.28,49.23,-123.21,49.29 \
+     --provider BC \
+     --out data/raw/tiles/canelevation_ubc.json
+
+   fresh-urban-forest tiles fetch \
+     --manifest data/raw/tiles/lidarbc_ubc.json \
+     --dest data/raw/tiles
+
+The manifests record the query bbox, acquisition year, projection, density, source URL,
+and metadata URL. The CanElevation tile index is large (about 428 MB), so the helper reads
+it with a bounding-box filter.
+
 Repeat measures
 ---------------
 

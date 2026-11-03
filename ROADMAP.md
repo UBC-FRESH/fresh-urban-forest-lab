@@ -102,6 +102,12 @@ Goal: turn public tree inventory and LiDAR products into a portable, provenance-
   - [x] `manifest.json`, trees, metrics, terrain, buildings, boundary
   - [x] Round-trip loader and summary
   - [x] Derived UBC core-campus demo
+- [x] P1.7 LidarBC and CanElevation tile discovery (#38)
+  - [x] Normalised tile record and JSON manifest
+  - [x] LidarBC ArcGIS index by WGS84 bbox and layer
+  - [x] CanElevation GeoPackage index by bbox, provider, and project
+  - [x] CLI discovery, index download, and tile fetch
+  - [x] UBC pilot discovery check and one-tile download/QA
 
 Acceptance criteria:
 
@@ -293,3 +299,4 @@ Acceptance criteria:
 6. Phase 6 is planned. The first review should decide whether to add a planting-site entity, a work-order log, and a fitted local growth model.
 7. Phases 0 to 4 merged as PR #36 (`1e0a9b0`). The parent issues #1 to #5 and their child issues #8 to #35 are closed. Subsequent hygiene commits on `main` fixed the editable-install ignore, the documentation package install, and the Pages deferral. CI and the Docs workflow are green on `main` as of `dc9f599`.
 8. P3.7 (#37) added the local OpenCode assistant and fixed 3D buildings by sampling terrain elevation at each footprint centroid and extruding the footprint geometry. The assistant is opt-in with `--allow-agent` and runs the local `opencode` CLI with a sanitized environment. The reverse-proxy path-prefix fix is also on `main`.
+9. P1.7 (#38) added external tile discovery. The UBC pilot bbox returned 34 LidarBC point-cloud tiles and 15 CanElevation tiles. The CanElevation 2016 Lower Mainland tiles duplicate the LidarBC 2016 coverage, so they are a COPC/cloud-optimised alternative rather than an independent repeat measure. One 6.04 MB LidarBC tile was downloaded and summarised as a QA check.

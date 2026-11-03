@@ -113,6 +113,9 @@ sources:
       height models, and in some areas tree and canopy structure grids and an
       individual tree database. The portal is the authoritative index; acquire the
       tile metadata with each download because acquisition year and CRS vary.
+      The public ArcGIS index is
+      https://services6.arcgis.com/ubm4tcTYICKBpist/arcgis/rest/services/LiDAR_BC_S3_Public/FeatureServer
+      (layer 4 is the point-cloud index, layers 1-3 DSM, layers 5-6 DEM).
   - source_id: canelevation_lidar_point_clouds
     title: LiDAR Point Clouds - CanElevation Series
     publisher: Natural Resources Canada
@@ -128,7 +131,10 @@ sources:
       Federal airborne LiDAR point clouds, distributed as LAZ or Cloud Optimized
       Point Cloud (COPC) by acquisition project. Projects can overlap and may have
       been collected by NRCan or a partner. Browse the S3 index or the project/tile
-      indexes before downloading. Vertical accuracy is generally 5-10 cm.
+      indexes before downloading. The tile index is
+      https://canelevation-lidar-point-clouds.s3.ca-central-1.amazonaws.com/pointclouds_nuagespoints/Index_LiDARtiles_tuileslidar.gpkg
+      (about 428 MB; use an AOI query rather than loading it whole). Vertical accuracy
+      is generally 5-10 cm.
   - source_id: vancouver_public_trees
     title: City of Vancouver public trees
     publisher: City of Vancouver

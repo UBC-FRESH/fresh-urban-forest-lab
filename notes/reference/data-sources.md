@@ -42,11 +42,23 @@ The Metro Vancouver 2022 classified product is a separate regional source.
 ## LidarBC
 
 - Portal: https://lidar.gov.bc.ca/
+- Public ArcGIS index:
+  https://services6.arcgis.com/ubm4tcTYICKBpist/arcgis/rest/services/LiDAR_BC_S3_Public/FeatureServer
+  - layer 0: project data extent
+  - layers 1-3: DSM index at 1:2,500, 1:10,000, and 1:20,000
+  - layer 4: point-cloud index
+  - layers 5-6: DEM index at 1:2,500 and 1:20,000
 - Licence: Open Government Licence – British Columbia.
 - Products: classified LAZ, DEM, DSM, and in some areas CHM, tree/canopy structure
   grids, and an individual tree database.
 - Trap: acquisition year, CRS, and quality level vary by tile. Keep the tile metadata with
   every download. The program is a multi-year build-out; coverage is not uniform yet.
+- Discovery check (2026-11-03): the UBC pilot bbox
+  ``-123.28,49.23,-123.21,49.29`` returned **34 point-cloud tiles**, mostly the 2016
+  Lower Mainland/Fraser acquisition. One small tile
+  (``bc_092g024_4_1_1_xyes_8_utm10_20170714.laz``, 6.04 MB) was downloaded and summarised:
+  2,067,440 points, classes 1/2, bounds around E479149-E479991, N5455285-N5456677. It is
+  low-elevation/shoreline and was used only as a download/QA check.
 
 ## CanElevation LiDAR point clouds
 
@@ -56,6 +68,14 @@ The Metro Vancouver 2022 classified product is a separate regional source.
 - CRS: NAD83(CSRS) UTM, CGVD2013.
 - Trap: projects can overlap and can come from NRCan or a partner. The federal product is
   not a single seamless surface. Download the project and tile indexes before fetching.
+- Tile index:
+  https://canelevation-lidar-point-clouds.s3.ca-central-1.amazonaws.com/pointclouds_nuagespoints/Index_LiDARtiles_tuileslidar.gpkg
+  (about 428 MB). It carries ``Provider``, ``Project``, ``Tile_name``, ``URL``, and tile
+  geometry. Use a bounding-box read; do not load the whole file.
+- Discovery check (2026-11-03): the UBC pilot bbox returned **15 tiles**, all the 2016
+  Lower Mainland project. The CanElevation tiles largely duplicate the LidarBC 2016
+  Lower Mainland coverage, but they are COPC/LAZ and are useful as a cloud-optimised
+  alternative or cross-check. Do not count them as independent repeat measures.
 
 ## UBC tree inventory
 

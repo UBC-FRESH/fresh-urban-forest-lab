@@ -18,6 +18,10 @@ import typer
 from rich.console import Console
 from rich.table import Table
 
+from fresh_urban_forest.canelevation import (
+    discover_canelevation_tiles,
+    download_canelevation_index,
+)
 from fresh_urban_forest.catalog import DatasetSource, load_catalog
 from fresh_urban_forest.change import canopy_change
 from fresh_urban_forest.dataset import build_dataset, dataset_summary, load_dataset
@@ -29,12 +33,21 @@ from fresh_urban_forest.inventory import (
 )
 from fresh_urban_forest.itd import detect_trees, detected_trees_geojson
 from fresh_urban_forest.lidar import PointCloudSummary, canopies_from_pair, summarize_point_cloud
+from fresh_urban_forest.lidarbc import discover_lidarbc_tiles
 from fresh_urban_forest.materialize import materialize_sources, read_materialization_manifest
 from fresh_urban_forest.terrain import RasterData, read_raster
+from fresh_urban_forest.tiles import (
+    download_tiles,
+    make_manifest,
+    read_tile_manifest,
+    write_tile_manifest,
+)
 
 app = typer.Typer(help="Open urban-forest LiDAR, inventory, growth, and 3-D decision support.")
 catalog_app = typer.Typer(help="Inspect and materialize public data sources.")
+tiles_app = typer.Typer(help="Discover and download LidarBC and CanElevation tiles.")
 app.add_typer(catalog_app, name="catalog")
+app.add_typer(tiles_app, name="tiles")
 console = Console()
 
 DEST_OPTION = typer.Option(..., "--dest", help="Destination directory.")
@@ -83,6 +96,11 @@ LATER_OPTION = typer.Option(..., "--later", help="Later dataset directory.")
 MIN_HEIGHT_OPTION = typer.Option(3.0, "--min-height", help="Minimum canopy height in metres.")
 WINDOW_OPTION = typer.Option(3.0, "--window", help="Local-maxima window in metres.")
 THRESHOLD_OPTION = typer.Option(2.0, "--threshold", help="Canopy threshold in metres.")
+LAYER_OPTION = typer.Option(4, "--layer", help="LidarBC ArcGIS layer id (4 is point cloud).")
+INDEX_OPTION = typer.Option(..., "--index", help="CanElevation tile-index GeoPackage.")
+PROJECT_OPTION = typer.Option(None, "--project", help="Optional CanElevation project filter.")
+PROVIDER_OPTION = typer.Option(None, "--provider", help="Optional CanElevation provider filter.")
+MANIFEST_OPTION = typer.Option(..., "--manifest", help="Tile manifest JSON.")
 
 
 @catalog_app.command("list")
@@ -294,6 +312,99 @@ def serve(
         agent_timeout=agent_timeout,
     )
     uvicorn.run(app_instance, host=host, port=port)
+
+
+@tiles_app.command("lidarbc")
+def tiles_lidarbc(
+    bbox: str = BBOX_OPTION,
+    out: Path = OUT_OPTION,
+    layer: int = LAYER_OPTION,
+) -> None:
+    """Discover LidarBC tiles intersecting a WGS84 bounding box.
+
+    Parameters
+    ----------
+    bbox : str
+        ``min_lon,min_lat,max_lon,max_lat``.
+    out : Path
+        Output tile manifest JSON.
+    layer : int
+        LidarBC ArcGIS layer id.
+    """
+    parsed = _parse_bbox(bbox)
+    if parsed is None:
+        raise typer.BadParameter("--bbox is required")
+    tiles = discover_lidarbc_tiles(parsed, layer_id=layer)
+    write_tile_manifest(make_manifest("lidarbc", parsed, tiles), out)
+    console.print(f"LidarBC: {len(tiles)} tiles -> {out}")
+
+
+@tiles_app.command("canelevation")
+def tiles_canelevation(
+    index: Path = INDEX_OPTION,
+    bbox: str = BBOX_OPTION,
+    out: Path = OUT_OPTION,
+    project: str | None = PROJECT_OPTION,
+    provider: str | None = PROVIDER_OPTION,
+) -> None:
+    """Discover CanElevation tiles intersecting a WGS84 bounding box.
+
+    Parameters
+    ----------
+    index : Path
+        CanElevation tile-index GeoPackage.
+    bbox : str
+        ``min_lon,min_lat,max_lon,max_lat``.
+    out : Path
+        Output tile manifest JSON.
+    project : str or None
+        Optional project filter.
+    provider : str or None
+        Optional provider filter.
+    """
+    parsed = _parse_bbox(bbox)
+    if parsed is None:
+        raise typer.BadParameter("--bbox is required")
+    tiles = discover_canelevation_tiles(
+        index,
+        parsed,
+        project=project,
+        provider=provider,
+    )
+    write_tile_manifest(make_manifest("canelevation", parsed, tiles), out)
+    console.print(f"CanElevation: {len(tiles)} tiles -> {out}")
+
+
+@tiles_app.command("index")
+def tiles_index(dest: Path = DEST_OPTION, overwrite: bool = False) -> None:
+    """Download the CanElevation tile index.
+
+    Parameters
+    ----------
+    dest : Path
+        Destination directory.
+    overwrite : bool
+        Re-download an existing index.
+    """
+    path = download_canelevation_index(dest, overwrite=overwrite)
+    console.print(f"CanElevation index: {path} ({path.stat().st_size} bytes)")
+
+
+@tiles_app.command("fetch")
+def tiles_fetch(manifest: Path = MANIFEST_OPTION, dest: Path = DEST_OPTION) -> None:
+    """Download every tile named in a manifest.
+
+    Parameters
+    ----------
+    manifest : Path
+        Tile manifest JSON.
+    dest : Path
+        Destination directory.
+    """
+    parsed = read_tile_manifest(manifest)
+    records = download_tiles(parsed.tiles, dest)
+    for record in records:
+        console.print(f"{record.status:9s} {record.source_id}  {record.size_bytes} bytes")
 
 
 @app.command("detect-trees")

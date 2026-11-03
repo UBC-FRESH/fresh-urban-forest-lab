@@ -28,6 +28,18 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
   data behind the GitHub GeoJSON/CSV snapshot.
 - Dashboard: GREEN.
 
+### P1.7 External LiDAR tile discovery
+
+- Added `fresh_urban_forest.tiles`, `lidarbc`, and `canelevation` modules with one
+  normalised tile record, JSON manifests, and checksum-aware downloads.
+- Added `fresh-urban-forest tiles lidarbc`, `tiles canelevation`, `tiles index`, and
+  `tiles fetch`.
+- UBC pilot bbox check: 34 LidarBC point-cloud tiles and 15 CanElevation tiles. The
+  CanElevation 2016 Lower Mainland set overlaps the LidarBC 2016 coverage, so it is a
+  COPC alternative/cross-check, not an independent repeat measure.
+- Downloaded and summarised one 6.04 MB LidarBC tile as a QA check.
+- Dashboard: GREEN; 202 tests.
+
 ### P1 Canonical urban-forest dataset
 
 - Added the YAML source catalog and resumable, SHA-256-verified materialization.
