@@ -176,6 +176,9 @@ Headless Chromium at 1500 x 950 and 900 x 700:
 - selecting any scenario in the global dropdown from the Optimize tab switches to the 3D
   scene, so the loaded scenario is visible instead of leaving the user on an unchanged
   point cloud;
+- the 3D terrain mesh now uses the same origin as trees and buildings, and DEM nodata is
+  filled from the nearest valid cell, so the ground no longer appears as a shifted
+  zero-elevation plane under floating objects;
 - switching tabs during a run, resizing, and rapid tab switching produce no console or
   page errors;
 - the slice slider and load button reset on a new run;

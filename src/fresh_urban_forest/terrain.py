@@ -16,6 +16,7 @@ import rasterio
 from affine import Affine
 from numpy.typing import NDArray
 from pyproj import Transformer
+from scipy.ndimage import distance_transform_edt
 
 from fresh_urban_forest.models import TerrainGrid
 
@@ -332,6 +333,32 @@ def build_terrain_grid(
         elevation=elevation.astype(np.float32),
         canopy_height=canopy.astype(np.float32) if canopy is not None else None,
     )
+
+
+def fill_nan_nearest(
+    array: NDArray[np.float32] | NDArray[np.float64],
+) -> NDArray[np.float64]:
+    """Fill missing cells with the nearest valid cell value.
+
+    Parameters
+    ----------
+    array : numpy.ndarray
+        Input array with ``numpy.nan`` for missing cells.
+
+    Returns
+    -------
+    numpy.ndarray
+        Filled array. An all-missing input becomes zeros.
+    """
+    values = np.asarray(array, dtype=np.float64)
+    missing = np.isnan(values)
+    if not np.any(missing):
+        return values.copy()
+    if np.all(missing):
+        return np.zeros_like(values)
+    indices = distance_transform_edt(missing, return_distances=False, return_indices=True)
+    filled = values[tuple(indices)]
+    return np.asarray(filled, dtype=np.float64)
 
 
 def canopy_cover_pct(

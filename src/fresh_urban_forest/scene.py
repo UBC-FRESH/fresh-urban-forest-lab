@@ -14,7 +14,7 @@ import numpy as np
 
 from fresh_urban_forest.allometry import species_group, tree_carbon_kg, tree_crown_volume_m3
 from fresh_urban_forest.models import TerrainGrid, TreeRecord, UrbanForestDataset
-from fresh_urban_forest.terrain import project_lonlat, unproject_xy
+from fresh_urban_forest.terrain import fill_nan_nearest, project_lonlat, unproject_xy
 
 
 def build_scene(
@@ -54,7 +54,12 @@ def build_scene(
     else:
         origin_x = (left + right) / 2.0
         origin_y = (bottom + top) / 2.0
-    origin_z = float(np.nanmin(grid.elevation)) if grid.elevation.size else 0.0
+    origin_z = (
+        float(np.nanmin(grid.elevation))
+        if grid.elevation.size and np.any(np.isfinite(grid.elevation))
+        else 0.0
+    )
+    render_elevation = fill_nan_nearest(grid.elevation)
     origin_lon, origin_lat = unproject_xy(origin_x, origin_y, grid.crs)
     corner_lons: list[float] = []
     corner_lats: list[float] = []
@@ -76,7 +81,7 @@ def build_scene(
                 [_local_point(lon, lat, origin_x, origin_y, grid.crs) for lon, lat in ring]
                 for ring in building.rings
             ],
-            "base_z": _building_base_z(building.rings, grid, origin_z),
+            "base_z": _building_base_z(building.rings, grid, origin_z, render_elevation),
         }
         for building in dataset.buildings
     ]
@@ -102,9 +107,7 @@ def build_scene(
             "width": grid.width,
             "height": grid.height,
             "bounds": list(grid.bounds),
-            "elevation": [
-                round(float(value), 2) for value in np.nan_to_num(grid.elevation.ravel(), nan=0.0)
-            ],
+            "elevation": [round(float(value), 2) for value in render_elevation.ravel()],
             "canopy_height": [
                 round(float(value), 2)
                 for value in np.nan_to_num(
@@ -188,6 +191,7 @@ def _building_base_z(
     rings: tuple[tuple[tuple[float, float], ...], ...],
     grid: TerrainGrid,
     origin_z: float,
+    elevation: np.ndarray,
 ) -> float:
     """Estimate a building base elevation from the terrain grid.
 
@@ -199,6 +203,8 @@ def _building_base_z(
         Terrain grid that supplies the base elevation.
     origin_z : float
         Scene vertical origin.
+    elevation : numpy.ndarray
+        Filled terrain elevation grid.
 
     Returns
     -------
@@ -213,7 +219,7 @@ def _building_base_z(
     left, bottom, right, top = grid.bounds
     col = min(max(int((x - left) / max(right - left, 1e-9) * grid.width), 0), grid.width - 1)
     row = min(max(int((top - y) / max(top - bottom, 1e-9) * grid.height), 0), grid.height - 1)
-    return round(float(grid.elevation[row, col]) - origin_z, 2)
+    return round(float(elevation[row, col]) - origin_z, 2)
 
 
 def _measured(tree: TreeRecord, key: str) -> bool:

@@ -76,7 +76,7 @@ from fresh_urban_forest.species import (
     profile_for_species,
     site_fit,
 )
-from fresh_urban_forest.terrain import unproject_xy
+from fresh_urban_forest.terrain import fill_nan_nearest, unproject_xy
 from fresh_urban_forest.vigor import growth_response, project_species_growth
 from fresh_urban_forest.water import (
     compare_water_policies,
@@ -2299,7 +2299,7 @@ def _hillshade_png(dataset: UrbanForestDataset, width: int) -> bytes:
         PNG bytes.
     """
     grid = dataset.terrain
-    elevation = np.asarray(grid.elevation, dtype=np.float64)
+    elevation = fill_nan_nearest(np.asarray(grid.elevation, dtype=np.float64))
     grad_y, grad_x = np.gradient(elevation)
     slope = np.pi / 2.0 - np.arctan(np.hypot(grad_x, grad_y))
     aspect = np.arctan2(-grad_x, grad_y)

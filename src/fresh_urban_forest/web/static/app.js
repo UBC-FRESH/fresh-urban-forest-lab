@@ -571,6 +571,8 @@ function buildTerrainMesh() {
   const [left, bottom, right, top] = sceneData.bounds;
   const spanX = right - left;
   const spanZ = top - bottom;
+  const originX = sceneData.origin.x;
+  const originY = sceneData.origin.y;
   const originZ = sceneData.origin.z;
   const positions = [];
   const colors = [];
@@ -579,8 +581,8 @@ function buildTerrainMesh() {
   for (let row = 0; row < height; row += 1) {
     for (let col = 0; col < width; col += 1) {
       const index = row * width + col;
-      const x = -spanX / 2 + (col / Math.max(width - 1, 1)) * spanX;
-      const z = spanZ / 2 - (row / Math.max(height - 1, 1)) * spanZ;
+      const x = left + (col / Math.max(width - 1, 1)) * spanX - originX;
+      const z = top - (row / Math.max(height - 1, 1)) * spanZ - originY;
       const y = elevation[index] - originZ;
       positions.push(x, y, z);
       const canopyValue = canopy ? canopy[index] : 0;
@@ -650,8 +652,8 @@ function buildBuildingMeshes() {
       roughness: 0.82,
       metalness: 0.03,
       transparent: true,
-      opacity: 0.55,
-      depthWrite: false,
+      opacity: 0.82,
+      depthWrite: true,
     });
     const mesh = new THREE.Mesh(geometry, material);
     mesh.position.y = Number(building.base_z) || 0;
