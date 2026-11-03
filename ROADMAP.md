@@ -286,3 +286,4 @@ Acceptance criteria:
 4. The software landscape note records why OpenTreeMap (AGPL) and ForestTools/lidR/PyCrown/itcSegment (GPL) are method references only. The repository is MIT.
 5. Phase 5 is planned. It needs maintainer approval before a tag, release, Pages setting change, or live deployment.
 6. Phase 6 is planned. The first review should decide whether to add a planting-site entity, a work-order log, and a fitted local growth model.
+7. Phases 0 to 4 merged as PR #36 (`1e0a9b0`). The parent issues #1 to #5 and their child issues #8 to #35 are closed. Subsequent hygiene commits on `main` fixed the editable-install ignore, the documentation package install, and the Pages deferral. CI and the Docs workflow are green on `main` as of `dc9f599`.
