@@ -26,8 +26,11 @@ Keep private material out of this directory.
   coverage, licences, and traps.
 - `reference/software-landscape.md`: comparable inventory, LiDAR, growth, and DSS systems;
   what we borrowed, what we refused to copy, and why.
+- `reference/arbor-method-mining.md`: Arbor 1.1.5 source snapshot, clean-room policy,
+  candidate matrix, attribution templates, and the first four implemented primitives.
 - `adr/0001-seed-and-workflow.md`: use the UBC-FRESH seed.
 - `adr/0002-standalone-core.md`: keep the core independent of other lab systems.
 - `adr/0003-lidar-and-change-methods.md`: CHM detection and repeat-measures change.
 - `adr/0004-scenario-model.md`: immutable dataset plus append-only scenario edits.
 - `adr/0005-marginal-shade-and-evidence-tiers.md`: proposed decision to model marginal shade and label every output with an evidence tier.
+- `adr/0006-clean-room-method-reuse.md`: reimplement copyleft methods and cite them; never copy copyleft code.

@@ -18,6 +18,7 @@
 - [Shade, species, water, and irrigation](reference/shade-and-species.html): marginal shade, solar method, species fit, water balance, irrigation cost, API, and limits.
 - [Data contracts](reference/data-contracts.html): dataset directory, tree record, scenario, scene payload.
 - [Methods](reference/methods.html): cover, volume, growth, carbon, detection, change, and DSS assumptions.
+- [Arbor method mining](reference/arbor-method-mining.html): the clean-room provenance policy and the point-cloud primitives borrowed from Arbor's published methods.
 - [Change products](reference/change-products.html): observed change, masks, metrics, and the UBC/City products.
 - [Validation and calibration](reference/validation-and-calibration.html): detection accuracy, field packets, allometry, growth gap.
 - [Assistant](reference/assistant.html): the + Ask assistant, endpoints, context, and security boundary.

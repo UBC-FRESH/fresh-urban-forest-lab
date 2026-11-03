@@ -228,3 +228,22 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Tests: 268 passed. Dashboard: GREEN.
 - Limits: no field shade survey, no Radiance/SOLWEIG benchmark, 2.5-D crowns, priors for
   species/water, and a scaled annual estimate.
+
+### P12 Arbor method mining and clean-room point-cloud primitives
+
+- Audited `r-lidar/arbor` 1.1.5 at commit `a2b487f4a23236a42eec50cb6583a5eae15593ed`.
+- Recorded the GPL-3.0 licence boundary, candidate matrix, design patterns, attribution
+  templates, and delivery sequence in `notes/reference/arbor-method-mining.md`.
+- Added ADR 0006: reimplement copyleft methods clean-room; never copy their code.
+- Added the public `docs/reference/arbor-method-mining.rst` page, the software-landscape
+  row, the `docs/index.rst` and `docs/llms.txt` links, and the API module entry.
+- Added `src/fresh_urban_forest/pointcloud.py` with four opt-in primitives:
+  `hybrid_homogenize`, `statistical_outlier_mask`,
+  `voxel_connected_components`, and `local_anisotropy`.
+- Each function names Arbor 1.1.5, its source file or book chapter, the GPL-3.0 source
+  licence, and the clean-room statement in a `Method provenance` docstring section.
+- Added `tests/test_pointcloud.py` with synthetic-cloud coverage, edge cases, and
+  determinism checks. The new module is 92 percent covered.
+- Tests: 287 passed; total coverage 87.51 percent. Dashboard: GREEN.
+- Limits: the four functions are opt-in and are not wired into the default CHM/ITD path;
+  PTD ground classification, semantic/instance segmentation, QSM, and QSF are future work.
