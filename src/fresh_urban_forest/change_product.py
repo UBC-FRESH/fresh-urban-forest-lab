@@ -6,6 +6,7 @@ that the browser can place over the campus map with the same bounds as the datas
 
 from __future__ import annotations
 
+import hashlib
 import io
 import json
 from dataclasses import asdict
@@ -135,6 +136,8 @@ def build_change_product(
             "grid": "change_grid.npz",
         },
     }
+    png_bytes = (out_dir / "change.png").read_bytes()
+    payload["image_version"] = hashlib.sha256(png_bytes).hexdigest()[:12]
     path = out_dir / "change.json"
     path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
     return path

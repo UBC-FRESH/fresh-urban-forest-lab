@@ -351,7 +351,8 @@ def create_app(
         path = _change_path(state)
         if path is None:
             raise HTTPException(status_code=404, detail="this dataset has no change product")
-        return _read_json_object(path)
+        payload = _read_json_object(path)
+        return payload
 
     @app.get("/api/change.png")
     def change_png() -> FileResponse:
@@ -374,6 +375,7 @@ def create_app(
             path.with_name("change.png"),
             media_type="image/png",
             filename="change.png",
+            headers={"Cache-Control": "no-store, max-age=0"},
         )
 
     @app.get("/api/metrics")

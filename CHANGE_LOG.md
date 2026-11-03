@@ -34,9 +34,9 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Added `/api/change`, `/api/change.png`, and a `Change` tab with a georeferenced
   loss/stable/gain overlay and summary cards.
 - Built the first UBC observed-change product from LidarBC 2016 core tiles and the UBC
-  2021 CHM at 1 m: 2.01M m² earlier canopy, 2.15M m² later canopy, +200,131 m² gain,
-  -68,387 m² loss, +131,744 m² net, +1.585 m mean height on stable canopy over 3.58M m²
-  of overlap.
+  2021 CHM at 1 m over four core tiles: 4.57M m² earlier canopy, 4.76M m² later canopy,
+  +384,143 m² gain, -199,042 m² loss, +185,101 m² net, +0.95 m mean height on stable
+  canopy over 7.51M m² of overlap.
 - The product starts with a `NaN` mask outside the 2016 tile coverage; only the overlap is
   compared.
 - Caveat: 2016 and 2021 differ in acquisition season and vertical datum. The product is a

@@ -1024,7 +1024,11 @@ async function ensureChangeView() {
             url: "api/canopy.png?width=1400",
             coordinates: state.scene.corners_wgs84 || coordinates,
           },
-          change: { type: "image", url: "api/change.png", coordinates },
+          change: {
+            type: "image",
+            url: `api/change.png?v=${encodeURIComponent(data.image_version || Date.now())}`,
+            coordinates,
+          },
           buildings: { type: "geojson", data: buildingFeatures() },
           boundary: { type: "geojson", data: boundaryFeatures() },
         },
