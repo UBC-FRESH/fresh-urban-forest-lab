@@ -34,19 +34,38 @@ inventory was filtered to the same bbox.
 Method: greedy nearest match, highest detected crown first, one inventory tree per
 detected crown, 5 m tolerance.
 
+### Tuning
+
+A Main Mall reference patch (`-123.255,49.258,-123.245,49.265`) was swept at 1 m over
+minimum heights 3–5 m and windows 3–10 m.
+
+| Min height | Window | Detected | Matched | Precision | Recall | F1 |
+| ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| 3 m | 6 m | 4,004 | 1,268 | 0.317 | 0.434 | **0.366** |
+| 3 m | 4 m | 6,816 | 1,742 | 0.256 | 0.597 | 0.358 |
+| 3 m | 8 m | 2,717 | 911 | 0.335 | 0.312 | 0.323 |
+| 3 m | 10 m | 1,943 | 685 | 0.353 | 0.235 | 0.282 |
+| 3 m | 3 m | 16,164 | 2,497 | 0.155 | 0.855 | 0.262 |
+
+Window 6 m gives the best F1 balance. Window 10 m raises precision but loses too much
+recall.
+
+The tuned full-core run (`min-height=3`, `window=6`) produced 9,678 detected crowns,
+2,314 matches, precision 0.239, recall 0.476, F1 0.318, and a +2.14 m height bias. The
+full core is harder than the Main Mall patch, which is why the F1 is lower.
+
 ### Interpretation
 
-- The detector **over-segments** the canopy: it returns about 2.6 times as many crowns as
-  there are inventory records in the same area.
+- The detector **over-segments** the canopy: it returns roughly twice as many crowns as
+  there are inventory records in the same area, even after tuning.
 - Recall is moderate; a matched crown is usually within 2.3 m of an inventory tree.
 - Height bias is +1.78 m and RMSE is 5.04 m. Some of this is the 2 m detection grid, some
   is crown overlap, and some is inventory height error or missing height.
 - Precision is not a clean accuracy estimate because the inventory is incomplete,
   especially for remnant forest and dense stands. A detected crown with no inventory
   record may be a real tree that was never measured.
-- Next step: rerun at 1 m with a tuned window and minimum height, add a field-validation
-  sample, and report precision against a **complete** reference patch rather than the
-  whole inventory.
+- Next step: create a **complete** field or photo-interpreted reference patch. The current
+  inventory is not complete enough to call precision a true error rate.
 
 ## Local allometry
 

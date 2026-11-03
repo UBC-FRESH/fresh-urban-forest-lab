@@ -56,6 +56,9 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Local height-diameter fits reduce RMSE versus the generic profiles: conifer 7.42 vs
   12.38 m, deciduous 4.87 vs 7.18 m, unknown 3.03 vs 7.16 m. R² remains modest.
 - Added `notes/reports/detection-and-allometry-2021.md`.
+- Tuned detection on a 1 m Main Mall patch: best F1 0.366 at `min-height=3`, `window=6`;
+  the full core gives F1 0.318 with the same settings.
+- Added draft `notes/releases/v0.2.0.md`; no tag or release was created.
 - Dashboard: GREEN.
 
 ### P1.7 External LiDAR tile discovery

@@ -14,8 +14,8 @@ from pathlib import Path
 
 import numpy as np
 
-from fresh_urban_forest.itd import DetectedTree
-from fresh_urban_forest.models import TreeRecord
+from fresh_urban_forest.itd import DetectedTree, detect_trees
+from fresh_urban_forest.models import TerrainGrid, TreeRecord
 
 VALIDATION_SCHEMA_VERSION = "fresh-urban-forest.validation.v1"
 
@@ -219,6 +219,126 @@ def validate_detection(
             "detected crown; allowed distance is the stated tolerance."
         ),
     )
+
+
+@dataclass(frozen=True, slots=True)
+class DetectionTuningRow:
+    """One parameter combination in a detection tuning sweep.
+
+    Attributes
+    ----------
+    min_height_m : float
+        Minimum detected canopy height.
+    window_m : float
+        Local-maxima window.
+    detected_count : int
+        Detected crowns.
+    matched_count : int
+        One-to-one matches.
+    precision : float
+        Matched divided by detected.
+    recall : float
+        Matched divided by inventory.
+    f1 : float
+        Harmonic mean.
+    mean_height_delta_m : float
+        Mean detected-minus-inventory height.
+    mean_distance_m : float
+        Mean match distance.
+    """
+
+    min_height_m: float
+    window_m: float
+    detected_count: int
+    matched_count: int
+    precision: float
+    recall: float
+    f1: float
+    mean_height_delta_m: float
+    mean_distance_m: float
+
+
+def tune_detection(
+    grid: TerrainGrid,
+    trees: Sequence[TreeRecord],
+    *,
+    bbox_wgs84: tuple[float, float, float, float] | None = None,
+    min_heights: Sequence[float] = (3.0, 4.0, 5.0),
+    windows: Sequence[float] = (3.0, 4.0, 5.0),
+    max_distance_m: float = 5.0,
+) -> tuple[DetectionTuningRow, ...]:
+    """Sweep detection parameters and rank them by F1.
+
+    Parameters
+    ----------
+    grid : TerrainGrid
+        Canopy-height grid.
+    trees : sequence of TreeRecord
+        Inventory trees.
+    bbox_wgs84 : tuple of float or None
+        Optional inventory filter.
+    min_heights : sequence of float
+        Minimum height values to test.
+    windows : sequence of float
+        Local-maxima window values to test.
+    max_distance_m : float
+        Match tolerance.
+
+    Returns
+    -------
+    tuple of DetectionTuningRow
+        Rows sorted by F1 descending, then precision descending.
+    """
+    rows: list[DetectionTuningRow] = []
+    for min_height in min_heights:
+        for window in windows:
+            detected = detect_trees(grid, min_height_m=min_height, window_m=window)
+            result = validate_detection(
+                detected,
+                trees,
+                max_distance_m=max_distance_m,
+                bbox_wgs84=bbox_wgs84,
+            )
+            rows.append(
+                DetectionTuningRow(
+                    min_height_m=float(min_height),
+                    window_m=float(window),
+                    detected_count=result.detected_count,
+                    matched_count=result.matched_count,
+                    precision=result.precision,
+                    recall=result.recall,
+                    f1=result.f1,
+                    mean_height_delta_m=result.mean_height_delta_m,
+                    mean_distance_m=result.mean_distance_m,
+                )
+            )
+    rows.sort(key=lambda row: (-row.f1, -row.precision, row.window_m, row.min_height_m))
+    return tuple(rows)
+
+
+def write_tuning(rows: Sequence[DetectionTuningRow], path: Path) -> Path:
+    """Write a tuning sweep as JSON.
+
+    Parameters
+    ----------
+    rows : sequence of DetectionTuningRow
+        Sweep rows.
+    path : Path
+        Destination JSON.
+
+    Returns
+    -------
+    Path
+        The written path.
+    """
+    payload = {
+        "schema_version": VALIDATION_SCHEMA_VERSION,
+        "method": "min-height and local-maxima window sweep, ranked by F1",
+        "rows": [asdict(row) for row in rows],
+    }
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
+    return path
 
 
 def write_validation(result: DetectionValidation, out_dir: Path) -> Path:

@@ -107,8 +107,10 @@ rests on measured versus imputed tree attributes.
 - `validate-detection` and `validation.py` are implemented.
 - First core-campus run: 12,715 detected crowns, 4,861 inventory trees, 2,764 matches,
   precision 0.217, recall 0.569, F1 0.315, mean height bias +1.78 m, RMSE 5.04 m.
-- The detector over-segments; the inventory is incomplete. The next run needs a 1 m grid
-  and a complete reference patch.
+- Tuned run: `min-height=3`, `window=6` gives 9,678 detected, 2,314 matches, precision
+  0.239, recall 0.476, F1 0.318 on the full core; the Main Mall patch reaches F1 0.366.
+- The detector over-segments; the inventory is incomplete. The next step is a complete
+  reference patch.
 
 ### Goal
 

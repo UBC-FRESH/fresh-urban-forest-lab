@@ -37,6 +37,7 @@ from fresh_urban_forest.itd import detect_trees, detected_trees_geojson
 from fresh_urban_forest.lidar import PointCloudSummary, canopies_from_pair, summarize_point_cloud
 from fresh_urban_forest.lidarbc import discover_lidarbc_tiles
 from fresh_urban_forest.materialize import materialize_sources, read_materialization_manifest
+from fresh_urban_forest.models import TerrainGrid, UrbanForestDataset
 from fresh_urban_forest.terrain import (
     RasterData,
     build_terrain_grid,
@@ -50,7 +51,12 @@ from fresh_urban_forest.tiles import (
     read_tile_manifest,
     write_tile_manifest,
 )
-from fresh_urban_forest.validation import validate_detection, write_validation
+from fresh_urban_forest.validation import (
+    tune_detection,
+    validate_detection,
+    write_tuning,
+    write_validation,
+)
 
 app = typer.Typer(help="Open urban-forest LiDAR, inventory, growth, and 3-D decision support.")
 catalog_app = typer.Typer(help="Inspect and materialize public data sources.")
@@ -112,6 +118,16 @@ PROJECT_OPTION = typer.Option(None, "--project", help="Optional CanElevation pro
 PROVIDER_OPTION = typer.Option(None, "--provider", help="Optional CanElevation provider filter.")
 MANIFEST_OPTION = typer.Option(..., "--manifest", help="Tile manifest JSON.")
 MAX_DISTANCE_OPTION = typer.Option(5.0, "--max-distance", help="Match distance in metres.")
+MIN_HEIGHTS_OPTION = typer.Option(
+    "3,4,5",
+    "--min-heights",
+    help="Comma-separated minimum heights to test.",
+)
+WINDOWS_OPTION = typer.Option(
+    "3,4,5",
+    "--windows",
+    help="Comma-separated local-maxima windows to test.",
+)
 
 
 @catalog_app.command("list")
@@ -481,6 +497,55 @@ def change_command(
     console.print_json(json.dumps(asdict(result)))
 
 
+@app.command("tune-detection")
+def tune_detection_command(
+    dataset: Path = DATASET_OPTION,
+    out: Path = OUT_OPTION,
+    chm: Path | None = CHM_OPTION,
+    bbox: str | None = BBOX_OPTION,
+    min_heights: str = MIN_HEIGHTS_OPTION,
+    windows: str = WINDOWS_OPTION,
+    max_distance: float = MAX_DISTANCE_OPTION,
+) -> None:
+    """Sweep detection parameters and write a ranked tuning table.
+
+    Parameters
+    ----------
+    dataset : Path
+        Dataset directory.
+    out : Path
+        Output tuning JSON.
+    chm : Path or None
+        Optional full-resolution CHM raster.
+    bbox : str or None
+        Optional WGS84 bounding box.
+    min_heights : str
+        Comma-separated minimum heights.
+    windows : str
+        Comma-separated local-maxima windows.
+    max_distance : float
+        Match distance in metres.
+    """
+    loaded = load_dataset(dataset)
+    parsed = _parse_bbox(bbox)
+    grid = _detection_grid(loaded, chm, parsed)
+    rows = tune_detection(
+        grid,
+        loaded.trees,
+        bbox_wgs84=parsed,
+        min_heights=_parse_float_list(min_heights),
+        windows=_parse_float_list(windows),
+        max_distance_m=max_distance,
+    )
+    write_tuning(rows, out)
+    for row in rows[:5]:
+        console.print(
+            f"min_h={row.min_height_m} window={row.window_m} "
+            f"detected={row.detected_count} matched={row.matched_count} "
+            f"precision={row.precision} recall={row.recall} f1={row.f1}"
+        )
+
+
 @app.command("fit-allometry")
 def fit_allometry_command(
     dataset: Path = DATASET_OPTION,
@@ -506,6 +571,70 @@ def fit_allometry_command(
             f"{group}: n={fit.sample_size} h=1.3+{fit.coefficient:.3f}*dbh^{fit.exponent:.3f} "
             f"rmse={fit.rmse_m} m r2={fit.r2}"
         )
+
+
+def _detection_grid(
+    loaded: UrbanForestDataset,
+    chm: Path | None,
+    bbox: tuple[float, float, float, float] | None,
+) -> TerrainGrid:
+    """Build a detection grid from a CHM or a dataset terrain.
+
+    Parameters
+    ----------
+    loaded : object
+        Loaded dataset.
+    chm : Path or None
+        Optional full-resolution CHM.
+    bbox : tuple of float or None
+        Optional WGS84 bounding box.
+
+    Returns
+    -------
+    object
+        Terrain grid.
+    """
+    if chm is None:
+        return loaded.terrain
+    raster = read_raster(_resolve_raster(chm))
+    if bbox is not None:
+        xs: list[float] = []
+        ys: list[float] = []
+        for lon, lat in (
+            (bbox[0], bbox[1]),
+            (bbox[2], bbox[1]),
+            (bbox[2], bbox[3]),
+            (bbox[0], bbox[3]),
+        ):
+            x, y = project_lonlat(lon, lat, raster.crs)
+            xs.append(x)
+            ys.append(y)
+        raster = crop_raster(raster, (min(xs), min(ys), max(xs), max(ys)))
+    return build_terrain_grid(raster, raster, max_size=1600)
+
+
+def _parse_float_list(value: str) -> tuple[float, ...]:
+    """Parse a comma-separated float list.
+
+    Parameters
+    ----------
+    value : str
+        Comma-separated values.
+
+    Returns
+    -------
+    tuple of float
+        Parsed values.
+
+    Raises
+    ------
+    typer.BadParameter
+        When a value is not numeric.
+    """
+    try:
+        return tuple(float(part.strip()) for part in value.split(",") if part.strip())
+    except ValueError as exc:
+        raise typer.BadParameter("expected comma-separated numbers") from exc
 
 
 @app.command("validate-detection")
@@ -539,23 +668,7 @@ def validate_detection_command(
     """
     loaded = load_dataset(dataset)
     parsed = _parse_bbox(bbox)
-    if chm is not None:
-        raster = read_raster(_resolve_raster(chm))
-        if parsed is not None:
-            xs, ys = [], []
-            for lon, lat in (
-                (parsed[0], parsed[1]),
-                (parsed[2], parsed[1]),
-                (parsed[2], parsed[3]),
-                (parsed[0], parsed[3]),
-            ):
-                x, y = project_lonlat(lon, lat, raster.crs)
-                xs.append(x)
-                ys.append(y)
-            raster = crop_raster(raster, (min(xs), min(ys), max(xs), max(ys)))
-        grid = build_terrain_grid(raster, raster, max_size=900)
-    else:
-        grid = loaded.terrain
+    grid = _detection_grid(loaded, chm, parsed)
     detected = detect_trees(grid, min_height_m=min_height, window_m=window)
     result = validate_detection(
         detected,

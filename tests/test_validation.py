@@ -7,7 +7,12 @@ from pathlib import Path
 
 from fresh_urban_forest.itd import DetectedTree
 from fresh_urban_forest.models import TreeRecord
-from fresh_urban_forest.validation import validate_detection, write_validation
+from fresh_urban_forest.validation import (
+    tune_detection,
+    validate_detection,
+    write_tuning,
+    write_validation,
+)
 
 
 def _crown(tree_id: str, x: float, y: float, height: float, radius: float) -> DetectedTree:
@@ -71,6 +76,35 @@ def test_validate_detection_writes_json_and_geojson(tmp_path: Path) -> None:
     geojson = json.loads((tmp_path / "detection_validation.geojson").read_text())
     assert geojson["features"][0]["properties"]["status"] == "matched"
     assert geojson["features"][0]["geometry"]["coordinates"] != [0.0, 0.0]
+
+
+def test_tune_detection_ranks_parameter_rows(tmp_path: Path) -> None:
+    """A small parameter sweep returns ranked rows and writes JSON."""
+    from pathlib import Path
+
+    import numpy as np
+
+    from fresh_urban_forest.terrain import build_terrain_grid
+    from tests.fixtures import make_raster
+
+    chm = np.zeros((30, 30), dtype=np.float32)
+    chm[5:12, 5:12] = 18.0
+    chm[18:24, 18:24] = 12.0
+    raster = make_raster(Path("synthetic.tif"), chm)
+    grid = build_terrain_grid(raster, raster, max_size=30)
+    trees = [
+        TreeRecord(
+            tree_id="a", lon=0.0, lat=0.0, height_m=18.0, crown_width_m=6.0, x_m=50.0, y_m=50.0
+        ),
+        TreeRecord(
+            tree_id="b", lon=0.0, lat=0.0, height_m=12.0, crown_width_m=4.0, x_m=80.0, y_m=20.0
+        ),
+    ]
+    rows = tune_detection(grid, trees, min_heights=(3.0,), windows=(3.0, 4.0))
+    assert len(rows) == 2
+    assert rows[0].f1 >= rows[1].f1
+    path = write_tuning(rows, tmp_path / "tuning.json")
+    assert path.exists()
 
 
 def test_validate_detection_handles_empty_inputs() -> None:
