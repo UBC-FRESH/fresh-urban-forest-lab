@@ -24,7 +24,8 @@ const $ = (id) => document.getElementById(id);
 
 function api(path, options = {}) {
   const headers = { "Content-Type": "application/json", ...(options.headers || {}) };
-  return fetch(path, { ...options, headers }).then(async (response) => {
+  const relative = String(path).replace(/^\/+/, "");
+  return fetch(relative, { ...options, headers }).then(async (response) => {
     if (!response.ok) {
       let detail = response.statusText;
       try {
@@ -261,8 +262,8 @@ function initMap() {
     style: {
       version: 8,
       sources: {
-        hillshade: { type: "image", url: "/api/hillshade.png?width=1400", coordinates },
-        canopy: { type: "image", url: "/api/canopy.png?width=1400", coordinates },
+        hillshade: { type: "image", url: "api/hillshade.png?width=1400", coordinates },
+        canopy: { type: "image", url: "api/canopy.png?width=1400", coordinates },
         buildings: { type: "geojson", data: buildingFeatures() },
         boundary: { type: "geojson", data: boundaryFeatures() },
         trees: { type: "geojson", data: treesToFeatureCollection(state.scene.trees) },

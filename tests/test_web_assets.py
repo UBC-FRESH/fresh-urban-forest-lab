@@ -20,7 +20,8 @@ def test_static_shell_has_required_hooks() -> None:
         'data-view="scene"',
     ):
         assert marker in html
-    assert "/static/vendor/maplibre-gl.js" in html
+    assert "static/vendor/maplibre-gl.js" in html
+    assert 'href="/static' not in html
     assert "importmap" in html
 
 
