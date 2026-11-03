@@ -245,5 +245,9 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Added `tests/test_pointcloud.py` with synthetic-cloud coverage, edge cases, and
   determinism checks. The new module is 92 percent covered.
 - Tests: 287 passed; total coverage 87.51 percent. Dashboard: GREEN.
+- PR #63; CI run 41742328362. Close-out report:
+  `notes/reports/p12-arbor-method-mining.md`.
 - Limits: the four functions are opt-in and are not wired into the default CHM/ITD path;
   PTD ground classification, semantic/instance segmentation, QSM, and QSF are future work.
+- P12 is complete. P13 is recommended for ALS ground classification and HAG; the MLS/TLS
+  semantic/instance/QSM stack remains a separate future package.

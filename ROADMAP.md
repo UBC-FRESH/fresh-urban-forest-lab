@@ -18,7 +18,7 @@ This roadmap is the plan of record and the issue tracker map for FRESH Urban For
 | P9 Off-inventory and private-canopy augmentation | #42 | `feature/p9-off-inventory` | planned |
 | P10 Bird habitat and demography | #43 | `feature/p10-birds` | planned |
 | P11 Integration and v0.3 release candidate | #44 | `feature/p11-integration` | planned |
-| P12 Arbor method mining and clean-room point-cloud primitives | #61 | `feature/p12-arbor-methods` | active |
+| P12 Arbor method mining and clean-room point-cloud primitives | #61 | `feature/p12-arbor-methods` | complete |
 
 ## Lifecycle Map
 
@@ -456,7 +456,7 @@ Phase 11 verification:
 
 Parent issue: #61
 Branch: `feature/p12-arbor-methods`
-Status: active
+Status: complete
 
 Goal: mine the published methods and design patterns in `r-lidar/arbor` and reimplement the
 low-risk point-cloud primitives in MIT-licensed Python, with explicit provenance and no

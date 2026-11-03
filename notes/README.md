@@ -21,6 +21,7 @@ Keep private material out of this directory.
 - `reports/observed-change-ubc.md`: same-mask 2015↔2016, 2015↔2021, and 2016↔2021 observed-change products.
 - `reports/observed-change-vancouver.md`: City 2018↔2022 product and browser-assisted tile retrieval.
 - `reports/growth-calibration-readiness.md`: why the current inventory cannot support growth calibration.
+- `reports/p12-arbor-method-mining.md`: P12 close-out, licence evidence, gate results, and the P13 recommendation.
 - `releases/v0.2.0.md`: draft release notes; not tagged.
 - `reference/data-sources.md`: public UBC, Vancouver, and Metro Vancouver sources, with
   coverage, licences, and traps.
