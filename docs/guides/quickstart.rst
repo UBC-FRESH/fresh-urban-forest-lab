@@ -17,6 +17,14 @@ Install and run the demo
 Open ``http://127.0.0.1:8000``. The 2D map, the 3D scene, the scenario editor, and the
 planting advisor are all served from the same process.
 
+.. image:: /_static/demo-map.png
+   :alt: 2D canopy map over the UBC core campus
+   :width: 100%
+
+.. image:: /_static/demo-scene.png
+   :alt: 3D terrain with instanced trees
+   :width: 100%
+
 Build a dataset from public sources
 -----------------------------------
 

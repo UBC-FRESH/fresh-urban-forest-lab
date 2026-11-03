@@ -7,6 +7,10 @@ end so planners can measure canopy structure and test management scenarios.
 The first pilot is UBC's Vancouver campus and the surrounding Metro Vancouver context.
 The demo runs offline from a small, derived core-campus dataset.
 
+![2D canopy map](docs/_static/demo-map.png)
+
+![3D terrain and instanced trees](docs/_static/demo-scene.png)
+
 ## What it does
 
 - **Resolves and materializes public data.** A source catalog records the publisher,
