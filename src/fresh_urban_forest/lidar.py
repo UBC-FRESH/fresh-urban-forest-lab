@@ -118,6 +118,7 @@ def build_chm_from_points(
     resolution_m: float = 1.0,
     include_ground: bool = False,
     empty_value: float = 0.0,
+    source_crs: str | None = None,
 ) -> RasterData:
     """Build a canopy-height model by binning the highest return per DEM cell.
 
@@ -135,6 +136,9 @@ def build_chm_from_points(
     empty_value : float
         Value assigned to cells with no usable return. Use ``numpy.nan`` when the result
         will be compared with another date and empty cells must be excluded.
+    source_crs : str or None
+        CRS of the point coordinates when it differs from the DEM CRS. The coordinates are
+        transformed to the DEM CRS before binning.
 
     Returns
     -------
@@ -152,6 +156,11 @@ def build_chm_from_points(
     paths: list[Path] = (
         [point_path] if isinstance(point_path, Path) else [Path(item) for item in point_path]
     )
+    transformer = None
+    if source_crs and source_crs != dem.crs:
+        from pyproj import Transformer
+
+        transformer = Transformer.from_crs(source_crs, dem.crs, always_xy=True)
     maximum = np.full(dem.array.shape, -np.inf, dtype=np.float64)
     transform = dem.transform
     for path in paths:
@@ -169,6 +178,8 @@ def build_chm_from_points(
                 x = np.asarray(points.x, dtype=np.float64)[keep]
                 y = np.asarray(points.y, dtype=np.float64)[keep]
                 z = np.asarray(points.z, dtype=np.float64)[keep]
+                if transformer is not None:
+                    x, y = transformer.transform(x, y)
                 rows, cols = rasterio.transform.rowcol(transform, x, y)
                 rows = np.asarray(rows, dtype=np.int64)
                 cols = np.asarray(cols, dtype=np.int64)

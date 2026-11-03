@@ -73,6 +73,17 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Added `notes/reports/field-validation-packet.md`.
 - Dashboard: GREEN.
 
+### P5.0 UBC 2015↔2021 observed change
+
+- Downloaded four UBC 2015 LAZ tiles with the Abacus user-agent workaround and transformed
+  EPSG:26910 points into the 2021 EPSG:3157 DEM grid.
+- Added a second change product: +320,535 m² gain, −209,369 m² loss, +111,166 m² net,
+  +0.235 m mean height on stable canopy over 4.00M m² of overlap.
+- Added `/api/changes` and a comparison selector to the Change tab, so the 2016 and 2015
+  products can be switched without mixing them.
+- Added `notes/reports/observed-change-ubc.md` with the comparison and caveats.
+- Dashboard: GREEN.
+
 ### P1.7 External LiDAR tile discovery
 
 - Added `fresh_urban_forest.tiles`, `lidarbc`, and `canelevation` modules with one

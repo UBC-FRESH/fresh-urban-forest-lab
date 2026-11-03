@@ -167,6 +167,9 @@ def test_change_endpoints_when_a_product_exists(tmp_path: Path) -> None:
     summary = client.get("/api/change")
     assert summary.status_code == 200
     assert json.loads(summary.text)["metrics"]["threshold_m"] == 2.0
+    products = client.get("/api/changes").json()
+    assert products["products"]
+    assert products["products"][0]["id"] == "change.json"
     png = client.get("/api/change.png")
     assert png.status_code == 200
     assert png.content.startswith(b"\x89PNG")

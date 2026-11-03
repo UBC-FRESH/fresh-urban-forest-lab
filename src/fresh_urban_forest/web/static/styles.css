@@ -407,6 +407,8 @@ select:focus, input:focus { outline: 2px solid #b8d3ae; outline-offset: 1px; }
   box-shadow: var(--shadow);
   backdrop-filter: blur(10px);
 }
+.change-product-field { margin-bottom: 6px; }
+.change-product-field select { width: 100%; }
 .change-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 8px; }
 .change-stat {
   padding: 7px;

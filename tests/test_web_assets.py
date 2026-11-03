@@ -41,6 +41,8 @@ def test_app_script_has_the_expected_endpoints_and_layers() -> None:
         "ExtrudeGeometry",
         "base_z",
         "renderChangeStats",
+        "change-product",
+        "switchChangeProduct",
     ):
         assert marker in script
     assert "eval(" not in script

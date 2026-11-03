@@ -21,6 +21,8 @@ const state = {
   assistant: { enabled: false, available: false, busy: false, session: null },
   changeMap: null,
   changeData: null,
+  changeProduct: "change.json",
+  changeProductsLoaded: false,
 };
 
 const $ = (id) => document.getElementById(id);
@@ -723,6 +725,7 @@ function bindControls() {
   document.querySelectorAll(".tab").forEach((tab) => {
     tab.addEventListener("click", () => switchView(tab.dataset.view));
   });
+  $("change-product").addEventListener("change", (event) => switchChangeProduct(event.target.value));
   $("assistant-button").addEventListener("click", openAssistant);
   $("assistant-close").addEventListener("click", closeAssistant);
   $("assistant-new").addEventListener("click", newAssistantChat);
@@ -1000,10 +1003,47 @@ function switchView(view) {
   }
 }
 
+async function populateChangeProducts() {
+  if (state.changeProductsLoaded) return;
+  state.changeProductsLoaded = true;
+  try {
+    const payload = await api("api/changes");
+    const products = payload.products || [];
+    const select = $("change-product");
+    select.innerHTML = products
+      .map(
+        (product) =>
+          `<option value="${escapeHtml(product.id)}">${escapeHtml(product.label)}</option>`
+      )
+      .join("");
+    if (products.some((product) => product.id === state.changeProduct)) {
+      select.value = state.changeProduct;
+    } else if (products.length) {
+      state.changeProduct = products[0].id;
+      select.value = state.changeProduct;
+    }
+  } catch (error) {
+    // Keep the default product when the index is unavailable.
+  }
+}
+
+function switchChangeProduct(product) {
+  if (!product || product === state.changeProduct) return;
+  if (state.changeMap) {
+    state.changeMap.remove();
+    state.changeMap = null;
+  }
+  state.changeData = null;
+  state.changeProduct = product;
+  $("change-status").textContent = "loading";
+  ensureChangeView();
+}
+
 async function ensureChangeView() {
   if (state.changeMap) return;
   try {
-    const data = await api("api/change");
+    await populateChangeProducts();
+    const data = await api(`api/change?product=${encodeURIComponent(state.changeProduct)}`);
     state.changeData = data;
     renderChangeStats(data);
     renderChangeLegend(data.legend || []);
@@ -1026,7 +1066,7 @@ async function ensureChangeView() {
           },
           change: {
             type: "image",
-            url: `api/change.png?v=${encodeURIComponent(data.image_version || Date.now())}`,
+            url: `api/change.png?product=${encodeURIComponent(state.changeProduct)}&v=${encodeURIComponent(data.image_version || Date.now())}`,
             coordinates,
           },
           buildings: { type: "geojson", data: buildingFeatures() },

@@ -108,8 +108,10 @@ Build a change product from two datasets and open the **Change** tab:
      --out-dir data/processed/change_2016_2021
 
 The product writes ``change.json``, ``change.png``, and ``change_grid.npz``. The service
-exposes them at ``/api/change`` and ``/api/change.png``. The product compares only cells
-valid in both dates and reports the overlap area; outside that overlap it is transparent.
+exposes them at ``/api/change`` and ``/api/change.png``. A dataset can hold several
+products; the Change tab lists them through ``/api/changes`` and passes a ``product``
+query parameter. The product compares only cells valid in both dates and reports the
+overlap area; outside that overlap it is transparent.
 
 Field validation packet
 -----------------------

@@ -238,6 +238,8 @@
     "change": "change.json",
     "change_png": "change.png",
     "change_grid": "change_grid.npz",
-    "allometry": "allometry.json"
+    "allometry": "allometry.json",
+    "change_2015_2021": "change_2015_2021.json",
+    "change_2015_2021_png": "change_2015_2021.png"
   }
 }

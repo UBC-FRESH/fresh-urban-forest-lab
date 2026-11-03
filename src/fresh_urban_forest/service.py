@@ -359,8 +359,36 @@ def create_app(
         """
         return inventory_completeness(state.dataset.trees)
 
+    @app.get("/api/changes")
+    def change_products() -> dict[str, object]:
+        """List optional observed-change products in the dataset.
+
+        Returns
+        -------
+        dict
+            Product id, labels, image version, and bounds.
+        """
+        products: list[dict[str, object]] = []
+        if state.dataset_root is not None:
+            for path in sorted(state.dataset_root.glob("change*.json")):
+                if not path.is_file():
+                    continue
+                try:
+                    payload = _read_json_object(path)
+                except (OSError, ValueError):
+                    continue
+                products.append(
+                    {
+                        "id": path.name,
+                        "label": f"{payload.get('earlier_label', 'earlier')} → "
+                        f"{payload.get('later_label', 'later')}",
+                        "image_version": payload.get("image_version", ""),
+                    }
+                )
+        return {"products": products}
+
     @app.get("/api/change")
-    def change_info() -> dict[str, object]:
+    def change_info(product: str = "change.json") -> dict[str, object]:
         """Return the optional observed-change summary.
 
         Returns
@@ -373,14 +401,14 @@ def create_app(
         fastapi.HTTPException
             When the dataset has no change product.
         """
-        path = _change_path(state)
+        path = _change_path(state, product)
         if path is None:
             raise HTTPException(status_code=404, detail="this dataset has no change product")
         payload = _read_json_object(path)
         return payload
 
     @app.get("/api/change.png")
-    def change_png() -> FileResponse:
+    def change_png(product: str = "change.json") -> FileResponse:
         """Return the observed-change PNG overlay.
 
         Returns
@@ -393,11 +421,11 @@ def create_app(
         fastapi.HTTPException
             When the dataset has no change product.
         """
-        path = _change_path(state)
+        path = _change_path(state, product)
         if path is None:
             raise HTTPException(status_code=404, detail="this dataset has no change product")
         return FileResponse(
-            path.with_name("change.png"),
+            path.with_name(path.stem + ".png"),
             media_type="image/png",
             filename="change.png",
             headers={"Cache-Control": "no-store, max-age=0"},
@@ -790,22 +818,28 @@ def _read_json_object(path: Path) -> dict[str, object]:
     return {str(key): value for key, value in payload.items()}
 
 
-def _change_path(state: LabState) -> Path | None:
-    """Return the dataset's change summary path, if any.
+def _change_path(state: LabState, product: str = "change.json") -> Path | None:
+    """Return a validated change summary path.
 
     Parameters
     ----------
     state : LabState
         Application state.
+    product : str
+        Change product filename, such as ``change.json`` or
+        ``change_2015_2021.json``.
 
     Returns
     -------
     Path or None
-        ``change.json`` when present.
+        The path when it is a safe, existing ``change*.json`` file.
     """
     if state.dataset_root is None:
         return None
-    path = state.dataset_root / "change.json"
+    name = Path(product).name
+    if not name.startswith("change") or not name.endswith(".json"):
+        return None
+    path = state.dataset_root / name
     return path if path.is_file() else None
 
 
