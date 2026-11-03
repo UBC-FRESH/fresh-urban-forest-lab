@@ -1,0 +1,115 @@
+{
+  "schema_version": "fresh-urban-forest.change.v1",
+  "earlier_label": "City of Vancouver LiDAR 2018",
+  "later_label": "City of Vancouver LiDAR 2022",
+  "crs": "EPSG:3157",
+  "bounds": [
+    481000.0,
+    5456000.0,
+    483000.0,
+    5457000.0
+  ],
+  "bounds_wgs84": [
+    -123.26112563570437,
+    49.256477709500395,
+    -123.2336830652901,
+    49.26553169275361
+  ],
+  "corners_wgs84": [
+    [
+      -123.26117309950716,
+      49.26547282420436
+    ],
+    [
+      -123.2336830652901,
+      49.26553169275361
+    ],
+    [
+      -123.2336405972591,
+      49.25653655948459
+    ],
+    [
+      -123.26112563570437,
+      49.256477709500395
+    ]
+  ],
+  "image_bounds": [
+    481000.0,
+    5456000.0,
+    483000.0,
+    5457000.0
+  ],
+  "image_corners_wgs84": [
+    [
+      -123.26117309950716,
+      49.26547282420436
+    ],
+    [
+      -123.2336830652901,
+      49.26553169275361
+    ],
+    [
+      -123.2336405972591,
+      49.25653655948459
+    ],
+    [
+      -123.26112563570437,
+      49.256477709500395
+    ]
+  ],
+  "image_width": 2000,
+  "image_height": 1000,
+  "valid_bounds": [
+    481000.0,
+    5456000.0,
+    483000.0,
+    5457000.0
+  ],
+  "valid_bounds_wgs84": [
+    -123.26112563570437,
+    49.256477709500395,
+    -123.2336830652901,
+    49.26553169275361
+  ],
+  "width": 2000,
+  "height": 1000,
+  "cell_area_m2": 1.0,
+  "valid_overlap_m2": 2000000.0,
+  "threshold_m": 2.0,
+  "metrics": {
+    "threshold_m": 2.0,
+    "earlier_canopy_m2": 728756.0,
+    "later_canopy_m2": 864335.0,
+    "gain_m2": 212734.0,
+    "loss_m2": 77155.0,
+    "stable_m2": 651601.0,
+    "net_m2": 135579.0,
+    "gain_pct_of_earlier": 29.191,
+    "loss_pct_of_earlier": 10.587,
+    "mean_height_change_m": 0.575
+  },
+  "legend": [
+    {
+      "label": "loss",
+      "colour": "#c84a3f"
+    },
+    {
+      "label": "stable canopy",
+      "colour": "#2f6b4f"
+    },
+    {
+      "label": "gain",
+      "colour": "#8ebf5a"
+    },
+    {
+      "label": "no canopy",
+      "colour": "#d9dfd2"
+    }
+  ],
+  "files": {
+    "summary": "change.json",
+    "png": "change.png",
+    "grid": "change_grid.npz"
+  },
+  "image_version": "cfc8b2361b34"
+}

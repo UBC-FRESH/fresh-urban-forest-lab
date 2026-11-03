@@ -66,6 +66,8 @@ A change directory added to a dataset:
   2015→2016 net −12,016 m²; 2015→2021 net +111,166 m²; 2016→2021 net +123,182 m².
 - The near-zero one-year change is the main sanity check; the five-to-six-year products
   both show a net gain.
+- The City 2018↔2022 product is now available too; the tile host was bypassed with a
+  headed browser under Xvfb.
 - Caveat: the 2016 and 2021 vertical datums and acquisition seasons differ; the result is
   a screening product, not a calibrated growth estimate.
 

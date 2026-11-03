@@ -96,6 +96,15 @@ before downloading:
      --manifest data/raw/tiles/lidarbc_ubc.json \
      --dest data/raw/tiles
 
+If a publisher blocks automated downloads with a browser challenge, use the operator
+helper with a headed browser under Xvfb:
+
+.. code-block:: bash
+
+   xvfb-run -a python scripts/browser_download_tiles.py \
+     --manifest data/raw/tiles/vancouver_2022_ubc.json \
+     --dest data/raw/city_lidar/2022
+
 The manifests record the query bbox, acquisition year, projection, density, source URL,
 and metadata URL. The CanElevation tile index is large (about 428 MB), so the helper reads
 it with a bounding-box filter.

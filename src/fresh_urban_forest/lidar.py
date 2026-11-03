@@ -119,6 +119,7 @@ def build_chm_from_points(
     include_ground: bool = False,
     empty_value: float = 0.0,
     source_crs: str | None = None,
+    exclude_classes: Sequence[int] | None = None,
 ) -> RasterData:
     """Build a canopy-height model by binning the highest return per DEM cell.
 
@@ -139,6 +140,8 @@ def build_chm_from_points(
     source_crs : str or None
         CRS of the point coordinates when it differs from the DEM CRS. The coordinates are
         transformed to the DEM CRS before binning.
+    exclude_classes : sequence of int or None
+        Additional ASPRS classes to exclude, such as buildings (6) in a city product.
 
     Returns
     -------
@@ -172,7 +175,8 @@ def build_chm_from_points(
                     if include_ground
                     else ~np.isin(classes, list(GROUND_CLASSES))
                 )
-                keep &= ~np.isin(classes, list(EXCLUDED_CLASSES))
+                excluded = set(EXCLUDED_CLASSES) | set(exclude_classes or ())
+                keep &= ~np.isin(classes, list(excluded))
                 if not np.any(keep):
                     continue
                 x = np.asarray(points.x, dtype=np.float64)[keep]

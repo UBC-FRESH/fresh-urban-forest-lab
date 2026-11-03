@@ -133,9 +133,12 @@ The Metro Vancouver 2022 classified product is a separate regional source.
 - The Opendatasoft API exposes 181 tile records per year.
 - `fresh-urban-forest tiles vancouver --year 2018 --bbox ...` and the same for 2022 return
   the intersecting tiles. The UBC pilot bbox returns **26 tiles** for each year.
-- Direct downloads go to `webtransfer.vancouver.ca`, which currently returns a Cloudflare
-  403 to automated clients. The manifest is still useful for a browser-assisted or manual
-  fetch; the `tiles fetch` path is ready once the host is accessible.
+- Direct downloads go to `webtransfer.vancouver.ca`, which returns a Cloudflare 403 to
+  `curl`, `httpx`, and headless Chromium from the server. A headed Chromium under Xvfb
+  passed the challenge; use `scripts/browser_download_tiles.py` with `xvfb-run`.
+- The 2018 and 2022 UBC-core tiles were retrieved this way and used for the City 2018↔2022
+  product. The manifest and the browser-assisted method are recorded in
+  `notes/reports/observed-change-vancouver.md`.
 - Do not treat a failed automated fetch as a missing dataset. Record the manifest and the
   manual retrieval method.
 

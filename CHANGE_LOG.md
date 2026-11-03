@@ -87,6 +87,17 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Added `notes/reports/observed-change-ubc.md` with the comparison and caveats.
 - Dashboard: GREEN.
 
+### P5.0 City 2018↔2022 observed change
+
+- Bypassed the `webtransfer.vancouver.ca` Cloudflare block with a headed Chromium under
+  Xvfb and added `scripts/browser_download_tiles.py` as an operator helper.
+- Downloaded 2018 and 2022 UBC-core tiles; 2018 is EPSG:3157 and 2022 is EPSG:26910, so
+  the 2022 points were transformed before binning.
+- Built the City 2018↔2022 product: 728,756 m² earlier canopy, 864,335 m² later canopy,
+  +212,734 m² gain, −77,155 m² loss, +135,579 m² net, +0.575 m mean height over 2.00M m².
+- Added it to the Change tab selector and recorded `notes/reports/observed-change-vancouver.md`.
+- Dashboard: GREEN.
+
 ### P5.0 Vancouver tile discovery and calibration readiness
 
 - Added `vancouver.py` and `fresh-urban-forest tiles vancouver` for the City 2013/2018/2022
