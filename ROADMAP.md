@@ -259,8 +259,9 @@ Parent issue: #6
 Branch: `feature/p5-release`
 Status: planned
 
-Goal: tag a public release, publish the docs site, and verify the demo from a clean clone.
+Goal: tag a public release, publish the docs site, and verify the demo from a clean clone. Before tagging, complete the observed-change, completeness, and validation plan in `notes/design/change-uncertainty-plan.md`.
 
+- [ ] P5.0 Observed change, inventory completeness, detection validation, and local calibration (#39)
 - [ ] P5.1 Release notes and known-gaps list
 - [ ] P5.2 Pages and live-demo check
 - [ ] P5.3 Tag and GitHub release (maintainer approval required)

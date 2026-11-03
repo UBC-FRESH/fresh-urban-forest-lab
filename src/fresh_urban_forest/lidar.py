@@ -8,6 +8,7 @@ to show where a full LiDAR pipeline would plug in.
 from __future__ import annotations
 
 import math
+from collections.abc import Sequence
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -111,18 +112,19 @@ def summarize_point_cloud(path: Path) -> PointCloudSummary:
 
 
 def build_chm_from_points(
-    point_path: Path,
+    point_path: Path | Sequence[Path],
     dem: RasterData,
     *,
     resolution_m: float = 1.0,
     include_ground: bool = False,
+    empty_value: float = 0.0,
 ) -> RasterData:
     """Build a canopy-height model by binning the highest return per DEM cell.
 
     Parameters
     ----------
-    point_path : Path
-        LAS or LAZ path.
+    point_path : Path or sequence of Path
+        One LAS/LAZ path, or several tiles that are binned into the same grid.
     dem : RasterData
         Bare-earth DEM that defines the output grid.
     resolution_m : float
@@ -130,6 +132,9 @@ def build_chm_from_points(
         caller and must be within ten percent of the DEM cell size.
     include_ground : bool
         When ``False``, ground-classified points are ignored.
+    empty_value : float
+        Value assigned to cells with no usable return. Use ``numpy.nan`` when the result
+        will be compared with another date and empty cells must be excluded.
 
     Returns
     -------
@@ -144,33 +149,40 @@ def build_chm_from_points(
     dem_resolution = math.sqrt(dem.cell_area_m2)
     if abs(resolution_m - dem_resolution) / max(dem_resolution, 1e-9) > 0.10:
         raise ValueError("requested resolution differs from the DEM grid by more than ten percent")
+    paths: list[Path] = (
+        [point_path] if isinstance(point_path, Path) else [Path(item) for item in point_path]
+    )
     maximum = np.full(dem.array.shape, -np.inf, dtype=np.float64)
     transform = dem.transform
-    with laspy.open(point_path) as reader:
-        for points in reader.chunk_iterator(2_000_000):
-            classes = np.asarray(points.classification)
-            keep = (
-                np.ones(classes.shape, dtype=bool)
-                if include_ground
-                else ~np.isin(classes, list(GROUND_CLASSES))
-            )
-            keep &= ~np.isin(classes, list(EXCLUDED_CLASSES))
-            if not np.any(keep):
-                continue
-            x = np.asarray(points.x, dtype=np.float64)[keep]
-            y = np.asarray(points.y, dtype=np.float64)[keep]
-            z = np.asarray(points.z, dtype=np.float64)[keep]
-            rows, cols = rasterio.transform.rowcol(transform, x, y)
-            rows = np.asarray(rows, dtype=np.int64)
-            cols = np.asarray(cols, dtype=np.int64)
-            valid = (
-                (rows >= 0) & (rows < maximum.shape[0]) & (cols >= 0) & (cols < maximum.shape[1])
-            )
-            np.maximum.at(maximum, (rows[valid], cols[valid]), z[valid])
-    canopy = np.where(np.isfinite(maximum), maximum - dem.array, 0.0)
-    canopy = np.clip(np.nan_to_num(canopy, nan=0.0, neginf=0.0, posinf=0.0), 0.0, None)
+    for path in paths:
+        with laspy.open(path) as reader:
+            for points in reader.chunk_iterator(2_000_000):
+                classes = np.asarray(points.classification)
+                keep = (
+                    np.ones(classes.shape, dtype=bool)
+                    if include_ground
+                    else ~np.isin(classes, list(GROUND_CLASSES))
+                )
+                keep &= ~np.isin(classes, list(EXCLUDED_CLASSES))
+                if not np.any(keep):
+                    continue
+                x = np.asarray(points.x, dtype=np.float64)[keep]
+                y = np.asarray(points.y, dtype=np.float64)[keep]
+                z = np.asarray(points.z, dtype=np.float64)[keep]
+                rows, cols = rasterio.transform.rowcol(transform, x, y)
+                rows = np.asarray(rows, dtype=np.int64)
+                cols = np.asarray(cols, dtype=np.int64)
+                valid = (
+                    (rows >= 0)
+                    & (rows < maximum.shape[0])
+                    & (cols >= 0)
+                    & (cols < maximum.shape[1])
+                )
+                np.maximum.at(maximum, (rows[valid], cols[valid]), z[valid])
+    canopy = np.where(np.isfinite(maximum), maximum - dem.array, empty_value)
+    canopy = np.clip(canopy, 0.0, None)
     return RasterData(
-        path=point_path,
+        path=paths[0],
         crs=dem.crs,
         transform=dem.transform,
         bounds=dem.bounds,

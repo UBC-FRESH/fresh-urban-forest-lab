@@ -150,8 +150,9 @@ def change_grid(
     second = np.asarray(later, dtype=np.float64)
     if first.shape != second.shape:
         raise ValueError("earlier and later canopy grids must share a shape")
-    earlier_mask = np.isfinite(first) & (first >= threshold_m)
-    later_mask = np.isfinite(second) & (second >= threshold_m)
+    valid = np.isfinite(first) & np.isfinite(second)
+    earlier_mask = valid & (first >= threshold_m)
+    later_mask = valid & (second >= threshold_m)
     result = np.zeros(first.shape, dtype=np.int8)
     result[later_mask & ~earlier_mask] = 1
     result[earlier_mask & ~later_mask] = -1

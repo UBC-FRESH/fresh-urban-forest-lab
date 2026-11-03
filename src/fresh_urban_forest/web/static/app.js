@@ -19,6 +19,8 @@ const state = {
   three: null,
   result: null,
   assistant: { enabled: false, available: false, busy: false, session: null },
+  changeMap: null,
+  changeData: null,
 };
 
 const $ = (id) => document.getElementById(id);
@@ -140,6 +142,7 @@ async function init() {
     $("dataset-name").textContent = `${dataset.name} · ${dataset.tree_count.toLocaleString("en-CA")} tree records · ${dataset.sources.length} sources`;
     setStatus("live");
     renderKPIs(dataset.metrics);
+    await loadCompleteness();
     renderComposition(dataset.metrics);
     renderSize(dataset.metrics);
     renderScenarioOptions();
@@ -163,6 +166,32 @@ function renderKPIs(metrics) {
   $("kpi-carbon").textContent = formatCompact(metrics.total_carbon_kg / 1000, " t");
   $("kpi-species").textContent = formatNumber(metrics.species_count);
   $("kpi-native").textContent = `${formatNumber(metrics.native_fraction * 100, 0)}%`;
+}
+
+async function loadCompleteness() {
+  try {
+    const data = await api("api/completeness");
+    const rows = Object.entries(data.fields || {})
+      .map(([, field]) => {
+        const fraction = Number(field.fraction || 0);
+        return `<div class="completeness-row">
+          <span>${escapeHtml(field.label)}</span>
+          <div class="completeness-track"><div class="completeness-fill" style="width:${(fraction * 100).toFixed(0)}%"></div></div>
+          <code>${(fraction * 100).toFixed(0)}%</code>
+        </div>`;
+      })
+      .join("");
+    $("completeness").innerHTML =
+      `<div class="completeness-head"><span>Inventory completeness</span><span>${formatNumber(data.total)} live</span></div>${rows}`;
+  } catch (error) {
+    $("completeness").innerHTML = '<p class="hint">Completeness unavailable.</p>';
+  }
+}
+
+function measuredTag(measured) {
+  return measured
+    ? '<span class="measure-tag">measured</span>'
+    : '<span class="measure-tag imputed">imputed</span>';
 }
 
 function renderComposition(metrics) {
@@ -674,9 +703,9 @@ function selectTree(treeId) {
       <dt>ID</dt><dd>${escapeHtml(tree.id)}</dd>
       <dt>Species</dt><dd>${escapeHtml(tree.species || "Unknown")}</dd>
       <dt>Group</dt><dd>${escapeHtml(tree.group)}</dd>
-      <dt>DBH</dt><dd>${tree.dbh_cm ? `${formatNumber(tree.dbh_cm, 1)} cm` : "n/a"}</dd>
-      <dt>Height</dt><dd>${tree.height ? `${formatNumber(tree.height, 1)} m` : "n/a"}</dd>
-      <dt>Crown</dt><dd>${tree.crown_width ? `${formatNumber(tree.crown_width, 1)} m` : "n/a"}</dd>
+      <dt>DBH</dt><dd>${tree.dbh_cm ? `${formatNumber(tree.dbh_cm, 1)} cm` : "n/a"}${measuredTag(tree.measured?.dbh)}</dd>
+      <dt>Height</dt><dd>${tree.height ? `${formatNumber(tree.height, 1)} m` : "n/a"}${measuredTag(tree.measured?.height)}</dd>
+      <dt>Crown</dt><dd>${tree.crown_width ? `${formatNumber(tree.crown_width, 1)} m` : "n/a"}${measuredTag(tree.measured?.crown_width)}</dd>
       <dt>Carbon</dt><dd>${formatNumber(tree.carbon_kg / 1000, 2)} t</dd>
       <dt>Source</dt><dd>${escapeHtml(tree.source || "unknown")}</dd>
     </dl>`;
@@ -963,6 +992,111 @@ function switchView(view) {
       }
     }, 60);
   }
+  if (view === "change") {
+    ensureChangeView();
+    window.setTimeout(() => {
+      if (state.changeMap) state.changeMap.resize();
+    }, 60);
+  }
+}
+
+async function ensureChangeView() {
+  if (state.changeMap) return;
+  try {
+    const data = await api("api/change");
+    state.changeData = data;
+    renderChangeStats(data);
+    renderChangeLegend(data.legend || []);
+    const [west, south, east, north] = data.valid_bounds_wgs84 || data.bounds_wgs84;
+    const coordinates = [
+      [west, north],
+      [east, north],
+      [east, south],
+      [west, south],
+    ];
+    const map = new maplibregl.Map({
+      container: "map-change",
+      style: {
+        version: 8,
+        sources: {
+          change: { type: "image", url: "api/change.png", coordinates },
+          buildings: { type: "geojson", data: buildingFeatures() },
+          boundary: { type: "geojson", data: boundaryFeatures() },
+        },
+        layers: [
+          { id: "background", type: "background", paint: { "background-color": "#e6eae2" } },
+          {
+            id: "change",
+            type: "raster",
+            source: "change",
+            paint: { "raster-opacity": 0.92, "raster-resampling": "nearest" },
+          },
+          {
+            id: "buildings-outline",
+            type: "line",
+            source: "buildings",
+            paint: { "line-color": "#8b948a", "line-width": 0.65, "line-opacity": 0.7 },
+          },
+          {
+            id: "boundary",
+            type: "line",
+            source: "boundary",
+            paint: { "line-color": "#2f6b4f", "line-width": 1.3, "line-dasharray": [2, 2] },
+          },
+        ],
+      },
+      center: [(west + east) / 2, (south + north) / 2],
+      zoom: 14,
+      attributionControl: false,
+    });
+    map.addControl(new maplibregl.NavigationControl(), "bottom-right");
+    map.on("load", () => {
+      map.fitBounds(
+        [
+          [west, south],
+          [east, north],
+        ],
+        { padding: 36, duration: 0 }
+      );
+    });
+    state.changeMap = map;
+    $("change-status").textContent = "observed";
+  } catch (error) {
+    $("change-status").textContent = "none";
+    $("change-labels").textContent = "No observed-change product for this dataset.";
+    $("change-stats").innerHTML =
+      '<div class="change-empty">Build one with <code>fresh-urban-forest build-change --earlier … --later … --out-dir …</code>.</div>';
+    $("change-legend").innerHTML = "";
+    $("change-note").textContent =
+      "Observed change compares two real canopy-height surfaces; it is not a scenario projection.";
+  }
+}
+
+function renderChangeStats(data) {
+  $("change-labels").textContent = `${data.earlier_label} → ${data.later_label}`;
+  const metrics = data.metrics || {};
+  const net = Number(metrics.net_m2 || 0);
+  const gain = Number(metrics.gain_m2 || 0);
+  const loss = Number(metrics.loss_m2 || 0);
+  const stable = Number(metrics.stable_m2 || 0);
+  const height = Number(metrics.mean_height_change_m || 0);
+  const overlap = Number(data.valid_overlap_m2 || 0);
+  $("change-stats").innerHTML = `
+    <div class="change-stat ${net < 0 ? "loss" : "gain"}"><span>Net canopy</span><strong>${net >= 0 ? "+" : ""}${formatCompact(net / 10000, " ha")}</strong></div>
+    <div class="change-stat gain"><span>Gain</span><strong>${formatCompact(gain / 10000, " ha")}</strong></div>
+    <div class="change-stat loss"><span>Loss</span><strong>${formatCompact(loss / 10000, " ha")}</strong></div>
+    <div class="change-stat"><span>Stable</span><strong>${formatCompact(stable / 10000, " ha")}</strong></div>
+    <div class="change-stat"><span>Height change</span><strong>${height >= 0 ? "+" : ""}${height.toFixed(2)} m</strong></div>
+    <div class="change-stat"><span>Overlap</span><strong>${formatCompact(overlap / 10000, " ha")}</strong></div>`;
+}
+
+function renderChangeLegend(legend) {
+  $("change-legend").innerHTML = legend
+    .map(
+      (item) =>
+        `<span><i class="change-swatch" style="background:${item.colour}"></i>${escapeHtml(item.label)}</span>`
+    )
+    .join("");
 }
 
 function setMode(mode) {

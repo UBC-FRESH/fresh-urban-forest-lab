@@ -40,6 +40,7 @@ def test_app_script_has_the_expected_endpoints_and_layers() -> None:
         "renderAssistantMarkdown",
         "ExtrudeGeometry",
         "base_z",
+        "renderChangeStats",
     ):
         assert marker in script
     assert "eval(" not in script

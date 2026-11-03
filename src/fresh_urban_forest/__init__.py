@@ -18,6 +18,7 @@ from fresh_urban_forest.allometry import (
 )
 from fresh_urban_forest.catalog import Catalog, DatasetSource, load_catalog
 from fresh_urban_forest.change import CanopyChange, canopy_change, change_grid
+from fresh_urban_forest.change_product import build_change_product
 from fresh_urban_forest.dataset import build_dataset, dataset_summary, load_dataset, write_dataset
 from fresh_urban_forest.dss import (
     PlantingCandidate,
@@ -81,6 +82,7 @@ __all__ = [
     "UrbanForestDataset",
     "aboveground_biomass_kg",
     "apply_edits",
+    "build_change_product",
     "build_dataset",
     "build_scene",
     "build_terrain_grid",

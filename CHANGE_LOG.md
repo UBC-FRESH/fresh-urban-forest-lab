@@ -28,6 +28,24 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
   data behind the GitHub GeoJSON/CSV snapshot.
 - Dashboard: GREEN.
 
+### P5.0 Observed change product
+
+- Added `fresh_urban_forest.change_product` and `fresh-urban-forest build-change`.
+- Added `/api/change`, `/api/change.png`, and a `Change` tab with a georeferenced
+  loss/stable/gain overlay and summary cards.
+- Built the first UBC observed-change product from LidarBC 2016 core tiles and the UBC
+  2021 CHM: 2.68M m² earlier canopy, 2.77M m² later canopy, +125,932 m² gain, -37,635 m²
+  loss, +88,298 m² net, +1.21 m mean height on stable canopy over 2.61M m² of overlap.
+- The product starts with a `NaN` mask outside the 2016 tile coverage; only the overlap is
+  compared.
+- Caveat: 2016 and 2021 differ in acquisition season and vertical datum. The product is a
+  screening comparison, not a calibrated growth rate.
+- Added `inventory_completeness` and `/api/completeness`, with measured/imputed flags on
+  every tree and a sidebar completeness panel. Demo completeness: DBH 53%, height 53%,
+  crown width 54%, species 97% of 4,861 live trees.
+- Added the detailed plan in `notes/design/change-uncertainty-plan.md`.
+- Dashboard: GREEN; tests include the change product, API, and completeness summary.
+
 ### P1.7 External LiDAR tile discovery
 
 - Added `fresh_urban_forest.tiles`, `lidarbc`, and `canelevation` modules with one

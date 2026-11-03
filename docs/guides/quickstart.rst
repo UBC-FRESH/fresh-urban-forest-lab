@@ -95,6 +95,22 @@ The manifests record the query bbox, acquisition year, projection, density, sour
 and metadata URL. The CanElevation tile index is large (about 428 MB), so the helper reads
 it with a bounding-box filter.
 
+Observed change
+---------------
+
+Build a change product from two datasets and open the **Change** tab:
+
+.. code-block:: bash
+
+   fresh-urban-forest build-change \
+     --earlier data/processed/ubc_lidar_2016 \
+     --later data/processed/ubc_lidar_2021 \
+     --out-dir data/processed/change_2016_2021
+
+The product writes ``change.json``, ``change.png``, and ``change_grid.npz``. The service
+exposes them at ``/api/change`` and ``/api/change.png``. The product compares only cells
+valid in both dates and reports the overlap area; outside that overlap it is transparent.
+
 Repeat measures
 ---------------
 

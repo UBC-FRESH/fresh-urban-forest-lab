@@ -28,6 +28,7 @@ from fastapi.staticfiles import StaticFiles
 from PIL import Image
 from pydantic import BaseModel, Field
 
+from fresh_urban_forest.completeness import inventory_completeness
 from fresh_urban_forest.dataset import dataset_summary
 from fresh_urban_forest.dss import (
     candidates_to_edits,
@@ -156,6 +157,7 @@ class LabState:
     agent_model: str = DEFAULT_AGENT_MODEL
     agent_timeout: float = 300.0
     workspace: Path = field(default_factory=Path.cwd)
+    dataset_root: Path | None = None
 
 
 def create_app(
@@ -167,6 +169,7 @@ def create_app(
     agent_model: str = DEFAULT_AGENT_MODEL,
     agent_timeout: float = 300.0,
     workspace: Path | None = None,
+    dataset_root: Path | None = None,
 ) -> FastAPI:
     """Create the FastAPI application.
 
@@ -186,6 +189,8 @@ def create_app(
         Assistant subprocess timeout in seconds.
     workspace : Path or None
         Working directory for the assistant. Defaults to the repository root.
+    dataset_root : Path or None
+        Dataset directory used to locate an optional observed-change product.
 
     Returns
     -------
@@ -202,6 +207,7 @@ def create_app(
         agent_model=agent_model,
         agent_timeout=agent_timeout,
         workspace=assistant_workspace,
+        dataset_root=dataset_root.resolve() if dataset_root is not None else None,
     )
     _load_scenarios(state)
     app = FastAPI(title="FRESH Urban Forest Lab", version="0.1.0")
@@ -316,6 +322,59 @@ def create_app(
     def dataset_info() -> dict[str, object]:
         """Return the dataset manifest and baseline metrics."""
         return dataset_summary(state.dataset)
+
+    @app.get("/api/completeness")
+    def completeness() -> dict[str, object]:
+        """Return the measured share of key tree attributes.
+
+        Returns
+        -------
+        dict
+            Live-tree count and measured counts/fractions by field.
+        """
+        return inventory_completeness(state.dataset.trees)
+
+    @app.get("/api/change")
+    def change_info() -> dict[str, object]:
+        """Return the optional observed-change summary.
+
+        Returns
+        -------
+        dict
+            The parsed ``change.json`` payload.
+
+        Raises
+        ------
+        fastapi.HTTPException
+            When the dataset has no change product.
+        """
+        path = _change_path(state)
+        if path is None:
+            raise HTTPException(status_code=404, detail="this dataset has no change product")
+        return _read_json_object(path)
+
+    @app.get("/api/change.png")
+    def change_png() -> FileResponse:
+        """Return the observed-change PNG overlay.
+
+        Returns
+        -------
+        fastapi.responses.FileResponse
+            The change PNG.
+
+        Raises
+        ------
+        fastapi.HTTPException
+            When the dataset has no change product.
+        """
+        path = _change_path(state)
+        if path is None:
+            raise HTTPException(status_code=404, detail="this dataset has no change product")
+        return FileResponse(
+            path.with_name("change.png"),
+            media_type="image/png",
+            filename="change.png",
+        )
 
     @app.get("/api/metrics")
     def baseline_metrics() -> dict[str, object]:
@@ -678,6 +737,49 @@ def create_app(
         return FileResponse(path, media_type="text/csv", filename=path.name)
 
     return app
+
+
+def _read_json_object(path: Path) -> dict[str, object]:
+    """Read a JSON file and require a top-level object.
+
+    Parameters
+    ----------
+    path : Path
+        JSON file.
+
+    Returns
+    -------
+    dict
+        The parsed object.
+
+    Raises
+    ------
+    fastapi.HTTPException
+        When the payload is not a JSON object.
+    """
+    payload: object = json.loads(path.read_text(encoding="utf-8"))
+    if not isinstance(payload, dict):
+        raise HTTPException(status_code=500, detail="change summary is not a JSON object")
+    return {str(key): value for key, value in payload.items()}
+
+
+def _change_path(state: LabState) -> Path | None:
+    """Return the dataset's change summary path, if any.
+
+    Parameters
+    ----------
+    state : LabState
+        Application state.
+
+    Returns
+    -------
+    Path or None
+        ``change.json`` when present.
+    """
+    if state.dataset_root is None:
+        return None
+    path = state.dataset_root / "change.json"
+    return path if path.is_file() else None
 
 
 def _agent_environment(workspace: Path) -> dict[str, str]:

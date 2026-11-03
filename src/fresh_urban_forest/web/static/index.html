@@ -54,6 +54,7 @@
           <article class="kpi"><span>Species</span><strong id="kpi-species">--</strong><small>distinct labels</small></article>
           <article class="kpi"><span>Native share</span><strong id="kpi-native">--</strong><small>of live trees</small></article>
         </div>
+        <div id="completeness" class="completeness"></div>
       </section>
 
       <section class="panel">
@@ -117,6 +118,7 @@
       <nav class="view-tabs" role="tablist" aria-label="View">
         <button class="tab active" data-view="map" role="tab" aria-selected="true">2D map</button>
         <button class="tab" data-view="scene" role="tab" aria-selected="false">3D scene</button>
+        <button class="tab" data-view="change" role="tab" aria-selected="false">Change</button>
         <button class="tab" data-view="analytics" role="tab" aria-selected="false">Analytics</button>
         <div class="layer-toggles">
           <label><input id="toggle-canopy" type="checkbox" checked> canopy</label>
@@ -138,6 +140,23 @@
           <span>Drag to orbit, scroll to zoom, click a crown to inspect.</span>
           <button id="scene-reset" class="button tiny ghost" type="button">Reset view</button>
         </div>
+      </div>
+
+      <div id="view-change" class="view">
+        <div id="map-change"></div>
+        <aside class="change-panel" id="change-panel">
+          <div class="panel-heading">
+            <h2>Observed canopy change</h2>
+            <span id="change-status" class="muted">loading</span>
+          </div>
+          <p id="change-labels" class="muted">—</p>
+          <div class="change-stats" id="change-stats"></div>
+          <p class="hint" id="change-note">
+            A thresholded CHM comparison. Acquisition dates, leaf-on/leaf-off status,
+            and vertical datum belong in the interpretation.
+          </p>
+        </aside>
+        <div class="change-legend" id="change-legend"></div>
       </div>
 
       <div id="view-analytics" class="view analytics">

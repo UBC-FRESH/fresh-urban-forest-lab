@@ -24,6 +24,7 @@ from fresh_urban_forest.canelevation import (
 )
 from fresh_urban_forest.catalog import DatasetSource, load_catalog
 from fresh_urban_forest.change import canopy_change
+from fresh_urban_forest.change_product import build_change_product
 from fresh_urban_forest.dataset import build_dataset, dataset_summary, load_dataset
 from fresh_urban_forest.inventory import (
     load_boundary,
@@ -52,6 +53,7 @@ console = Console()
 
 DEST_OPTION = typer.Option(..., "--dest", help="Destination directory.")
 OUT_OPTION = typer.Option(..., "--out", help="Output dataset directory.")
+OUT_DIR_OPTION = typer.Option(..., "--out-dir", help="Output directory for a change product.")
 NAME_OPTION = typer.Option("UBC urban forest", "--name", help="Dataset name.")
 SOURCE_OPTION = typer.Option(None, "--source", help="Catalog source identifier; repeatable.")
 ALL_DIRECT_OPTION = typer.Option(False, "--all-direct", help="Fetch every direct-download source.")
@@ -310,6 +312,7 @@ def serve(
         allow_agent=allow_agent,
         agent_model=agent_model,
         agent_timeout=agent_timeout,
+        dataset_root=dataset,
     )
     uvicorn.run(app_instance, host=host, port=port)
 
@@ -467,6 +470,41 @@ def change_command(
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(asdict(result), indent=2) + "\n", encoding="utf-8")
     console.print_json(json.dumps(asdict(result)))
+
+
+@app.command("build-change")
+def build_change(
+    earlier: Path = EARLIER_OPTION,
+    later: Path = LATER_OPTION,
+    out_dir: Path = OUT_DIR_OPTION,
+    threshold: float = THRESHOLD_OPTION,
+) -> None:
+    """Build an observed-change product from two datasets.
+
+    Parameters
+    ----------
+    earlier : Path
+        Earlier dataset directory.
+    later : Path
+        Later dataset directory.
+    out_dir : Path
+        Output change-product directory.
+    threshold : float
+        Canopy threshold in metres.
+    """
+    first = load_dataset(earlier)
+    second = load_dataset(later)
+    if first.terrain.canopy_height is None or second.terrain.canopy_height is None:
+        raise typer.BadParameter("both datasets need a canopy-height grid")
+    path = build_change_product(
+        first.terrain,
+        second.terrain,
+        out_dir,
+        threshold_m=threshold,
+        earlier_label=first.manifest.name,
+        later_label=second.manifest.name,
+    )
+    console.print(f"Change product: {path}")
 
 
 @app.command("materialization")

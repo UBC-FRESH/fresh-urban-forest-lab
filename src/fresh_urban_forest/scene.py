@@ -98,13 +98,18 @@ def build_scene(
             "width": grid.width,
             "height": grid.height,
             "bounds": list(grid.bounds),
-            "elevation": [round(float(value), 2) for value in grid.elevation.ravel()],
+            "elevation": [
+                round(float(value), 2) for value in np.nan_to_num(grid.elevation.ravel(), nan=0.0)
+            ],
             "canopy_height": [
                 round(float(value), 2)
-                for value in (
-                    grid.canopy_height.ravel()
-                    if grid.canopy_height is not None
-                    else np.zeros(grid.width * grid.height, dtype=np.float32)
+                for value in np.nan_to_num(
+                    (
+                        grid.canopy_height.ravel()
+                        if grid.canopy_height is not None
+                        else np.zeros(grid.width * grid.height, dtype=np.float32)
+                    ),
+                    nan=0.0,
                 )
             ],
         },
@@ -166,6 +171,12 @@ def _tree_payload(
         "crown_volume_m3": round(tree_crown_volume_m3(tree), 3),
         "carbon_kg": round(tree_carbon_kg(tree), 3),
         "color": _color(group, bool(tree.native)),
+        "measured": {
+            "dbh": _measured(tree, "dbh"),
+            "height": _measured(tree, "height"),
+            "crown_width": _measured(tree, "crown_width"),
+            "species": _measured(tree, "species"),
+        },
     }
 
 
@@ -199,6 +210,33 @@ def _building_base_z(
     col = min(max(int((x - left) / max(right - left, 1e-9) * grid.width), 0), grid.width - 1)
     row = min(max(int((top - y) / max(top - bottom, 1e-9) * grid.height), 0), grid.height - 1)
     return round(float(grid.elevation[row, col]) - origin_z, 2)
+
+
+def _measured(tree: TreeRecord, key: str) -> bool:
+    """Return whether a tree field was measured rather than imputed.
+
+    Parameters
+    ----------
+    tree : TreeRecord
+        Tree to inspect.
+    key : str
+        Field key, such as ``dbh``.
+
+    Returns
+    -------
+    bool
+        ``True`` when the source flag says measured, or when the value is present.
+    """
+    flag = tree.attributes.get(f"{key}_measured")
+    if flag is not None:
+        return flag.strip().lower() in {"true", "1", "yes"}
+    if key == "dbh":
+        return tree.dbh_cm is not None
+    if key == "height":
+        return tree.height_m is not None
+    if key == "crown_width":
+        return tree.crown_width_m is not None
+    return bool(tree.species)
 
 
 def _local_point(lon: float, lat: float, origin_x: float, origin_y: float, crs: str) -> list[float]:

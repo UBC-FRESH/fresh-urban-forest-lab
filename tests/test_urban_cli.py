@@ -62,6 +62,27 @@ def test_info_detect_and_change(tmp_path: Path) -> None:
     assert (tmp_path / "change.json").exists()
 
 
+def test_build_change_product(tmp_path: Path) -> None:
+    """The CLI writes an observed-change product from two datasets."""
+    make_dataset(tmp_path / "first")
+    make_dataset(tmp_path / "second")
+    result = RUNNER.invoke(
+        app,
+        [
+            "build-change",
+            "--earlier",
+            str(tmp_path / "first" / "dataset"),
+            "--later",
+            str(tmp_path / "second" / "dataset"),
+            "--out-dir",
+            str(tmp_path / "change"),
+        ],
+    )
+    assert result.exit_code == 0
+    assert (tmp_path / "change" / "change.json").exists()
+    assert (tmp_path / "change" / "change.png").exists()
+
+
 def test_bad_bbox_is_rejected(tmp_path: Path) -> None:
     """A malformed bounding box exits with a usage error."""
     result = RUNNER.invoke(

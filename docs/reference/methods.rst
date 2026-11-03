@@ -20,6 +20,14 @@ field prism, not a crown hull or a QSM. The tree-level volume is an ellipsoid cr
 approximation. The two numbers answer different questions and are labelled separately in
 the UI.
 
+Inventory completeness
+----------------------
+
+Every live tree carries a measured/imputed flag for DBH, height, crown width, and species.
+The dashboard shows the measured share of each field. A canopy or carbon number should be
+read with that panel in view: the UBC demo is about 53 percent measured for DBH, height,
+and crown width, and 97 percent measured for species.
+
 Tree records
 ------------
 

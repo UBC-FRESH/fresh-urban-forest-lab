@@ -13,7 +13,13 @@ from tests.fixtures import make_dataset
 def _client(tmp_path: Path) -> TestClient:
     """Build a test client over a synthetic dataset."""
     dataset = make_dataset(tmp_path)
-    return TestClient(create_app(dataset, runtime_dir=tmp_path / "runtime"))
+    return TestClient(
+        create_app(
+            dataset,
+            runtime_dir=tmp_path / "runtime",
+            dataset_root=tmp_path / "dataset",
+        )
+    )
 
 
 def test_health_dataset_metrics_and_trees(tmp_path: Path) -> None:
@@ -24,6 +30,9 @@ def test_health_dataset_metrics_and_trees(tmp_path: Path) -> None:
     assert dataset["tree_count"] > 0
     metrics = client.get("/api/metrics").json()
     assert metrics["tree_count"] > 0
+    completeness = client.get("/api/completeness").json()
+    assert completeness["total"] > 0
+    assert "dbh" in completeness["fields"]
     trees = client.get("/api/trees", params={"limit": 3}).json()
     assert trees["returned"] == 3
     assert trees["total"] > 3
@@ -121,6 +130,54 @@ def test_recommend_and_not_found(tmp_path: Path) -> None:
     assert payload["candidates"]
     assert client.get("/api/scenarios/missing").status_code == 404
     assert client.get("/api/scenarios/missing/result").status_code == 404
+
+
+def test_change_endpoints_when_a_product_exists(tmp_path: Path) -> None:
+    """The service exposes the optional change summary and PNG."""
+    import json
+
+    import numpy as np
+
+    from fresh_urban_forest.change_product import build_change_product
+    from fresh_urban_forest.models import TerrainGrid
+
+    dataset = make_dataset(tmp_path)
+    earlier = np.array(dataset.terrain.elevation, dtype=np.float32)
+    later = earlier + 1.0
+    grid_earlier = TerrainGrid(
+        crs=dataset.terrain.crs,
+        bounds=dataset.terrain.bounds,
+        width=dataset.terrain.width,
+        height=dataset.terrain.height,
+        elevation=dataset.terrain.elevation,
+        canopy_height=earlier,
+    )
+    grid_later = TerrainGrid(
+        crs=dataset.terrain.crs,
+        bounds=dataset.terrain.bounds,
+        width=dataset.terrain.width,
+        height=dataset.terrain.height,
+        elevation=dataset.terrain.elevation,
+        canopy_height=later,
+    )
+    build_change_product(grid_earlier, grid_later, tmp_path / "dataset")
+    client = TestClient(
+        create_app(dataset, runtime_dir=tmp_path / "runtime", dataset_root=tmp_path / "dataset")
+    )
+    summary = client.get("/api/change")
+    assert summary.status_code == 200
+    assert json.loads(summary.text)["metrics"]["threshold_m"] == 2.0
+    png = client.get("/api/change.png")
+    assert png.status_code == 200
+    assert png.content.startswith(b"\x89PNG")
+    assert client.get("/api/change").json()["legend"]
+
+
+def test_change_endpoint_is_404_without_a_product(tmp_path: Path) -> None:
+    """A dataset without an observed-change product returns 404."""
+    client = _client(tmp_path)
+    assert client.get("/api/change").status_code == 404
+    assert client.get("/api/change.png").status_code == 404
 
 
 def test_index_serves_the_shell(tmp_path: Path) -> None:

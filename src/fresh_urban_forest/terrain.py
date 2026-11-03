@@ -475,4 +475,4 @@ def _block_reduce(array: NDArray[np.float32], step: int) -> NDArray[np.float32]:
     reshaped = trimmed.reshape(rows, step, cols, step)
     with np.errstate(invalid="ignore"):
         reduced = np.nanmean(reshaped, axis=(1, 3))
-    return np.nan_to_num(reduced, nan=0.0).astype(np.float32)
+    return reduced.astype(np.float32)

@@ -193,6 +193,19 @@ def enrich_trees(
             else profile_for(tree.species).crown_ratio
         )
         native = tree.native if tree.native is not None else is_native_species(tree.species)
+        attributes = dict(tree.attributes)
+        attributes.setdefault(
+            "dbh_measured", "true" if tree.dbh_cm is not None and tree.dbh_cm > 0.5 else "false"
+        )
+        attributes.setdefault(
+            "height_measured",
+            "true" if tree.height_m is not None and tree.height_m > 0.5 else "false",
+        )
+        attributes.setdefault(
+            "crown_width_measured",
+            "true" if tree.crown_width_m is not None and tree.crown_width_m > 0.2 else "false",
+        )
+        attributes.setdefault("species_measured", "true" if bool(tree.species) else "false")
         enriched.append(
             TreeRecord(
                 tree_id=tree.tree_id,
@@ -213,7 +226,7 @@ def enrich_trees(
                 y_m=round(y, 3),
                 elevation_m=None if elevation is None else round(elevation, 2),
                 lidar_height_m=None if lidar_height is None else round(lidar_height, 2),
-                attributes=tree.attributes,
+                attributes=attributes,
             )
         )
     return tuple(enriched)

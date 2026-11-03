@@ -1,0 +1,70 @@
+{
+  "schema_version": "fresh-urban-forest.change.v1",
+  "earlier_label": "LidarBC 2016",
+  "later_label": "UBC LiDAR 2021",
+  "crs": "EPSG:3157",
+  "bounds": [
+    480411.0,
+    5451920.0,
+    486201.0,
+    5458722.0
+  ],
+  "bounds_wgs84": [
+    -123.26902055961008,
+    49.2197589415071,
+    -123.18974449473309,
+    49.28110193103576
+  ],
+  "valid_bounds": [
+    480411.0,
+    5455264.0,
+    483648.8289473684,
+    5456708.0
+  ],
+  "valid_bounds_wgs84": [
+    -123.26918396132331,
+    49.2498387227428,
+    -123.22475295209655,
+    49.26292280639334
+  ],
+  "width": 152,
+  "height": 179,
+  "cell_area_m2": 1447.5,
+  "valid_overlap_m2": 3767842.5,
+  "threshold_m": 2.0,
+  "metrics": {
+    "threshold_m": 2.0,
+    "earlier_canopy_m2": 2677875.0,
+    "later_canopy_m2": 2766172.5,
+    "gain_m2": 125932.5,
+    "loss_m2": 37635.0,
+    "stable_m2": 2640240.0,
+    "net_m2": 88297.5,
+    "gain_pct_of_earlier": 4.703,
+    "loss_pct_of_earlier": 1.405,
+    "mean_height_change_m": 1.209
+  },
+  "legend": [
+    {
+      "label": "loss",
+      "colour": "#c84a3f"
+    },
+    {
+      "label": "stable canopy",
+      "colour": "#2f6b4f"
+    },
+    {
+      "label": "gain",
+      "colour": "#8ebf5a"
+    },
+    {
+      "label": "no canopy",
+      "colour": "#d9dfd2"
+    }
+  ],
+  "files": {
+    "summary": "change.json",
+    "png": "change.png",
+    "grid": "change_grid.npz"
+  }
+}

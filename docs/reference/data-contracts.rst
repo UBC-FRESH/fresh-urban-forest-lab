@@ -28,6 +28,12 @@ A dataset directory contains:
      - Building footprints in WGS84.
    * - ``boundary.geojson``
      - Analysis boundary in WGS84.
+   * - ``change.json`` (optional)
+     - Observed-change summary: labels, threshold, metrics, legend, and overlap.
+   * - ``change.png`` (optional)
+     - Transparent loss/stable/gain overlay.
+   * - ``change_grid.npz`` (optional)
+     - Change classes, earlier/later canopy, elevation, and valid mask.
 
 Tree record
 -----------

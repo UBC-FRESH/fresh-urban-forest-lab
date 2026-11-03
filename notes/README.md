@@ -12,6 +12,7 @@ Keep private material out of this directory.
 ## Current notes
 
 - `design/architecture.md`: the layer diagram, contracts, and deliberate simplifications.
+- `design/change-uncertainty-plan.md`: observed change, completeness, validation, and calibration plan.
 - `reference/data-sources.md`: public UBC, Vancouver, and Metro Vancouver sources, with
   coverage, licences, and traps.
 - `reference/software-landscape.md`: comparable inventory, LiDAR, growth, and DSS systems;
