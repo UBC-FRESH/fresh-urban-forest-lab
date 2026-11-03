@@ -240,6 +240,8 @@
     "change_grid": "change_grid.npz",
     "allometry": "allometry.json",
     "change_2015_2021": "change_2015_2021.json",
-    "change_2015_2021_png": "change_2015_2021.png"
+    "change_2015_2021_png": "change_2015_2021.png",
+    "change_2015_2016": "change_2015_2016.json",
+    "change_2015_2016_png": "change_2015_2016.png"
   }
 }

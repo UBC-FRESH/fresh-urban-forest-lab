@@ -1,56 +1,48 @@
-# Observed canopy change: UBC 2015/2016 to 2021
+# Observed canopy change: UBC core, same 2 km mask
 
-Status: first two products, 2026-11-03.
+Status: three products on a common mask, 2026-11-03.
 
-## Products
+## Common mask
 
-### UBC LiDAR 2015 ↔ UBC LiDAR 2021
+All three comparisons use the same projected 2 km × 2 km core box
+`E481000–E483000, N5456000–N5458000` and a 1 m grid. This removes the coverage
+difference that made the earlier products hard to compare.
 
-- Source: four UBC 2015 LAZ tiles (`UBC_481_5456`, `UBC_481_5457`, `UBC_482_5456`,
-  `UBC_482_5457`), EPSG:26910, transformed to the 2021 EPSG:3157 DEM grid.
-- Earlier canopy: 2.36M m²
-- Later canopy: 2.47M m²
-- Gain: +320,535 m²
-- Loss: −209,369 m²
-- Stable: 2.15M m²
-- Net: **+111,166 m²**
-- Mean height change on stable canopy: **+0.235 m**
-- Valid overlap: 4.00M m²
+## Results
 
-### LidarBC 2016 ↔ UBC LiDAR 2021
+| Comparison | Earlier canopy | Later canopy | Gain | Loss | Net | Mean height change |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| UBC 2015 → LidarBC 2016 | 2.359M m² | 2.347M m² | +175,360 m² | −187,376 m² | **−12,016 m²** | −0.095 m |
+| UBC 2015 → UBC 2021 | 2.359M m² | 2.470M m² | +320,535 m² | −209,369 m² | **+111,166 m²** | +0.235 m |
+| LidarBC 2016 → UBC 2021 | 2.347M m² | 2.470M m² | +263,201 m² | −140,019 m² | **+123,182 m²** | +0.420 m |
 
-- Source: four LidarBC 2016 tiles covering the campus core, EPSG:3157.
-- Earlier canopy: 4.57M m²
-- Later canopy: 4.76M m²
-- Gain: +384,143 m²
-- Loss: −199,042 m²
-- Stable: 4.38M m²
-- Net: **+185,101 m²**
-- Mean height change on stable canopy: **+0.949 m**
-- Valid overlap: 7.51M m²
+Valid overlap is 4.00M m² for every comparison.
 
-## What this means
+## Interpretation
 
-Both comparisons show a net canopy gain, but the magnitudes differ. The products cover
-different areas and use different source acquisitions, vertical datums, and seasons. They
-are **not** two independent estimates of the same quantity and should not be averaged.
-
-The 2015 product is a useful second screening surface, but a direct 2015↔2016 comparison
-on the same mask is needed to separate real one-year change from acquisition and datum
-differences.
+- The 2015→2016 comparison is nearly balanced (−12k m² net). This is the right sanity
+  check: two independent one-year-apart acquisitions should not show a large systematic
+  gain or loss.
+- The 2015→2021 and 2016→2021 comparisons both show a net gain of about 110–123k m² over
+  five to six years.
+- The difference between the two multi-year products is modest compared with the
+  difference from the one-year product, which is reassuring.
+- The mean height change is small (+0.24 to +0.42 m) relative to the height RMSE of the
+  detection validation. Do not treat it as a precise growth rate.
 
 ## Caveats
 
-- The 2015 tiles are EPSG:26910; the 2021 DEM is EPSG:3157. Point coordinates were
-  transformed before binning.
+- 2015 is EPSG:26910 and was transformed to the 2021 EPSG:3157 grid before binning.
 - Vertical datums and acquisition seasons differ.
-- The change threshold is 2 m.
-- A canopy gain does not prove new planting; it can reflect growth, crown expansion,
-  better returns, or a method difference.
+- The canopy threshold is 2 m.
+- A canopy gain is not proof of planting; it can reflect growth, crown expansion, better
+  returns, or a method difference.
 - Loss can reflect removal, dieback, pruning, shadow, or a lower-quality return.
+- The products are screening surfaces, not a calibrated growth model.
 
 ## Next
 
-1. Build 2015 and 2016 on the same mask and grid, then compare 2015↔2016.
-2. Add the 2015 product to the Change tab selector (done).
-3. Keep the field packet as the route to a complete-reference patch.
+1. Add a field-verified complete-reference patch.
+2. Collect repeat DBH measurements for growth calibration.
+3. Add City 2018↔2022 if the tile host can be fetched.
+4. Use the same-mask approach for any future city or regional comparison.

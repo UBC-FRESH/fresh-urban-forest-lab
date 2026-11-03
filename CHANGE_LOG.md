@@ -79,8 +79,11 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
   EPSG:26910 points into the 2021 EPSG:3157 DEM grid.
 - Added a second change product: +320,535 m² gain, −209,369 m² loss, +111,166 m² net,
   +0.235 m mean height on stable canopy over 4.00M m² of overlap.
-- Added `/api/changes` and a comparison selector to the Change tab, so the 2016 and 2015
-  products can be switched without mixing them.
+- Added `/api/changes` and a comparison selector to the Change tab. All three displayed
+  products now use the same 2 km core mask:
+  - 2015→2016: net −12,016 m², mean height −0.095 m
+  - 2015→2021: net +111,166 m², mean height +0.235 m
+  - 2016→2021: net +123,182 m², mean height +0.420 m
 - Added `notes/reports/observed-change-ubc.md` with the comparison and caveats.
 - Dashboard: GREEN.
 
