@@ -16,13 +16,13 @@ import os
 import shutil
 import subprocess
 import uuid
-from collections.abc import Mapping
+from collections.abc import Awaitable, Callable, Mapping
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Literal
 
 import numpy as np
-from fastapi import FastAPI, HTTPException, Query
+from fastapi import FastAPI, HTTPException, Query, Request
 from fastapi.responses import FileResponse, HTMLResponse, Response
 from fastapi.staticfiles import StaticFiles
 from PIL import Image
@@ -212,6 +212,31 @@ def create_app(
     _load_scenarios(state)
     app = FastAPI(title="FRESH Urban Forest Lab", version="0.1.0")
     app.state.lab = state
+
+    @app.middleware("http")
+    async def no_cache_ui(
+        request: Request,
+        call_next: Callable[[Request], Awaitable[Response]],
+    ) -> Response:
+        """Keep the browser shell and its code from serving stale assets.
+
+        Parameters
+        ----------
+        request : Request
+            Incoming request.
+        call_next : callable
+            Downstream handler.
+
+        Returns
+        -------
+        Response
+            The response, with no-store headers on the shell and its code.
+        """
+        response = await call_next(request)
+        if request.url.path in {"/", "/static/app.js", "/static/styles.css"}:
+            response.headers["Cache-Control"] = "no-store, max-age=0"
+        return response
+
     assets = static_dir or Path(__file__).resolve().parent / "web" / "static"
     if assets.exists():
         app.mount("/static", StaticFiles(directory=str(assets)), name="static")

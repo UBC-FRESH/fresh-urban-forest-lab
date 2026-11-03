@@ -37,6 +37,9 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
   2021 CHM at 1 m over four core tiles: 4.57M m² earlier canopy, 4.76M m² later canopy,
   +384,143 m² gain, -199,042 m² loss, +185,101 m² net, +0.95 m mean height on stable
   canopy over 7.51M m² of overlap.
+- Served the shell, app.js, and styles with `Cache-Control: no-store`, and added an
+  `image_version` query to the change PNG so a rebuilt raster cannot be masked by an old
+  browser cache.
 - The product starts with a `NaN` mask outside the 2016 tile coverage; only the overlap is
   compared.
 - Caveat: 2016 and 2021 differ in acquisition season and vertical datum. The product is a
