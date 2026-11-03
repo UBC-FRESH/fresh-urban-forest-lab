@@ -97,6 +97,38 @@ sources:
     notes: >
       A 1 km tile on the west side of campus and Pacific Spirit Park. Useful for
       point-cloud ingestion tests without downloading the multi-gigabyte full coverage.
+  - source_id: lidarbc
+    title: LidarBC open LiDAR data portal
+    publisher: Government of British Columbia / GeoBC
+    url: https://lidar.gov.bc.ca/
+    download_url:
+    filename:
+    media_type: application/vnd.laszip
+    licence: OGL-BC
+    access_mode: catalog
+    native_crs: varies by tile (UTM or BC Albers); check tile metadata
+    products: [point_cloud, dem, dsm, canopy_height, tree_metrics]
+    notes: >
+      Provincial open LiDAR portal. Tiles include classified LAZ, DEM/DSM, canopy
+      height models, and in some areas tree and canopy structure grids and an
+      individual tree database. The portal is the authoritative index; acquire the
+      tile metadata with each download because acquisition year and CRS vary.
+  - source_id: canelevation_lidar_point_clouds
+    title: LiDAR Point Clouds - CanElevation Series
+    publisher: Natural Resources Canada
+    url: https://open.canada.ca/data/en/dataset/7069387e-9986-4297-9f55-0288e9676947
+    download_url: https://canelevation-lidar-point-clouds.s3.ca-central-1.amazonaws.com/pointclouds_nuagespoints/index.html#pointclouds_nuagespoints/
+    filename:
+    media_type: application/vnd.laszip
+    licence: OGL-Canada
+    access_mode: catalog
+    native_crs: NAD83(CSRS) UTM / CGVD2013; zone varies by project
+    products: [point_cloud, dem, dsm]
+    notes: >
+      Federal airborne LiDAR point clouds, distributed as LAZ or Cloud Optimized
+      Point Cloud (COPC) by acquisition project. Projects can overlap and may have
+      been collected by NRCan or a partner. Browse the S3 index or the project/tile
+      indexes before downloading. Vertical accuracy is generally 5-10 cm.
   - source_id: vancouver_public_trees
     title: City of Vancouver public trees
     publisher: City of Vancouver

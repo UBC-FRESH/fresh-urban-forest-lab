@@ -5,6 +5,25 @@ Status: reference note, 2026-11-03.
 This note records what is publicly available, what we actually used, what each source can
 and cannot support, and the traps that would make a change analysis wrong.
 
+## Collaborator link set (Andrew Almas, 2026-11-03)
+
+Andrew supplied the following starting links. The status column says what this repository
+already does with each one.
+
+| Link | Status |
+| --- | --- |
+| [UBC campus trees](https://github.com/UBCGeodata/ubc-geospatial-opendata) (ArcGIS layer `Campus Trees (Temp)`, ID 0) | Used. `load_ubc_trees` reads the GitHub GeoJSON/CSV snapshot. The ArcGIS layer is the same living data behind the repository. |
+| [City of Vancouver LiDAR 2013](https://opendata.vancouver.ca/explore/dataset/lidar-2013/) | Cataloged as `vancouver_lidar_2013`. Not yet built into a change product. |
+| [City of Vancouver LiDAR 2018](https://opendata.vancouver.ca/explore/dataset/lidar-2018/) | Cataloged as `vancouver_lidar_2018`. Not yet built into a change product. |
+| [LidarBC download and discovery](https://lidar.gov.bc.ca/) | Cataloged as `lidarbc`. New source; the portal is the authoritative tile index. |
+| [LiDAR Point Clouds - CanElevation Series](https://open.canada.ca/data/en/dataset/7069387e-9986-4297-9f55-0288e9676947) | Cataloged as `canelevation_lidar_point_clouds`. New federal source; LAZ/COPC by project. |
+| [City of Vancouver public trees](https://opendata.vancouver.ca/explore/dataset/public-trees/) | Used. `load_vancouver_trees` reads the daily CSV export. |
+| [Public trees API metadata](https://opendata.vancouver.ca/api/explore/v2.1/catalog/datasets/public-trees) | Referenced. The catalog stores the CSV export URL; the API metadata is the schema source. |
+
+Note: the 2013 and 2018 links are **City of Vancouver** products, not Metro Vancouver
+regional products. The city layer covers the City of Vancouver and UBC Endowment Lands.
+The Metro Vancouver 2022 classified product is a separate regional source.
+
 ## Summary
 
 | Need | Best available source | Coverage | Native CRS | Why it matters |
@@ -15,8 +34,28 @@ and cannot support, and the traps that would make a change analysis wrong.
 | Repeat campus LiDAR | UBC 2005, 2010 (cliffs/bare earth), 2015, 2021 | Partial to full campus | EPSG:3157 / legacy | Repeat measures for growth and loss. |
 | City-wide repeat LiDAR | City of Vancouver 2013, 2018, 2022 | City jurisdiction and UBC Endowment Lands | EPSG:3157 | The best three-date citywide change series. |
 | Regional classified LiDAR | Metro Vancouver 2022 | Vancouver, UBC, UEL, Electoral Area A | EPSG:3157 | Classified vegetation classes; about 16.5 GB. |
+| Provincial LiDAR | LidarBC | Province-wide, tile by tile | Varies by tile | LAZ, DEM/DSM, CHM, and in some areas tree metrics and an individual tree database. |
+| Federal LiDAR | CanElevation Series (NRCan) | Canada, project by project | NAD83(CSRS) UTM / CGVD2013 | LAZ/COPC; useful for coverage outside municipal and provincial products. |
 | Street-tree inventory | City of Vancouver `public-trees` | Public boulevards and parks | EPSG:4326 | About 180,000 records; daily refresh. |
 | Buildings and boundary | UBC Geodata buildings and legal boundary | UBC campus | EPSG:4326 | Context, planting constraints, 3D massing. |
+
+## LidarBC
+
+- Portal: https://lidar.gov.bc.ca/
+- Licence: Open Government Licence – British Columbia.
+- Products: classified LAZ, DEM, DSM, and in some areas CHM, tree/canopy structure
+  grids, and an individual tree database.
+- Trap: acquisition year, CRS, and quality level vary by tile. Keep the tile metadata with
+  every download. The program is a multi-year build-out; coverage is not uniform yet.
+
+## CanElevation LiDAR point clouds
+
+- Portal: https://open.canada.ca/data/en/dataset/7069387e-9986-4297-9f55-0288e9676947
+- Licence: Open Government Licence – Canada.
+- Format: LAZ or Cloud Optimized Point Cloud (COPC), distributed by acquisition project.
+- CRS: NAD83(CSRS) UTM, CGVD2013.
+- Trap: projects can overlap and can come from NRCan or a partner. The federal product is
+  not a single seamless surface. Download the project and tile indexes before fetching.
 
 ## UBC tree inventory
 

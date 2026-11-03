@@ -14,6 +14,8 @@ publishing a new derivative.
 | City of Vancouver public trees | City of Vancouver | Open Government Licence – Vancouver | Optional street-tree inventory | Refreshed daily on weekdays; filter to the study area. |
 | City of Vancouver LiDAR 2013, 2018, 2022 | City of Vancouver | Open Government Licence – Vancouver | Repeat-measures canopy change | 2013 is about 12 points/m²; 2018 about 30; 2022 about 49. |
 | Metro Vancouver classified LiDAR 2022 | Metro Vancouver | Metro Vancouver open-data terms | Regional cross-check | About 16.5 GB for the Vancouver/UBC/UEL area; classified vegetation. |
+| LidarBC open LiDAR data | Government of British Columbia / GeoBC | Open Government Licence – British Columbia | Provincial point clouds, DEM/DSM, CHM, and some tree metrics | Tile metadata carries acquisition year, CRS, and quality level. |
+| LiDAR Point Clouds – CanElevation Series | Natural Resources Canada | Open Government Licence – Canada | Federal LAZ/COPC point clouds | Distributed by project; projects can overlap. |
 | UBC Vancouver LiDAR 2005 and 2015 | UBC Campus and Community Planning / Abacus | Open access via Abacus; verify the current terms | Earlier repeat measures | 2005 covers shoreline areas; 2015 covers the campus. |
 
 ## Citation examples

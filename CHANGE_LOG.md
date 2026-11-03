@@ -19,6 +19,15 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
   `notes/design/architecture.md`, and ADRs 0001 to 0004.
 - Dashboard: GREEN (lint, format, types, tests, validator, docs).
 
+### Collaborator source review
+
+- Added the LidarBC and CanElevation Series (NRCan) sources to the catalog, data note,
+  data guide, and licence table, based on Andrew Almas's 2026-11-03 link set.
+- Recorded that the City of Vancouver 2013 and 2018 LiDAR links are city products, not
+  Metro Vancouver regional products, and that the UBC ArcGIS tree layer is the same living
+  data behind the GitHub GeoJSON/CSV snapshot.
+- Dashboard: GREEN.
+
 ### P1 Canonical urban-forest dataset
 
 - Added the YAML source catalog and resumable, SHA-256-verified materialization.
