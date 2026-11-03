@@ -62,7 +62,7 @@ Known gaps
 - No repeat measurements for annual growth calibration.
 - City coverage is two core tiles, not the whole city.
 - No accounts, work orders, risk assessment, or mobile field app.
-- No tagged release or live Pages site yet.
+- No tagged release yet. The documentation site is live on GitHub Pages.
 
 Release actions
 ---------------

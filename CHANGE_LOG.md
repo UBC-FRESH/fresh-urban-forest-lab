@@ -95,6 +95,18 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Added `notes/reports/observed-change-ubc.md` with the comparison and caveats.
 - Dashboard: GREEN.
 
+### P5.0 documentation deep dive and Pages
+
+- Expanded the Sphinx site with web-app, CLI, architecture, change-product, validation and
+  calibration, assistant, deployment, reproducibility, testing, limitations, and project
+  status pages.
+- Added the scenario-lab, change-product, and assistant screenshots.
+- Added the scenario studio, planting-zone, time-animation, comparison, and export docs.
+- Enabled GitHub Pages with the Actions build source and restored the deploy job.
+- Published https://ubc-fresh.github.io/fresh-urban-forest-lab/; the build and deploy jobs
+  are green and every documented page returns 200.
+- Dashboard: GREEN.
+
 ### P5.0 City 2018↔2022 observed change
 
 - Bypassed the `webtransfer.vancouver.ca` Cloudflare block with a headed Chromium under

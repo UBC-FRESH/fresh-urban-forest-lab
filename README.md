@@ -4,6 +4,8 @@ An open, reproducible urban-forest modelling and decision-support lab. It links 
 LiDAR, tree inventories, and individual-tree growth models to a 2D and 3D editing front
 end so planners can measure canopy structure and test management scenarios.
 
+**Documentation:** https://ubc-fresh.github.io/fresh-urban-forest-lab/
+
 The first pilot is UBC's Vancouver campus and the surrounding Metro Vancouver context.
 The demo runs offline from a small, derived core-campus dataset.
 
@@ -61,8 +63,8 @@ fresh-urban-forest build \
 ## Status
 
 The prototype is complete through Phase 4 (verify and demo) on `main`. Phase 5 is a
-release candidate at v0.2.0; the tag, release, and Pages deploy await approval. Phase 6
-(operate and maintain) is planned. `ROADMAP.md` is the
+release candidate at v0.2.0. The documentation site is live on GitHub Pages; the tag and
+GitHub release await approval. Phase 6 (operate and maintain) is planned. `ROADMAP.md` is the
 plan of record; the GitHub issues carry the live status.
 
 ## Repository map

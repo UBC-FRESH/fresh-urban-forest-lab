@@ -263,7 +263,7 @@ Goal: tag a public release, publish the docs site, and verify the demo from a cl
 
 - [ ] P5.0 Observed change, inventory completeness, detection validation, and local calibration (#39)
 - [ ] P5.1 Release notes and known-gaps list
-- [ ] P5.2 Pages and live-demo check
+- [x] P5.2 Pages and live-demo check
 - [ ] P5.3 Tag and GitHub release (maintainer approval required)
 
 Acceptance criteria:
