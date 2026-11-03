@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>FRESH Urban Forest Lab</title>
   <link rel="stylesheet" href="static/vendor/maplibre-gl.css">
-  <link rel="stylesheet" href="static/styles.css?v=p7a">
+  <link rel="stylesheet" href="static/styles.css?v=p8a">
   <script src="static/vendor/maplibre-gl.js"></script>
   <script type="importmap">
     {
@@ -154,6 +154,7 @@
         <button class="tab" data-view="light" role="tab" aria-selected="false">Light</button>
         <button class="tab" data-view="change" role="tab" aria-selected="false">Change</button>
         <button class="tab" data-view="analytics" role="tab" aria-selected="false">Analytics</button>
+        <button class="tab" data-view="optimize" role="tab" aria-selected="false">Optimize</button>
         <div class="layer-toggles">
           <label><input id="toggle-canopy" type="checkbox" checked> canopy</label>
           <label><input id="toggle-hillshade" type="checkbox" checked> terrain</label>
@@ -255,6 +256,52 @@
         </div>
       </div>
 
+      <div id="view-optimize" class="view optimize">
+        <canvas id="pareto-canvas"></canvas>
+        <aside class="change-panel optimize-panel">
+          <div class="panel-heading">
+            <h2>Pareto solution space</h2>
+            <span id="optimize-status" class="muted">idle</span>
+          </div>
+          <div class="inline-fields">
+            <label class="field"><span>Sites</span><input id="opt-sites" type="number" value="24" min="4" max="120"></label>
+            <label class="field"><span>Scalarizations</span><input id="opt-scalarizations" type="number" value="18" min="2" max="80"></label>
+          </div>
+          <div class="inline-fields">
+            <label class="field"><span>Population</span><input id="opt-population" type="number" value="20" min="4" max="80"></label>
+            <label class="field"><span>Generations</span><input id="opt-generations" type="number" value="5" min="1" max="30"></label>
+          </div>
+          <div class="inline-fields">
+            <label class="field"><span>Workers</span><input id="opt-workers" type="number" value="2" min="1" max="16"></label>
+            <label class="field"><span>Budget</span><input id="opt-budget" type="number" value="60000" min="0" step="1000"></label>
+          </div>
+          <div class="button-row">
+            <button id="optimize-run" class="button primary" type="button">Run optimization</button>
+            <button id="optimize-reset" class="button ghost" type="button">Reset view</button>
+          </div>
+          <div id="optimize-stats" class="change-stats"></div>
+          <div class="inline-fields axis-fields">
+            <label class="field"><span>X</span><select id="pareto-x"></select></label>
+            <label class="field"><span>Y</span><select id="pareto-y"></select></label>
+            <label class="field"><span>Z</span><select id="pareto-z"></select></label>
+          </div>
+          <div class="inline-fields">
+            <label class="field"><span>Colour</span><select id="pareto-colour"></select></label>
+            <label class="field"><span>Size</span><select id="pareto-size"></select></label>
+          </div>
+          <label class="field">
+            <span>Slice <output id="pareto-slice-value">all</output></span>
+            <select id="pareto-slice-objective"></select>
+            <input id="pareto-slice" type="range" min="0" max="100" value="0" step="1">
+          </label>
+          <div id="pareto-info" class="pareto-info">
+            <p class="muted">Run an optimization to build a front, then orbit, slice, and select a solution.</p>
+          </div>
+          <button id="pareto-load" class="button primary" type="button" disabled>Load selected as scenario</button>
+        </aside>
+        <div id="pareto-legend" class="change-legend"></div>
+      </div>
+
       <div class="timeline-strip">
         <div>
           <span class="eyebrow">Scenario outcome</span>
@@ -303,6 +350,6 @@
   </aside>
 
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
-  <script type="module" src="static/app.js?v=p7a"></script>
+  <script type="module" src="static/app.js?v=p8a"></script>
 </body>
 </html>

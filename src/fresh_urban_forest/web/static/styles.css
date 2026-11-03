@@ -449,6 +449,19 @@ select:focus, input:focus { outline: 2px solid #b8d3ae; outline-offset: 1px; }
 }
 .evidence-badge strong { color: var(--green); font-weight: 700; }
 
+/* --------------------------------------------------------------- optimize view */
+#view-optimize { background: radial-gradient(circle at 50% 40%, #eef4ea, #cfd9c9); }
+#pareto-canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.optimize-panel { width: min(25rem, calc(100% - 28px)); max-height: calc(100% - 28px); overflow-y: auto; }
+.axis-fields { grid-template-columns: 1fr 1fr 1fr; }
+.axis-fields select { width: 100%; }
+.pareto-info { margin: 7px 0; padding: 7px; border: 1px solid #e3e9de; border-radius: 8px; background: #fbfcf8; font-size: 0.7rem; }
+.pareto-info strong { color: var(--green); font-family: var(--mono); }
+.pareto-info .mini-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
+.pareto-info .mini-card { padding: 5px; border: 1px solid #e3e9de; border-radius: 7px; background: #ffffff; }
+.pareto-info .mini-card span { display: block; color: var(--ink-soft); font-size: 0.58rem; text-transform: uppercase; letter-spacing: 0.05em; }
+.pareto-info .mini-card strong { display: block; margin-top: 2px; color: var(--green); font-family: var(--mono); font-size: 0.76rem; }
+
 /* --------------------------------------------------------------- change view */
 #map-change { position: absolute; inset: 0; width: 100%; height: 100%; }
 .change-panel {

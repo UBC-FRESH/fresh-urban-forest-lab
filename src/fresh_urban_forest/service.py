@@ -15,6 +15,7 @@ import math
 import os
 import shutil
 import subprocess
+import threading
 import uuid
 from collections.abc import Awaitable, Callable, Mapping
 from dataclasses import dataclass, field
@@ -142,6 +143,28 @@ class ChatRequest(BaseModel):
     context: dict[str, object] | None = None
 
 
+class OptimizationRequest(BaseModel):
+    """A planting optimization request."""
+
+    sites: int = Field(default=24, ge=4, le=200)
+    species: list[str] | None = None
+    horizon: int = Field(default=20, ge=1, le=60)
+    budget_cad: float = Field(default=60_000.0, ge=0.0)
+    generations: int = Field(default=5, ge=1, le=40)
+    population: int = Field(default=20, ge=4, le=200)
+    scalarizations: int = Field(default=18, ge=2, le=500)
+    local_iterations: int = Field(default=120, ge=0, le=5000)
+    workers: int = Field(default=2, ge=1, le=32)
+    seed: int = Field(default=42, ge=0)
+    surrogate_samples: int = Field(default=0, ge=0, le=500)
+
+
+class SolutionSelection(BaseModel):
+    """A selected archive solution."""
+
+    solution_id: str = Field(min_length=1, max_length=40)
+
+
 AGENT_GUIDE = """\
 You are the FRESH Urban Forest Lab assistant. Help the user understand the current
 UBC urban-forest dataset, canopy metrics, tree records, scenarios, planting
@@ -166,6 +189,46 @@ Rules:
 
 
 @dataclass
+class OptimizationJob:
+    """In-memory optimization job state.
+
+    Attributes
+    ----------
+    job_id : str
+        Job identifier.
+    status : str
+        ``queued``, ``running``, ``done``, or ``error``.
+    progress : int
+        Completed scalarizations.
+    total : int
+        Requested scalarizations.
+    archive_size : int
+        Current archive size.
+    result : object or None
+        Completed optimization result.
+    error : str
+        Error message when the job fails.
+    request : dict of str to object
+        Request settings.
+    started_utc : str
+        Start time.
+    finished_utc : str
+        Finish time, or an empty string.
+    """
+
+    job_id: str
+    status: str
+    progress: int
+    total: int
+    archive_size: int
+    result: object | None
+    error: str
+    request: dict[str, object]
+    started_utc: str
+    finished_utc: str = ""
+
+
+@dataclass
 class LabState:
     """Runtime state shared by the request handlers.
 
@@ -187,6 +250,7 @@ class LabState:
     results: dict[str, ScenarioResult] = field(default_factory=dict)
     tree_cache: dict[tuple[str, int], tuple[TreeRecord, ...]] = field(default_factory=dict)
     light_cache: dict[tuple[str, str, str, str], dict[str, object]] = field(default_factory=dict)
+    jobs: dict[str, OptimizationJob] = field(default_factory=dict)
     allow_agent: bool = False
     agent_model: str = DEFAULT_AGENT_MODEL
     agent_timeout: float = 300.0
@@ -981,6 +1045,169 @@ def create_app(
         )
         return {"options": [option.to_dict() for option in options]}
 
+    @app.get("/api/optimize")
+    def list_optimizations() -> dict[str, object]:
+        """List optimization jobs.
+
+        Returns
+        -------
+        dict
+            Job summaries, newest last.
+        """
+        return {"jobs": [_job_payload(job) for job in state.jobs.values()]}
+
+    @app.post("/api/optimize", status_code=202)
+    def start_optimization(payload: OptimizationRequest) -> dict[str, object]:
+        """Start a background planting optimization.
+
+        Parameters
+        ----------
+        payload : OptimizationRequest
+            Problem and solver settings.
+
+        Returns
+        -------
+        dict
+            Job summary.
+
+        Raises
+        ------
+        fastapi.HTTPException
+            When the optional optimization extra is unavailable.
+        """
+        if not _optimizer_available():
+            raise HTTPException(
+                status_code=503,
+                detail="the optimizer requires the optimize extra: pip install -e '.[optimize]'",
+            )
+        job_id = f"opt-{uuid.uuid4().hex[:10]}"
+        request_payload = payload.model_dump()
+        job = OptimizationJob(
+            job_id=job_id,
+            status="queued",
+            progress=0,
+            total=payload.scalarizations,
+            archive_size=0,
+            result=None,
+            error="",
+            request=request_payload,
+            started_utc=_utc_now(),
+        )
+        state.jobs[job_id] = job
+        thread = threading.Thread(target=_run_optimization_job, args=(state, job_id), daemon=True)
+        thread.start()
+        return _job_payload(job)
+
+    @app.get("/api/optimize/{job_id}")
+    def optimization_job(job_id: str) -> dict[str, object]:
+        """Return one optimization job.
+
+        Parameters
+        ----------
+        job_id : str
+            Job identifier.
+
+        Returns
+        -------
+        dict
+            Job state and, when done, the full result.
+
+        Raises
+        ------
+        fastapi.HTTPException
+            When the job does not exist.
+        """
+        job = state.jobs.get(job_id)
+        if job is None:
+            raise HTTPException(status_code=404, detail="optimization job not found")
+        return _job_payload(job, include_result=True)
+
+    @app.get("/api/optimize/{job_id}/solutions")
+    def optimization_solutions(job_id: str) -> dict[str, object]:
+        """Return the Pareto archive for a completed job.
+
+        Parameters
+        ----------
+        job_id : str
+            Job identifier.
+
+        Returns
+        -------
+        dict
+            Archive with solutions, ideal/nadir, hypervolume, and robustness.
+
+        Raises
+        ------
+        fastapi.HTTPException
+            When the job is missing or not done.
+        """
+        job = state.jobs.get(job_id)
+        if job is None:
+            raise HTTPException(status_code=404, detail="optimization job not found")
+        if job.result is None:
+            raise HTTPException(status_code=409, detail="optimization job is still running")
+        result = job.result
+        archive = getattr(result, "archive", None)
+        if archive is None or not hasattr(archive, "to_dict"):
+            raise HTTPException(status_code=500, detail="optimization archive is unavailable")
+        archive_payload = archive.to_dict()
+        if not isinstance(archive_payload, Mapping):
+            raise HTTPException(status_code=500, detail="optimization archive is malformed")
+        return {str(key): value for key, value in archive_payload.items()}
+
+    @app.post("/api/optimize/{job_id}/scenario", status_code=201)
+    def optimization_scenario(job_id: str, payload: SolutionSelection) -> dict[str, object]:
+        """Load one archive solution as a scenario.
+
+        Parameters
+        ----------
+        job_id : str
+            Job identifier.
+        payload : SolutionSelection
+            Selected solution identifier.
+
+        Returns
+        -------
+        dict
+            The created scenario.
+
+        Raises
+        ------
+        fastapi.HTTPException
+            When the job, solution, or archive is unavailable.
+        """
+        from fresh_urban_forest.optimize import solution_to_edits
+
+        job = state.jobs.get(job_id)
+        if job is None:
+            raise HTTPException(status_code=404, detail="optimization job not found")
+        if job.result is None:
+            raise HTTPException(status_code=409, detail="optimization job is still running")
+        result = job.result
+        archive = getattr(result, "archive", None)
+        solutions = getattr(archive, "solutions", ())
+        solution = next(
+            (item for item in solutions if getattr(item, "solution_id", "") == payload.solution_id),
+            None,
+        )
+        if solution is None:
+            raise HTTPException(status_code=404, detail="solution not found")
+        problem = getattr(result, "problem", None)
+        if problem is None:
+            raise HTTPException(status_code=500, detail="problem is unavailable")
+        scenario_id = f"scenario-{uuid.uuid4().hex[:10]}"
+        scenario = Scenario(
+            scenario_id=scenario_id,
+            name=f"Pareto {payload.solution_id[:8]}",
+            created_utc=_utc_now(),
+            base_dataset_id=state.dataset.manifest.dataset_id,
+            years=int(getattr(problem, "horizon", 20)),
+            edits=solution_to_edits(problem, solution),
+        )
+        state.scenarios[scenario_id] = scenario
+        _save_scenario(state, scenario)
+        return _scenario_payload(scenario)
+
     @app.get("/api/scenario-comparison")
     def scenario_comparison() -> dict[str, object]:
         """Project and compare all saved scenarios.
@@ -1405,6 +1632,162 @@ def _tree_or_404(dataset: UrbanForestDataset, tree_id: str) -> TreeRecord:
         if tree.tree_id == tree_id:
             return tree
     raise HTTPException(status_code=404, detail="tree not found")
+
+
+def _optimizer_available() -> bool:
+    """Return whether the optional optimizer extra is importable.
+
+    Returns
+    -------
+    bool
+        ``True`` when the Fresh Solutions-backed optimizer imports.
+    """
+    try:
+        import fresh_urban_forest.optimize  # noqa: F401
+    except Exception:
+        return False
+    return True
+
+
+def _job_payload(job: OptimizationJob, *, include_result: bool = False) -> dict[str, object]:
+    """Convert a job to a JSON-safe payload.
+
+    Parameters
+    ----------
+    job : OptimizationJob
+        Job state.
+    include_result : bool
+        Include the full result when it exists.
+
+    Returns
+    -------
+    dict
+        Job summary.
+    """
+    payload: dict[str, object] = {
+        "job_id": job.job_id,
+        "status": job.status,
+        "progress": job.progress,
+        "total": job.total,
+        "archive_size": job.archive_size,
+        "error": job.error,
+        "request": dict(job.request),
+        "started_utc": job.started_utc,
+        "finished_utc": job.finished_utc,
+    }
+    if include_result and job.result is not None and hasattr(job.result, "to_dict"):
+        payload["result"] = job.result.to_dict()
+    return payload
+
+
+def _run_optimization_job(state: LabState, job_id: str) -> None:
+    """Run one optimization job in a daemon thread.
+
+    Parameters
+    ----------
+    state : LabState
+        Application state.
+    job_id : str
+        Job identifier.
+    """
+    job = state.jobs.get(job_id)
+    if job is None:
+        return
+    try:
+        from fresh_urban_forest.optimize import build_problem, run_optimization
+
+        request = job.request
+        raw_species = request.get("species")
+        species = (
+            tuple(str(value) for value in raw_species) if isinstance(raw_species, list) else None
+        )
+        job.status = "running"
+        job.started_utc = _utc_now()
+        problem = build_problem(
+            state.dataset,
+            site_count=_request_int(request, "sites", 24),
+            species=species,
+            horizon=_request_int(request, "horizon", 20),
+            budget_cad=_request_float(request, "budget_cad", 60_000.0),
+            seed=_request_int(request, "seed", 42),
+        )
+
+        def progress(done: int, total: int, archive_size: int) -> None:
+            job.progress = done
+            job.total = total
+            job.archive_size = archive_size
+
+        result = run_optimization(
+            problem,
+            population_size=_request_int(request, "population", 20),
+            generations=_request_int(request, "generations", 5),
+            scalarizations=_request_int(request, "scalarizations", 18),
+            local_iterations=_request_int(request, "local_iterations", 120),
+            workers=_request_int(request, "workers", 2),
+            seed=_request_int(request, "seed", 42),
+            surrogate_samples=_request_int(request, "surrogate_samples", 0),
+            progress=progress,
+        )
+        job.result = result
+        job.archive_size = len(getattr(getattr(result, "archive", None), "solutions", ()))
+        job.status = "done"
+    except Exception as exc:
+        job.status = "error"
+        job.error = str(exc)[:500]
+    finally:
+        job.finished_utc = _utc_now()
+
+
+def _request_int(request: Mapping[str, object], key: str, default: int) -> int:
+    """Read an integer request field.
+
+    Parameters
+    ----------
+    request : mapping
+        Request payload.
+    key : str
+        Field key.
+    default : int
+        Fallback.
+
+    Returns
+    -------
+    int
+        Parsed value.
+    """
+    value = request.get(key, default)
+    if isinstance(value, (int, float, str)):
+        try:
+            return int(value)
+        except (TypeError, ValueError):
+            return default
+    return default
+
+
+def _request_float(request: Mapping[str, object], key: str, default: float) -> float:
+    """Read a float request field.
+
+    Parameters
+    ----------
+    request : mapping
+        Request payload.
+    key : str
+        Field key.
+    default : float
+        Fallback.
+
+    Returns
+    -------
+    float
+        Parsed value.
+    """
+    value = request.get(key, default)
+    if isinstance(value, (int, float, str)):
+        try:
+            return float(value)
+        except (TypeError, ValueError):
+            return default
+    return default
 
 
 def _zone(name: str) -> ZoneInfo:

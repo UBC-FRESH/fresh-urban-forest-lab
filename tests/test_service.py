@@ -283,3 +283,48 @@ def test_light_solar_shade_species_and_water_endpoints(tmp_path: Path) -> None:
     assert cached.status_code == 200
     assert client.get("/api/light/tree/missing").status_code == 404
     assert client.get("/api/shade", params={"date": "not-a-date"}).status_code == 400
+
+
+def test_optimization_job_and_scenario(tmp_path: Path) -> None:
+    """An optimization job runs, exposes solutions, and loads one as a scenario."""
+    import time
+
+    client = _client(tmp_path)
+    started = client.post(
+        "/api/optimize",
+        json={
+            "sites": 6,
+            "species": ["Acer rubrum", "Thuja plicata"],
+            "horizon": 5,
+            "population": 6,
+            "generations": 1,
+            "scalarizations": 4,
+            "local_iterations": 10,
+            "workers": 1,
+            "seed": 3,
+        },
+    )
+    assert started.status_code == 202
+    job_id = started.json()["job_id"]
+    payload = {}
+    for _ in range(80):
+        response = client.get(f"/api/optimize/{job_id}")
+        assert response.status_code == 200
+        payload = response.json()
+        if payload["status"] in {"done", "error"}:
+            break
+        time.sleep(0.1)
+    assert payload["status"] == "done", payload.get("error")
+    assert payload["archive_size"] > 0
+    assert payload["result"]["archive"]["solutions"]
+    solutions = client.get(f"/api/optimize/{job_id}/solutions")
+    assert solutions.status_code == 200
+    solution_id = solutions.json()["solutions"][0]["solution_id"]
+    scenario = client.post(
+        f"/api/optimize/{job_id}/scenario",
+        json={"solution_id": solution_id},
+    )
+    assert scenario.status_code == 201
+    assert scenario.json()["scenario_id"].startswith("scenario-")
+    assert client.get("/api/optimize").json()["jobs"]
+    assert client.get("/api/optimize/missing").status_code == 404
