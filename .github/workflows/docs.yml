@@ -29,27 +29,19 @@ jobs:
           python-version: "3.12"
           cache: pip
 
-      - name: Install documentation dependencies
+      - name: Install the package and documentation dependencies
         run: |
           python -m pip install --upgrade pip
+          python -m pip install -e .
           python -m pip install -r docs/requirements.txt
 
       - name: Build documentation
         run: sphinx-build -b html docs _build/html -W
 
-      - name: Upload Pages artifact
+      - name: Upload the documentation artifact
         uses: actions/upload-pages-artifact@v5
         with:
           path: _build/html
 
-  deploy:
-    needs: build
-    runs-on: ubuntu-24.04
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v5
+      # Pages deployment is a Phase 5 approval gate. Add the deploy job only after
+      # the maintainer enables Pages for the repository.
