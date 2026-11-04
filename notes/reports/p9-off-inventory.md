@@ -4,7 +4,7 @@ Date: 2026-11-04
 Phase: P9
 Parent issue: #42
 Branch: `feature/p9-off-inventory`
-Implementation head: pending at report write; refreshed at PR queue
+Implementation head: `0f1cd6b`
 Status: ready for review
 
 ## Summary
