@@ -43,6 +43,7 @@ from fresh_urban_forest.dss import (
 )
 from fresh_urban_forest.growth import project_scenario, project_trees_to_year, scenario_summary
 from fresh_urban_forest.habitat import GUILDS, guild_habitat, habitat_metrics
+from fresh_urban_forest.integration import build_lab_report
 from fresh_urban_forest.irrigation import compare_irrigation
 from fresh_urban_forest.metrics import compare_metrics
 from fresh_urban_forest.models import (
@@ -1121,6 +1122,57 @@ def create_app(
             age_years=age_years,
         )
         return {"options": [option.to_dict() for option in options]}
+
+    @app.get("/api/report")
+    def lab_report(
+        scenario_id: str | None = None,
+        year: int | None = Query(default=None, ge=0, le=100),
+    ) -> dict[str, object]:
+        """Return the unified baseline or scenario lab report.
+
+        Parameters
+        ----------
+        scenario_id : str or None
+            Optional scenario identifier.
+        year : int or None
+            Optional scenario year.
+
+        Returns
+        -------
+        dict
+            Metrics, shade, birds, completeness, off-inventory, and evidence.
+        """
+        off_inventory = None
+        off_path = _dataset_file(state, "off_inventory.json")
+        if off_path is not None:
+            try:
+                off_inventory = _read_json_object(off_path)
+            except (OSError, ValueError):
+                off_inventory = None
+        if scenario_id:
+            result = _ensure_result(state, scenario_id)
+            target = (
+                result.scenario.years if year is None else min(max(year, 0), result.scenario.years)
+            )
+            if 0 <= target < len(result.tree_timeline):
+                trees = result.tree_timeline[target]
+            else:
+                scenario = _scenario_or_404(state, scenario_id)
+                trees = project_trees_to_year(state.dataset, scenario, target)
+            metrics = result.metrics_by_year[target][1]
+            return build_lab_report(
+                state.dataset,
+                population=trees,
+                metrics=metrics,
+                scenario_id=scenario_id,
+                scenario_name=result.scenario.name,
+                year=target,
+                off_inventory=off_inventory,
+            )
+        return build_lab_report(
+            state.dataset,
+            off_inventory=off_inventory,
+        )
 
     @app.get("/api/birds")
     def birds(

@@ -271,3 +271,20 @@ def test_birds_command(tmp_path: Path) -> None:
     )
     assert result.exit_code == 0, result.stdout
     assert (tmp_path / "birds.json").exists()
+
+
+def test_report_command(tmp_path: Path) -> None:
+    """The report command writes a unified baseline report."""
+    make_dataset(tmp_path / "report")
+    result = RUNNER.invoke(
+        app,
+        [
+            "report",
+            "--dataset",
+            str(tmp_path / "report" / "dataset"),
+            "--out",
+            str(tmp_path / "lab-report.json"),
+        ],
+    )
+    assert result.exit_code == 0, result.stdout
+    assert (tmp_path / "lab-report.json").exists()

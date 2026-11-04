@@ -400,3 +400,16 @@ def test_bird_habitat_and_demography_endpoint(tmp_path: Path) -> None:
     assert guild["demography"]["lambda"] > 0.0
     assert guild["demography"]["prior_range"][0] <= guild["demography"]["lambda"]
     assert "not a density" in payload["caveat"]
+
+
+def test_lab_report_endpoint(tmp_path: Path) -> None:
+    """The unified report includes metrics, shade, and birds."""
+    client = _client(tmp_path)
+    response = client.get("/api/report")
+    assert response.status_code == 200
+    payload = response.json()
+    assert payload["schema_version"] == "fresh-urban-forest.lab-report.v1"
+    assert payload["metrics"]["tree_count"] > 0
+    assert "shade" in payload
+    assert "birds" in payload
+    assert payload["evidence"]

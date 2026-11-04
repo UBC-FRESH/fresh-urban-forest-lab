@@ -33,6 +33,7 @@ from fresh_urban_forest.demography import project_demography
 from fresh_urban_forest.field_analysis import analyze_field_packet, write_field_analysis
 from fresh_urban_forest.field_packet import build_field_packet
 from fresh_urban_forest.habitat import GUILDS, guild_habitat, habitat_metrics, write_bird_report
+from fresh_urban_forest.integration import build_lab_report, write_lab_report
 from fresh_urban_forest.inventory import (
     load_boundary,
     load_buildings,
@@ -726,6 +727,52 @@ def tune_detection_command(
             f"detected={row.detected_count} matched={row.matched_count} "
             f"precision={row.precision} recall={row.recall} f1={row.f1}"
         )
+
+
+@app.command("report")
+def report_command(
+    dataset: Path = DATASET_OPTION,
+    out: Path = OUT_OPTION,
+    scenario: Path | None = SCENARIO_FILE_OPTION,
+    year: int | None = PROJECT_YEAR_OPTION,
+) -> None:
+    """Write the unified baseline or scenario lab report.
+
+    Parameters
+    ----------
+    dataset : Path
+        Dataset directory.
+    out : Path
+        Output JSON path.
+    scenario : Path or None
+        Optional scenario JSON.
+    year : int or None
+        Optional scenario year.
+    """
+    loaded = load_dataset(dataset)
+    off_path = dataset / "off_inventory.json"
+    off_inventory = None
+    if off_path.exists():
+        off_inventory = json.loads(off_path.read_text(encoding="utf-8"))
+    if scenario is not None:
+        parsed_scenario = scenario_from_dict(json.loads(scenario.read_text(encoding="utf-8")))
+        from fresh_urban_forest.growth import project_scenario
+
+        result = project_scenario(loaded, parsed_scenario, collect_trees=True)
+        target = min(max(year or parsed_scenario.years, 0), parsed_scenario.years)
+        report = build_lab_report(
+            loaded,
+            population=result.tree_timeline[target],
+            metrics=result.metrics_by_year[target][1],
+            scenario_id=parsed_scenario.scenario_id,
+            scenario_name=parsed_scenario.name,
+            year=target,
+            off_inventory=off_inventory,
+        )
+    else:
+        report = build_lab_report(loaded, off_inventory=off_inventory)
+    path = write_lab_report(report, out)
+    console.print(f"Lab report: {path}")
 
 
 @app.command("birds")

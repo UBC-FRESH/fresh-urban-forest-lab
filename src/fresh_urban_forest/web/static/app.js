@@ -916,6 +916,7 @@ function bindControls() {
   $("export-csv").addEventListener("click", () => {
     if (state.scenarioId) window.location.href = `api/scenarios/${state.scenarioId}/export.csv`;
   });
+  $("export-report").addEventListener("click", exportLabReport);
   $("preview").addEventListener("click", previewScenario);
   $("reset-edits").addEventListener("click", clearEdits);
   $("new-scenario").addEventListener("click", newScenario);
@@ -1497,6 +1498,29 @@ function renderTreeLight(data) {
 function evidenceBadge(evidence) {
   if (!evidence || !evidence.tier) return "";
   return `<span class="evidence-badge">evidence <strong>${escapeHtml(evidence.tier)}</strong> · ${escapeHtml(evidence.method || "")}</span>`;
+}
+
+async function exportLabReport() {
+  try {
+    const params = new URLSearchParams();
+    if (state.scenarioId) {
+      params.set("scenario_id", state.scenarioId);
+      params.set("year", String(state.previewYear || state.years));
+    }
+    const payload = await api(`api/report${params.toString() ? `?${params}` : ""}`);
+    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = state.scenarioId ? `${state.scenarioId}-lab-report.json` : "baseline-lab-report.json";
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(url);
+    toast("Lab report exported");
+  } catch (error) {
+    toast(`Could not export the report: ${error.message}`, true);
+  }
 }
 
 async function loadBirds() {

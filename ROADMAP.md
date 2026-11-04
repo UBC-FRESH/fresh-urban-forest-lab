@@ -434,10 +434,10 @@ Goal: make the shade, species, optimization, off-inventory, and bird layers one 
 
 Plan: `notes/design/urban-canopy-program-plan.md`.
 
-- [ ] P11.1 Unified scenario and evidence contract
-- [ ] P11.2 Integrated UI and exports
-- [ ] P11.3 Benchmark, reproducibility, and docs
-- [ ] P11.4 v0.3 release candidate
+- [x] P11.1 Unified scenario and evidence contract
+- [x] P11.2 Integrated UI and exports
+- [x] P11.3 Benchmark, reproducibility, and docs
+- [x] P11.4 v0.3 release candidate
 
 Acceptance criteria:
 

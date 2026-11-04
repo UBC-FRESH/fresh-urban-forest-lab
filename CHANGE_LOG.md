@@ -325,3 +325,16 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Tests: 319 passed. Dashboard: GREEN.
 - Limits: no local point counts, distance sampling, mark-recapture, or expert review response;
   relative abundance is not density and lambda is not a local forecast.
+
+### P11 integration and v0.3 release candidate
+
+- Added `integration.py`: unified lab report across dataset, scenario, metrics,
+  completeness, shade, birds, and off-inventory with evidence and caveats.
+- Added `GET /api/report` and `fresh-urban-forest report`.
+- Added the **Export lab report** browser button; baselines and scenarios download JSON.
+- Added `docs/reference/integration-and-release.rst`, the P11 report, and v0.3.0 release
+  notes.
+- Bumped package, citation, and runtime version metadata to 0.3.0.
+- Tests: 323 passed. Dashboard: GREEN.
+- Release limits: no tag, GitHub release, Pages setting, or public deployment has been
+  created; those actions remain approval-gated.
