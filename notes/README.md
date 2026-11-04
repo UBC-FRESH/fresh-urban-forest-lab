@@ -15,6 +15,7 @@ Keep private material out of this directory.
 - `design/change-uncertainty-plan.md`: observed change, completeness, validation, and calibration plan.
 - `design/urban-canopy-program-plan.md`: the completed P7-P11 programme for shade, species fit, optimization, off-inventory canopy, and birds.
 - `reference/literature-review-shade-optimization-biodiversity.md`: rapid peer-reviewed and grey-literature review, novelty assessment, and citations.
+- `reference/irss-silva21-method-provenance.md`: what the urban LiDAR canopy methods owe to IRSS/Silva21 (currently no direct integration), the implemented/derived distinction, and a candidate map for future work.
 - `reference/shade-review-protocol.md`: P7.1 search protocol, screening log, capability comparison, and frozen claim.
 - `reports/detection-and-allometry-2021.md`: first detection validation and local allometry results.
 - `reports/field-validation-packet.md`: Main Mall field packet and verification/analysis protocol.
