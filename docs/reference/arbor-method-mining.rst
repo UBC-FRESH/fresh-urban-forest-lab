@@ -95,12 +95,21 @@ The manifest records input/output hashes, CRS, vertical datum, parameters, prove
 warnings. The QA file records counts, HAG percentiles, class summaries, and the explicit
 `ground_truth_used: false` note.
 
+CHM/ITD post-processing
+-----------------------
+
+`fresh_urban_forest.itd_postprocess` adds opt-in post-processing for CHM-detected crowns:
+an edge buffer, a small-tree height flag, and a conservative over-segmentation merge. The
+merge is deliberately narrow: the smaller crown must be much smaller by area, its centroid
+must fall inside the larger crown, and the height difference must be small. Every merge
+group records its source IDs. The default `detect_trees` output is unchanged.
+
 What is next
 ------------
 
-The next step is a real-tile smoke test of the optional adapter and a CHM/ITD
-post-processing pass (buffer flags, small-tree flags, over-segmentation merging). QSM and
-QSF work belongs in a dedicated point-cloud package, not this app's core.
+The next step is a real-tile or real-dataset smoke test of the CHM/ITD post-processing and
+a check of the optional ground adapter on a second tile. QSM and QSF work belongs in a
+dedicated point-cloud package, not this app's core.
 
 Citations
 ---------

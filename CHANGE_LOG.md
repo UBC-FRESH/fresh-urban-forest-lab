@@ -476,3 +476,17 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Close-out report: `notes/reports/p16-closeout.md`. P16 is complete.
 - Limits: the adapter is not a FEMIC core import; no real-tile smoke test is in CI; the
   classifier remains opt-in and does not change default FEMIC products.
+
+### P17 CHM/ITD post-processing
+
+- Added `fresh_urban_forest.itd_postprocess` with `TreePostprocessResult` and
+  `postprocess_trees`.
+- Added edge-buffer flags, strict small-tree flags, and a conservative over-segmentation
+  merge that records every source ID.
+- Added `kept()` filtering and a JSON-friendly summary.
+- Added synthetic tests for edge flags, small trees, merge, no-merge, empty input, invalid
+  parameters, and JSON output.
+- Tests: 346 passed; total coverage 87.76 percent. Dashboard: GREEN.
+- Close-out report: `notes/reports/p17-closeout.md`. P17 is complete.
+- Limits: the merge is a small CHM heuristic, not a point-cloud instance resolver; the
+  default `detect_trees` output is unchanged and the feature is opt-in.
