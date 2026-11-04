@@ -81,7 +81,6 @@ These are stated limits, not hidden behavior.
 - City LiDAR coverage is two core tiles.
 - The unified report is a composition, not a new calibrated model.
 
-## Next phase
+## Release
 
-Phase 6 (operate and maintain) is the next lifecycle stage. The v0.3 release candidate
-needs maintainer approval before a tag or release.
+v0.3.0 is released. The tag and GitHub release point to the release commit.

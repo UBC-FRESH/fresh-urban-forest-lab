@@ -426,6 +426,17 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Limits: the reference is not manually labelled; the 0-2 m band is excluded; one small
   steep tile; no production FEMIC integration.
 
+### v0.3.0 release
+
+- Tagged and released the integrated lab as v0.3.0.
+- P5 release gate closed with the stated data limit: no field validation or repeat-measure
+  growth calibration yet.
+- Removed the invented P6 operate-and-maintain phase, quarterly review, source-triage rule,
+  and contract-migration checklist. These were not requested and do not map to a concrete
+  workflow task.
+- Closed P6 issue #7 and P5.0 issue #39 with evidence and explicit limitations.
+- Release notes: `notes/releases/v0.3.0.md`.
+
 ### P15 Manual ground reference and optional FEMIC adapter design
 
 - Added a manually checked 20 m x 20 m reference patch from the Golden-area steep tile:
