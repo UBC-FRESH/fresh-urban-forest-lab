@@ -25,7 +25,7 @@ census.
 | Reconciliation separates unmatched, missed, and false-positive risk | met with limit | matched/unmatched counts and caveats; no field verification |
 | Value-of-information experiment reports whether the plan changes | met | official vs augmented P8 comparison |
 | No private owner data tracked or exposed | met | aggregate/candidate-level fields only |
-| Dashboard green | met | dashboard GREEN; 291 tests |
+| Dashboard green | met | dashboard GREEN; 310 tests |
 
 ## Pilot method
 

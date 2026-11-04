@@ -306,6 +306,6 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Value of information: 9,259 → 9,759 trees; 2.855M → 3.669M m³ crown volume; 3,827 →
   5,024 t carbon. Best-shade plan unchanged (Jaccard 1.00, 0 sites differ) in this pilot.
 - Added privacy/terminology note and the P9 report.
-- Tests: 291 passed. Dashboard: GREEN.
+- Tests: 310 passed. Dashboard: GREEN.
 - Limits: no parcel/ownership layer, no field validation, 500-candidate cap, unknown species,
   screening-only carbon/canopy totals.
