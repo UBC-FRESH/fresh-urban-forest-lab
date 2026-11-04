@@ -1,0 +1,86 @@
+{
+  "schema_version": "fresh-urban-forest.ground-reference.v1",
+  "date": "2026-11-04",
+  "protocol": {
+    "positive": "classification == 2",
+    "reference_surface": "nearest published class-2 point in XY; reference HAG = z - nearest class-2 z",
+    "high_confidence_negative": "classification != 2 and reference HAG > 2 m",
+    "ambiguous_band": "classification != 2 and 0 <= reference HAG <= 2 m",
+    "policy": {
+      "sor": {"k": 10, "multiplier": 2.0},
+      "ptd": {"cell_size_m": 1.0, "max_angle_deg": 15.0, "max_distance_m": 0.5, "max_iterations": 8},
+      "low_point_cut_m": 0.15
+    }
+  },
+  "tiles": [
+    {
+      "filename": "bc_092g024_4_3_1_xyes_8_utm10_20250826_20250826.laz",
+      "setting": "coastal 2025",
+      "crs": "EPSG:3157",
+      "points": 415068,
+      "class_counts": {"1_unclassified": 133558, "2_ground": 89760, "7_noise": 191750},
+      "reference": {
+        "positive_class_2": 89760,
+        "high_confidence_negative_hag_gt_2m": 39228,
+        "ambiguous_band": 286080
+      },
+      "result": {
+        "sor_removed": 16526,
+        "sor_removed_fraction": 0.039815,
+        "predicted_ground": 374711,
+        "predicted_fraction_of_kept": 0.940205,
+        "class_2_recall": 0.999866,
+        "high_confidence_false_ground": 812,
+        "high_confidence_negative_total": 24258,
+        "high_confidence_false_ground_rate": 0.033473,
+        "class_2_hag_p95_m": 0.0094,
+        "class_2_hag_p99_m": 0.0217,
+        "low_point_fraction_false_ground": 0.714286,
+        "elapsed_seconds": 61.999
+      }
+    },
+    {
+      "filename": "bc_082n025_4_2_1_xyes_8_utm11_2021.laz",
+      "setting": "Golden-area 2021, steep",
+      "crs": "EPSG:2955 + CGVD2013",
+      "points": 113775,
+      "class_counts": {"1_unclassified": 98182, "2_ground": 15353, "7_noise": 240},
+      "reference": {
+        "positive_class_2": 15353,
+        "high_confidence_negative_hag_gt_2m": 17900,
+        "ambiguous_band": 80522
+      },
+      "result": {
+        "sor_removed": 5355,
+        "sor_removed_fraction": 0.047067,
+        "predicted_ground": 82530,
+        "predicted_fraction_of_kept": 0.761206,
+        "class_2_recall": 0.963423,
+        "high_confidence_false_ground": 666,
+        "high_confidence_negative_total": 14313,
+        "high_confidence_false_ground_rate": 0.046531,
+        "class_2_hag_p95_m": 0.001,
+        "class_2_hag_p99_m": 0.0441,
+        "low_point_fraction_false_ground": 0.66967,
+        "elapsed_seconds": 4.934
+      }
+    }
+  ],
+  "decision": {
+    "femic": "approve an optional adapter prototype, not a default pipeline change",
+    "conditions": [
+      "manually labelled reference patch",
+      "optional, versioned FEMIC-side design",
+      "stable GroundClassification and low_point_mask contract",
+      "second steep and second coastal tile",
+      "explicit statement that class 1 and class 7 remain unresolved"
+    ]
+  },
+  "limits": [
+    "reference is reproducible but not manually labelled",
+    "ambiguous 0-2 m band excluded",
+    "one small steep tile from one map sheet",
+    "simplified PTD-inspired classifier",
+    "no production FEMIC integration"
+  ]
+}

@@ -197,14 +197,23 @@ ground is within 0.15 m HAG. The policy is therefore:
 The low-point flag is a downstream contract, not a ground label. The ground labels are not
 noise-free.
 
-**Do not use this as an operational ground classifier yet.** P13.4 defers FEMIC
-integration. The classifier stays opt-in in `fresh-urban-forest-lab` until there is a
-checked reference patch, a second terrain type, and a fuller PTD angle test.
+P14 adds a reproducible class-2 reference surface and a steep Golden-area tile
+(113,775 points, about 62 m relief, EPSG:2955 + CGVD2013). Positives are class 2;
+high-confidence negatives are non-class-2 points with reference HAG > 2 m; the 0-2 m band is
+ambiguous and excluded. On the steep tile, class-2 recall is 0.9634, high-confidence
+false-ground is 4.65%, and class-2 HAG p99 is 0.0441 m. On the coastal tile, recall is
+0.9999, false-ground is 3.35%, and HAG p99 is 0.0217 m. The classifier transfers to the
+steeper terrain, but the reference is still not manually labelled.
+
+P14.3 **approves an optional FEMIC adapter prototype**, not a default pipeline change. The
+conditions are a manually labelled reference patch, a versioned optional FEMIC-side design,
+a stable `GroundClassification`/`low_point_mask` contract, and a second steep and coastal
+tile.
 
 ## Next slices
 
-1. **Reference patch and second terrain type**: resolve class 1/7 and test a steep or
-   interior forest tile before reopening FEMIC integration.
+1. **Manual reference patch and FEMIC adapter design**: label a small patch, then design an
+   optional versioned adapter. No default pipeline change.
 2. **CHM/ITD post-processing**: buffer flags, small-tree flags, and over-segmentation
    merging.
 3. **MLS/TLS semantic and instance segmentation**: a future `fresh-pointcloud` package,

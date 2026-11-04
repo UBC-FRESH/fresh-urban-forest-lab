@@ -70,17 +70,23 @@ class-2 ground. It does not fix near-ground noise. However, 99.84% of class-7 fa
 is within 0.15 m HAG, so `low_point_mask(height_above_ground, cut_m=0.15)` is the downstream
 segmentation contract. The ground labels are not noise-free.
 
-This is not yet an operational ground classifier. P13.4 defers FEMIC integration until
-there is a checked reference patch, a second terrain type, and a fuller PTD angle test. The
-classifier stays opt-in in this repository.
+P14 adds a reproducible class-2 reference surface and a steep Golden-area tile. Positives
+are class 2; high-confidence negatives are non-class-2 points with reference HAG > 2 m; the
+0-2 m band is ambiguous and excluded. On the steep tile, class-2 recall is 0.9634,
+high-confidence false-ground is 4.65%, and class-2 HAG p99 is 0.0441 m. On the coastal tile,
+recall is 0.9999, false-ground is 3.35%, and HAG p99 is 0.0217 m.
+
+P14.3 approves an optional FEMIC adapter prototype, not a default pipeline change. The
+conditions are a manually labelled reference patch, a versioned optional FEMIC-side design,
+and a stable contract. The classifier stays opt-in in this repository.
 
 What is next
 ------------
 
-The next validation step is a checked reference patch and a steep or interior forest tile.
-CHM/ITD post-processing (buffer flags, small-tree flags, over-segmentation merging) is a
-smaller intermediate step. QSM and QSF work belongs in a dedicated point-cloud package, not
-this app's core.
+The next step is a manual reference patch and an optional FEMIC adapter design. CHM/ITD
+post-processing (buffer flags, small-tree flags, over-segmentation merging) is a smaller
+intermediate step. QSM and QSF work belongs in a dedicated point-cloud package, not this
+app's core.
 
 Citations
 ---------
