@@ -4,6 +4,7 @@ Date: 2026-11-04
 Phase: P30
 Parent issue: #105
 Branch: `feature/p30-vancouver-city`
+Pull request: #131
 Status: PR queued for maintainer review
 
 ## Summary
