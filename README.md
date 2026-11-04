@@ -73,6 +73,14 @@ python scripts/build_vancouver_pack.py
 fresh-urban-forest serve --dataset data/processed/vancouver_2022 --port 8000
 ```
 
+Run both demos behind one landing page on the existing demo port:
+
+```bash
+./scripts/run_portal.sh
+```
+
+Open `http://127.0.0.1:8101/`; the UBC app is at `/ubc/` and Vancouver at `/vancouver/`.
+
 ## Status
 
 The prototype is complete through Phase 15 and released as v0.3.0. P30 is the active full

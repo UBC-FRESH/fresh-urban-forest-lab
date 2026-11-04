@@ -609,3 +609,14 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Storage: 165 GB raw LiDAR, 1.8 GB processed, 7.7 TB free; no dataset on the root disk.
 - Close-out report: `notes/reports/p30-vancouver-city.md`.
 - Dashboard: GREEN.
+
+
+### P30.7 demo portal
+
+- Added `fresh_urban_forest.portal` and `portal_app.py` for a landing page on port 8101.
+- Mounted the UBC demo at `/ubc/` and the Vancouver city demo at `/vancouver/`, with
+  separate runtime directories.
+- Kept the WS4 portal on port 8790 unchanged.
+- Portal browser smoke: both cards load, both apps reach live status, the City tab is
+  visible only in Vancouver, and there are no console or page errors.
+- Dashboard: GREEN.

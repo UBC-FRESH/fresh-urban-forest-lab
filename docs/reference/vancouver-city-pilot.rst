@@ -103,6 +103,24 @@ The app exposes the city tab at ``/api/city-metrics``. The 2D map, 3D scene, tre
 inspector, Light tab, and analytics use the same city dataset. The 3D scene uses a
 representative visual tree sample; metrics always use the full inventory.
 
+Demo portal
+-----------
+
+The UBC and Vancouver demos share one landing page on the existing FRESH Urban Forest Lab
+dev-server port, ``8101``. The WS4 portal stays on ``8790``.
+
+.. code-block:: bash
+
+   ./scripts/run_portal.sh
+
+Then open ``http://127.0.0.1:8101/``. The UBC app is at ``/ubc/`` and the Vancouver app is
+at ``/vancouver/``. Behind the lab proxy the paths are
+``/proxy/8101/``, ``/proxy/8101/ubc/``, and ``/proxy/8101/vancouver/``.
+
+.. image:: /_static/vancouver-city-portal.png
+   :alt: Landing page with UBC campus and Vancouver city demo cards
+   :width: 100%
+
 .. image:: /_static/vancouver-city-metrics.png
    :alt: Vancouver city metrics tab with canopy cover, volume, carbon, sequestration, rainfall, and local-area ranking
    :width: 100%

@@ -94,6 +94,14 @@ phase.
 - P30.4 city metrics: complete (#109).
 - P30.5 City UI and 3D: complete (#110).
 - P30.6 validation, docs, close-out: complete (#111).
+- P30.7 portal landing page: complete (#132).
+
+## Portal
+
+The two apps share a landing page on the existing FRESH Urban Forest Lab demo port, 8101.
+The WS4 portal remains on 8790. The portal mounts `/ubc/` and `/vancouver/`, gives each app
+its own runtime directory, and passes a browser smoke check with no console or page errors.
+Screenshot: `docs/_static/vancouver-city-portal.png`.
 
 ## Limits
 
