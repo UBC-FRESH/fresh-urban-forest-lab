@@ -32,6 +32,7 @@ from fresh_urban_forest.dataset import build_dataset, dataset_summary, load_data
 from fresh_urban_forest.demography import project_demography
 from fresh_urban_forest.field_analysis import analyze_field_packet, write_field_analysis
 from fresh_urban_forest.field_packet import build_field_packet
+from fresh_urban_forest.ground_adapter import GroundAdapterParameters, write_ground_bundle
 from fresh_urban_forest.habitat import GUILDS, guild_habitat, habitat_metrics, write_bird_report
 from fresh_urban_forest.integration import build_lab_report, write_lab_report
 from fresh_urban_forest.inventory import (
@@ -95,6 +96,14 @@ console = Console()
 
 DEST_OPTION = typer.Option(..., "--dest", help="Destination directory.")
 OUT_OPTION = typer.Option(..., "--out", help="Output dataset directory.")
+GROUND_LAZ_OPTION = typer.Option(
+    ...,
+    "--laz",
+    exists=True,
+    dir_okay=False,
+    help="Input LAS/LAZ tile.",
+)
+GROUND_OUT_OPTION = typer.Option(..., "--out", help="Output directory for the ground bundle.")
 OUT_DIR_OPTION = typer.Option(..., "--out-dir", help="Output directory for a change product.")
 NAME_OPTION = typer.Option("UBC urban forest", "--name", help="Dataset name.")
 SOURCE_OPTION = typer.Option(None, "--source", help="Catalog source identifier; repeatable.")
@@ -371,6 +380,86 @@ def info(dataset: Path = DATASET_OPTION) -> None:
         Dataset directory.
     """
     console.print_json(json.dumps(dataset_summary(load_dataset(dataset))))
+
+
+@app.command("ground-adapter")
+def ground_adapter(
+    laz: Path = GROUND_LAZ_OPTION,
+    out: Path = GROUND_OUT_OPTION,
+    crs: str | None = typer.Option(None, "--crs"),
+    vertical_datum: str | None = typer.Option(None, "--vertical-datum"),
+    sor: bool = typer.Option(True, "--sor/--no-sor"),
+    sor_k: int = typer.Option(10, "--sor-k"),
+    sor_multiplier: float = typer.Option(2.0, "--sor-multiplier"),
+    cell_size: float = typer.Option(1.0, "--cell-size"),
+    max_angle: float = typer.Option(15.0, "--max-angle"),
+    max_distance: float = typer.Option(0.5, "--max-distance"),
+    max_iterations: int = typer.Option(8, "--max-iterations"),
+    low_point_cut: float = typer.Option(0.15, "--low-point-cut"),
+    overwrite: bool = typer.Option(False, "--overwrite"),
+) -> None:
+    """Write an optional sidecar ground bundle for one LAS/LAZ tile.
+
+    Parameters
+    ----------
+    laz : Path
+        Input LAS or LAZ file.
+    out : Path
+        Output directory for ``ground.laz``, ``manifest.json``, and ``qa.json``.
+    crs : str or None
+        Explicit CRS label.
+    vertical_datum : str or None
+        Explicit vertical datum label.
+    sor : bool
+        Run statistical outlier removal before PTD.
+    sor_k : int
+        SOR neighbour count.
+    sor_multiplier : float
+        SOR standard-deviation multiplier.
+    cell_size : float
+        PTD seed grid cell size in metres.
+    max_angle : float
+        Maximum point-to-vertex angle in degrees.
+    max_distance : float
+        Maximum vertical residual in metres.
+    max_iterations : int
+        Maximum PTD iterations.
+    low_point_cut : float
+        Low-point cut in metres.
+    overwrite : bool
+        Replace an existing bundle.
+    """
+    parameters = GroundAdapterParameters(
+        sor_enabled=sor,
+        sor_k=sor_k,
+        sor_multiplier=sor_multiplier,
+        cell_size_m=cell_size,
+        max_angle_deg=max_angle,
+        max_distance_m=max_distance,
+        max_iterations=max_iterations,
+        low_point_cut_m=low_point_cut,
+    )
+    result = write_ground_bundle(
+        laz,
+        out,
+        crs=crs,
+        vertical_datum=vertical_datum,
+        parameters=parameters,
+        overwrite=overwrite,
+    )
+    console.print_json(
+        json.dumps(
+            {
+                "ground_laz": str(result.ground_laz),
+                "manifest_path": str(result.manifest_path),
+                "qa_path": str(result.qa_path),
+                "point_count": result.point_count,
+                "ground_count": result.ground_count,
+                "low_point_count": result.low_point_count,
+                "warnings": list(result.warnings),
+            }
+        )
+    )
 
 
 @app.command("serve")
