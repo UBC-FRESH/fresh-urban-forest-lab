@@ -197,15 +197,14 @@ ground is within 0.15 m HAG. The policy is therefore:
 The low-point flag is a downstream contract, not a ground label. The ground labels are not
 noise-free.
 
-**Do not use this as an operational ground classifier yet.** P13.4 decides whether the
-validated lane is ready for a FEMIC adapter. A checked reference patch and a second terrain
-type are still required.
+**Do not use this as an operational ground classifier yet.** P13.4 defers FEMIC
+integration. The classifier stays opt-in in `fresh-urban-forest-lab` until there is a
+checked reference patch, a second terrain type, and a fuller PTD angle test.
 
 ## Next slices
 
-1. **P13.4 FEMIC integration decision**: decide whether the validated preprocessing and
-   classifier are ready for a FEMIC adapter; default to no until the reference patch and a
-   second terrain type pass.
+1. **Reference patch and second terrain type**: resolve class 1/7 and test a steep or
+   interior forest tile before reopening FEMIC integration.
 2. **CHM/ITD post-processing**: buffer flags, small-tree flags, and over-segmentation
    merging.
 3. **MLS/TLS semantic and instance segmentation**: a future `fresh-pointcloud` package,

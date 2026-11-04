@@ -70,16 +70,17 @@ class-2 ground. It does not fix near-ground noise. However, 99.84% of class-7 fa
 is within 0.15 m HAG, so `low_point_mask(height_above_ground, cut_m=0.15)` is the downstream
 segmentation contract. The ground labels are not noise-free.
 
-This is not yet an operational ground classifier.
+This is not yet an operational ground classifier. P13.4 defers FEMIC integration until
+there is a checked reference patch, a second terrain type, and a fuller PTD angle test. The
+classifier stays opt-in in this repository.
 
 What is next
 ------------
 
-P13.4 decides whether the validated preprocessing and classifier are ready for a FEMIC
-adapter. A checked reference patch and a second terrain type are still required. CHM/ITD
-post-processing (buffer flags, small-tree flags, over-segmentation merging) is a smaller
-intermediate step. QSM and QSF work belongs in a dedicated point-cloud package, not this
-app's core.
+The next validation step is a checked reference patch and a steep or interior forest tile.
+CHM/ITD post-processing (buffer flags, small-tree flags, over-segmentation merging) is a
+smaller intermediate step. QSM and QSF work belongs in a dedicated point-cloud package, not
+this app's core.
 
 Citations
 ---------

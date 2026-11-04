@@ -363,4 +363,15 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
   the SOR/low-point policy.
 - Tests: 318 passed; total coverage 87.84 percent. Dashboard: GREEN.
 - Limits: SOR is optional and loses a small amount of ground; the low-point flag is not a
-  ground label; no operational or FEMIC claim is included. P13.4 is the FEMIC decision.
+  ground label; no operational or FEMIC claim is included.
+
+### P13.4 FEMIC integration decision
+
+- Deferred FEMIC integration. The classifier remains opt-in in `fresh-urban-forest-lab`.
+- Reasons: two tiles from one coastal/low-relief map sheet, no exhaustive ground truth, and
+  near-ground class-7 noise remains in the ground class.
+- Reopen only with a checked reference patch, a second terrain type, a fuller PTD angle
+  test, and a stable versioned contract.
+- Updated the P13 report, note, and docs. No FEMIC code changed.
+- Tests: 318 passed; total coverage 87.84 percent. Dashboard: GREEN.
+- Limits: this is a scope decision, not an accuracy claim. No tag or release is included.

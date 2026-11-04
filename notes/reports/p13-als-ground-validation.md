@@ -160,3 +160,31 @@ should not drive tree segmentation or QSM."
    adapter. The default is no until the reference patch and a second terrain type pass.
 3. Keep the classifier opt-in until the multi-tile evidence exists.
 4. Do not move it to FEMIC yet.
+
+## P13.4 FEMIC integration decision
+
+**Decision: defer FEMIC integration.** Keep the classifier opt-in in
+`fresh-urban-forest-lab` and do not add a FEMIC adapter yet.
+
+Reasons:
+
+- The validation uses two tiles, both from the same LidarBC map sheet and coastal/low-relief
+  setting. A second terrain type is missing.
+- The reference classes are not an exhaustive ground truth. Class 1 is unclassified and
+  class 7 is noise; precision and specificity are not established.
+- Near-ground class-7 noise remains in the ground class. The low-point flag is a downstream
+  contract, not a corrected ground label.
+- The classifier is a simplified PTD-inspired implementation. The multi-pass angle logic and
+  a checked reference patch are still missing.
+
+Conditions that would reopen the decision:
+
+1. A manually checked reference patch where class 1 and class 7 are resolved.
+2. A second terrain type, preferably steep or interior forest, with the same metrics.
+3. A full or better-documented PTD angle test and a measured noise pre-pass.
+4. A stable versioned contract for `GroundClassification` and `low_point_mask`.
+5. A FEMIC-side design that keeps the adapter optional and does not change the default
+   LidarBC product path.
+
+Until then, FEMIC keeps its current product lanes and this classifier stays an experimental
+consumer-side utility.
