@@ -4,7 +4,7 @@ Date: 2026-11-04
 Phase: P10
 Parent issue: #43
 Branch: `feature/p10-birds`
-Implementation head: pending at report write; refreshed at PR queue
+Implementation head: `10dac0d`
 Status: ready for review
 
 ## Summary
