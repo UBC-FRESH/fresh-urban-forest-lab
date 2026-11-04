@@ -535,3 +535,17 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Close-out report: `notes/reports/p20-closeout.md`. P20 is complete.
 - Limits: synthetic audit patch, one demo dataset, and no orthophoto/field crown labels.
   The anchor merge is a safety filter, not a validated instance solver.
+
+### P21 Ground-adapter second-tile smoke test
+
+- Ran `write_ground_bundle` on the 2025 coastal LidarBC tile
+  `bc_092g024_4_3_1_xyes_8_utm10_20250826_20250826.laz` with EPSG:3157 and CGVD2013.
+- Coastal bundle: 415,068 points, 374,711 predicted ground, 68.8 s, no warnings.
+- Golden comparison: 113,775 points, 82,530 predicted ground, 5.8 s, no warnings.
+- Both bundles use `femic.ground-bundle.v1` and `femic.ground-qa.v1`, with hashes, explicit
+  CRS/vertical datum, and the four extra dimensions.
+- Added `notes/reports/p21-ground-smoke.md` and updated the public adapter section.
+- Tests: 353 passed; total coverage 87.82 percent. Dashboard: GREEN.
+- Close-out report: `notes/reports/p21-closeout.md`. P21 is complete.
+- Limits: two tiles, no field/manual point labels, and no CI network job for real-tile
+  smoke.
