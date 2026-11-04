@@ -25,6 +25,7 @@ This roadmap is the plan of record and the issue tracker map for FRESH Urban For
 | P17 CHM/ITD post-processing | #113 | `feature/p17-itd-postprocess` | complete |
 | P18 CHM/ITD post-processing exports and smoke test | #116 | `feature/p18-itd-exports` | complete |
 | P19 Merge-reduction audit and guard | #119 | `feature/p19-merge-audit` | complete |
+| P20 Non-transitive crown merge and manual audit patch | #122 | `feature/p20-anchor-merge` | complete |
 
 ## Lifecycle Map
 
@@ -702,6 +703,34 @@ Phase 19 verification:
 - `python scripts/dashboard.py`
 - `python scripts/check_workflow.py`
 
+## Phase 20: Non-transitive crown merge and manual audit patch
+
+Parent issue: #122
+Branch: `feature/p20-anchor-merge`
+Status: complete
+
+Goal: replace the guarded union-find merge with a non-transitive anchor merge and validate
+it on a synthetic manual audit patch and the UBC demo.
+
+- [x] P20.1 Anchor merge, synthetic audit patch, tests, and report (#123)
+  - [x] Anchor pass: only larger crowns absorb; absorbed crowns cannot anchor
+  - [x] Synthetic split/distinct audit patch
+  - [x] Demo: 859 detected, 3 local groups, 856 kept
+  - [x] Non-transitivity and multi-crown anchor tests
+
+Acceptance criteria:
+
+- A smaller crown cannot anchor after being absorbed.
+- A large crown can absorb multiple smaller crowns within the caps.
+- The synthetic patch merges the split crown and keeps distinct crowns separate.
+- The demo comparison is recorded.
+- The dashboard is green.
+
+Phase 20 verification:
+
+- `python scripts/dashboard.py`
+- `python scripts/check_workflow.py`
+
 ## Detailed Next Steps Notes
 
 1. The repository was created from `UBC-FRESH/ubc-fresh-dev-workflow` on 2026-11-03. The seed's dashboard, validator, docs, and agent contract are retained.
@@ -718,3 +747,4 @@ Phase 19 verification:
 12. P17 (#113) adds opt-in CHM/ITD post-processing: edge buffer flags, small-tree height flags, and a conservative over-segmentation merge with source-ID groups. `kept()` excludes both flag sets; `detect_trees` defaults are unchanged.
 13. P18 (#116) exposes the P17 post-processing through `detect-trees --postprocess` and writes a sidecar summary. The UBC demo detects 859 crowns, keeps 701 after 57 merge groups, and a 50 m stress buffer flags 5. The default detector path is unchanged; the merge reduction needs visual review before operational use.
 14. P19 (#119) audits the demo merge and finds a transitive chain collapse: the old rule merged 67 crowns across 4.6 km. The guarded rule caps groups at 4 crowns and 30 m, reducing the demo to 3 local groups and 856 kept crowns. The guard prevents false merges but may under-merge real over-segmentation; the merge is a safety filter, not an instance solver.
+15. P20 (#122) replaces the guarded union-find merge with a non-transitive anchor rule: only larger crowns absorb, and absorbed crowns cannot anchor. The synthetic audit patch merges a known split crown and keeps similar distinct crowns separate. The demo remains 3 local groups and 856 kept; a real orthophoto/field audit is still needed.

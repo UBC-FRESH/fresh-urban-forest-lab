@@ -520,3 +520,18 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Close-out report: `notes/reports/p19-closeout.md`. P19 is complete.
 - Limits: one demo dataset and a visual audit; no field crown labels; the merge is a safety
   filter, not an instance solver; the default detector is unchanged.
+
+### P20 Non-transitive crown merge and manual audit patch
+
+- Replaced the union-find merge with an anchor pass: only larger crowns absorb smaller
+  crowns, and an absorbed crown cannot become an anchor.
+- Kept the 4-source and 30 m group caps.
+- Added a synthetic manual audit patch: a known split crown merges; two similar distinct
+  crowns stay separate.
+- Added tests for non-transitivity, multi-crown anchors, and the audit patch.
+- Demo result is unchanged: 859 detected, 3 local groups, 856 kept. The old 57 groups were
+  chain artifacts, not local split crowns.
+- Tests: 353 passed; total coverage 87.82 percent. Dashboard: GREEN.
+- Close-out report: `notes/reports/p20-closeout.md`. P20 is complete.
+- Limits: synthetic audit patch, one demo dataset, and no orthophoto/field crown labels.
+  The anchor merge is a safety filter, not a validated instance solver.
