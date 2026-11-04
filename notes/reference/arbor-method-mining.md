@@ -73,9 +73,9 @@ on Arbor's code.
 
 | ID | Candidate | Arbor source | What it does | Why it matters here | Complexity | Status |
 | --- | --- | --- | --- | --- | --- | --- |
-| G1 | Progressive TIN densification (PTD) | `src/segment/segment_ground_api.cpp`, `src/vendor/ptd/PTD.cpp`, book ch. 4 | Sparse ground seed, iterative TIN densification under angle/distance thresholds, ground class and HAG | Directly relevant to unclassified or inconsistently classified LidarBC/ALS tiles | Medium-high | Future ALS lane |
-| G2 | TIN interpolation and 1-NN fallback | `src/segment/segment_ground_api.cpp` | Interpolate ground elevation on the TIN; nearest ground point outside the TIN | Robust HAG at tile edges and sparse coverage | Medium | Future ALS lane |
-| G3 | Ground QA and low-outlier handling | Book ch. 4 | Record low-point cut, ground class, and HAG assumptions | Makes ground classification auditable | Low | Future ALS lane |
+| G1 | Progressive TIN densification (PTD) | `src/segment/segment_ground_api.cpp`, `src/vendor/ptd/PTD.cpp`, book ch. 4 | Sparse ground seed, iterative TIN densification under angle/distance thresholds, ground class and HAG | Directly relevant to unclassified or inconsistently classified LidarBC/ALS tiles | Medium-high | Implemented as simplified `classify_ground_ptd` in P13.1 |
+| G2 | TIN interpolation and 1-NN fallback | `src/segment/segment_ground_api.cpp` | Interpolate ground elevation on the TIN; nearest ground point outside the TIN | Robust HAG at tile edges and sparse coverage | Medium | Implemented as part of P13.1; real-tile edge validation pending |
+| G3 | Ground QA and low-outlier handling | Book ch. 4 | Record low-point cut, ground class, and HAG assumptions | Makes ground classification auditable | Low | Seed/iteration counters implemented; low-point-cut policy pending P13.3 |
 
 Underlying method to cite for PTD: Axelsson (2000), adaptive TIN models. Arbor's vendored
 PTD implementation is MIT, but the planned implementation is a new Python version.
@@ -157,11 +157,30 @@ They are opt-in utilities. They are not wired into the default CHM/ITD pipeline.
 Each function carries a `Method provenance` docstring section naming Arbor 1.1.5, the
 source file or book chapter, the GPL-3.0 source licence, and the clean-room statement.
 
+## ALS ground classification (P13.1)
+
+`classify_ground_ptd` is the first ALS-specific function. It seeds a TIN from the lowest
+point in each grid cell, then progressively adds points whose vertical residual from the
+TIN is within `max_distance_m` and whose TIN facet slope is within `max_angle_deg`. The
+final TIN provides `ground_elevation` and `height_above_ground`.
+
+This is a **simplified, PTD-inspired** implementation, not a line-by-line port:
+
+- the angle test uses the TIN facet slope, not the full point-to-vertex angle test;
+- the default vertical residual is permissive (2 m);
+- points outside the TIN hull are not classified as ground; their HAG uses the nearest
+  support point;
+- the TIN support is thinned to 200,000 points for large tiles;
+- a degenerate TIN returns the seed-only result with a warning.
+
+The synthetic fixtures cover a flat plane, a gentle slope, a high outlier, a collinear
+degenerate seed set, an empty cloud, and invalid parameters. A real LidarBC tile is the
+next validation gate. Do not use this as an operational ground classifier before P13.2.
+
 ## Next slices
 
-1. **ALS ground classification**: PTD-inspired ground and HAG in `femic` or the
-   preprocessing path, with ground QA and a low-point cut. This is the most relevant
-   Arbor-derived capability for LidarBC/ALS.
+1. **Real LidarBC tile validation**: run `classify_ground_ptd` on a small ALS tile, report
+   ground counts, HAG percentiles, low-point cut, and QA warnings.
 2. **CHM/ITD post-processing**: buffer flags, small-tree flags, and over-segmentation
    merging.
 3. **MLS/TLS semantic and instance segmentation**: a future `fresh-pointcloud` package,

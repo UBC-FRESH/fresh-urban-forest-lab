@@ -23,6 +23,9 @@ The first slice adds four opt-in functions in ``fresh_urban_forest.pointcloud``:
   26-connected voxel labelling, from ``src/utils/Grid3D.cpp``.
 - :func:`fresh_urban_forest.pointcloud.local_anisotropy` — kNN covariance anisotropy as a
   wood-likelihood proxy, from ``src/utils/anisotopy.cpp`` and book chapter 5.
+- :func:`fresh_urban_forest.pointcloud.classify_ground_ptd` — a simplified, PTD-inspired
+  ALS ground classifier with TIN densification and HAG, from book chapter 4 and
+  Axelsson (2000).
 
 Each function carries a ``Method provenance`` docstring section. The note records the
 source file or book chapter, the licence, and the clean-room statement.
@@ -45,14 +48,25 @@ the licence of the combined work. If a future change wants to copy a specific co
 rather than reimplement it, the change stops for a licence review. The default is always a
 new implementation with a named method source.
 
+ALS ground classification
+-------------------------
+
+``classify_ground_ptd`` is a simplified, PTD-inspired implementation. It seeds a TIN from
+the lowest point per grid cell, progressively adds points within a vertical residual and
+TIN facet-slope threshold, and interpolates height above ground from the final surface.
+
+It is **not** a line-by-line port of Arbor, lidR, or the original PTD code. The angle test
+uses the TIN facet slope, the default vertical residual is permissive, and points outside
+the TIN hull are not classified as ground. A real LidarBC tile must pass the P13.2
+validation before this is used as an operational ground classifier.
+
 What is next
 ------------
 
-The most relevant Arbor-derived capability for LidarBC/ALS data is progressive TIN
-densification ground classification and height above ground, not the MLS pathfinder or
-QSM. That is a separate ALS lane with real-tile validation. CHM/ITD post-processing
-(buffer flags, small-tree flags, over-segmentation merging) is a smaller intermediate
-step. QSM and QSF work belongs in a dedicated point-cloud package, not this app's core.
+The next ALS step is real-tile validation: ground counts, HAG percentiles, low-point-cut
+policy, and QA warnings on a small LidarBC tile. CHM/ITD post-processing (buffer flags,
+small-tree flags, over-segmentation merging) is a smaller intermediate step. QSM and QSF
+work belongs in a dedicated point-cloud package, not this app's core.
 
 Citations
 ---------

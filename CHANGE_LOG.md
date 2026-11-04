@@ -291,3 +291,20 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
   PTD ground classification, semantic/instance segmentation, QSM, and QSF are future work.
 - P12 is complete. P13 is recommended for ALS ground classification and HAG; the MLS/TLS
   semantic/instance/QSM stack remains a separate future package.
+
+### P13 ALS ground classification and height above ground
+
+- Added `classify_ground_ptd` and the typed `GroundClassification` result to
+  `src/fresh_urban_forest/pointcloud.py`.
+- The classifier seeds a TIN from the lowest point per grid cell, progressively adds points
+  within a vertical residual and TIN facet-slope threshold, and interpolates HAG from the
+  final ground surface.
+- Added seed/iteration counters and a warning for degenerate or too-small TINs.
+- Added synthetic tests for a flat plane, a gentle slope, high vegetation, a collinear
+  degenerate seed set, an empty cloud, and invalid parameters.
+- Documented the simplified, PTD-inspired method, the provenance to Axelsson (2000) and
+  Arbor chapter 4, and the real-tile validation gate in the note and Sphinx page.
+- Tests: 311 passed; total coverage 87.55 percent. Dashboard: GREEN.
+- Limits: this is not a full PTD implementation. The angle test uses the TIN facet slope,
+  the default vertical residual is permissive, points outside the TIN hull are not ground,
+  and a real LidarBC tile has not yet been validated. No FEMIC integration is included.
