@@ -19,6 +19,7 @@ This roadmap is the plan of record and the issue tracker map for FRESH Urban For
 | P10 Bird habitat and demography | #43 | `feature/p10-birds` | pr-open |
 | P11 Integration and v0.3 release candidate | #44 | `feature/p11-integration` | planned |
 | P12 Arbor method mining and clean-room point-cloud primitives | #61 | `feature/p12-arbor-methods` | complete |
+| P13 ALS ground classification and height above ground | #70 | `feature/p13-als-ground` | complete |
 
 ## Lifecycle Map
 
@@ -484,6 +485,53 @@ Phase 12 verification:
 - `python scripts/dashboard.py`
 - `python scripts/check_workflow.py`
 
+## Phase 13: ALS ground classification and height above ground
+
+Parent issue: #70
+Branch: `feature/p13-als-ground`
+Status: complete
+
+Goal: add a PTD-inspired ground classification and height-above-ground capability for raw
+LidarBC/ALS point clouds, starting in this repository and validating on a real tile before
+any FEMIC integration.
+
+Plan: `notes/reference/arbor-method-mining.md`.
+Decision: `notes/adr/0006-clean-room-method-reuse.md`.
+
+- [x] P13.1 PTD ground classification core and synthetic fixtures (#71)
+  - [x] Grid-lowest seeding, progressive TIN densification, and HAG interpolation
+  - [x] Typed `GroundClassification` result with seed/iteration counters and warnings
+  - [x] Flat, sloped, outlier, degenerate-TIN, empty, and invalid-parameter tests
+  - [x] Method provenance docstring and public docs
+- [x] P13.2 Real LidarBC tile validation (#80)
+  - [x] Acquired a 415,068-point LidarBC 2025 tile under OGL-BC
+  - [x] Recorded class counts, class-2 recall, HAG percentiles, runtime, and caveats
+  - [x] Replaced the facet-slope gate with a point-to-vertex angle gate after the first pass
+- [x] P13.3 QA report and low-point-cut/SOR policy (#82)
+  - [x] SOR before PTD on the 2025 and 2016 tiles
+  - [x] Class-7 false-ground and class-2 recall comparison
+  - [x] `low_point_mask` 0.15 m downstream policy
+- [x] P13.4 FEMIC integration decision (#87)
+  - [x] Deferred FEMIC integration; keep the classifier opt-in
+  - [x] Recorded the reference-patch, second-terrain, and full-PTD conditions
+
+Acceptance criteria:
+
+- A flat plane, a sloped plane, and a scene with an above-ground outlier classify the
+  expected ground points.
+- HAG is near zero on synthetic ground and positive on vegetation or building outliers.
+- The result records seed count, iteration count, ground count, and a warning when the TIN
+  is degenerate.
+- A real LidarBC tile reports ground points, HAG percentiles, and QA warnings.
+- The implementation cites Axelsson (2000), Arbor book chapter 4, and Arbor's PTD note;
+  no GPL code is copied.
+- The dashboard is green.
+
+Phase 13 verification:
+
+- `python scripts/dashboard.py`
+- `python scripts/check_workflow.py`
+
 ## Detailed Next Steps Notes
 
 1. The repository was created from `UBC-FRESH/ubc-fresh-dev-workflow` on 2026-11-03. The seed's dashboard, validator, docs, and agent contract are retained.
@@ -498,3 +546,4 @@ Phase 12 verification:
 10. The P7-P11 programme is queued as planned phases (#40-#44) with the detailed plan in `notes/design/urban-canopy-program-plan.md` and the rapid evidence review in `notes/reference/literature-review-shade-optimization-biodiversity.md`. The recommended order is P7 shade/species, P8 optimization/Pareto, P9 off-inventory, P10 birds, P11 integration. No phase is active.
 11. The P7-P11 queue does not block the v0.2.0 release candidate. P5 remains the release gate; its tag, release, and settings actions still need explicit maintainer approval.
 12. P12 (#61) mines Arbor 1.1.5 methods without copying its GPL-3.0 code. The first slice adds four opt-in point-cloud primitives, the provenance note, ADR 0006, and the public docs page. The next ALS-relevant candidate is PTD-inspired ground classification; the MLS/TLS semantic, instance, and QSM stack belongs in a future separately tested package.
+13. P13 (#70) adds `classify_ground_ptd` and `GroundClassification` for the ALS ground lane. P13.1 covers the core algorithm, synthetic fixtures, and provenance. P13.2 validates a 415,068-point LidarBC 2025 tile: class-2 recall is 0.9998 and class-2 HAG p99 is 0.021 m, but the reference classes are not exhaustive negatives and near-ground class-7 noise is over-labelled as ground. P13.3 shows SOR removes high noise with 0.04-0.6% class-2 ground loss but does not fix near-ground noise; 99.84% of class-7 false ground is within 0.15 m HAG, so `low_point_mask(0.15)` is the downstream segmentation contract. P13.4 defers FEMIC integration until a checked reference patch, a second terrain type, and a fuller PTD angle test exist. The classifier remains an opt-in consumer-side utility; no operational or FEMIC claim is made.
