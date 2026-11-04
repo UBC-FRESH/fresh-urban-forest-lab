@@ -30,11 +30,12 @@ stormwater audit.
 | Public trees | City of Vancouver `public-trees` | 184,152 records, modified 2026-11-02 | OGL – Vancouver | EPSG:4326 | `data/raw/vancouver/public_trees.csv` |
 | Local areas | City of Vancouver `local-area-boundary` | 22 polygons | OGL – Vancouver | EPSG:4326 | `data/raw/vancouver/local_area_boundary.geojson` |
 | Buildings | City of Vancouver `building-footprints-2015` | 154,124 footprints | OGL – Vancouver | EPSG:4326 | `data/raw/vancouver/building_footprints.geojson` |
-| Rainfall normals | Environment Canada climate normals, Vancouver Harbour CS | 1981–2010 normal, about 1,200 mm/yr | Open Government Licence – Canada | n/a | `data/raw/vancouver/climate_normals.json` |
+| Rainfall normals | Environment Canada climate normals, Vancouver Harbour CS | 1981–2010 normal, 1,098.8 mm/yr | Open Government Licence – Canada | n/a | Environment Canada climate normals (recorded in `notes/reports/p16-source-lock.json`) |
 | Cross-check LiDAR | Metro Vancouver 2022 classified LAS, 16.5 GB | 2022, QL3, ground/water classes | OGL – Metro Vancouver | EPSG:3157, CGVD28GVRD2018 | optional `data/raw/metro_van_2022/` |
 
 The City LiDAR tile manifest is `data/raw/tiles/vancouver_2022_city.json` and contains all
-181 tiles. The webtransfer host blocks plain HTTP clients; use the headed Chromium helper in
+181 tiles. Source counts, byte sizes, and SHA-256 hashes are in
+`notes/reports/p16-source-lock.json`. The webtransfer host blocks plain HTTP clients; use the headed Chromium helper in
 `scripts/browser_download_tiles.py` under `xvfb-run`.
 
 The union of the 22 local areas is 118.76 km² in EPSG:3157. LiDAR coverage is larger
@@ -120,8 +121,8 @@ City-wide and per local area:
 - shade: representative-day shade for 21 June and 21 September, 10:00–16:00, using the
   existing solar/shadow engine with buildings and canopy;
 - species diversity: Shannon and Simpson indices, native share, top genera;
-- rainfall interception potential: `rainfall * canopy_area * interception_fraction`, with
-  a stated 10–20% range and a screening label.
+- rainfall interception potential: `rainfall * canopy_area * interception_fraction`, using
+  the 1,098.8 mm/yr normal, with a stated 10–20% range and a screening label.
 
 Every metric JSON field carries `method`, `evidence_tier`, and `units`. City totals and
 local-area totals must reconcile within rounding.

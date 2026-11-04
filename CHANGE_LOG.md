@@ -470,3 +470,14 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Added `notes/design/vancouver-city-pilot.md` with the processing, metrics, 3D, validation,
   and storage plan.
 - Dashboard: GREEN. Tests: 331 passed.
+
+### P16.1 source lock
+
+- Locked the Vancouver AOI at 118.76 km² from the union of 22 local-area polygons.
+- Downloaded and hashed 184,152 public trees, the local-area polygons, and 154,124 building
+  footprints. The 2022 City LiDAR manifest contains all 181 tiles.
+- Climate normal locked at 1,098.8 mm/yr (Vancouver Harbour CS, 1981–2010).
+- Source evidence: `notes/reports/p16-source-lock.json`.
+- Started the resumable browser-assisted LiDAR download into
+  `data/raw/city_lidar/2022/`.
+- Dashboard: GREEN.
