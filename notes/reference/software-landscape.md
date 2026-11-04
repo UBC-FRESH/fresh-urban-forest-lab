@@ -31,6 +31,7 @@ licence clean, and record what we deliberately did not copy.
 | **allometree** (R) | Fits and selects height–diameter and crown allometries, including multi-species and mixed models. | Open source R package (check current licence on CRAN/GitHub). | **Method reference.** | Informs the model-fitting roadmap: fit local equations from repeat inventory measurements rather than assuming generic curves forever. |
 | **ForestTools** (R) | Variable-window filter tree detection plus marker-controlled watershed crown segmentation on a CHM; GLCM texture metrics. | GPL-3. | **Algorithm reimplementation.** Do not copy GPL code. | We implemented local-maxima detection and marker-controlled watershed segmentation from the published method in `src/fresh_urban_forest/itd.py`. No R dependency. |
 | **lidR** (R) | Rich LAS/LAZ processing, CHM/DTM, point-cloud and raster ITD/ITS algorithms, LAScatalog processing. | GPL-3. | **Algorithm and vocabulary reference.** | We borrowed the CHM → local maxima → watershed sequence and the separation of detection from segmentation. We did not copy code or add an R dependency. |
+| **Arbor** (`r-lidar/arbor`) | MLS/TLS pipeline: hybrid decimation, ground/HAG, wood likelihood, semantic and instance segmentation, QSM/QSF, quality codes. | GPL-3.0. | **Method and design-pattern reference only.** Do not copy code into this MIT repository. | We reimplemented hybrid homogenization, SOR, sparse voxel components, and kNN anisotropy from the book's method descriptions in `pointcloud.py`. We did not copy Arbor code, vendor its C++, or import the MLS pathfinder/QSM stack. See `notes/reference/arbor-method-mining.md`. |
 | **PyCrown** | Fast raster ITD with local maxima and Dalponte–Coomes crown growth; DSM/DTM handling on steep terrain. | GPL-3; repository archived. | **Algorithm reference only.** | Confirms the need for terrain correction and a circular/region-growing crown option. Our first implementation is simpler and documented as such. |
 | **itcSegment** (R) | Published individual-tree crown delineation with adaptive windows and region growing. | GPL. | **Algorithm reference only.** | Same family as ForestTools/PyCrown. We cite the method family and avoid code reuse. |
 | **Treepedia / Treepedia 2.0** (MIT Senseable City Lab) | Street-level Green View Index from Google Street View; Otsu/mean-shift and deep-learning segmentation; open city results. | BSD-2-Clause for the original code; model weights and images have separate terms. | **Metric and UX reference.** | We did not implement GVI because it needs proprietary Street View imagery. The idea is recorded as a future street-level layer, not a core dependency. |
@@ -92,6 +93,13 @@ prototype already has them.
   Urban Forestry & Urban Greening 14(3): 675–685.
 - City of Vancouver (2022). *2022 Vancouver tree canopy assessment.*
 - UBC SEEDS / UFOR 220 (2024). *UBC Vancouver campus tree inventory* reports and toolkit.
+- Roussel, J.-R. (2026). *Arbor: Tree Segmentation in MLS/TLS Point Clouds* (version
+  1.1.5) [Computer software]. https://github.com/r-lidar/arbor
+- Roussel, J.-R. (2026). *Arbor: The Complete R Tutorial Book*.
+  https://r-lidar.github.io/arbor_book/
+- Axelsson, P. (2000). *DEM generation from laser scanner data using adaptive TIN
+  models.* International Archives of Photogrammetry and Remote Sensing, 33(B4/1),
+  110–117.
 
 ## Next scan targets
 

@@ -18,6 +18,7 @@ This roadmap is the plan of record and the issue tracker map for FRESH Urban For
 | P9 Off-inventory and private-canopy augmentation | #42 | `feature/p9-off-inventory` | pr-open |
 | P10 Bird habitat and demography | #43 | `feature/p10-birds` | planned |
 | P11 Integration and v0.3 release candidate | #44 | `feature/p11-integration` | planned |
+| P12 Arbor method mining and clean-room point-cloud primitives | #61 | `feature/p12-arbor-methods` | complete |
 
 ## Lifecycle Map
 
@@ -451,6 +452,38 @@ Phase 11 verification:
 - `python scripts/check_workflow.py`
 - `fresh-urban-forest serve --dataset data/demo/ubc_core --port 8000`
 
+## Phase 12: Arbor method mining and clean-room point-cloud primitives
+
+Parent issue: #61
+Branch: `feature/p12-arbor-methods`
+Status: complete
+
+Goal: mine the published methods and design patterns in `r-lidar/arbor` and reimplement the
+low-risk point-cloud primitives in MIT-licensed Python, with explicit provenance and no
+copyleft code copying.
+
+Plan: `notes/reference/arbor-method-mining.md`.
+Decision: `notes/adr/0006-clean-room-method-reuse.md`.
+
+- [x] P12.1 Provenance scaffolding and point-cloud primitives (#62)
+  - [x] Arbor source snapshot, licence posture, and candidate matrix
+  - [x] ADR, software-landscape row, Sphinx page, and `llms.txt` entry
+  - [x] `hybrid_homogenize`, `statistical_outlier_mask`, `voxel_connected_components`, `local_anisotropy`
+  - [x] Synthetic-cloud tests and `Method provenance` docstrings
+
+Acceptance criteria:
+
+- The provenance note, ADR, software-landscape row, and Sphinx page exist and are linked.
+- `fresh_urban_forest.pointcloud` exposes the four documented functions.
+- Unit tests cover the nominal path, edge cases, and determinism.
+- No Arbor source code is copied and no GPL-licensed code is added.
+- The dashboard is green.
+
+Phase 12 verification:
+
+- `python scripts/dashboard.py`
+- `python scripts/check_workflow.py`
+
 ## Detailed Next Steps Notes
 
 1. The repository was created from `UBC-FRESH/ubc-fresh-dev-workflow` on 2026-11-03. The seed's dashboard, validator, docs, and agent contract are retained.
@@ -464,3 +497,4 @@ Phase 11 verification:
 9. P1.7 (#38) added external tile discovery. The UBC pilot bbox returned 34 LidarBC point-cloud tiles and 15 CanElevation tiles. The CanElevation 2016 Lower Mainland tiles duplicate the LidarBC 2016 coverage, so they are a COPC/cloud-optimised alternative rather than an independent repeat measure. One 6.04 MB LidarBC tile was downloaded and summarised as a QA check.
 10. The P7-P11 programme is queued as planned phases (#40-#44) with the detailed plan in `notes/design/urban-canopy-program-plan.md` and the rapid evidence review in `notes/reference/literature-review-shade-optimization-biodiversity.md`. The recommended order is P7 shade/species, P8 optimization/Pareto, P9 off-inventory, P10 birds, P11 integration. No phase is active.
 11. The P7-P11 queue does not block the v0.2.0 release candidate. P5 remains the release gate; its tag, release, and settings actions still need explicit maintainer approval.
+12. P12 (#61) mines Arbor 1.1.5 methods without copying its GPL-3.0 code. The first slice adds four opt-in point-cloud primitives, the provenance note, ADR 0006, and the public docs page. The next ALS-relevant candidate is PTD-inspired ground classification; the MLS/TLS semantic, instance, and QSM stack belongs in a future separately tested package.

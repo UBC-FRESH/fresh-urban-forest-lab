@@ -30,6 +30,7 @@ act, and cite it in their reports. Start with the repository's ``AGENTS.md`` and
    reference/optimization-and-pareto
    reference/off-inventory-canopy
    reference/methods
+   reference/arbor-method-mining
    reference/change-products
    reference/validation-and-calibration
    reference/assistant
