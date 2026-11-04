@@ -348,3 +348,38 @@ def test_optimization_job_and_scenario(tmp_path: Path) -> None:
     deleted = client.delete(f"/api/optimize/{job_id}")
     assert deleted.status_code == 200
     assert not saved.exists()
+
+
+def test_off_inventory_endpoints(tmp_path: Path) -> None:
+    """The off-inventory report, GeoJSON, and value-of-information endpoints work."""
+    import json
+
+    client = _client(tmp_path)
+    root = tmp_path / "dataset"
+    (root / "off_inventory.json").write_text(
+        json.dumps(
+            {
+                "schema_version": "fresh-urban-forest.off-inventory.v1",
+                "candidate_count": 1,
+                "candidates": [],
+            }
+        ),
+        encoding="utf-8",
+    )
+    (root / "off_inventory.geojson").write_text(
+        json.dumps({"type": "FeatureCollection", "features": []}),
+        encoding="utf-8",
+    )
+    (root / "off_inventory_voi.json").write_text(
+        json.dumps({"plan_jaccard": 1.0, "changed_sites": 0}),
+        encoding="utf-8",
+    )
+    report = client.get("/api/off-inventory")
+    assert report.status_code == 200
+    assert report.json()["candidate_count"] == 1
+    geojson = client.get("/api/off-inventory.geojson")
+    assert geojson.status_code == 200
+    assert geojson.json()["type"] == "FeatureCollection"
+    value = client.get("/api/off-inventory/value")
+    assert value.status_code == 200
+    assert value.json()["plan_jaccard"] == 1.0

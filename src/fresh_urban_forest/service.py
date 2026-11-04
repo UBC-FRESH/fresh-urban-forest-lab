@@ -473,6 +473,65 @@ def create_app(
         """
         return inventory_completeness(state.dataset.trees)
 
+    @app.get("/api/off-inventory")
+    def off_inventory() -> dict[str, object]:
+        """Return the precomputed off-inventory candidate report.
+
+        Returns
+        -------
+        dict
+            Candidate summary and records.
+
+        Raises
+        ------
+        fastapi.HTTPException
+            When the dataset has no off-inventory layer.
+        """
+        path = _dataset_file(state, "off_inventory.json")
+        if path is None:
+            raise HTTPException(status_code=404, detail="this dataset has no off-inventory layer")
+        return _read_json_object(path)
+
+    @app.get("/api/off-inventory.geojson")
+    def off_inventory_geojson() -> FileResponse:
+        """Return the public off-inventory candidate GeoJSON.
+
+        Returns
+        -------
+        fastapi.responses.FileResponse
+            Candidate FeatureCollection.
+
+        Raises
+        ------
+        fastapi.HTTPException
+            When the dataset has no off-inventory layer.
+        """
+        path = _dataset_file(state, "off_inventory.geojson")
+        if path is None:
+            raise HTTPException(status_code=404, detail="this dataset has no off-inventory layer")
+        return FileResponse(path, media_type="application/geo+json", filename=path.name)
+
+    @app.get("/api/off-inventory/value")
+    def off_inventory_value() -> dict[str, object]:
+        """Return the value-of-information comparison, when one exists.
+
+        Returns
+        -------
+        dict
+            Official/augmented archive and plan comparison.
+
+        Raises
+        ------
+        fastapi.HTTPException
+            When the dataset has no value-of-information result.
+        """
+        path = _dataset_file(state, "off_inventory_voi.json")
+        if path is None:
+            raise HTTPException(
+                status_code=404, detail="this dataset has no value-of-information result"
+            )
+        return _read_json_object(path)
+
     @app.get("/api/changes")
     def change_products() -> dict[str, object]:
         """List optional observed-change products in the dataset.
@@ -2029,6 +2088,27 @@ def _read_json_object(path: Path) -> dict[str, object]:
     if not isinstance(payload, dict):
         raise HTTPException(status_code=500, detail="change summary is not a JSON object")
     return {str(key): value for key, value in payload.items()}
+
+
+def _dataset_file(state: LabState, name: str) -> Path | None:
+    """Return a safe dataset file when it exists.
+
+    Parameters
+    ----------
+    state : LabState
+        Application state.
+    name : str
+        File name without a directory.
+
+    Returns
+    -------
+    Path or None
+        Existing path, or ``None``.
+    """
+    if state.dataset_root is None:
+        return None
+    path = state.dataset_root / Path(name).name
+    return path if path.is_file() else None
 
 
 def _change_path(state: LabState, product: str = "change.json") -> Path | None:

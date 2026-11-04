@@ -292,6 +292,25 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - P12 is complete. P13 is recommended for ALS ground classification and HAG; the MLS/TLS
   semantic/instance/QSM stack remains a separate future package.
 
+### P9 off-inventory canopy and value of information
+
+- Added `off_inventory.py`: CHM detection, inventory matching, confidence-scored
+  off-inventory candidates, a separate augmented population, and a P8 value-of-information
+  comparison.
+- Added `fresh-urban-forest off-inventory` with `--voi` and the
+  `/api/off-inventory`, `/api/off-inventory.geojson`, and `/api/off-inventory/value`
+  endpoints.
+- Added the sidebar summary and map layer toggle; the layer is off by default and shows
+  candidate confidence and height.
+- Main Mall pilot: 5,536 detected, 1,409 matched, 500 candidates (cap), 435 high-confidence,
+  8.3 ha candidate crown area; ownership unknown.
+- Value of information: 9,259 → 9,759 trees; 2.855M → 3.669M m³ crown volume; 3,827 →
+  5,024 t carbon. Best-shade plan unchanged (Jaccard 1.00, 0 sites differ) in this pilot.
+- Added privacy/terminology note and the P9 report.
+- Tests: 310 passed. Dashboard: GREEN.
+- Limits: no parcel/ownership layer, no field validation, 500-candidate cap, unknown species,
+  screening-only carbon/canopy totals.
+
 ### P13 ALS ground classification and height above ground
 
 - Added `classify_ground_ptd` and the typed `GroundClassification` result to
