@@ -401,6 +401,6 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Added `docs/reference/integration-and-release.rst`, the P11 report, and v0.3.0 release
   notes.
 - Bumped package, citation, and runtime version metadata to 0.3.0.
-- Tests: 323 passed. Dashboard: GREEN.
+- Tests: 331 passed. Dashboard: GREEN.
 - Release limits: no tag, GitHub release, Pages setting, or public deployment has been
   created; those actions remain approval-gated.
