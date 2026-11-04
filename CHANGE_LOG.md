@@ -630,3 +630,15 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Portal browser smoke: both cards load, both apps reach live status, the City tab is
   visible only in Vancouver, and there are no console or page errors.
 - Dashboard: GREEN.
+
+
+### P30 full 2D map layers
+
+- The Vancouver 2D map now loads all 184,151 public-tree points and all 154,124 building
+  footprints from compressed GeoJSON, after the app reaches live status.
+- The 3D scene keeps a spatially stratified visual sample of 29,096 trees and 12,000
+  buildings, with an explicit sample label in the scene HUD.
+- Added a Downtown camera preset alongside the city view.
+- Browser smoke: map loads in about 4.5 s to live, full map layers arrive after about 7 s,
+  and there are no console or page errors.
+- Dashboard: GREEN.

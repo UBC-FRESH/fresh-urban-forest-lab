@@ -3,9 +3,11 @@
 from __future__ import annotations
 
 import datetime as dt
+import gzip
 import json
 import math
-from collections import Counter
+import shutil
+from collections import Counter, defaultdict
 from collections.abc import Mapping
 from dataclasses import replace
 from pathlib import Path
@@ -15,6 +17,7 @@ import numpy as np
 from pyproj import Transformer
 from shapely.geometry import Polygon
 
+from fresh_urban_forest.allometry import species_group, tree_carbon_kg, tree_crown_volume_m3
 from fresh_urban_forest.dataset import write_dataset
 from fresh_urban_forest.inventory import load_buildings
 from fresh_urban_forest.metrics import SIZE_CLASSES, size_class
@@ -122,6 +125,8 @@ def build_city_pack(
             "boundary": "boundary.geojson",
             "city_metrics": "city_metrics.json",
             "inventory_summary": "inventory_summary.json",
+            "map_trees": "map_trees.json.gz",
+            "map_buildings": "map_buildings.geojson.gz",
         },
     )
     dataset = UrbanForestDataset(
@@ -138,6 +143,13 @@ def build_city_pack(
     (out_dir / "inventory_summary.json").write_text(
         json.dumps(dict(inventory_summary), indent=2) + "\n", encoding="utf-8"
     )
+    with gzip.open(out_dir / "map_trees.json.gz", "wt", encoding="utf-8") as handle:
+        json.dump(_map_tree_collection(trees), handle, separators=(",", ":"))
+    with (
+        open(building_footprints, "rb") as source,
+        gzip.open(out_dir / "map_buildings.geojson.gz", "wb") as destination,
+    ):
+        shutil.copyfileobj(source, destination)
     return dataset
 
 
@@ -161,9 +173,9 @@ def _select_buildings(
     height_raster: RasterData,
     max_buildings: int,
 ) -> tuple[Building, ...]:
-    """Assign LiDAR heights and select the largest footprints for the 3D scene."""
+    """Assign LiDAR heights and pick a spatially stratified 3D building sample."""
     transformer = Transformer.from_crs("EPSG:4326", height_raster.crs, always_xy=True)
-    scored: list[tuple[float, Building, float]] = []
+    buckets: dict[tuple[int, int], list[tuple[float, Building, float]]] = defaultdict(list)
     for building in buildings:
         if not building.rings or len(building.rings[0]) < 3:
             continue
@@ -180,10 +192,76 @@ def _select_buildings(
             np.asarray([lat], dtype=np.float64),
         )[0]
         height = float(sampled) if np.isfinite(sampled) and sampled > 0.5 else 8.0
-        scored.append((area, building, height))
-    scored.sort(key=lambda item: -item[0])
-    selected = scored[:max_buildings]
+        x, y = transformer.transform(lon, lat)
+        cell = (math.floor(x / 300.0), math.floor(y / 300.0))
+        buckets[cell].append((area, building, height))
+    for bucket in buckets.values():
+        bucket.sort(key=lambda item: -item[0])
+    selected: list[tuple[float, Building, float]] = []
+    keys = sorted(buckets)
+    while len(selected) < max_buildings and any(buckets[key] for key in keys):
+        for key in keys:
+            if buckets[key] and len(selected) < max_buildings:
+                selected.append(buckets[key].pop(0))
+    if len(selected) < max_buildings:
+        remaining = [item for key in keys for item in buckets[key]]
+        remaining.sort(key=lambda item: -item[0])
+        selected.extend(remaining[: max_buildings - len(selected)])
     return tuple(replace(building, height_m=round(height, 2)) for _, building, height in selected)
+
+
+def _map_tree_collection(trees: tuple[TreeRecord, ...]) -> dict[str, object]:
+    """Build the all-tree map layer with enough fields for the inspector."""
+    features = []
+    for tree in trees:
+        group = species_group(tree.species or tree.common_name)
+        features.append(
+            {
+                "type": "Feature",
+                "geometry": {"type": "Point", "coordinates": [tree.lon, tree.lat]},
+                "properties": {
+                    "id": tree.tree_id,
+                    "tree_id": tree.tree_id,
+                    "lon": tree.lon,
+                    "lat": tree.lat,
+                    "species": tree.species,
+                    "common_name": tree.common_name,
+                    "genus": tree.genus,
+                    "height": round(float(tree.height_m or 0.0), 2),
+                    "crown_width": round(float(tree.crown_width_m or 0.0), 2),
+                    "dbh_cm": round(float(tree.dbh_cm or 0.0), 2),
+                    "crown_ratio": round(float(tree.crown_ratio), 3),
+                    "group": group,
+                    "native": bool(tree.native),
+                    "status": tree.status,
+                    "source": tree.source,
+                    "carbon_kg": round(tree_carbon_kg(tree), 3),
+                    "crown_volume_m3": round(tree_crown_volume_m3(tree), 3),
+                    "color": _map_color(group, bool(tree.native)),
+                    "measured": {
+                        "dbh": str(tree.attributes.get("dbh_measured", "true")).lower()
+                        in {"true", "1", "yes"},
+                        "height": str(tree.attributes.get("height_measured", "true")).lower()
+                        in {"true", "1", "yes"},
+                        "crown_width": str(
+                            tree.attributes.get("crown_width_measured", "true")
+                        ).lower()
+                        in {"true", "1", "yes"},
+                        "species": bool(tree.species),
+                    },
+                },
+            }
+        )
+    return {"type": "FeatureCollection", "features": features}
+
+
+def _map_color(group: str, native: bool) -> str:
+    """Return a high-contrast map colour for a tree group."""
+    if group == "conifer":
+        return "#14563a" if native else "#2c7350"
+    if group == "deciduous":
+        return "#6f963d" if native else "#91a948"
+    return "#5f665f"
 
 
 def _canopy_metrics(

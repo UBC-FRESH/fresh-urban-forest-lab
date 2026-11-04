@@ -103,6 +103,11 @@ The app exposes the city tab at ``/api/city-metrics``. The 2D map, 3D scene, tre
 inspector, Light tab, and analytics use the same city dataset. The 3D scene uses a
 representative visual tree sample; metrics always use the full inventory.
 
+The 2D map loads all 184,151 public-tree points and all 154,124 building footprints from
+compressed GeoJSON after the app is live. The 3D scene uses a spatially stratified visual
+sample of 29,096 trees and 12,000 buildings, labelled in the scene HUD; metrics always use
+the full inventory.
+
 Demo portal
 -----------
 

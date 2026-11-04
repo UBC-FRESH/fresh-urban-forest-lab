@@ -76,6 +76,11 @@ phase.
   metrics use all 184,151 trees.
 - City tab: 9 KPI cards, 22 local-area rows, method/evidence labels, published-cover
   check, and caveats.
+- 2D map: all 184,151 public-tree points and all 154,124 building footprints, loaded as
+  compressed GeoJSON after the app reaches live status. The map is no longer a visual
+  sample.
+- 3D scene: 29,096 trees and 12,000 building footprints, selected to keep spatial coverage;
+  the scene HUD labels it as a visual sample.
 - `/api/city-metrics` serves `city_metrics.json`; `/api/completeness` serves the full
   inventory summary.
 - Browser smoke check on the city dataset: no console errors and no page errors after the

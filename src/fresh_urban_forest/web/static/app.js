@@ -4,6 +4,8 @@ import { OrbitControls } from "three/addons/OrbitControls.js";
 const state = {
   dataset: null,
   scene: null,
+  mapTrees: null,
+  mapBuildings: null,
   offInventory: null,
   offInventoryValue: null,
   birds: null,
@@ -170,6 +172,9 @@ function renderOffInventory() {
 }
 
 function buildingFeatures() {
+  if (state.mapBuildings && Array.isArray(state.mapBuildings.features)) {
+    return state.mapBuildings;
+  }
   return {
     type: "FeatureCollection",
     features: (state.scene.buildings || []).map((building) => ({
@@ -200,6 +205,23 @@ function selectedFeatures() {
   if (!state.selectedId) return { type: "FeatureCollection", features: [] };
   const tree = state.treeById.get(state.selectedId);
   return tree ? treesToFeatureCollection([tree]) : { type: "FeatureCollection", features: [] };
+}
+
+function loadFullMapLayers() {
+  if (!state.dataset?.has_map_trees && !state.dataset?.has_map_buildings) return;
+  const apply = () => {
+    if (state.dataset.has_map_trees) {
+      const trees = state.map?.getSource("trees");
+      if (trees) trees.setData("api/map-trees");
+    }
+    if (state.dataset.has_map_buildings) {
+      const buildings = state.map?.getSource("buildings");
+      if (buildings) buildings.setData("api/map-buildings");
+    }
+  };
+  if (!state.map) return;
+  if (state.map.isStyleLoaded()) apply();
+  else state.map.once("load", apply);
 }
 
 function renderCityMetrics() {
@@ -313,6 +335,7 @@ async function init() {
     renderScenarioOptions();
     renderBaselineTimeline(dataset.metrics);
     initMap();
+    loadFullMapLayers();
     bindControls();
     initLightControls();
     initOptimizeControls();
@@ -478,7 +501,10 @@ function initMap() {
         buildings: { type: "geojson", data: buildingFeatures() },
         offInventory: { type: "geojson", data: offInventoryFeatures() },
         boundary: { type: "geojson", data: boundaryFeatures() },
-        trees: { type: "geojson", data: treesToFeatureCollection(state.scene.trees) },
+        trees: {
+          type: "geojson",
+          data: state.mapTrees || treesToFeatureCollection(state.scene.trees),
+        },
         selected: { type: "geojson", data: selectedFeatures() },
       },
       layers: [
@@ -532,10 +558,10 @@ function initMap() {
           source: "trees",
           paint: {
             "circle-color": ["get", "color"],
-            "circle-radius": ["interpolate", ["linear"], ["zoom"], 13, 1.6, 16, 3.2, 19, 6],
+            "circle-radius": ["interpolate", ["linear"], ["zoom"], 13, 0.55, 15, 1.2, 17, 2.8, 19, 6],
             "circle-stroke-color": "#ffffff",
-            "circle-stroke-width": 0.45,
-            "circle-opacity": 0.9,
+            "circle-stroke-width": ["interpolate", ["linear"], ["zoom"], 13, 0, 16, 0.25, 19, 0.8],
+            "circle-opacity": ["interpolate", ["linear"], ["zoom"], 13, 0.34, 16, 0.74, 19, 0.95],
           },
         },
         {
@@ -569,7 +595,7 @@ function initMap() {
   map.on("click", "trees", (event) => {
     const feature = event.features && event.features[0];
     if (!feature) return;
-    selectTree(feature.properties.tree_id);
+    selectTree(feature.properties.tree_id, feature.properties);
   });
   map.on("click", (event) => {
     if (state.mode === "zone") {
@@ -942,9 +968,10 @@ function animateThree() {
   requestAnimationFrame(animateThree);
 }
 
-function selectTree(treeId) {
-  const tree = state.treeById.get(treeId);
+function selectTree(treeId, treeData = null) {
+  const tree = treeData || state.treeById.get(treeId);
   if (!tree) return;
+  if (treeData) state.treeById.set(treeId, treeData);
   state.selectedId = treeId;
   updateMapSelection();
   updateSelectedMarker();
@@ -1045,6 +1072,7 @@ function bindControls() {
   $("play-year").addEventListener("click", togglePlay);
   $("apply-recommend").addEventListener("click", applyRecommendations);
   $("scene-reset").addEventListener("click", resetCamera);
+  $("scene-downtown").addEventListener("click", focusDowntown);
   $("toggle-canopy").addEventListener("change", (event) => {
     if (state.map && state.map.getLayer("canopy")) {
       state.map.setLayoutProperty("canopy", "visibility", event.target.checked ? "visible" : "none");
@@ -2889,6 +2917,26 @@ function applyRecommendations() {
   $("apply-recommend").disabled = true;
   renderEditList();
   toast("Recommendations added to the scenario.");
+}
+
+function focusDowntown() {
+  if (!state.three) return;
+  const span = sceneSpan();
+  const [originLon, originLat] = state.scene.origin_lonlat;
+  const [mx, my] = state.scene.meters_per_degree;
+  const targetX = (-123.1207 - originLon) * mx;
+  const targetZ = (49.2827 - originLat) * my;
+  const distance = Math.max(700, span * 0.22);
+  state.three.camera.position.set(
+    targetX + distance * 0.55,
+    distance * 0.48,
+    targetZ + distance * 0.9,
+  );
+  state.three.controls.target.set(targetX, 25, targetZ);
+  state.three.controls.maxDistance = span * 2.8;
+  state.three.camera.far = span * 7;
+  state.three.camera.updateProjectionMatrix();
+  state.three.controls.update();
 }
 
 function sceneSpan() {

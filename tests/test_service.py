@@ -59,6 +59,26 @@ def test_city_metrics_endpoint_is_optional(tmp_path: Path) -> None:
     assert response.json()["city"]["tree_count"] == 2
 
 
+def test_full_map_layers_are_optional(tmp_path: Path) -> None:
+    """The compressed full map layers are served when present."""
+    import gzip
+
+    client = _client(tmp_path)
+    assert client.get("/api/map-trees").status_code == 404
+    (tmp_path / "dataset" / "map_trees.json.gz").write_bytes(
+        gzip.compress(b'{"type":"FeatureCollection","features":[]}')
+    )
+    (tmp_path / "dataset" / "map_buildings.geojson.gz").write_bytes(
+        gzip.compress(b'{"type":"FeatureCollection","features":[]}')
+    )
+    dataset = client.get("/api/dataset").json()
+    assert dataset["has_map_trees"] is True
+    assert dataset["has_map_buildings"] is True
+    response = client.get("/api/map-trees")
+    assert response.status_code == 200
+    assert response.headers["content-encoding"] == "gzip"
+
+
 def test_scene_and_image_endpoints(tmp_path: Path) -> None:
     """Scene and PNG endpoints return usable payloads."""
     client = _client(tmp_path)

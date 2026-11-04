@@ -466,6 +466,8 @@ def create_app(
         summary = dataset_summary(state.dataset)
         summary["has_off_inventory"] = _dataset_file(state, "off_inventory.json") is not None
         summary["has_city_metrics"] = _dataset_file(state, "city_metrics.json") is not None
+        summary["has_map_trees"] = _dataset_file(state, "map_trees.json.gz") is not None
+        summary["has_map_buildings"] = _dataset_file(state, "map_buildings.geojson.gz") is not None
         return summary
 
     @app.get("/api/completeness")
@@ -696,6 +698,38 @@ def create_app(
             "returned": len(page),
             "offset": offset,
         }
+
+    @app.get("/api/map-trees")
+    def map_trees() -> FileResponse:
+        """Return the full-tree compressed GeoJSON map layer."""
+        path = _dataset_file(state, "map_trees.json.gz")
+        if path is None:
+            raise HTTPException(status_code=404, detail="this dataset has no full map-tree layer")
+        return FileResponse(
+            path,
+            media_type="application/json",
+            headers={
+                "Content-Encoding": "gzip",
+                "Cache-Control": "no-store, max-age=0",
+            },
+        )
+
+    @app.get("/api/map-buildings")
+    def map_buildings() -> FileResponse:
+        """Return the full building-footprint compressed GeoJSON map layer."""
+        path = _dataset_file(state, "map_buildings.geojson.gz")
+        if path is None:
+            raise HTTPException(
+                status_code=404, detail="this dataset has no full map-building layer"
+            )
+        return FileResponse(
+            path,
+            media_type="application/geo+json",
+            headers={
+                "Content-Encoding": "gzip",
+                "Cache-Control": "no-store, max-age=0",
+            },
+        )
 
     @app.get("/api/scene")
     def scene(
