@@ -458,3 +458,15 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Corrected stale v0.2.0 and release-candidate status in the roadmap, project status, notes,
   and live docs.
 - Moved tag `v0.3.0` to the final release commit and refreshed the GitHub release notes.
+
+### P16 full Vancouver city pilot
+
+- Activated P16 (#105) and its six tasks (#106–#111) for a full City of Vancouver public-data
+  pilot.
+- Locked the source set: City 2022 LiDAR (181 tiles, ~49 points/m²), 184,152 public trees,
+  the 22 local-area polygons, building footprints, and climate normals.
+- The city AOI is 118.76 km² in EPSG:3157. The working storage budget is 250 GB against
+  7.9 TB free on `/srv/shared-data`; no dataset is written to the container root disk.
+- Added `notes/design/vancouver-city-pilot.md` with the processing, metrics, 3D, validation,
+  and storage plan.
+- Dashboard: GREEN. Tests: 331 passed.
