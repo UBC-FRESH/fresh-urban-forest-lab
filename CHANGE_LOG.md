@@ -469,6 +469,7 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
   default dataset path.
 - Added synthetic-LAZ contract tests for the nominal bundle, extra dimensions, hashes,
   schemas, missing CRS/vertical datum warnings, overwrite refusal, empty input, and the CLI.
+- Added `lazrs>=0.5` so the LAZ write path works in a clean install and in CI.
 - Tests: 337 passed; total coverage 87.68 percent. Dashboard: GREEN.
 - Real-tile smoke: Golden-area tile, 113,775 points, 82,530 predicted ground, 5.8 s;
   local only, not a CI network job.
