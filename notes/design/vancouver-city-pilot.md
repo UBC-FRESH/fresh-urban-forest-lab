@@ -83,9 +83,11 @@ For each 1 km tile:
    nodata. Never fill canopy holes with building heights.
 7. Write a tile QA record: point count, class counts, min/max height, nodata fraction.
 
-The City 2022 classes are: 1 unclassified, 2 ground, 3 low vegetation (<2 m), 4 high
-vegetation (>2 m), 5 water, 6 buildings, 7 other, 8 noise. The 1 m CHM is
-`max(0, vegetation_max_z - DEM)`.
+The LAS uses the ASPRS class scheme even though the portal text lists a different
+numbering: 1 unclassified, 2 ground, 3 low vegetation, 4 medium vegetation, 5 high
+vegetation, 6 buildings, 7 noise, 9 water. Class counts and spatial patterns confirm that
+class 5 is vegetation, not water; class 9 is water. The 1 m CHM is
+`max(0, max(class 3,4,5) - DEM)`.
 
 ### Mosaic
 

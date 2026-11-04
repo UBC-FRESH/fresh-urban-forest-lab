@@ -25,6 +25,7 @@ const state = {
   assistant: { enabled: false, available: false, busy: false, session: null },
   changeMap: null,
   changeData: null,
+  cityMetrics: null,
   changeProduct: "change.json",
   changeProductsLoaded: false,
   lightMap: null,
@@ -201,6 +202,57 @@ function selectedFeatures() {
   return tree ? treesToFeatureCollection([tree]) : { type: "FeatureCollection", features: [] };
 }
 
+function renderCityMetrics() {
+  const data = state.cityMetrics;
+  if (!data) return;
+  const tab = document.querySelector('.tab[data-view="city"]');
+  if (tab) tab.hidden = false;
+  const city = data.city || {};
+  const local = Array.isArray(data.local_areas) ? data.local_areas : [];
+  const metrics = state.dataset?.metrics || {};
+  const visualTrees = state.scene?.trees?.length || 0;
+  const cards = [
+    ["Canopy cover", `${formatNumber(city.canopy_cover_pct, 1)}%`, "of city area"],
+    ["Canopy volume", `${formatCompact(city.canopy_volume_m3)} m³`, "LiDAR height field"],
+    ["Carbon storage", `${formatCompact(Number(city.carbon_kg) / 1000)} t`, "above ground"],
+    ["Annual sequestration", `${formatCompact(Number(city.annual_sequestration_kg) / 1000)} t/yr`, "one-year model"],
+    ["Rainfall interception", `${formatCompact(city.rainfall_interception_m3_low)}–${formatCompact(city.rainfall_interception_m3_high)} m³`, "10–20% screening"],
+    ["Public trees", formatNumber(city.tree_count), "mapped records"],
+    ["Species", formatNumber(metrics.species_count), "distinct labels"],
+    ["Native share", `${formatNumber(Number(city.native_fraction) * 100, 1)}%`, "of public trees"],
+  ];
+  $("city-kpis").innerHTML = cards
+    .map(
+      ([label, value, note]) =>
+        `<article class="kpi"><span>${escapeHtml(label)}</span><strong>${escapeHtml(value)}</strong><small>${escapeHtml(note)}</small></article>`,
+    )
+    .join("");
+  const maxCover = Math.max(...local.map((area) => Number(area.canopy_cover_pct) || 0), 1);
+  const rows = [...local]
+    .sort((a, b) => Number(b.canopy_cover_pct) - Number(a.canopy_cover_pct))
+    .map((area) => {
+      const width = Math.max(2, (Number(area.canopy_cover_pct) / maxCover) * 100);
+      return `<div class="city-row">
+        <span class="name">${escapeHtml(area.name)}</span>
+        <span class="num">${formatNumber(area.canopy_cover_pct, 1)}%</span>
+        <span class="bar"><span style="width:${width.toFixed(1)}%"></span></span>
+        <span class="num hide-small">${formatCompact(Number(area.carbon_kg) / 1000)} t</span>
+        <span class="num">${formatNumber(area.tree_count)}</span>
+      </div>`;
+    })
+    .join("");
+  $("city-local-areas").innerHTML = rows || '<p class="muted">No local-area metrics.</p>';
+  const methods = Object.entries(data.methods || {})
+    .map(([key, method]) => {
+      const tier = method?.tier || "method";
+      return `<div class="city-method"><strong>${escapeHtml(key.replaceAll("_", " "))}</strong><span>${escapeHtml(method?.method || "")} · ${escapeHtml(tier)}</span></div>`;
+    })
+    .join("");
+  const caveats = (data.caveats || []).map((item) => `<li>${escapeHtml(item)}</li>`).join("");
+  $("city-methods").innerHTML = `${methods}<ul class="city-caveats">${caveats}</ul>`;
+  $("city-source").textContent = `${formatNumber(city.tree_count)} public trees · ${local.length} local areas · 2022 LiDAR · ${formatNumber(visualTrees)} visual trees`;
+}
+
 async function init() {
   try {
     const [dataset, scene, scenarios] = await Promise.all([
@@ -225,6 +277,12 @@ async function init() {
     state.scene = scene;
     state.scenarios = scenarios.scenarios || [];
     state.treeById = new Map(scene.trees.map((tree) => [tree.id, tree]));
+    try {
+      state.cityMetrics = await api("api/city-metrics");
+      renderCityMetrics();
+    } catch (_error) {
+      state.cityMetrics = null;
+    }
     $("dataset-name").textContent = `${dataset.name} · ${dataset.tree_count.toLocaleString("en-CA")} tree records · ${dataset.sources.length} sources`;
     setStatus("live");
     renderKPIs(dataset.metrics);

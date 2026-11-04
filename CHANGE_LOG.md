@@ -481,3 +481,16 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Started the resumable browser-assisted LiDAR download into
   `data/raw/city_lidar/2022/`.
 - Dashboard: GREEN.
+
+### P16 city pipeline
+
+- Added `city.py` for 1 m classified-LAS rasterisation and city mosaic assembly.
+- Added `city_inventory.py`, `city_metrics.py`, and `city_pack.py` for the full inventory,
+  local-area metrics, and portable city dataset.
+- Added operator scripts for LiDAR rasterisation, inventory enrichment, metrics, and pack
+  assembly.
+- Added `/api/city-metrics` and a City tab in the web app for city KPIs, local-area ranking,
+  methods, and caveats.
+- Verified class 5 is high vegetation and class 9 is water in the City LAS despite the
+  portal text; the rasteriser uses the ASPRS classes.
+- Dashboard: GREEN.

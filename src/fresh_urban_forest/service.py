@@ -25,7 +25,7 @@ from zoneinfo import ZoneInfo
 
 import numpy as np
 from fastapi import FastAPI, HTTPException, Query, Request
-from fastapi.responses import FileResponse, HTMLResponse, Response
+from fastapi.responses import FileResponse, HTMLResponse, JSONResponse, Response
 from fastapi.staticfiles import StaticFiles
 from PIL import Image
 from pydantic import BaseModel, Field
@@ -612,6 +612,23 @@ def create_app(
         """Return baseline canopy metrics."""
         metrics = state.dataset.manifest.metrics
         return _metrics_payload(metrics)
+
+    @app.get("/api/city-metrics")
+    def city_metrics() -> JSONResponse:
+        """Return optional city-wide and local-area metrics.
+
+        Returns
+        -------
+        JSONResponse
+            The city metrics JSON, or a 404 when this dataset has no city pack.
+        """
+        path = _dataset_file(state, "city_metrics.json")
+        if path is None:
+            raise HTTPException(status_code=404, detail="this dataset has no city metrics")
+        return JSONResponse(
+            json.loads(path.read_text(encoding="utf-8")),
+            headers={"Cache-Control": "no-store, max-age=0"},
+        )
 
     @app.get("/api/trees")
     def trees(

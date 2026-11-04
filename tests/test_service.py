@@ -47,6 +47,18 @@ def test_health_dataset_metrics_and_trees(tmp_path: Path) -> None:
     assert bbox["returned"] == 1
 
 
+def test_city_metrics_endpoint_is_optional(tmp_path: Path) -> None:
+    """A dataset without a city pack returns 404; adding one serves it."""
+    client = _client(tmp_path)
+    assert client.get("/api/city-metrics").status_code == 404
+    (tmp_path / "dataset" / "city_metrics.json").write_text(
+        '{"city": {"tree_count": 2}, "local_areas": []}', encoding="utf-8"
+    )
+    response = client.get("/api/city-metrics")
+    assert response.status_code == 200
+    assert response.json()["city"]["tree_count"] == 2
+
+
 def test_scene_and_image_endpoints(tmp_path: Path) -> None:
     """Scene and PNG endpoints return usable payloads."""
     client = _client(tmp_path)
