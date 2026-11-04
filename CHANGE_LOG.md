@@ -549,6 +549,16 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Close-out report: `notes/reports/p21-closeout.md`. P21 is complete.
 - Limits: two tiles, no field/manual point labels, and no CI network job for real-tile
   smoke.
+### IRSS and Silva21 method provenance
+
+- Added `notes/reference/irss-silva21-method-provenance.md`. It records that the
+  urban LiDAR canopy work is independently implemented from generic CHM, ITD,
+  canopy-metric, and change methods, not from IRSS/Silva21 code or registry
+  contracts. It maps `INV-02`, `INV-06`, `BIO-02`, `DEC-04`, `DATA-01`, and
+  `INV-01` as candidates for later evaluation, with fit risks and a proposed
+  sequence. No integration is claimed and no registry target changed.
+- Dashboard on the note head: GREEN on all gates; 353 tests pass.
+
 
 ### P30 full Vancouver city pilot
 
