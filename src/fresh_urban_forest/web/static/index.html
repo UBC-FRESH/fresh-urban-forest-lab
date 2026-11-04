@@ -168,6 +168,7 @@
         <button class="tab" data-view="light" role="tab" aria-selected="false">Light</button>
         <button class="tab" data-view="change" role="tab" aria-selected="false">Change</button>
         <button class="tab" data-view="analytics" role="tab" aria-selected="false">Analytics</button>
+        <button class="tab" data-view="birds" role="tab" aria-selected="false">Birds</button>
         <button class="tab" data-view="optimize" role="tab" aria-selected="false">Optimize</button>
         <div class="layer-toggles">
           <label><input id="toggle-canopy" type="checkbox" checked> canopy</label>
@@ -269,6 +270,32 @@
             <div id="comparison-list" class="comparison-list"></div>
           </article>
         </div>
+      </div>
+
+      <div id="view-birds" class="view analytics">
+        <div class="analytics-grid">
+          <article class="chart-card">
+            <div class="panel-heading"><h2>Habitat structure</h2><span class="muted">3D canopy metrics</span></div>
+            <div id="birds-metrics"></div>
+          </article>
+          <article class="chart-card">
+            <div class="panel-heading"><h2>Guild response</h2><span class="muted">relative index</span></div>
+            <div id="birds-guilds"></div>
+          </article>
+          <article class="chart-card">
+            <div class="panel-heading"><h2>Prior demography</h2><span class="muted">two-stage matrix</span></div>
+            <label class="field"><span>Guild</span><select id="birds-guild-select"></select></label>
+            <div id="birds-demography"></div>
+          </article>
+          <article class="chart-card">
+            <div class="panel-heading"><h2>Adult survival</h2><span class="muted">prior curve</span></div>
+            <svg id="birds-chart" viewBox="0 0 640 220" role="img" aria-label="Adult survival over time"></svg>
+          </article>
+        </div>
+        <p class="hint" id="birds-note">
+          Relative abundance is a screening index, not a density. Demographic outputs are
+          prior-driven, not local survival estimates.
+        </p>
       </div>
 
       <div id="view-optimize" class="view optimize">

@@ -218,6 +218,14 @@ select:focus, input:focus { outline: 2px solid #b8d3ae; outline-offset: 1px; }
 .delta.negative b { color: var(--red); }
 
 .analytics { overflow-y: auto; padding: 14px; }
+.bird-metric-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; }
+.bird-metric-grid > div { padding: 8px; border: 1px solid #e3e9de; border-radius: 8px; background: #fbfcf8; }
+.bird-metric-grid span { display: block; color: var(--ink-soft); font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.06em; }
+.bird-metric-grid strong { display: block; margin-top: 2px; color: var(--green); font-family: var(--mono); font-size: 0.95rem; }
+.guild-row { margin-bottom: 10px; }
+.guild-meta { display: flex; justify-content: space-between; gap: 8px; font-size: 0.74rem; }
+.guild-meta code { color: var(--green); font-family: var(--mono); }
+.guild-row small { color: var(--ink-soft); font-size: 0.64rem; }
 .analytics-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .chart-card {
   background: #fff; border: 1px solid var(--line); border-radius: var(--radius);
