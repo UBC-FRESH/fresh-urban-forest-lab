@@ -62,9 +62,9 @@ fresh-urban-forest build \
 
 ## Status
 
-The prototype is complete through Phase 9 (off-inventory canopy) on `main`. P10 (bird
-habitat and demography) is active. Phase 5 is a release candidate at v0.2.0; the tag and
-GitHub release await approval. The documentation site is live on GitHub Pages. `ROADMAP.md` is the
+The prototype is complete through Phase 10 (bird habitat and demography) on `main`. P11
+(integration and the v0.3 release candidate) is active. The tag and GitHub release await
+approval. The documentation site is live on GitHub Pages. `ROADMAP.md` is the
 plan of record; the GitHub issues carry the live status.
 
 ## Repository map

@@ -25,6 +25,7 @@ def test_static_shell_has_required_hooks() -> None:
         'data-view="birds"',
         "birds-metrics",
         "birds-guild-select",
+        "export-report",
         "pareto-canvas",
         "optimize-run",
         "pareto-x",
@@ -81,6 +82,8 @@ def test_app_script_has_the_expected_endpoints_and_layers() -> None:
         "api/birds",
         "loadBirds",
         "renderBirdsChart",
+        "api/report",
+        "exportLabReport",
     ):
         assert marker in script
     assert "eval(" not in script

@@ -26,6 +26,8 @@ Keep private material out of this directory.
 - `reference/off-inventory-terminology.md`: terminology, land-class proxy, privacy, and refresh workflow.
 - `reference/bird-habitat-methods.md`: guild scope, structural metrics, demographic priors, and evidence tiers.
 - `reports/p10-birds.md`: bird habitat, guild relative abundance, prior lambda, and limits.
+- `reports/p11-integration.md`: unified report, integration limits, and v0.3 release candidate.
+- `releases/v0.3.0.md`: v0.3.0 release candidate notes, not tagged.
 - `reports/growth-calibration-readiness.md`: why the current inventory cannot support growth calibration.
 - `reports/p12-arbor-method-mining.md`: P12 close-out, licence evidence, gate results, and the P13 recommendation.
 - `reports/p13-als-ground-validation.md` and `.json`: P13.2 real LidarBC tile validation, class-2 recall, HAG, and noise caveats.

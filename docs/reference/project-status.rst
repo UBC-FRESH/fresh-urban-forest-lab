@@ -63,7 +63,7 @@ Known gaps
 - City coverage is two core tiles, not the whole city.
 - No accounts, work orders, risk assessment, or mobile field app.
 - No tagged release yet. The documentation site is live on GitHub Pages.
-- P7-P9 are complete. P10 is active. P11 remains planned. See :doc:`research-agenda`, :doc:`shade-and-species`, :doc:`optimization-and-pareto`, :doc:`off-inventory-canopy`, and :doc:`bird-habitat-and-demography`.
+- P7-P10 are complete. P11 is active. See :doc:`research-agenda`, :doc:`shade-and-species`, :doc:`optimization-and-pareto`, :doc:`off-inventory-canopy`, :doc:`bird-habitat-and-demography`, and :doc:`integration-and-release`.
 
 Release actions
 ---------------
