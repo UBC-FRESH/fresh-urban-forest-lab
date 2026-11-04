@@ -6,7 +6,6 @@ Status as of 2026-11-03:
 - Phase 0–4 are complete on ``main``.
 - Phase 5 is a **v0.2.0 release candidate**. The tag, GitHub release, and Pages settings
   change are approval-gated.
-- Phase 6 (operate and maintain) is planned.
 
 The live plan is ``ROADMAP.md`` and the GitHub issues. The dated narrative is
 ``CHANGE_LOG.md``.
@@ -63,7 +62,7 @@ Known gaps
 - City coverage is two core tiles, not the whole city.
 - No accounts, work orders, risk assessment, or mobile field app.
 - No tagged release yet. The documentation site is live on GitHub Pages.
-- P7-P10 are complete. P11 is active. See :doc:`research-agenda`, :doc:`shade-and-species`, :doc:`optimization-and-pareto`, :doc:`off-inventory-canopy`, :doc:`bird-habitat-and-demography`, and :doc:`integration-and-release`.
+- P5-P11 are complete. v0.3.0 is released. See :doc:`research-agenda`, :doc:`shade-and-species`, :doc:`optimization-and-pareto`, :doc:`off-inventory-canopy`, :doc:`bird-habitat-and-demography`, and :doc:`integration-and-release`.
 
 Release actions
 ---------------

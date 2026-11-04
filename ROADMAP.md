@@ -11,8 +11,7 @@ This roadmap is the plan of record and the issue tracker map for FRESH Urban For
 | P2 Tree-level analytics and growth | #3 | `feature/p0-p4-prototype` | complete |
 | P3 2D and 3D decision-support prototype | #4 | `feature/p0-p4-prototype` | complete |
 | P4 Verify and demo | #5 | `feature/p0-p4-prototype` | complete |
-| P5 Release and public deployment | #6 | `feature/p5-release` | planned |
-| P6 Operate and maintain | #7 | `feature/p6-operate` | planned |
+| P5 Release and public deployment | #6 | `feature/p5-release` | complete |
 | P7 Solar shade and species-fit engine | #40 | `feature/p7-shade-species` | complete |
 | P8 Spatio-temporal optimization and Pareto explorer | #41 | `feature/p8-optimize-pareto` | complete |
 | P9 Off-inventory and private-canopy augmentation | #42 | `feature/p9-off-inventory` | complete |
@@ -30,7 +29,6 @@ This roadmap is the plan of record and the issue tracker map for FRESH Urban For
 | Build | P1, P2, P3, P7, P8, P9, P10 | A dataset, a growth/DSS core, a working 2D/3D app, and the shade/optimization/canopy/bird layers |
 | Verify | P4, P11 | Dashboard green, real data built, browser checked, method notes written, benchmark reproduced |
 | Release and deploy | P5, P11.4 | Tag, release notes, Pages, clean-clone verification |
-| Operate and maintain | P6 | Review cadence, source triage, contract migration policy |
 
 ## Conventions
 
@@ -265,38 +263,20 @@ Phase 4 verification:
 
 Parent issue: #6
 Branch: `feature/p5-release`
-Status: planned
+Status: complete
 
-Goal: tag a public release, publish the docs site, and verify the demo from a clean clone. Before tagging, complete the observed-change, completeness, and validation plan in `notes/design/change-uncertainty-plan.md`.
+Goal: tag v0.3.0, publish the docs site, and verify the demo from a clean clone.
 
-- [ ] P5.0 Observed change, inventory completeness, detection validation, and local calibration (#39)
-- [ ] P5.1 Release notes and known-gaps list
+- [x] P5.0 Observed change, inventory completeness, detection validation, and local calibration (#39)
+- [x] P5.1 Release notes and known-gaps list
 - [x] P5.2 Pages and live-demo check
-- [ ] P5.3 Tag and GitHub release (maintainer approval required)
+- [x] P5.3 Tag and GitHub release v0.3.0
 
 Acceptance criteria:
 
 - A clean clone installs and runs the demo.
 - The docs site builds from the tagged commit.
 - The release names its limitations and data licences.
-
-## Phase 6: Operate and maintain
-
-Parent issue: #7
-Branch: `feature/p6-operate`
-Status: planned
-
-Goal: keep the catalog current, triage new datasets and methods, and review the prototype on a cadence.
-
-- [ ] P6.1 Incoming-source and method triage rule
-- [ ] P6.2 Quarterly review checklist, exercised once
-- [ ] P6.3 Versioning and migration policy for the dataset contract
-
-Acceptance criteria:
-
-- The review is held and recorded.
-- New sources are accepted or rejected against a written rule.
-- A schema change has a migration note.
 
 ## Phase 7: Solar shade and species-fit engine
 
@@ -573,13 +553,8 @@ Phase 14 verification:
 2. UBC 2021 LiDAR and the UBC tree inventory were built into a local processed dataset and a smaller tracked demo. The full raw and processed rasters stay out of git; the demo manifest records lineage.
 3. The core is standalone by design (ADR 0002). `fresh-fvsbc` remains an optional future adapter for calibrated growth, not a core import.
 4. The software landscape note records why OpenTreeMap (AGPL) and ForestTools/lidR/PyCrown/itcSegment (GPL) are method references only. The repository is MIT.
-5. Phase 5 is planned. It needs maintainer approval before a tag, release, Pages setting change, or live deployment.
-6. Phase 6 is planned. The first review should decide whether to add a planting-site entity, a work-order log, and a fitted local growth model.
-7. Phases 0 to 4 merged as PR #36 (`1e0a9b0`). The parent issues #1 to #5 and their child issues #8 to #35 are closed. Subsequent hygiene commits on `main` fixed the editable-install ignore, the documentation package install, and the Pages deferral. CI and the Docs workflow are green on `main` as of `dc9f599`.
-8. P3.7 (#37) added the local OpenCode assistant and fixed 3D buildings by sampling terrain elevation at each footprint centroid and extruding the footprint geometry. The assistant is opt-in with `--allow-agent` and runs the local `opencode` CLI with a sanitized environment. The reverse-proxy path-prefix fix is also on `main`.
-9. P1.7 (#38) added external tile discovery. The UBC pilot bbox returned 34 LidarBC point-cloud tiles and 15 CanElevation tiles. The CanElevation 2016 Lower Mainland tiles duplicate the LidarBC 2016 coverage, so they are a COPC/cloud-optimised alternative rather than an independent repeat measure. One 6.04 MB LidarBC tile was downloaded and summarised as a QA check.
-10. The P7-P11 programme is queued as planned phases (#40-#44) with the detailed plan in `notes/design/urban-canopy-program-plan.md` and the rapid evidence review in `notes/reference/literature-review-shade-optimization-biodiversity.md`. The recommended order is P7 shade/species, P8 optimization/Pareto, P9 off-inventory, P10 birds, P11 integration. No phase is active.
-11. The P7-P11 queue does not block the v0.2.0 release candidate. P5 remains the release gate; its tag, release, and settings actions still need explicit maintainer approval.
-12. P12 (#61) mines Arbor 1.1.5 methods without copying its GPL-3.0 code. The first slice adds four opt-in point-cloud primitives, the provenance note, ADR 0006, and the public docs page. The next ALS-relevant candidate is PTD-inspired ground classification; the MLS/TLS semantic, instance, and QSM stack belongs in a future separately tested package.
-13. P13 (#70) adds `classify_ground_ptd` and `GroundClassification` for the ALS ground lane. P13.1 covers the core algorithm, synthetic fixtures, and provenance. P13.2 validates a 415,068-point LidarBC 2025 tile: class-2 recall is 0.9998 and class-2 HAG p99 is 0.021 m, but the reference classes are not exhaustive negatives and near-ground class-7 noise is over-labelled as ground. P13.3 shows SOR removes high noise with 0.04-0.6% class-2 ground loss but does not fix near-ground noise; 99.84% of class-7 false ground is within 0.15 m HAG, so `low_point_mask(0.15)` is the downstream segmentation contract. P13.4 defers FEMIC integration until a checked reference patch, a second terrain type, and a fuller PTD angle test exist. The classifier remains an opt-in consumer-side utility; no operational or FEMIC claim is made.
-14. P14 (#89) closes the P13 validation gap with a class-2 reference surface and a steep Golden-area tile. Class-2 recall is 0.9634 and high-confidence false-ground is 4.65% on the steep tile; the coastal tile is 0.9999 and 3.35%. P14.3 approves an optional FEMIC adapter prototype only, with a manual reference patch and versioned contract as conditions. No default pipeline change or operational claim is made.
+5. v0.3.0 is the released integrated lab. P5 is complete, the docs site is live, and the tag points to the release commit.
+6. P7-P11 are complete: shade and species fit, Fresh Solutions optimization and Pareto explorer, off-inventory canopy and value of information, bird habitat and prior demography, and the unified lab report.
+7. P12 (#61) mines Arbor 1.1.5 methods without copying its GPL-3.0 code. Four opt-in point-cloud primitives, the provenance note, ADR 0006, and the public docs page are complete.
+8. P13 (#70) adds `classify_ground_ptd` and `GroundClassification` for the ALS ground lane. P13.4 defers FEMIC integration until a checked reference patch, a second terrain type, and a fuller PTD angle test exist.
+9. P14 (#89) adds a class-2 reference surface and steep-tile validation. Class-2 recall is 0.9634 and high-confidence false-ground is 4.65% on the steep tile; the coastal tile is 0.9999 and 3.35%. An optional FEMIC adapter prototype is approved only with a manual reference patch and versioned contract.
