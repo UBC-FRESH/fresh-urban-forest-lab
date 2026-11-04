@@ -676,11 +676,62 @@ def classify_ground_ptd(
     )
 
 
+def low_point_mask(
+    height_above_ground: NDArray[np.float64],
+    *,
+    cut_m: float = 0.15,
+) -> BoolMask:
+    """Flag points below a height-above-ground cut.
+
+    The Arbor book recommends ignoring points a few centimetres above the ground during
+    MLS/TLS segmentation, because the ground and low understory form a continuous surface
+    that can confuse the pathfinder. This helper applies that policy to an existing HAG
+    array without changing the ground labels.
+
+    Parameters
+    ----------
+    height_above_ground : ndarray
+        Height above ground in metres, with shape ``(N,)``.
+    cut_m : float, optional
+        Cut height in metres. The default is ``0.15``. Must be non-negative.
+
+    Returns
+    -------
+    ndarray of bool
+        ``True`` where ``height_above_ground < cut_m``.
+
+    Raises
+    ------
+    ValueError
+        When the HAG array is not one-dimensional or ``cut_m`` is negative.
+
+    Notes
+    -----
+    This is a downstream segmentation flag, not a ground-classification label. A point
+    flagged here can still be a valid ground point.
+
+    Method provenance
+    -----------------
+    Idea: the low-point-removal policy described in Arbor 1.1.5 (r-lidar/arbor), commit
+    ``a2b487f4a23236a42eec50cb6583a5eae15593ed``, book chapter 4
+    (https://r-lidar.github.io/arbor_book/ground.html).
+    Source licence: GPL-3.0. This is an independent Python implementation; no Arbor
+    source code was copied.
+    """
+    values = np.asarray(height_above_ground, dtype=np.float64)
+    if values.ndim != 1:
+        raise ValueError("height_above_ground must be one-dimensional")
+    if cut_m < 0:
+        raise ValueError("cut_m must be non-negative")
+    return np.asarray(values < cut_m, dtype=np.bool_)
+
+
 __all__ = (
     "GroundClassification",
     "classify_ground_ptd",
     "hybrid_homogenize",
     "local_anisotropy",
+    "low_point_mask",
     "statistical_outlier_mask",
     "voxel_connected_components",
 )

@@ -347,3 +347,20 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Limits: one coastal/low-relief tile, no exhaustive ground truth, and near-ground noise is
   still over-labelled. P13.3 low-point-cut/SOR preprocessing is the next gate. No FEMIC
   integration or operational claim is included.
+
+### P13.3 Low-point-cut and SOR policy
+
+- Added `low_point_mask(height_above_ground, cut_m=0.15)` as the downstream segmentation
+  contract. It flags low points without changing the ground labels.
+- Ran `statistical_outlier_mask(k=10, multiplier=2.0)` before PTD on the 2025 P13.2 tile
+  and a 3,042,883-point 2016 tile.
+- SOR removed 3.98-4.09% of points, including 8.6% of class-7 noise but only 0.04-0.61% of
+  class-2 ground. Class-2 recall after SOR+PTD was 0.9999 on the 2025 tile and 0.9802 on
+  the 2016 tile.
+- SOR does not fix near-ground noise. On the 2025 tile, 86.75% of retained class-7 points
+  were still labelled ground. However, 99.84% of class-7 false ground is within 0.15 m HAG.
+- Added `notes/reports/p13-als-ground-sor.json` and extended the P13 validation report with
+  the SOR/low-point policy.
+- Tests: 318 passed; total coverage 87.84 percent. Dashboard: GREEN.
+- Limits: SOR is optional and loses a small amount of ground; the low-point flag is not a
+  ground label; no operational or FEMIC claim is included. P13.4 is the FEMIC decision.

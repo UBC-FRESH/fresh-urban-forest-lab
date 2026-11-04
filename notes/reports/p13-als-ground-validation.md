@@ -112,10 +112,51 @@ result = classify_ground_ptd(
 )
 ```
 
+## P13.3 SOR and low-point policy
+
+### SOR before PTD
+
+`statistical_outlier_mask(k=10, multiplier=2.0)` was run before PTD on both tiles.
+
+| Tile | Removed | Removed fraction | Class-2 ground removed | Class-7 noise removed | Class-2 recall after SOR+PTD |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| 2025 P13.2 tile | 16,526 | 3.98% | 33 of 89,760 (0.037%) | 16,404 of 191,750 (8.56%) | 0.999866 |
+| 2016 `bc_092g024_4_3_2` | 124,566 | 4.09% | 927 of 152,767 (0.61%) | not present | 0.980183 |
+
+SOR removes high noise cheaply and loses very little published ground. It does **not** fix
+near-ground noise. On the 2025 tile, the class-7 false-ground fraction among the retained
+class-7 points is 86.75% after SOR, higher than the 80.29% before SOR, because SOR removes
+the high-noise tail and leaves the near-ground tail.
+
+### Low-point cut
+
+The 2025 SOR+PTD result shows:
+
+- 99.84% of class-7 false-ground points have HAG < 0.15 m;
+- 99.86% have HAG < 0.50 m;
+- class-2 ground HAG has a maximum of 0.105 m.
+
+A 0.15 m low-point flag therefore captures almost all near-ground class-7 noise for
+downstream segmentation while leaving the ground labels unchanged. It is not a replacement
+for ground classification; it is the contract that says "this point is at ground level and
+should not drive tree segmentation or QSM."
+
+### Policy
+
+1. Use `statistical_outlier_mask` before PTD when high-noise removal matters. Accept the
+   small ground loss; report it.
+2. Run `classify_ground_ptd` on the kept points.
+3. Use `low_point_mask(height_above_ground, cut_m=0.15)` before tree segmentation or QSM.
+4. Do not claim the ground labels are noise-free. The near-ground noise remains in the
+   ground class; the low-point flag is what keeps it out of downstream tree work.
+5. Keep the whole lane opt-in. P13.4 is the FEMIC integration decision, not an automatic
+   production switch.
+
 ## Next steps
 
-1. P13.3: add a low-point-cut and SOR pre-pass, then re-run this tile and a second tile.
-2. Add a manually checked reference patch or a higher-quality classified tile where class 1
+1. Add a manually checked reference patch or a higher-quality classified tile where class 1
    and class 7 are resolved.
+2. Decide in P13.4 whether the validated preprocessing and classifier are ready for a FEMIC
+   adapter. The default is no until the reference patch and a second terrain type pass.
 3. Keep the classifier opt-in until the multi-tile evidence exists.
 4. Do not move it to FEMIC yet.

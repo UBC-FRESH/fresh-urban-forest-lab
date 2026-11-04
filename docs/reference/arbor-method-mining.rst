@@ -62,16 +62,24 @@ residual is permissive, and points outside the TIN hull are not classified as gr
 P13.2 validates a 415,068-point LidarBC 2025 tile (EPSG:3157, OGL-BC). Class-2 recall is
 0.9998 and class-2 HAG p99 is 0.021 m. The tile's class 1 is unclassified and class 7 is
 noise, so neither is a valid negative set. About 80% of class-7 near-ground noise is
-labelled ground. Precision against class 2 is therefore not an accuracy estimate, and this
-is not yet an operational ground classifier.
+labelled ground. Precision against class 2 is therefore not an accuracy estimate.
+
+P13.3 tested SOR and a low-point policy on the 2025 tile and a 3,042,883-point 2016 tile.
+SOR removes 3.98-4.09% of points, including 8.6% of class-7 noise but only 0.04-0.61% of
+class-2 ground. It does not fix near-ground noise. However, 99.84% of class-7 false ground
+is within 0.15 m HAG, so `low_point_mask(height_above_ground, cut_m=0.15)` is the downstream
+segmentation contract. The ground labels are not noise-free.
+
+This is not yet an operational ground classifier.
 
 What is next
 ------------
 
-P13.3 adds a low-point cut and SOR pre-pass, then re-runs this tile and a second tile.
-CHM/ITD post-processing (buffer flags, small-tree flags, over-segmentation merging) is a
-smaller intermediate step. QSM and QSF work belongs in a dedicated point-cloud package, not
-this app's core.
+P13.4 decides whether the validated preprocessing and classifier are ready for a FEMIC
+adapter. A checked reference patch and a second terrain type are still required. CHM/ITD
+post-processing (buffer flags, small-tree flags, over-segmentation merging) is a smaller
+intermediate step. QSM and QSF work belongs in a dedicated point-cloud package, not this
+app's core.
 
 Citations
 ---------

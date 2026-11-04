@@ -11,6 +11,7 @@ from fresh_urban_forest.pointcloud import (
     classify_ground_ptd,
     hybrid_homogenize,
     local_anisotropy,
+    low_point_mask,
     statistical_outlier_mask,
     voxel_connected_components,
 )
@@ -272,3 +273,19 @@ def test_classify_ground_ptd_invalid_parameters() -> None:
         classify_ground_ptd(points, max_distance_m=0.0)
     with pytest.raises(ValueError, match="max_iterations"):
         classify_ground_ptd(points, max_iterations=0)
+
+
+def test_low_point_mask_flags_points_below_the_cut() -> None:
+    """The low-point flag uses a strict HAG cut."""
+    hag = np.array([0.0, 0.1, 0.15, 0.2], dtype=np.float64)
+    mask = low_point_mask(hag, cut_m=0.15)
+    assert mask.dtype == np.bool_
+    assert np.array_equal(mask, np.array([True, True, False, False]))
+
+
+def test_low_point_mask_validates_inputs() -> None:
+    """Negative cuts and non-vector HAG arrays fail."""
+    with pytest.raises(ValueError, match="one-dimensional"):
+        low_point_mask(np.zeros((2, 2)), cut_m=0.15)
+    with pytest.raises(ValueError, match="non-negative"):
+        low_point_mask(np.zeros(3), cut_m=-0.1)
