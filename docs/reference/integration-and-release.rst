@@ -2,8 +2,7 @@ Integration and the v0.3 release candidate
 ==========================================
 
 P11 composes the shade, water, optimization, off-inventory, and bird layers into one
-portable lab report. It also prepares the v0.3.0 release candidate. No tag or GitHub
-release is created by this phase.
+portable lab report. v0.3.0 is the released integrated lab.
 
 Unified lab report
 ------------------
@@ -49,17 +48,13 @@ The integrated lab includes:
 Version metadata is ``0.3.0``. The release notes are
 ``notes/releases/v0.3.0.md``.
 
-Release gate
-------------
+Release
+-------
 
-The following still need explicit maintainer approval:
+v0.3.0 is tagged and published from the release commit. Future tags, releases, repository
+settings changes, Pages changes, and public deployments remain approval-gated.
 
-- creating a git tag;
-- publishing a GitHub release;
-- changing repository settings or Pages;
-- announcing or deploying a public demo.
-
-The v0.3 candidate is not a claim that every model is field-calibrated. Known gaps remain:
+v0.3.0 is not a claim that every model is field-calibrated. Known gaps remain:
 
 - no completed field shade or bird reference patch;
 - no calibrated local growth model;
