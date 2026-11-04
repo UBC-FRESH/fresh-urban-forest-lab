@@ -5,8 +5,8 @@ deterministic post-processing steps:
 
 - flag crowns whose centroid is inside a rectangular edge buffer;
 - flag crowns below a height threshold;
-- merge a much smaller overlapping crown into a larger crown when their heights are
-  similar.
+- merge a much smaller overlapping crown into a larger anchor crown when their heights are
+  similar, with no transitive chains.
 
 It does not change ``detect_trees`` and it is not a point-cloud instance-segmentation
 resolver. The merge rule is deliberately conservative and records every source ID.
@@ -103,7 +103,11 @@ def _merge_groups(
     max_group_members: int,
     max_group_extent_m: float,
 ) -> list[list[int]]:
-    """Return index groups for conservative over-segmentation merges.
+    """Return non-transitive anchor groups for conservative crown merges.
+
+    Only a larger crown can act as an anchor. An absorbed crown cannot become an anchor
+    and absorb another crown, so a chain cannot propagate across the dataset. Anchors are
+    processed from largest to smallest area.
 
     Parameters
     ----------
@@ -121,56 +125,53 @@ def _merge_groups(
     Returns
     -------
     list of list of int
-        Groups with two or more indices.
+        Groups with two or more indices, ordered by anchor tree ID.
     """
-    parent = list(range(len(trees)))
-    members: dict[int, list[int]] = {index: [index] for index in range(len(trees))}
+    order = sorted(
+        range(len(trees)),
+        key=lambda index: (
+            -trees[index].crown_area_m2,
+            -trees[index].height_m,
+            trees[index].tree_id,
+        ),
+    )
+    assigned: set[int] = set()
+    groups: list[list[int]] = []
 
-    def find(index: int) -> int:
-        while parent[index] != index:
-            parent[index] = parent[parent[index]]
-            index = parent[index]
-        return index
-
-    def union(first: int, second: int) -> None:
-        root_first = find(first)
-        root_second = find(second)
-        if root_first == root_second:
-            return
-        combined = members[root_first] + members[root_second]
-        if len(combined) > max_group_members:
-            return
-        xs = [trees[index].x for index in combined]
-        ys = [trees[index].y for index in combined]
-        extent = math.hypot(max(xs) - min(xs), max(ys) - min(ys))
-        if extent > max_group_extent_m:
-            return
-        keep = min(root_first, root_second)
-        drop = max(root_first, root_second)
-        parent[drop] = keep
-        members[keep] = combined
-        del members[drop]
-
-    for first in range(len(trees)):
-        for second in range(first + 1, len(trees)):
-            left = trees[first]
-            right = trees[second]
-            larger, smaller = (
-                (left, right) if left.crown_area_m2 >= right.crown_area_m2 else (right, left)
-            )
-            if smaller.crown_area_m2 > larger.crown_area_m2 * max_area_ratio:
+    for anchor_index in order:
+        if anchor_index in assigned:
+            continue
+        anchor = trees[anchor_index]
+        assigned.add(anchor_index)
+        group = [anchor_index]
+        candidates: list[tuple[float, float, int]] = []
+        for index, candidate in enumerate(trees):
+            if index == anchor_index or index in assigned:
                 continue
-            if abs(left.height_m - right.height_m) > max_height_delta_m:
+            if candidate.crown_area_m2 > anchor.crown_area_m2 * max_area_ratio:
                 continue
-            distance = math.hypot(left.x - right.x, left.y - right.y)
-            if distance > larger.crown_radius_m:
+            if abs(candidate.height_m - anchor.height_m) > max_height_delta_m:
                 continue
-            union(first, second)
+            distance = math.hypot(anchor.x - candidate.x, anchor.y - candidate.y)
+            if distance > anchor.crown_radius_m:
+                continue
+            candidates.append((distance, candidate.crown_area_m2, index))
+        candidates.sort()
+        for _, _, index in candidates:
+            if len(group) >= max_group_members:
+                break
+            xs = [trees[member].x for member in group] + [trees[index].x]
+            ys = [trees[member].y for member in group] + [trees[index].y]
+            extent = math.hypot(max(xs) - min(xs), max(ys) - min(ys))
+            if extent > max_group_extent_m:
+                continue
+            group.append(index)
+            assigned.add(index)
+        if len(group) > 1:
+            groups.append(group)
 
-    groups: dict[int, list[int]] = {}
-    for index in range(len(trees)):
-        groups.setdefault(find(index), []).append(index)
-    return [group for group in groups.values() if len(group) > 1]
+    groups.sort(key=lambda group: trees[group[0]].tree_id)
+    return groups
 
 
 def _merge_group(trees: tuple[DetectedTree, ...], group: list[int]) -> DetectedTree:
@@ -268,8 +269,10 @@ def postprocess_trees(
     -----
     The merge rule is intentionally conservative: the smaller crown's centroid must fall
     inside the larger crown's equivalent radius, the height difference must be small, and
-    the smaller crown must be much smaller by area. It is not a general instance
-    segmentation method and does not use the point cloud.
+    the smaller crown must be much smaller by area. The merge is non-transitive: only a
+    larger crown can anchor, and an absorbed crown cannot absorb another crown. Group-size
+    and group-extent caps provide a second guard. It is not a general instance segmentation
+    method and does not use the point cloud.
     """
     if buffer_m < 0:
         raise ValueError("buffer_m must be non-negative")

@@ -218,3 +218,56 @@ def test_invalid_group_guards_raise() -> None:
             (-10.0, -10.0, 10.0, 10.0),
             merge_max_group_extent_m=0.0,
         )
+
+
+def test_absorbed_crown_cannot_become_an_anchor() -> None:
+    """A small crown absorbed by a large crown cannot then absorb another crown."""
+    trees = (
+        _tree("a", 0.0, 0.0, height_m=10.0, crown_radius_m=20.0),
+        _tree("b", 15.0, 0.0, height_m=10.0, crown_radius_m=10.0),
+        _tree("c", 25.0, 0.0, height_m=10.0, crown_radius_m=5.0),
+    )
+    result = postprocess_trees(
+        trees,
+        (-50.0, -50.0, 50.0, 50.0),
+        buffer_m=0.0,
+        merge_max_group_extent_m=100.0,
+    )
+    assert result.merge_groups == (("a", "b"),)
+    assert {tree.tree_id for tree in result.trees} == {"a", "c"}
+
+
+def test_anchor_absorbs_multiple_small_crowns() -> None:
+    """One anchor can absorb several small crowns within the caps."""
+    trees = (
+        _tree("anchor", 0.0, 0.0, height_m=10.0, crown_radius_m=20.0),
+        _tree("one", 5.0, 0.0, height_m=10.0, crown_radius_m=5.0),
+        _tree("two", 10.0, 0.0, height_m=10.0, crown_radius_m=5.0),
+    )
+    result = postprocess_trees(
+        trees,
+        (-50.0, -50.0, 50.0, 50.0),
+        buffer_m=0.0,
+        merge_max_group_members=3,
+    )
+    assert result.merge_groups == (("anchor", "one", "two"),)
+    assert len(result.trees) == 1
+
+
+def test_synthetic_audit_patch_merges_split_crown_only() -> None:
+    """A known split crown merges; two similar distinct crowns do not."""
+    trees = (
+        _tree("true-left", 50.0, 50.0, height_m=12.0, crown_radius_m=4.0),
+        _tree("true-right", 52.0, 50.0, height_m=11.5, crown_radius_m=2.0),
+        _tree("distinct-left", 80.0, 50.0, height_m=10.0, crown_radius_m=3.0),
+        _tree("distinct-right", 84.0, 50.0, height_m=10.0, crown_radius_m=2.8),
+        _tree("far", 20.0, 20.0, height_m=10.0, crown_radius_m=2.0),
+    )
+    result = postprocess_trees(trees, (0.0, 0.0, 100.0, 100.0), buffer_m=0.0)
+    assert result.merge_groups == (("true-left", "true-right"),)
+    assert {tree.tree_id for tree in result.trees} == {
+        "true-left",
+        "distinct-left",
+        "distinct-right",
+        "far",
+    }

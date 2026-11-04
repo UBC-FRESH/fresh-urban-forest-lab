@@ -105,10 +105,15 @@ must fall inside the larger crown, and the height difference must be small. Ever
 group records its source IDs. The default `detect_trees` output is unchanged.
 
 The `detect-trees --postprocess` CLI path writes kept crowns and a sidecar summary. P19
-found that the first merge rule chain-collapsed 67 crowns across the whole UBC demo. The
-rule now caps a group at 4 source crowns and 30 m XY extent. On the demo, the guarded run
-detects 859 crowns and keeps 856 after 3 local merge groups; a 50 m stress buffer flags 5.
-The guarded merge is conservative and may under-merge real over-segmentation.
+found that the first merge rule chain-collapsed 67 crowns across the whole UBC demo. P20
+replaced the union-find merge with a non-transitive anchor rule: only a larger crown can
+absorb smaller crowns, and an absorbed crown cannot anchor another. Group caps remain at
+4 source crowns and 30 m XY extent.
+
+On the demo, the anchor run detects 859 crowns and keeps 856 after 3 local groups. The
+synthetic audit patch merges a known split crown and keeps two similar distinct crowns
+separate. A real orthophoto/field crown audit is still needed; the anchor merge is a safety
+filter, not a validated instance solver.
 
 What is next
 ------------

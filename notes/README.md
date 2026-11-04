@@ -46,6 +46,8 @@ Keep private material out of this directory.
 - `reports/p18-closeout.md`: P18 close-out and the P19 recommendation.
 - `reports/p19-merge-audit.md`: P19 chain-collapse audit, guard evidence, and new demo counts.
 - `reports/p19-closeout.md`: P19 close-out and the P20 recommendation.
+- `reports/p20-anchor-merge.md`: P20 anchor rule, synthetic audit patch, and demo comparison.
+- `reports/p20-closeout.md`: P20 close-out and the P21 recommendation.
 - `releases/v0.2.0.md`: superseded draft; never tagged.
 - `reference/data-sources.md`: public UBC, Vancouver, and Metro Vancouver sources, with
   coverage, licences, and traps.
