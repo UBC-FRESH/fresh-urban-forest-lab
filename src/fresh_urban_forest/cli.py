@@ -43,6 +43,7 @@ from fresh_urban_forest.inventory import (
 )
 from fresh_urban_forest.irrigation import compare_irrigation
 from fresh_urban_forest.itd import detect_trees, detected_trees_geojson
+from fresh_urban_forest.itd_postprocess import postprocess_trees
 from fresh_urban_forest.lidar import PointCloudSummary, canopies_from_pair, summarize_point_cloud
 from fresh_urban_forest.lidarbc import discover_lidarbc_tiles
 from fresh_urban_forest.materialize import materialize_sources, read_materialization_manifest
@@ -149,6 +150,17 @@ EARLIER_OPTION = typer.Option(..., "--earlier", help="Earlier dataset directory.
 LATER_OPTION = typer.Option(..., "--later", help="Later dataset directory.")
 MIN_HEIGHT_OPTION = typer.Option(3.0, "--min-height", help="Minimum canopy height in metres.")
 WINDOW_OPTION = typer.Option(3.0, "--window", help="Local-maxima window in metres.")
+POSTPROCESS_OPTION = typer.Option(
+    False, "--postprocess", help="Apply opt-in crown post-processing."
+)
+BUFFER_OPTION = typer.Option(10.0, "--buffer", help="Edge buffer in metres for post-processing.")
+MAX_SMALL_HEIGHT_OPTION = typer.Option(
+    2.0, "--max-small-height", help="Small-tree height threshold in metres."
+)
+MERGE_OPTION = typer.Option(
+    True, "--merge/--no-merge", help="Conservatively merge overlapping crowns."
+)
+SUMMARY_OPTION = typer.Option(None, "--summary", help="Optional post-processing summary JSON path.")
 THRESHOLD_OPTION = typer.Option(2.0, "--threshold", help="Canopy threshold in metres.")
 LAYER_OPTION = typer.Option(4, "--layer", help="LidarBC ArcGIS layer id (4 is point cloud).")
 INDEX_OPTION = typer.Option(..., "--index", help="CanElevation tile-index GeoPackage.")
@@ -635,6 +647,11 @@ def detect_trees_command(
     out: Path = OUT_OPTION,
     min_height: float = MIN_HEIGHT_OPTION,
     window: float = WINDOW_OPTION,
+    postprocess: bool = POSTPROCESS_OPTION,
+    buffer: float = BUFFER_OPTION,
+    max_small_height: float = MAX_SMALL_HEIGHT_OPTION,
+    merge: bool = MERGE_OPTION,
+    summary: Path | None = SUMMARY_OPTION,
 ) -> None:
     """Detect individual crowns from a dataset canopy-height grid.
 
@@ -648,9 +665,43 @@ def detect_trees_command(
         Minimum canopy height in metres.
     window : float
         Local-maxima window in metres.
+    postprocess : bool
+        Apply opt-in buffer, small-tree, and merge post-processing.
+    buffer : float
+        Edge buffer in metres for post-processing.
+    max_small_height : float
+        Small-tree height threshold in metres.
+    merge : bool
+        Conservatively merge overlapping crowns.
+    summary : Path or None
+        Optional post-processing summary JSON path. Defaults to a sidecar next to ``out``.
     """
     loaded = load_dataset(dataset)
     trees = detect_trees(loaded.terrain, min_height_m=min_height, window_m=window)
+    if postprocess:
+        result = postprocess_trees(
+            trees,
+            loaded.terrain.bounds,
+            buffer_m=buffer,
+            max_small_height_m=max_small_height,
+            merge=merge,
+        )
+        kept = result.kept()
+        out.parent.mkdir(parents=True, exist_ok=True)
+        out.write_text(
+            json.dumps(detected_trees_geojson(kept), indent=1) + "\n",
+            encoding="utf-8",
+        )
+        summary_path = summary or out.with_suffix(".summary.json")
+        summary_path.write_text(
+            json.dumps(result.to_dict(), indent=2) + "\n",
+            encoding="utf-8",
+        )
+        console.print(
+            f"Detected {len(trees)} crowns; kept {len(kept)} after post-processing; "
+            f"summary -> {summary_path}"
+        )
+        return
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(detected_trees_geojson(trees), indent=1) + "\n", encoding="utf-8")
     console.print(f"Detected {len(trees)} crowns and wrote {out}")

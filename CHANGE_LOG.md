@@ -490,3 +490,17 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Close-out report: `notes/reports/p17-closeout.md`. P17 is complete.
 - Limits: the merge is a small CHM heuristic, not a point-cloud instance resolver; the
   default `detect_trees` output is unchanged and the feature is opt-in.
+
+### P18 CHM/ITD post-processing exports and smoke test
+
+- Added `detect-trees --postprocess` with `--buffer`, `--max-small-height`, `--no-merge`,
+  and `--summary`.
+- Post-processed runs write kept-crown GeoJSON and a sidecar summary JSON; the default
+  command is unchanged.
+- Added a CLI test for the post-processed output and sidecar summary.
+- Demo smoke: 859 detected, 701 kept after 57 merge groups; a 50 m stress buffer flags 5
+  crowns. The 10 m default buffer flags none on the large interior demo.
+- Tests: 347 passed; total coverage 87.79 percent. Dashboard: GREEN.
+- Close-out report: `notes/reports/p18-closeout.md`. P18 is complete.
+- Limits: one demo dataset, no field validation of the merge reduction, and the small-tree
+  flag is not exercised because the detector minimum height is above the threshold.
