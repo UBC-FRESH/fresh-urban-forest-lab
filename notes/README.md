@@ -42,6 +42,8 @@ Keep private material out of this directory.
 - `reports/p16-ground-adapter.md`: P16 implementation, contract tests, and the real-tile smoke result.
 - `reports/p16-closeout.md`: P16 close-out and the P17 recommendation.
 - `reports/p17-closeout.md`: P17 close-out and the P18 recommendation.
+- `reports/p18-itd-postprocess-smoke.md`: P18 demo smoke counts and CLI export details.
+- `reports/p18-closeout.md`: P18 close-out and the P19 recommendation.
 - `releases/v0.2.0.md`: superseded draft; never tagged.
 - `reference/data-sources.md`: public UBC, Vancouver, and Metro Vancouver sources, with
   coverage, licences, and traps.

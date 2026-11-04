@@ -23,6 +23,7 @@ This roadmap is the plan of record and the issue tracker map for FRESH Urban For
 | P15 Manual ground reference and optional FEMIC adapter design | #95 | `feature/p15-ground-adapter` | complete |
 | P16 Optional FEMIC ground-adapter implementation | #103 | `feature/p16-ground-adapter` | complete |
 | P17 CHM/ITD post-processing | #113 | `feature/p17-itd-postprocess` | complete |
+| P18 CHM/ITD post-processing exports and smoke test | #116 | `feature/p18-itd-exports` | complete |
 
 ## Lifecycle Map
 
@@ -644,6 +645,33 @@ Phase 17 verification:
 - `python scripts/dashboard.py`
 - `python scripts/check_workflow.py`
 
+## Phase 18: CHM/ITD post-processing exports and smoke test
+
+Parent issue: #116
+Branch: `feature/p18-itd-exports`
+Status: complete
+
+Goal: expose P17 post-processing through the CLI and run it on the real UBC demo dataset.
+
+- [x] P18.1 CLI post-processing export and smoke test (#117)
+  - [x] `detect-trees --postprocess` with buffer, small-tree, and merge options
+  - [x] Kept-crown GeoJSON plus sidecar summary JSON
+  - [x] Default command unchanged
+  - [x] Demo smoke: 859 detected, 701 kept, 57 merge groups; stress buffer flags 5
+
+Acceptance criteria:
+
+- `detect-trees` without the new flag behaves exactly as before.
+- With the flag, it writes kept crowns and a sidecar summary.
+- The summary reports buffer, small-tree, and merge counts.
+- The demo run is recorded with exact counts.
+- The dashboard is green.
+
+Phase 18 verification:
+
+- `python scripts/dashboard.py`
+- `python scripts/check_workflow.py`
+
 ## Detailed Next Steps Notes
 
 1. The repository was created from `UBC-FRESH/ubc-fresh-dev-workflow` on 2026-11-03. The seed's dashboard, validator, docs, and agent contract are retained.
@@ -658,3 +686,4 @@ Phase 17 verification:
 10. P15 (#95) adds a manually checked 20 m Golden-area patch and accepts an optional sidecar FEMIC adapter design. The patch shows class-2 recall 0.9507 and high-confidence false-ground 3.14%. The adapter is not implemented; the design defines `ground.laz`, `manifest.json`, and `qa.json`, no hard FEMIC dependency, and no default product change.
 11. P16 (#103) implements the optional sidecar ground adapter: `write_ground_bundle`, the `ground-adapter` CLI, extra dimensions, manifest/QA schemas, and synthetic contract tests. It remains opt-in and does not change default FEMIC products.
 12. P17 (#113) adds opt-in CHM/ITD post-processing: edge buffer flags, small-tree height flags, and a conservative over-segmentation merge with source-ID groups. `kept()` excludes both flag sets; `detect_trees` defaults are unchanged.
+13. P18 (#116) exposes the P17 post-processing through `detect-trees --postprocess` and writes a sidecar summary. The UBC demo detects 859 crowns, keeps 701 after 57 merge groups, and a 50 m stress buffer flags 5. The default detector path is unchanged; the merge reduction needs visual review before operational use.
