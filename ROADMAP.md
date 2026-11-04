@@ -17,7 +17,7 @@ This roadmap is the plan of record and the issue tracker map for FRESH Urban For
 | P8 Spatio-temporal optimization and Pareto explorer | #41 | `feature/p8-optimize-pareto` | complete |
 | P9 Off-inventory and private-canopy augmentation | #42 | `feature/p9-off-inventory` | complete |
 | P10 Bird habitat and demography | #43 | `feature/p10-birds` | complete |
-| P11 Integration and v0.3 release candidate | #44 | `feature/p11-integration` | pr-open |
+| P11 Integration and v0.3 release candidate | #44 | `feature/p11-integration` | complete |
 | P12 Arbor method mining and clean-room point-cloud primitives | #61 | `feature/p12-arbor-methods` | complete |
 | P13 ALS ground classification and height above ground | #70 | `feature/p13-als-ground` | complete |
 
@@ -429,7 +429,7 @@ Phase 10 verification:
 
 Parent issue: #44
 Branch: `feature/p11-integration`
-Status: pr-open
+Status: complete
 
 Goal: make the shade, species, optimization, off-inventory, and bird layers one coherent lab, document them, benchmark them, and queue a v0.3 release candidate.
 
