@@ -100,6 +100,8 @@ def _merge_groups(
     *,
     max_height_delta_m: float,
     max_area_ratio: float,
+    max_group_members: int,
+    max_group_extent_m: float,
 ) -> list[list[int]]:
     """Return index groups for conservative over-segmentation merges.
 
@@ -111,6 +113,10 @@ def _merge_groups(
         Maximum absolute height difference for a merge.
     max_area_ratio : float
         Maximum smaller/larger crown-area ratio for a merge.
+    max_group_members : int
+        Maximum number of source crowns in one merge group.
+    max_group_extent_m : float
+        Maximum XY bounding-box diagonal of one merge group.
 
     Returns
     -------
@@ -118,6 +124,7 @@ def _merge_groups(
         Groups with two or more indices.
     """
     parent = list(range(len(trees)))
+    members: dict[int, list[int]] = {index: [index] for index in range(len(trees))}
 
     def find(index: int) -> int:
         while parent[index] != index:
@@ -128,8 +135,21 @@ def _merge_groups(
     def union(first: int, second: int) -> None:
         root_first = find(first)
         root_second = find(second)
-        if root_first != root_second:
-            parent[max(root_first, root_second)] = min(root_first, root_second)
+        if root_first == root_second:
+            return
+        combined = members[root_first] + members[root_second]
+        if len(combined) > max_group_members:
+            return
+        xs = [trees[index].x for index in combined]
+        ys = [trees[index].y for index in combined]
+        extent = math.hypot(max(xs) - min(xs), max(ys) - min(ys))
+        if extent > max_group_extent_m:
+            return
+        keep = min(root_first, root_second)
+        drop = max(root_first, root_second)
+        parent[drop] = keep
+        members[keep] = combined
+        del members[drop]
 
     for first in range(len(trees)):
         for second in range(first + 1, len(trees)):
@@ -205,6 +225,8 @@ def postprocess_trees(
     merge: bool = True,
     merge_max_height_delta_m: float = 2.0,
     merge_max_area_ratio: float = 0.6,
+    merge_max_group_members: int = 4,
+    merge_max_group_extent_m: float = 30.0,
 ) -> TreePostprocessResult:
     """Flag and conservatively merge CHM-detected crowns.
 
@@ -225,6 +247,12 @@ def postprocess_trees(
         Maximum absolute height difference for a merge. The default is ``2.0``.
     merge_max_area_ratio : float, optional
         Maximum smaller/larger crown-area ratio for a merge. The default is ``0.6``.
+    merge_max_group_members : int, optional
+        Maximum source crowns in one merge group. The default is ``4``. Must be at least
+        ``2``.
+    merge_max_group_extent_m : float, optional
+        Maximum XY bounding-box diagonal of one merge group. The default is ``30.0``.
+        Must be positive.
 
     Returns
     -------
@@ -251,6 +279,10 @@ def postprocess_trees(
         raise ValueError("merge_max_height_delta_m must be non-negative")
     if not 0 < merge_max_area_ratio < 1:
         raise ValueError("merge_max_area_ratio must be between 0 and 1")
+    if merge_max_group_members < 2:
+        raise ValueError("merge_max_group_members must be at least 2")
+    if merge_max_group_extent_m <= 0:
+        raise ValueError("merge_max_group_extent_m must be positive")
     _validate_bounds(bounds)
 
     warnings: list[str] = []
@@ -269,6 +301,8 @@ def postprocess_trees(
             trees,
             max_height_delta_m=merge_max_height_delta_m,
             max_area_ratio=merge_max_area_ratio,
+            max_group_members=merge_max_group_members,
+            max_group_extent_m=merge_max_group_extent_m,
         )
         merged_indices: set[int] = set()
         for group in groups:
