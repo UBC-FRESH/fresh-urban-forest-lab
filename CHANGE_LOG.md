@@ -459,9 +459,86 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
   and live docs.
 - Moved tag `v0.3.0` to the final release commit and refreshed the GitHub release notes.
 
-### P16 full Vancouver city pilot
+### P16 Optional FEMIC ground-adapter implementation
 
-- Activated P16 (#105) and its six tasks (#106–#111) for a full City of Vancouver public-data
+- Added `fresh_urban_forest.ground_adapter` with `GroundAdapterParameters`,
+  `GroundAdapterParameters.sha256`, `GroundBundleResult`, and `write_ground_bundle`.
+- The writer copies the input LAZ and adds `is_ground`, `hag`, `is_low`, and `ref_class`
+  dimensions, then writes a versioned `manifest.json` and `qa.json`.
+- Added the opt-in `ground-adapter` CLI command. It is not part of `build`, `serve`, or the
+  default dataset path.
+- Added synthetic-LAZ contract tests for the nominal bundle, extra dimensions, hashes,
+  schemas, missing CRS/vertical datum warnings, overwrite refusal, empty input, and the CLI.
+- Added `lazrs>=0.5` so the LAZ write path works in a clean install and in CI.
+- Tests: 337 passed; total coverage 87.68 percent. Dashboard: GREEN.
+- Real-tile smoke: Golden-area tile, 113,775 points, 82,530 predicted ground, 5.8 s;
+  local only, not a CI network job.
+- Close-out report: `notes/reports/p16-closeout.md`. P16 is complete.
+- Limits: the adapter is not a FEMIC core import; no real-tile smoke test is in CI; the
+  classifier remains opt-in and does not change default FEMIC products.
+
+### P17 CHM/ITD post-processing
+
+- Added `fresh_urban_forest.itd_postprocess` with `TreePostprocessResult` and
+  `postprocess_trees`.
+- Added edge-buffer flags, strict small-tree flags, and a conservative over-segmentation
+  merge that records every source ID.
+- Added `kept()` filtering and a JSON-friendly summary.
+- Added synthetic tests for edge flags, small trees, merge, no-merge, empty input, invalid
+  parameters, and JSON output.
+- Tests: 346 passed; total coverage 87.76 percent. Dashboard: GREEN.
+- Close-out report: `notes/reports/p17-closeout.md`. P17 is complete.
+- Limits: the merge is a small CHM heuristic, not a point-cloud instance resolver; the
+  default `detect_trees` output is unchanged and the feature is opt-in.
+
+### P18 CHM/ITD post-processing exports and smoke test
+
+- Added `detect-trees --postprocess` with `--buffer`, `--max-small-height`, `--no-merge`,
+  and `--summary`.
+- Post-processed runs write kept-crown GeoJSON and a sidecar summary JSON; the default
+  command is unchanged.
+- Added a CLI test for the post-processed output and sidecar summary.
+- Demo smoke: 859 detected, 701 kept after 57 merge groups; a 50 m stress buffer flags 5
+  crowns. The 10 m default buffer flags none on the large interior demo.
+- Tests: 347 passed; total coverage 87.79 percent. Dashboard: GREEN.
+- Close-out report: `notes/reports/p18-closeout.md`. P18 is complete.
+- Limits: one demo dataset, no field validation of the merge reduction, and the small-tree
+  flag is not exercised because the detector minimum height is above the threshold.
+
+### P19 Merge-reduction audit and guard
+
+- Audited the demo merge: 57 groups, 215 source crowns, one group with 67 crowns spanning
+  4.6 km. The old union-find merged transitively across the whole dataset.
+- Added `merge_max_group_members` (default 4) and `merge_max_group_extent_m` (default 30 m)
+  guards. A union is rejected when the combined group exceeds either cap.
+- Guarded demo: 3 local groups, 6 source crowns, 859 detected -> 856 kept. The old rule kept
+  701. The guarded merge is conservative and may under-merge real over-segmentation.
+- Exposed `--merge-max-area-ratio`, `--merge-max-height-delta`,
+  `--merge-max-group-members`, and `--merge-max-group-extent` on `detect-trees`.
+- Added guard and invalid-parameter tests; rendered a before/after audit map in `runtime/`.
+- Tests: 350 passed; total coverage 87.82 percent. Dashboard: GREEN.
+- Close-out report: `notes/reports/p19-closeout.md`. P19 is complete.
+- Limits: one demo dataset and a visual audit; no field crown labels; the merge is a safety
+  filter, not an instance solver; the default detector is unchanged.
+
+### P20 Non-transitive crown merge and manual audit patch
+
+- Replaced the union-find merge with an anchor pass: only larger crowns absorb smaller
+  crowns, and an absorbed crown cannot become an anchor.
+- Kept the 4-source and 30 m group caps.
+- Added a synthetic manual audit patch: a known split crown merges; two similar distinct
+  crowns stay separate.
+- Added tests for non-transitivity, multi-crown anchors, and the audit patch.
+- Demo result is unchanged: 859 detected, 3 local groups, 856 kept. The old 57 groups were
+  chain artifacts, not local split crowns.
+- Tests: 353 passed; total coverage 87.82 percent. Dashboard: GREEN.
+- Close-out report: `notes/reports/p20-closeout.md`. P20 is complete.
+- Limits: synthetic audit patch, one demo dataset, and no orthophoto/field crown labels.
+  The anchor merge is a safety filter, not a validated instance solver.
+
+### P21 full Vancouver city pilot
+
+- Activated P21 (#105) and its six tasks (#106–#111) for a full City of Vancouver public-data
   pilot.
 - Locked the source set: City 2022 LiDAR (181 tiles, ~49 points/m²), 184,152 public trees,
   the 22 local-area polygons, building footprints, and climate normals.
@@ -471,18 +548,18 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
   and storage plan.
 - Dashboard: GREEN. Tests: 331 passed.
 
-### P16.1 source lock
+### P21.1 source lock
 
 - Locked the Vancouver AOI at 118.76 km² from the union of 22 local-area polygons.
 - Downloaded and hashed 184,152 public trees, the local-area polygons, and 154,124 building
   footprints. The 2022 City LiDAR manifest contains all 181 tiles.
 - Climate normal locked at 1,098.8 mm/yr (Vancouver Harbour CS, 1981–2010).
-- Source evidence: `notes/reports/p16-source-lock.json`.
+- Source evidence: `notes/reports/p21-source-lock.json`.
 - Started the resumable browser-assisted LiDAR download into
   `data/raw/city_lidar/2022/`.
 - Dashboard: GREEN.
 
-### P16 city pipeline
+### P21 city pipeline
 
 - Added `city.py` for 1 m classified-LAS rasterisation and city mosaic assembly.
 - Added `city_inventory.py`, `city_metrics.py`, and `city_pack.py` for the full inventory,
@@ -495,7 +572,7 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
   portal text; the rasteriser uses the ASPRS classes.
 - Dashboard: GREEN.
 
-### P16 city metrics UI, docs, and shade
+### P21 city metrics UI, docs, and shade
 
 - Added the city metrics endpoint and City tab with city KPIs, local-area ranking, method
   labels, and caveats.
@@ -506,7 +583,7 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
   and the optional city-metrics endpoint.
 - Dashboard: GREEN.
 
-### P16 full Vancouver city pilot close-out
+### P21 full Vancouver city pilot close-out
 
 - Built the full city mosaic: 181/181 tiles, 8,721,285,369 points, 99.96% AOI coverage.
 - Enriched 184,151 public trees; 162,497 height pairs, bias -0.397 m, RMSE 4.292 m.
@@ -516,5 +593,5 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
   a sanity check, not calibration.
 - City tab and city-scale 3D scene pass browser smoke with no console or page errors.
 - Storage: 165 GB raw LiDAR, 1.8 GB processed, 7.7 TB free; no dataset on the root disk.
-- Close-out report: `notes/reports/p16-vancouver-city.md`.
+- Close-out report: `notes/reports/p21-vancouver-city.md`.
 - Dashboard: GREEN.

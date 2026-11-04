@@ -32,6 +32,7 @@ from fresh_urban_forest.dataset import build_dataset, dataset_summary, load_data
 from fresh_urban_forest.demography import project_demography
 from fresh_urban_forest.field_analysis import analyze_field_packet, write_field_analysis
 from fresh_urban_forest.field_packet import build_field_packet
+from fresh_urban_forest.ground_adapter import GroundAdapterParameters, write_ground_bundle
 from fresh_urban_forest.habitat import GUILDS, guild_habitat, habitat_metrics, write_bird_report
 from fresh_urban_forest.integration import build_lab_report, write_lab_report
 from fresh_urban_forest.inventory import (
@@ -42,6 +43,7 @@ from fresh_urban_forest.inventory import (
 )
 from fresh_urban_forest.irrigation import compare_irrigation
 from fresh_urban_forest.itd import detect_trees, detected_trees_geojson
+from fresh_urban_forest.itd_postprocess import postprocess_trees
 from fresh_urban_forest.lidar import PointCloudSummary, canopies_from_pair, summarize_point_cloud
 from fresh_urban_forest.lidarbc import discover_lidarbc_tiles
 from fresh_urban_forest.materialize import materialize_sources, read_materialization_manifest
@@ -95,6 +97,14 @@ console = Console()
 
 DEST_OPTION = typer.Option(..., "--dest", help="Destination directory.")
 OUT_OPTION = typer.Option(..., "--out", help="Output dataset directory.")
+GROUND_LAZ_OPTION = typer.Option(
+    ...,
+    "--laz",
+    exists=True,
+    dir_okay=False,
+    help="Input LAS/LAZ tile.",
+)
+GROUND_OUT_OPTION = typer.Option(..., "--out", help="Output directory for the ground bundle.")
 OUT_DIR_OPTION = typer.Option(..., "--out-dir", help="Output directory for a change product.")
 NAME_OPTION = typer.Option("UBC urban forest", "--name", help="Dataset name.")
 SOURCE_OPTION = typer.Option(None, "--source", help="Catalog source identifier; repeatable.")
@@ -140,6 +150,37 @@ EARLIER_OPTION = typer.Option(..., "--earlier", help="Earlier dataset directory.
 LATER_OPTION = typer.Option(..., "--later", help="Later dataset directory.")
 MIN_HEIGHT_OPTION = typer.Option(3.0, "--min-height", help="Minimum canopy height in metres.")
 WINDOW_OPTION = typer.Option(3.0, "--window", help="Local-maxima window in metres.")
+POSTPROCESS_OPTION = typer.Option(
+    False, "--postprocess", help="Apply opt-in crown post-processing."
+)
+BUFFER_OPTION = typer.Option(10.0, "--buffer", help="Edge buffer in metres for post-processing.")
+MAX_SMALL_HEIGHT_OPTION = typer.Option(
+    2.0, "--max-small-height", help="Small-tree height threshold in metres."
+)
+MERGE_OPTION = typer.Option(
+    True, "--merge/--no-merge", help="Conservatively merge overlapping crowns."
+)
+MERGE_AREA_RATIO_OPTION = typer.Option(
+    0.6,
+    "--merge-max-area-ratio",
+    help="Maximum smaller/larger crown-area ratio for a merge.",
+)
+MERGE_HEIGHT_DELTA_OPTION = typer.Option(
+    2.0,
+    "--merge-max-height-delta",
+    help="Maximum crown height difference for a merge.",
+)
+MERGE_GROUP_MEMBERS_OPTION = typer.Option(
+    4,
+    "--merge-max-group-members",
+    help="Maximum source crowns in one merge group.",
+)
+MERGE_GROUP_EXTENT_OPTION = typer.Option(
+    30.0,
+    "--merge-max-group-extent",
+    help="Maximum merge-group XY extent in metres.",
+)
+SUMMARY_OPTION = typer.Option(None, "--summary", help="Optional post-processing summary JSON path.")
 THRESHOLD_OPTION = typer.Option(2.0, "--threshold", help="Canopy threshold in metres.")
 LAYER_OPTION = typer.Option(4, "--layer", help="LidarBC ArcGIS layer id (4 is point cloud).")
 INDEX_OPTION = typer.Option(..., "--index", help="CanElevation tile-index GeoPackage.")
@@ -373,6 +414,86 @@ def info(dataset: Path = DATASET_OPTION) -> None:
     console.print_json(json.dumps(dataset_summary(load_dataset(dataset))))
 
 
+@app.command("ground-adapter")
+def ground_adapter(
+    laz: Path = GROUND_LAZ_OPTION,
+    out: Path = GROUND_OUT_OPTION,
+    crs: str | None = typer.Option(None, "--crs"),
+    vertical_datum: str | None = typer.Option(None, "--vertical-datum"),
+    sor: bool = typer.Option(True, "--sor/--no-sor"),
+    sor_k: int = typer.Option(10, "--sor-k"),
+    sor_multiplier: float = typer.Option(2.0, "--sor-multiplier"),
+    cell_size: float = typer.Option(1.0, "--cell-size"),
+    max_angle: float = typer.Option(15.0, "--max-angle"),
+    max_distance: float = typer.Option(0.5, "--max-distance"),
+    max_iterations: int = typer.Option(8, "--max-iterations"),
+    low_point_cut: float = typer.Option(0.15, "--low-point-cut"),
+    overwrite: bool = typer.Option(False, "--overwrite"),
+) -> None:
+    """Write an optional sidecar ground bundle for one LAS/LAZ tile.
+
+    Parameters
+    ----------
+    laz : Path
+        Input LAS or LAZ file.
+    out : Path
+        Output directory for ``ground.laz``, ``manifest.json``, and ``qa.json``.
+    crs : str or None
+        Explicit CRS label.
+    vertical_datum : str or None
+        Explicit vertical datum label.
+    sor : bool
+        Run statistical outlier removal before PTD.
+    sor_k : int
+        SOR neighbour count.
+    sor_multiplier : float
+        SOR standard-deviation multiplier.
+    cell_size : float
+        PTD seed grid cell size in metres.
+    max_angle : float
+        Maximum point-to-vertex angle in degrees.
+    max_distance : float
+        Maximum vertical residual in metres.
+    max_iterations : int
+        Maximum PTD iterations.
+    low_point_cut : float
+        Low-point cut in metres.
+    overwrite : bool
+        Replace an existing bundle.
+    """
+    parameters = GroundAdapterParameters(
+        sor_enabled=sor,
+        sor_k=sor_k,
+        sor_multiplier=sor_multiplier,
+        cell_size_m=cell_size,
+        max_angle_deg=max_angle,
+        max_distance_m=max_distance,
+        max_iterations=max_iterations,
+        low_point_cut_m=low_point_cut,
+    )
+    result = write_ground_bundle(
+        laz,
+        out,
+        crs=crs,
+        vertical_datum=vertical_datum,
+        parameters=parameters,
+        overwrite=overwrite,
+    )
+    console.print_json(
+        json.dumps(
+            {
+                "ground_laz": str(result.ground_laz),
+                "manifest_path": str(result.manifest_path),
+                "qa_path": str(result.qa_path),
+                "point_count": result.point_count,
+                "ground_count": result.ground_count,
+                "low_point_count": result.low_point_count,
+                "warnings": list(result.warnings),
+            }
+        )
+    )
+
+
 @app.command("serve")
 def serve(
     dataset: Path = DATASET_OPTION,
@@ -546,6 +667,15 @@ def detect_trees_command(
     out: Path = OUT_OPTION,
     min_height: float = MIN_HEIGHT_OPTION,
     window: float = WINDOW_OPTION,
+    postprocess: bool = POSTPROCESS_OPTION,
+    buffer: float = BUFFER_OPTION,
+    max_small_height: float = MAX_SMALL_HEIGHT_OPTION,
+    merge: bool = MERGE_OPTION,
+    merge_max_area_ratio: float = MERGE_AREA_RATIO_OPTION,
+    merge_max_height_delta: float = MERGE_HEIGHT_DELTA_OPTION,
+    merge_max_group_members: int = MERGE_GROUP_MEMBERS_OPTION,
+    merge_max_group_extent: float = MERGE_GROUP_EXTENT_OPTION,
+    summary: Path | None = SUMMARY_OPTION,
 ) -> None:
     """Detect individual crowns from a dataset canopy-height grid.
 
@@ -559,9 +689,55 @@ def detect_trees_command(
         Minimum canopy height in metres.
     window : float
         Local-maxima window in metres.
+    postprocess : bool
+        Apply opt-in buffer, small-tree, and merge post-processing.
+    buffer : float
+        Edge buffer in metres for post-processing.
+    max_small_height : float
+        Small-tree height threshold in metres.
+    merge : bool
+        Conservatively merge overlapping crowns.
+    merge_max_area_ratio : float
+        Maximum smaller/larger crown-area ratio for a merge.
+    merge_max_height_delta : float
+        Maximum crown height difference for a merge.
+    merge_max_group_members : int
+        Maximum source crowns in one merge group.
+    merge_max_group_extent : float
+        Maximum merge-group XY extent in metres.
+    summary : Path or None
+        Optional post-processing summary JSON path. Defaults to a sidecar next to ``out``.
     """
     loaded = load_dataset(dataset)
     trees = detect_trees(loaded.terrain, min_height_m=min_height, window_m=window)
+    if postprocess:
+        result = postprocess_trees(
+            trees,
+            loaded.terrain.bounds,
+            buffer_m=buffer,
+            max_small_height_m=max_small_height,
+            merge=merge,
+            merge_max_area_ratio=merge_max_area_ratio,
+            merge_max_height_delta_m=merge_max_height_delta,
+            merge_max_group_members=merge_max_group_members,
+            merge_max_group_extent_m=merge_max_group_extent,
+        )
+        kept = result.kept()
+        out.parent.mkdir(parents=True, exist_ok=True)
+        out.write_text(
+            json.dumps(detected_trees_geojson(kept), indent=1) + "\n",
+            encoding="utf-8",
+        )
+        summary_path = summary or out.with_suffix(".summary.json")
+        summary_path.write_text(
+            json.dumps(result.to_dict(), indent=2) + "\n",
+            encoding="utf-8",
+        )
+        console.print(
+            f"Detected {len(trees)} crowns; kept {len(kept)} after post-processing; "
+            f"summary -> {summary_path}"
+        )
+        return
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(detected_trees_geojson(trees), indent=1) + "\n", encoding="utf-8")
     console.print(f"Detected {len(trees)} crowns and wrote {out}")

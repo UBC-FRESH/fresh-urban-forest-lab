@@ -14,7 +14,7 @@ Keep private material out of this directory.
 - `design/architecture.md`: the layer diagram, contracts, and deliberate simplifications.
 - `design/change-uncertainty-plan.md`: observed change, completeness, validation, and calibration plan.
 - `design/urban-canopy-program-plan.md`: the completed P7-P11 programme for shade, species fit, optimization, off-inventory canopy, and birds.
-- `design/vancouver-city-pilot.md`: P16 full-city Vancouver data lock, storage budget, processing design, metrics, and acceptance criteria.
+- `design/vancouver-city-pilot.md`: P21 full-city Vancouver data lock, storage budget, processing design, metrics, and acceptance criteria.
 - `reference/literature-review-shade-optimization-biodiversity.md`: rapid peer-reviewed and grey-literature review, novelty assessment, and citations.
 - `reference/shade-review-protocol.md`: P7.1 search protocol, screening log, capability comparison, and frozen claim.
 - `reports/detection-and-allometry-2021.md`: first detection validation and local allometry results.
@@ -40,7 +40,16 @@ Keep private material out of this directory.
 - `design/femic-ground-adapter.md`: optional sidecar adapter contract, bundle schema, failure modes, and test strategy.
 - `adr/0007-optional-femic-ground-adapter.md`: accept the sidecar contract; no default FEMIC change.
 - `reports/p15-closeout.md`: P15 close-out, acceptance evidence, and the P16 recommendation.
-- `reports/p16-vancouver-city.md`: full Vancouver city pilot close-out, metrics, validation, performance, storage, and limits.
+- `reports/p16-ground-adapter.md`: P16 implementation, contract tests, and the real-tile smoke result.
+- `reports/p16-closeout.md`: P16 close-out and the P17 recommendation.
+- `reports/p17-closeout.md`: P17 close-out and the P18 recommendation.
+- `reports/p18-itd-postprocess-smoke.md`: P18 demo smoke counts and CLI export details.
+- `reports/p18-closeout.md`: P18 close-out and the P19 recommendation.
+- `reports/p19-merge-audit.md`: P19 chain-collapse audit, guard evidence, and new demo counts.
+- `reports/p19-closeout.md`: P19 close-out and the P20 recommendation.
+- `reports/p20-anchor-merge.md`: P20 anchor rule, synthetic audit patch, and demo comparison.
+- `reports/p20-closeout.md`: P20 close-out and the P21 recommendation.
+- `reports/p21-vancouver-city.md`: full Vancouver city pilot close-out, metrics, validation, performance, storage, and limits.
 - `releases/v0.2.0.md`: superseded draft; never tagged.
 - `reference/data-sources.md`: public UBC, Vancouver, and Metro Vancouver sources, with
   coverage, licences, and traps.

@@ -1,14 +1,14 @@
-# P16 close-out: full Vancouver city canopy pilot
+# P21 close-out: full Vancouver city canopy pilot
 
 Date: 2026-11-04
-Phase: P16
+Phase: P21
 Parent issue: #105
-Branch: `feature/p16-vancouver-city`
+Branch: `feature/p21-vancouver-city`
 Status: PR queued for maintainer review
 
 ## Summary
 
-P16 turns the UBC-core prototype into a full City of Vancouver pilot using only public,
+P21 turns the UBC-core prototype into a full City of Vancouver pilot using only public,
 downloadable data. It builds a 1 m city canopy surface from the 2022 City LiDAR, enriches
 all 184,151 mapped public trees, computes city and 22-local-area metrics, and adds a City
 tab and city-scale 3D scene to the existing app.
@@ -25,7 +25,7 @@ phase.
 - Public trees: 184,152 rows, 184,151 mapped, OGL–Vancouver.
 - Buildings: 154,124 footprints, OGL–Vancouver; 2022 LiDAR heights sampled.
 - Climate: Vancouver Harbour CS 1981–2010, 1,098.8 mm/yr, OGL–Canada.
-- Hashes and byte counts: `notes/reports/p16-source-lock.json`.
+- Hashes and byte counts: `notes/reports/p21-source-lock.json`.
 
 ### LiDAR rasterisation
 
@@ -88,12 +88,12 @@ phase.
 
 ## Tasks
 
-- P16.1 source lock and manifest: complete (#106).
-- P16.2 LiDAR mosaic: complete (#107).
-- P16.3 inventory and evidence: complete (#108).
-- P16.4 city metrics: complete (#109).
-- P16.5 City UI and 3D: complete (#110).
-- P16.6 validation, docs, close-out: complete (#111).
+- P21.1 source lock and manifest: complete (#106).
+- P21.2 LiDAR mosaic: complete (#107).
+- P21.3 inventory and evidence: complete (#108).
+- P21.4 city metrics: complete (#109).
+- P21.5 City UI and 3D: complete (#110).
+- P21.6 validation, docs, close-out: complete (#111).
 
 ## Limits
 

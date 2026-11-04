@@ -64,7 +64,24 @@ Inspect and detect
      --out data/demo/ubc_core/detected_trees.geojson
 
 ``detect-trees`` uses local maxima plus marker-controlled watershed on the dataset canopy
-grid.
+grid. Add ``--postprocess`` to apply the opt-in edge buffer, small-tree flag, and
+conservative over-segmentation merge. The command writes kept crowns to ``--out`` and a
+sidecar summary to ``<out>.summary.json`` unless ``--summary`` is supplied.
+
+.. code-block:: bash
+
+   fresh-urban-forest detect-trees \
+     --dataset data/demo/ubc_core \
+     --out tmp/detected_post.geojson \
+     --min-height 3 \
+     --postprocess \
+     --buffer 10 \
+     --max-small-height 2
+
+Without ``--postprocess`` the command and output are unchanged. The merge is guarded by
+``--merge-max-group-members`` (default 4) and ``--merge-max-group-extent`` (default 30 m)
+so a chain of small pairwise merges cannot collapse crowns across the whole dataset. Use
+``--merge-max-area-ratio`` and ``--merge-max-height-delta`` to tune the pairwise rule.
 
 Tile discovery
 --------------

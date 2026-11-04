@@ -7,7 +7,7 @@ end so planners can measure canopy structure and test management scenarios.
 **Documentation:** https://ubc-fresh.github.io/fresh-urban-forest-lab/
 
 The first pilot is UBC's Vancouver campus and the surrounding Metro Vancouver context.
-P16 extends the same stack to the full City of Vancouver using 2022 LiDAR and all 184k
+P21 extends the same stack to the full City of Vancouver using 2022 LiDAR and all 184k
 public trees; see `docs/reference/vancouver-city-pilot.rst`. The demo runs offline from a
 small, derived core-campus dataset.
 
@@ -75,7 +75,7 @@ fresh-urban-forest serve --dataset data/processed/vancouver_2022 --port 8000
 
 ## Status
 
-The prototype is complete through Phase 15 and released as v0.3.0. P16 is the active full
+The prototype is complete through Phase 15 and released as v0.3.0. P21 is the active full
 Vancouver city pilot. The documentation site is live on GitHub Pages. `ROADMAP.md` is the
 plan of record; the GitHub issues carry the live status.
 

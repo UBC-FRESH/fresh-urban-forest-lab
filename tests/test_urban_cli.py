@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 from pathlib import Path
 
 from typer.testing import CliRunner
@@ -288,3 +289,36 @@ def test_report_command(tmp_path: Path) -> None:
     )
     assert result.exit_code == 0, result.stdout
     assert (tmp_path / "lab-report.json").exists()
+
+
+def test_detect_trees_postprocess_writes_summary(tmp_path: Path) -> None:
+    """The opt-in post-processing writes kept crowns and a sidecar summary."""
+    make_dataset(tmp_path / "first")
+    out = tmp_path / "detected_post.geojson"
+    detected = RUNNER.invoke(
+        app,
+        [
+            "detect-trees",
+            "--dataset",
+            str(tmp_path / "first" / "dataset"),
+            "--out",
+            str(out),
+            "--min-height",
+            "2",
+            "--postprocess",
+            "--buffer",
+            "5",
+            "--max-small-height",
+            "2",
+        ],
+    )
+    assert detected.exit_code == 0
+    assert out.exists()
+    summary = out.with_suffix(".summary.json")
+    assert summary.exists()
+    payload = json.loads(summary.read_text())
+    assert payload["tree_count"] >= 0
+    assert "buffer_ids" in payload
+    assert "small_ids" in payload
+    assert "merge_groups" in payload
+    assert "kept_ids" in payload

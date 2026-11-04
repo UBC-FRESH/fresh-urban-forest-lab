@@ -85,17 +85,42 @@ confirms class 2 is the lowest continuous surface; class 1 mixes unclassified gr
 above-surface vegetation. Patch metrics: class-2 recall 0.9507, high-confidence false-ground
 3.14%, class-2 HAG p99 0.0434 m.
 
-The optional FEMIC adapter design is a sidecar contract, not a core import: `ground.laz`,
+The optional FEMIC adapter is a sidecar contract, not a core import: `ground.laz`,
 `manifest.json`, and `qa.json`, with versioned schemas and no default product change. The
 design is in `notes/design/femic-ground-adapter.md`; ADR 0007 records the decision. The
-adapter is designed but not implemented.
+writer and `ground-adapter` CLI are implemented in `fresh_urban_forest.ground_adapter`.
+
+The bundle adds `is_ground`, `hag`, `is_low`, and `ref_class` to a copy of the input LAZ.
+The manifest records input/output hashes, CRS, vertical datum, parameters, provenance, and
+warnings. The QA file records counts, HAG percentiles, class summaries, and the explicit
+`ground_truth_used: false` note.
+
+CHM/ITD post-processing
+-----------------------
+
+`fresh_urban_forest.itd_postprocess` adds opt-in post-processing for CHM-detected crowns:
+an edge buffer, a small-tree height flag, and a conservative over-segmentation merge. The
+merge is deliberately narrow: the smaller crown must be much smaller by area, its centroid
+must fall inside the larger crown, and the height difference must be small. Every merge
+group records its source IDs. The default `detect_trees` output is unchanged.
+
+The `detect-trees --postprocess` CLI path writes kept crowns and a sidecar summary. P19
+found that the first merge rule chain-collapsed 67 crowns across the whole UBC demo. P20
+replaced the union-find merge with a non-transitive anchor rule: only a larger crown can
+absorb smaller crowns, and an absorbed crown cannot anchor another. Group caps remain at
+4 source crowns and 30 m XY extent.
+
+On the demo, the anchor run detects 859 crowns and keeps 856 after 3 local groups. The
+synthetic audit patch merges a known split crown and keeps two similar distinct crowns
+separate. A real orthophoto/field crown audit is still needed; the anchor merge is a safety
+filter, not a validated instance solver.
 
 What is next
 ------------
 
-The next step is an optional FEMIC adapter implementation with a contract test, or CHM/ITD
-post-processing (buffer flags, small-tree flags, over-segmentation merging). QSM and QSF
-work belongs in a dedicated point-cloud package, not this app's core.
+The next step is a real-tile or real-dataset smoke test of the CHM/ITD post-processing and
+a check of the optional ground adapter on a second tile. QSM and QSF work belongs in a
+dedicated point-cloud package, not this app's core.
 
 Citations
 ---------

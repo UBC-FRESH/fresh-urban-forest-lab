@@ -21,15 +21,20 @@ This roadmap is the plan of record and the issue tracker map for FRESH Urban For
 | P13 ALS ground classification and height above ground | #70 | `feature/p13-als-ground` | complete |
 | P14 Ground reference and second terrain validation | #89 | `feature/p14-ground-reference` | complete |
 | P15 Manual ground reference and optional FEMIC adapter design | #95 | `feature/p15-ground-adapter` | complete |
-| P16 Full Vancouver city canopy and ecosystem-services pilot | #105 | `feature/p16-vancouver-city` | pr-open |
+| P16 Optional FEMIC ground-adapter implementation | #103 | `feature/p16-ground-adapter` | complete |
+| P17 CHM/ITD post-processing | #113 | `feature/p17-itd-postprocess` | complete |
+| P18 CHM/ITD post-processing exports and smoke test | #116 | `feature/p18-itd-exports` | complete |
+| P19 Merge-reduction audit and guard | #119 | `feature/p19-merge-audit` | complete |
+| P20 Non-transitive crown merge and manual audit patch | #122 | `feature/p20-anchor-merge` | complete |
+| P21 Full Vancouver city canopy and ecosystem-services pilot | #105 | `feature/p21-vancouver-city` | pr-open |
 
 ## Lifecycle Map
 
 | Stage | Phases | Exit criteria |
 | --- | --- | --- |
 | Scope and design | P0, P7.1 | Sources, licences, architecture, evidence review, and ADRs recorded |
-| Build | P1, P2, P3, P7, P8, P9, P10, P16 | A dataset, a growth/DSS core, a working 2D/3D app, and the shade/optimization/canopy/bird layers |
-| Verify | P4, P11, P16 | Dashboard green, real data built, browser checked, method notes written, benchmark reproduced |
+| Build | P1, P2, P3, P7, P8, P9, P10, P21 | A dataset, a growth/DSS core, a working 2D/3D app, and the shade/optimization/canopy/bird layers |
+| Verify | P4, P11, P21 | Dashboard green, real data built, browser checked, method notes written, benchmark reproduced |
 | Release and deploy | P5, P11.4 | Tag, release notes, Pages, clean-clone verification |
 
 ## Conventions
@@ -583,10 +588,154 @@ Phase 15 verification:
 - `python scripts/dashboard.py`
 - `python scripts/check_workflow.py`
 
-## Phase 16: Full Vancouver city canopy and ecosystem-services pilot
+## Phase 16: Optional FEMIC ground-adapter implementation
+
+Parent issue: #103
+Branch: `feature/p16-ground-adapter`
+Status: complete
+
+Goal: implement the optional sidecar ground-adapter designed in P15, with contract tests,
+CLI, docs, and no default FEMIC product change.
+
+Plan: `notes/design/femic-ground-adapter.md`.
+
+- [x] P16.1 Sidecar ground-bundle writer, CLI, tests, and docs (#104)
+  - [x] `GroundAdapterParameters`, `GroundAdapterParameters.sha256`, `GroundBundleResult`
+  - [x] `write_ground_bundle` with extra dimensions, hashes, manifest, and QA
+  - [x] `ground-adapter` CLI command
+  - [x] Synthetic-LAZ contract tests and failure-mode tests
+  - [x] API and public docs
+
+Acceptance criteria:
+
+- The writer produces `ground.laz`, `manifest.json`, and `qa.json`.
+- The manifest and QA files validate their versioned schemas.
+- Hashes, parameters, CRS, vertical datum, warnings, and provenance are recorded.
+- The CLI is opt-in and does not change default paths.
+- Contract tests cover the nominal path, missing metadata, overwrite, and empty input.
+- The dashboard is green.
+
+Phase 16 verification:
+
+- `python scripts/dashboard.py`
+- `python scripts/check_workflow.py`
+
+## Phase 17: CHM/ITD post-processing
+
+Parent issue: #113
+Branch: `feature/p17-itd-postprocess`
+Status: complete
+
+Goal: add opt-in CHM/ITD post-processing for edge buffers, small trees, and conservative
+over-segmentation merging.
+
+- [x] P17.1 ITD post-processing module, tests, and docs (#114)
+  - [x] `TreePostprocessResult` and `postprocess_trees`
+  - [x] Edge buffer, small-tree flag, and conservative merge groups
+  - [x] `kept()` filtering and JSON summary
+  - [x] Synthetic tests and API/public docs
+
+Acceptance criteria:
+
+- Buffer, small-tree, and merge functions are opt-in and deterministic.
+- Merge groups record every source ID and keep a stable representative ID.
+- The `kept()` result excludes buffer and small-tree IDs.
+- Tests cover flags, merge, no-merge, empty input, and invalid parameters.
+- The dashboard is green.
+
+Phase 17 verification:
+
+- `python scripts/dashboard.py`
+- `python scripts/check_workflow.py`
+
+## Phase 18: CHM/ITD post-processing exports and smoke test
+
+Parent issue: #116
+Branch: `feature/p18-itd-exports`
+Status: complete
+
+Goal: expose P17 post-processing through the CLI and run it on the real UBC demo dataset.
+
+- [x] P18.1 CLI post-processing export and smoke test (#117)
+  - [x] `detect-trees --postprocess` with buffer, small-tree, and merge options
+  - [x] Kept-crown GeoJSON plus sidecar summary JSON
+  - [x] Default command unchanged
+  - [x] Demo smoke: 859 detected, 701 kept, 57 merge groups; stress buffer flags 5
+
+Acceptance criteria:
+
+- `detect-trees` without the new flag behaves exactly as before.
+- With the flag, it writes kept crowns and a sidecar summary.
+- The summary reports buffer, small-tree, and merge counts.
+- The demo run is recorded with exact counts.
+- The dashboard is green.
+
+Phase 18 verification:
+
+- `python scripts/dashboard.py`
+- `python scripts/check_workflow.py`
+
+## Phase 19: Merge-reduction audit and guard
+
+Parent issue: #119
+Branch: `feature/p19-merge-audit`
+Status: complete
+
+Goal: audit the P17/P18 merge on the demo, fix the transitive chain collapse, and expose
+merge tuning options.
+
+- [x] P19.1 Merge audit, guard, CLI options, tests, and report (#120)
+  - [x] Old rule: 57 groups, 215 crowns, largest group 67 crowns over 4.6 km
+  - [x] Guarded rule: 3 local groups, 6 crowns, 859 detected -> 856 kept
+  - [x] `merge_max_group_members` and `merge_max_group_extent_m`
+  - [x] CLI tuning options and guard tests
+
+Acceptance criteria:
+
+- The audit reports the old and guarded merge-group counts and extents.
+- The chain-collapse false merge is documented with evidence.
+- The guarded rule prevents the chain collapse.
+- The CLI exposes merge tuning options.
+- Tests cover the guard behavior.
+- The dashboard is green.
+
+Phase 19 verification:
+
+- `python scripts/dashboard.py`
+- `python scripts/check_workflow.py`
+
+## Phase 20: Non-transitive crown merge and manual audit patch
+
+Parent issue: #122
+Branch: `feature/p20-anchor-merge`
+Status: complete
+
+Goal: replace the guarded union-find merge with a non-transitive anchor merge and validate
+it on a synthetic manual audit patch and the UBC demo.
+
+- [x] P20.1 Anchor merge, synthetic audit patch, tests, and report (#123)
+  - [x] Anchor pass: only larger crowns absorb; absorbed crowns cannot anchor
+  - [x] Synthetic split/distinct audit patch
+  - [x] Demo: 859 detected, 3 local groups, 856 kept
+  - [x] Non-transitivity and multi-crown anchor tests
+
+Acceptance criteria:
+
+- A smaller crown cannot anchor after being absorbed.
+- A large crown can absorb multiple smaller crowns within the caps.
+- The synthetic patch merges the split crown and keeps distinct crowns separate.
+- The demo comparison is recorded.
+- The dashboard is green.
+
+Phase 20 verification:
+
+- `python scripts/dashboard.py`
+- `python scripts/check_workflow.py`
+
+## Phase 21: Full Vancouver city canopy and ecosystem-services pilot
 
 Parent issue: #105
-Branch: `feature/p16-vancouver-city`
+Branch: `feature/p21-vancouver-city`
 Status: pr-open
 
 Goal: extend the UBC-core prototype to the full City of Vancouver using public data, with a
@@ -595,12 +744,12 @@ scene.
 
 Plan: `notes/design/vancouver-city-pilot.md`.
 
-- [x] P16.1 Source lock, AOI, storage budget, and full-city data manifest (#106)
-- [x] P16.2 Full-city LiDAR mosaic and canopy surfaces (#107)
-- [x] P16.3 Full public-tree inventory and tree-level evidence (#108)
-- [x] P16.4 City-wide and local-area metrics and ecosystem services (#109)
-- [x] P16.5 Vancouver 3D city scene and dashboard (#110)
-- [x] P16.6 Validation, performance, docs, and close-out (#111)
+- [x] P21.1 Source lock, AOI, storage budget, and full-city data manifest (#106)
+- [x] P21.2 Full-city LiDAR mosaic and canopy surfaces (#107)
+- [x] P21.3 Full public-tree inventory and tree-level evidence (#108)
+- [x] P21.4 City-wide and local-area metrics and ecosystem services (#109)
+- [x] P21.5 Vancouver 3D city scene and dashboard (#110)
+- [x] P21.6 Validation, performance, docs, and close-out (#111)
 
 Acceptance criteria:
 
@@ -613,7 +762,7 @@ Acceptance criteria:
 - Storage stays under a 250 GB working budget and no dataset is written outside
   `/srv/shared-data`.
 
-Phase 16 verification:
+Phase 21 verification:
 
 - `python scripts/dashboard.py`
 - `python scripts/check_workflow.py`
@@ -631,5 +780,9 @@ Phase 16 verification:
 8. P13 (#70) adds `classify_ground_ptd` and `GroundClassification` for the ALS ground lane. P13.4 defers FEMIC integration until a checked reference patch, a second terrain type, and a fuller PTD angle test exist.
 9. P14 (#89) adds a class-2 reference surface and steep-tile validation. Class-2 recall is 0.9634 and high-confidence false-ground is 4.65% on the steep tile; the coastal tile is 0.9999 and 3.35%. An optional FEMIC adapter prototype is approved only with a manual reference patch and versioned contract.
 10. P15 (#95) adds a manually checked 20 m Golden-area patch and accepts an optional sidecar FEMIC adapter design. The patch shows class-2 recall 0.9507 and high-confidence false-ground 3.14%. The adapter is not implemented; the design defines `ground.laz`, `manifest.json`, and `qa.json`, no hard FEMIC dependency, and no default product change.
-
-11. P16 (#105) is the full Vancouver city pilot. It uses the City 2022 LiDAR (181 tiles, ~49 points/m²), all 184,152 public trees, the 22 local-area polygons, and building footprints. The AOI is 118.76 km² in EPSG:3157. The build produced 8.72 billion points, 99.96% LiDAR coverage, 184,151 mapped trees, 26.854% canopy cover, 350.16 million m³ canopy volume, 95,792 t above-ground carbon, and 1,979 t/yr modelled sequestration. The City's 2022 estimate is about 25%, a sanity check rather than calibration. Raw data is 165 GB under `/srv/shared-data`; processed outputs are 1.8 GB; free space remains 7.7 TB. The close-out is `notes/reports/p16-vancouver-city.md`.
+11. P16 (#103) implements the optional sidecar ground adapter: `write_ground_bundle`, the `ground-adapter` CLI, extra dimensions, manifest/QA schemas, and synthetic contract tests. It remains opt-in and does not change default FEMIC products.
+12. P17 (#113) adds opt-in CHM/ITD post-processing: edge buffer flags, small-tree height flags, and a conservative over-segmentation merge with source-ID groups. `kept()` excludes both flag sets; `detect_trees` defaults are unchanged.
+13. P18 (#116) exposes the P17 post-processing through `detect-trees --postprocess` and writes a sidecar summary. The UBC demo detects 859 crowns, keeps 701 after 57 merge groups, and a 50 m stress buffer flags 5. The default detector path is unchanged; the merge reduction needs visual review before operational use.
+14. P19 (#119) audits the demo merge and finds a transitive chain collapse: the old rule merged 67 crowns across 4.6 km. The guarded rule caps groups at 4 crowns and 30 m, reducing the demo to 3 local groups and 856 kept crowns. The guard prevents false merges but may under-merge real over-segmentation; the merge is a safety filter, not an instance solver.
+15. P20 (#122) replaces the guarded union-find merge with a non-transitive anchor rule: only larger crowns absorb, and absorbed crowns cannot anchor. The synthetic audit patch merges a known split crown and keeps similar distinct crowns separate. The demo remains 3 local groups and 856 kept; a real orthophoto/field audit is still needed.
+16. P21 (#105) is the full Vancouver city pilot. It uses the City 2022 LiDAR (181 tiles, ~49 points/m²), all 184,152 public trees, the 22 local-area polygons, and building footprints. The AOI is 118.76 km² in EPSG:3157. The build produced 8.72 billion points, 99.96% LiDAR coverage, 184,151 mapped trees, 26.854% canopy cover, 350.16 million m³ canopy volume, 95,792 t above-ground carbon, and 1,979 t/yr modelled sequestration. The City's 2022 estimate is about 25%, a sanity check rather than calibration. Raw data is 165 GB under `/srv/shared-data`; processed outputs are 1.8 GB; free space remains 7.7 TB. The close-out is `notes/reports/p21-vancouver-city.md`.
