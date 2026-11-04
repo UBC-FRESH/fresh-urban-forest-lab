@@ -138,6 +138,12 @@ def inventory_summary(inventory: CityInventory) -> dict[str, object]:
     ]
     species = [tree.species or tree.common_name or "Unknown" for tree in trees]
     local_areas = [tree.attributes.get("local_area", "") for tree in trees]
+    measured = {
+        "dbh": _measured_count(trees, "dbh"),
+        "height": _measured_count(trees, "height"),
+        "crown_width": _measured_count(trees, "crown_width"),
+        "species": _measured_count(trees, "species"),
+    }
     return {
         "source_rows": inventory.source_rows,
         "mapped_rows": len(trees),
@@ -155,11 +161,40 @@ def inventory_summary(inventory: CityInventory) -> dict[str, object]:
             4,
         ),
         "local_area_count": len({value for value in local_areas if value}),
-        "measured_species": _measured_count(trees, "species"),
-        "measured_dbh": _measured_count(trees, "dbh"),
-        "measured_height": _measured_count(trees, "height"),
-        "measured_crown_width": _measured_count(trees, "crown_width"),
+        "measured_species": measured["species"],
+        "measured_dbh": measured["dbh"],
+        "measured_height": measured["height"],
+        "measured_crown_width": measured["crown_width"],
         "height_comparison": height_comparison(trees),
+        "completeness": {
+            "total": len(trees),
+            "fields": {
+                "dbh": {
+                    "label": "DBH",
+                    "measured": measured["dbh"],
+                    "total": len(trees),
+                    "fraction": round(measured["dbh"] / max(1, len(trees)), 4),
+                },
+                "height": {
+                    "label": "Height",
+                    "measured": measured["height"],
+                    "total": len(trees),
+                    "fraction": round(measured["height"] / max(1, len(trees)), 4),
+                },
+                "crown_width": {
+                    "label": "Crown width",
+                    "measured": measured["crown_width"],
+                    "total": len(trees),
+                    "fraction": round(measured["crown_width"] / max(1, len(trees)), 4),
+                },
+                "species": {
+                    "label": "Species",
+                    "measured": measured["species"],
+                    "total": len(trees),
+                    "fraction": round(measured["species"] / max(1, len(trees)), 4),
+                },
+            },
+        },
     }
 
 

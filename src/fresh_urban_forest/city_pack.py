@@ -202,7 +202,7 @@ def _canopy_metrics(
         native_fraction=float(cast(float, city["native_fraction"])),
         canopy_cover_pct=float(cast(float, city["canopy_cover_pct"])),
         canopy_volume_m3=float(cast(float, city["canopy_volume_m3"])),
-        mean_height_m=float(cast(float, city["tree_height_p50_m"])),
+        mean_height_m=float(cast(float, city["tree_height_mean_m"])),
         p95_height_m=float(cast(float, city["tree_height_p95_m"])),
         total_carbon_kg=float(cast(float, city["carbon_kg"])),
         shannon_index=float(cast(float, city["shannon_index"])),

@@ -221,6 +221,13 @@ function renderCityMetrics() {
     ["Species", formatNumber(metrics.species_count), "distinct labels"],
     ["Native share", `${formatNumber(Number(city.native_fraction) * 100, 1)}%`, "of public trees"],
   ];
+  if (data.shade?.metrics) {
+    cards.push([
+      "Tree shade",
+      `${formatNumber(Number(data.shade.metrics.tree_shade_fraction) * 100, 1)}%`,
+      "representative day",
+    ]);
+  }
   $("city-kpis").innerHTML = cards
     .map(
       ([label, value, note]) =>

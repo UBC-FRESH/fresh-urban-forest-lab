@@ -20,7 +20,7 @@ import uuid
 from collections.abc import Awaitable, Callable, Mapping
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Literal
+from typing import Literal, cast
 from zoneinfo import ZoneInfo
 
 import numpy as np
@@ -474,6 +474,12 @@ def create_app(
         dict
             Live-tree count and measured counts/fractions by field.
         """
+        city_summary = _dataset_file(state, "inventory_summary.json")
+        if city_summary is not None:
+            payload = json.loads(city_summary.read_text(encoding="utf-8"))
+            completeness_payload = payload.get("completeness")
+            if isinstance(completeness_payload, dict):
+                return cast(dict[str, object], completeness_payload)
         return inventory_completeness(state.dataset.trees)
 
     @app.get("/api/off-inventory")

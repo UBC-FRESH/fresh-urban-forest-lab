@@ -58,6 +58,8 @@ class AreaSummary:
         Species diversity.
     native_fraction : float
         Share of native trees.
+    tree_height_mean_m : float
+        Mean inventory height.
     tree_height_p50_m : float
         Median inventory height.
     tree_height_p95_m : float
@@ -78,6 +80,7 @@ class AreaSummary:
     annual_sequestration_kg: float
     shannon_index: float
     native_fraction: float
+    tree_height_mean_m: float
     tree_height_p50_m: float
     tree_height_p95_m: float
     rainfall_interception_m3_low: float
@@ -102,6 +105,7 @@ class AreaSummary:
             "annual_sequestration_kg": round(self.annual_sequestration_kg, 3),
             "shannon_index": round(self.shannon_index, 4),
             "native_fraction": round(self.native_fraction, 4),
+            "tree_height_mean_m": round(self.tree_height_mean_m, 3),
             "tree_height_p50_m": round(self.tree_height_p50_m, 3),
             "tree_height_p95_m": round(self.tree_height_p95_m, 3),
             "rainfall_interception_m3_low": round(self.rainfall_interception_m3_low, 3),
@@ -194,6 +198,7 @@ def compute_city_metrics(
                 annual_sequestration_kg=tree_values["annual_sequestration_kg"],
                 shannon_index=tree_values["shannon_index"],
                 native_fraction=tree_values["native_fraction"],
+                tree_height_mean_m=tree_values["height_mean_m"],
                 tree_height_p50_m=tree_values["height_p50_m"],
                 tree_height_p95_m=tree_values["height_p95_m"],
                 rainfall_interception_m3_low=canopy_count[index]
@@ -222,6 +227,7 @@ def compute_city_metrics(
         annual_sequestration_kg=all_values["annual_sequestration_kg"],
         shannon_index=all_values["shannon_index"],
         native_fraction=all_values["native_fraction"],
+        tree_height_mean_m=all_values["height_mean_m"],
         tree_height_p50_m=all_values["height_p50_m"],
         tree_height_p95_m=all_values["height_p95_m"],
         rainfall_interception_m3_low=total_canopy_area
@@ -331,6 +337,7 @@ def _tree_values(trees: list[TreeRecord]) -> dict[str, float]:
         "annual_sequestration_kg": sequestration,
         "shannon_index": shannon_index(species),
         "native_fraction": sum(1 for tree in trees if tree.native) / max(1, len(trees)),
+        "height_mean_m": float(np.mean(heights)) if heights else 0.0,
         "height_p50_m": float(np.median(heights)) if heights else 0.0,
         "height_p95_m": float(np.percentile(heights, 95)) if heights else 0.0,
     }

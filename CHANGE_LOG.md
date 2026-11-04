@@ -494,3 +494,14 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Verified class 5 is high vegetation and class 9 is water in the City LAS despite the
   portal text; the rasteriser uses the ASPRS classes.
 - Dashboard: GREEN.
+
+### P16 city metrics UI, docs, and shade
+
+- Added the city metrics endpoint and City tab with city KPIs, local-area ranking, method
+  labels, and caveats.
+- Added the full-city source/licence rows, data-source note, city pilot docs page, and
+  README build path.
+- Added the optional representative-day shade script.
+- Added tests for city rasterisation, inventory evidence, city metrics, city pack assembly,
+  and the optional city-metrics endpoint.
+- Dashboard: GREEN.
