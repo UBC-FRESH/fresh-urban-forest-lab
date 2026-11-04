@@ -48,6 +48,8 @@ Keep private material out of this directory.
 - `reports/p19-closeout.md`: P19 close-out and the P20 recommendation.
 - `reports/p20-anchor-merge.md`: P20 anchor rule, synthetic audit patch, and demo comparison.
 - `reports/p20-closeout.md`: P20 close-out and the P21 recommendation.
+- `reports/p21-ground-smoke.md`: P21 coastal-tile bundle smoke and Golden comparison.
+- `reports/p21-closeout.md`: P21 close-out and the P22 recommendation.
 - `releases/v0.2.0.md`: superseded draft; never tagged.
 - `reference/data-sources.md`: public UBC, Vancouver, and Metro Vancouver sources, with
   coverage, licences, and traps.

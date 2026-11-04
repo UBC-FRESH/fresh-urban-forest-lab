@@ -95,6 +95,11 @@ The manifest records input/output hashes, CRS, vertical datum, parameters, prove
 warnings. The QA file records counts, HAG percentiles, class summaries, and the explicit
 `ground_truth_used: false` note.
 
+P21 runs the adapter on the 2025 coastal tile: 415,068 points, 374,711 predicted ground,
+68.8 s, no warnings. The Golden 2021 tile reports 113,775 points, 82,530 predicted ground,
+and 5.8 s. Both bundles use the same schemas and extra dimensions. The low-point fraction
+differs (90.3% coastal, 69.4% Golden) because the point distributions differ.
+
 CHM/ITD post-processing
 -----------------------
 

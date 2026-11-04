@@ -26,6 +26,7 @@ This roadmap is the plan of record and the issue tracker map for FRESH Urban For
 | P18 CHM/ITD post-processing exports and smoke test | #116 | `feature/p18-itd-exports` | complete |
 | P19 Merge-reduction audit and guard | #119 | `feature/p19-merge-audit` | complete |
 | P20 Non-transitive crown merge and manual audit patch | #122 | `feature/p20-anchor-merge` | complete |
+| P21 Ground-adapter second-tile smoke test | #126 | `feature/p21-ground-smoke` | complete |
 
 ## Lifecycle Map
 
@@ -731,6 +732,33 @@ Phase 20 verification:
 - `python scripts/dashboard.py`
 - `python scripts/check_workflow.py`
 
+## Phase 21: Ground-adapter second-tile smoke test
+
+Parent issue: #126
+Branch: `feature/p21-ground-smoke`
+Status: complete
+
+Goal: run the optional ground adapter on a second real LidarBC tile and compare it with the
+P16 Golden-area smoke.
+
+- [x] P21.1 Coastal-tile bundle smoke test and report (#127)
+  - [x] Coastal 2025 tile: 415,068 points, 374,711 ground, 68.8 s, no warnings
+  - [x] Golden 2021 tile: 113,775 points, 82,530 ground, 5.8 s, no warnings
+  - [x] Both bundles use the same schemas and extra dimensions
+
+Acceptance criteria:
+
+- A valid bundle is written for the coastal tile.
+- The manifest and QA schemas validate.
+- The report records ground count, low-point count, HAG, runtime, and warnings.
+- The comparison with the Golden tile is explicit.
+- The dashboard is green.
+
+Phase 21 verification:
+
+- `python scripts/dashboard.py`
+- `python scripts/check_workflow.py`
+
 ## Detailed Next Steps Notes
 
 1. The repository was created from `UBC-FRESH/ubc-fresh-dev-workflow` on 2026-11-03. The seed's dashboard, validator, docs, and agent contract are retained.
@@ -748,3 +776,4 @@ Phase 20 verification:
 13. P18 (#116) exposes the P17 post-processing through `detect-trees --postprocess` and writes a sidecar summary. The UBC demo detects 859 crowns, keeps 701 after 57 merge groups, and a 50 m stress buffer flags 5. The default detector path is unchanged; the merge reduction needs visual review before operational use.
 14. P19 (#119) audits the demo merge and finds a transitive chain collapse: the old rule merged 67 crowns across 4.6 km. The guarded rule caps groups at 4 crowns and 30 m, reducing the demo to 3 local groups and 856 kept crowns. The guard prevents false merges but may under-merge real over-segmentation; the merge is a safety filter, not an instance solver.
 15. P20 (#122) replaces the guarded union-find merge with a non-transitive anchor rule: only larger crowns absorb, and absorbed crowns cannot anchor. The synthetic audit patch merges a known split crown and keeps similar distinct crowns separate. The demo remains 3 local groups and 856 kept; a real orthophoto/field audit is still needed.
+16. P21 (#126) runs the optional ground adapter on the 2025 coastal tile and compares it with the Golden 2021 tile. Coastal: 415,068 points, 374,711 predicted ground, 68.8 s. Golden: 113,775 points, 82,530 predicted ground, 5.8 s. Both bundles are schema-valid with no warnings. The low-point fraction differs because the point distributions differ.
