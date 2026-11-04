@@ -53,20 +53,25 @@ ALS ground classification
 
 ``classify_ground_ptd`` is a simplified, PTD-inspired implementation. It seeds a TIN from
 the lowest point per grid cell, progressively adds points within a vertical residual and
-TIN facet-slope threshold, and interpolates height above ground from the final surface.
+point-to-vertex angle threshold, and interpolates height above ground from the final surface.
 
 It is **not** a line-by-line port of Arbor, lidR, or the original PTD code. The angle test
-uses the TIN facet slope, the default vertical residual is permissive, and points outside
-the TIN hull are not classified as ground. A real LidarBC tile must pass the P13.2
-validation before this is used as an operational ground classifier.
+uses a point-to-triangle-vertex angle measured from the triangle plane, the default vertical
+residual is permissive, and points outside the TIN hull are not classified as ground.
+
+P13.2 validates a 415,068-point LidarBC 2025 tile (EPSG:3157, OGL-BC). Class-2 recall is
+0.9998 and class-2 HAG p99 is 0.021 m. The tile's class 1 is unclassified and class 7 is
+noise, so neither is a valid negative set. About 80% of class-7 near-ground noise is
+labelled ground. Precision against class 2 is therefore not an accuracy estimate, and this
+is not yet an operational ground classifier.
 
 What is next
 ------------
 
-The next ALS step is real-tile validation: ground counts, HAG percentiles, low-point-cut
-policy, and QA warnings on a small LidarBC tile. CHM/ITD post-processing (buffer flags,
-small-tree flags, over-segmentation merging) is a smaller intermediate step. QSM and QSF
-work belongs in a dedicated point-cloud package, not this app's core.
+P13.3 adds a low-point cut and SOR pre-pass, then re-runs this tile and a second tile.
+CHM/ITD post-processing (buffer flags, small-tree flags, over-segmentation merging) is a
+smaller intermediate step. QSM and QSF work belongs in a dedicated point-cloud package, not
+this app's core.
 
 Citations
 ---------

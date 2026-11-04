@@ -24,6 +24,7 @@ Keep private material out of this directory.
 - `reports/p8-benchmark-evidence.json`: machine-readable whole-campus and convergence evidence.
 - `reports/growth-calibration-readiness.md`: why the current inventory cannot support growth calibration.
 - `reports/p12-arbor-method-mining.md`: P12 close-out, licence evidence, gate results, and the P13 recommendation.
+- `reports/p13-als-ground-validation.md` and `.json`: P13.2 real LidarBC tile validation, class-2 recall, HAG, and noise caveats.
 - `releases/v0.2.0.md`: draft release notes; not tagged.
 - `reference/data-sources.md`: public UBC, Vancouver, and Metro Vancouver sources, with
   coverage, licences, and traps.

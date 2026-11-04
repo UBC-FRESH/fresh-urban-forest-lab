@@ -503,8 +503,11 @@ Decision: `notes/adr/0006-clean-room-method-reuse.md`.
   - [x] Typed `GroundClassification` result with seed/iteration counters and warnings
   - [x] Flat, sloped, outlier, degenerate-TIN, empty, and invalid-parameter tests
   - [x] Method provenance docstring and public docs
-- [ ] P13.2 Real LidarBC tile validation
-- [ ] P13.3 QA report and low-point-cut policy
+- [x] P13.2 Real LidarBC tile validation (#80)
+  - [x] Acquired a 415,068-point LidarBC 2025 tile under OGL-BC
+  - [x] Recorded class counts, class-2 recall, HAG percentiles, runtime, and caveats
+  - [x] Replaced the facet-slope gate with a point-to-vertex angle gate after the first pass
+- [ ] P13.3 QA report and low-point-cut/SOR policy
 - [ ] P13.4 FEMIC integration decision
 
 Acceptance criteria:
@@ -538,4 +541,4 @@ Phase 13 verification:
 10. The P7-P11 programme is queued as planned phases (#40-#44) with the detailed plan in `notes/design/urban-canopy-program-plan.md` and the rapid evidence review in `notes/reference/literature-review-shade-optimization-biodiversity.md`. The recommended order is P7 shade/species, P8 optimization/Pareto, P9 off-inventory, P10 birds, P11 integration. No phase is active.
 11. The P7-P11 queue does not block the v0.2.0 release candidate. P5 remains the release gate; its tag, release, and settings actions still need explicit maintainer approval.
 12. P12 (#61) mines Arbor 1.1.5 methods without copying its GPL-3.0 code. The first slice adds four opt-in point-cloud primitives, the provenance note, ADR 0006, and the public docs page. The next ALS-relevant candidate is PTD-inspired ground classification; the MLS/TLS semantic, instance, and QSM stack belongs in a future separately tested package.
-13. P13 (#70) adds `classify_ground_ptd` and `GroundClassification` for the ALS ground lane. P13.1 covers the core algorithm, synthetic fixtures, and provenance. It is a simplified PTD-inspired implementation; a real LidarBC tile validation (P13.2) is required before any operational or FEMIC claim.
+13. P13 (#70) adds `classify_ground_ptd` and `GroundClassification` for the ALS ground lane. P13.1 covers the core algorithm, synthetic fixtures, and provenance. P13.2 validates a 415,068-point LidarBC 2025 tile: class-2 recall is 0.9998 and class-2 HAG p99 is 0.021 m, but the reference classes are not exhaustive negatives and near-ground class-7 noise is over-labelled as ground. The next step is P13.3 low-point-cut/SOR preprocessing; no operational or FEMIC claim is made yet.

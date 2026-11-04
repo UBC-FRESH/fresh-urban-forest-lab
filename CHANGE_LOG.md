@@ -297,7 +297,7 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Added `classify_ground_ptd` and the typed `GroundClassification` result to
   `src/fresh_urban_forest/pointcloud.py`.
 - The classifier seeds a TIN from the lowest point per grid cell, progressively adds points
-  within a vertical residual and TIN facet-slope threshold, and interpolates HAG from the
+  within a vertical residual and point-to-vertex angle threshold, and interpolates HAG from the
   final ground surface.
 - Added seed/iteration counters and a warning for degenerate or too-small TINs.
 - Added synthetic tests for a flat plane, a gentle slope, high vegetation, a collinear
@@ -305,6 +305,26 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Documented the simplified, PTD-inspired method, the provenance to Axelsson (2000) and
   Arbor chapter 4, and the real-tile validation gate in the note and Sphinx page.
 - Tests: 311 passed; total coverage 87.55 percent. Dashboard: GREEN.
-- Limits: this is not a full PTD implementation. The angle test uses the TIN facet slope,
-  the default vertical residual is permissive, points outside the TIN hull are not ground,
-  and a real LidarBC tile has not yet been validated. No FEMIC integration is included.
+- Limits: this is not a full PTD implementation. The default vertical residual is
+  permissive, points outside the TIN hull are not ground, and no FEMIC integration is
+  included.
+
+### P13.2 Real LidarBC tile validation
+
+- Acquired the 415,068-point LidarBC 2025 tile
+  `bc_092g024_4_3_1_xyes_8_utm10_20250826_20250826.laz` under OGL-BC. The LAZ stays in
+  `runtime/p13/` and is not tracked.
+- Replaced the initial TIN-facet-slope gate with a point-to-triangle-vertex angle gate after
+  the first validation pass showed that the facet gate over-labelled low vegetation.
+- Strict setting (`cell_size_m=1`, `max_angle_deg=15`, `max_distance_m=0.5`): class-2
+  recall 0.9998, class-2 HAG p99 0.021 m, 376,587 predicted ground points (90.73%),
+  67.6 s.
+- Class-1 (unclassified) is not a negative label; class-7 (noise) is not a negative label.
+  About 80% of class-7 near-ground noise is labelled ground. Precision against class 2 is
+  therefore not a valid accuracy estimate.
+- Added `notes/reports/p13-als-ground-validation.md` and
+  `notes/reports/p13-als-ground-validation.json`.
+- Tests: 311 passed; total coverage 87.55 percent. Dashboard: GREEN.
+- Limits: one coastal/low-relief tile, no exhaustive ground truth, and near-ground noise is
+  still over-labelled. P13.3 low-point-cut/SOR preprocessing is the next gate. No FEMIC
+  integration or operational claim is included.

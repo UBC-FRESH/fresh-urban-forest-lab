@@ -157,16 +157,17 @@ They are opt-in utilities. They are not wired into the default CHM/ITD pipeline.
 Each function carries a `Method provenance` docstring section naming Arbor 1.1.5, the
 source file or book chapter, the GPL-3.0 source licence, and the clean-room statement.
 
-## ALS ground classification (P13.1)
+## ALS ground classification (P13.1-P13.2)
 
 `classify_ground_ptd` is the first ALS-specific function. It seeds a TIN from the lowest
 point in each grid cell, then progressively adds points whose vertical residual from the
-TIN is within `max_distance_m` and whose TIN facet slope is within `max_angle_deg`. The
-final TIN provides `ground_elevation` and `height_above_ground`.
+TIN is within `max_distance_m` and whose point-to-triangle-vertex angle is within
+`max_angle_deg`. The final TIN provides `ground_elevation` and `height_above_ground`.
 
 This is a **simplified, PTD-inspired** implementation, not a line-by-line port:
 
-- the angle test uses the TIN facet slope, not the full point-to-vertex angle test;
+- the angle test uses the maximum point-to-triangle-vertex angle measured from the triangle
+  plane, not the full multi-pass PTD angle logic;
 - the default vertical residual is permissive (2 m);
 - points outside the TIN hull are not classified as ground; their HAG uses the nearest
   support point;
@@ -174,13 +175,22 @@ This is a **simplified, PTD-inspired** implementation, not a line-by-line port:
 - a degenerate TIN returns the seed-only result with a warning.
 
 The synthetic fixtures cover a flat plane, a gentle slope, a high outlier, a collinear
-degenerate seed set, an empty cloud, and invalid parameters. A real LidarBC tile is the
-next validation gate. Do not use this as an operational ground classifier before P13.2.
+degenerate seed set, an empty cloud, and invalid parameters.
+
+P13.2 validates a 415,068-point LidarBC 2025 tile
+(`bc_092g024_4_3_1_xyes_8_utm10_20250826_20250826.laz`, EPSG:3157, OGL-BC). At the strict
+setting, class-2 recall is 0.9998 and class-2 HAG p99 is 0.021 m. The tile's class 1 is
+unclassified and class 7 is noise, so neither is a valid negative set. About 80% of class-7
+near-ground noise is labelled ground; the high-noise tail is not. Precision against class 2
+is therefore not an accuracy estimate. See `notes/reports/p13-als-ground-validation.md`.
+
+**Do not use this as an operational ground classifier yet.** P13.3 must add a low-point cut
+and SOR pre-pass and validate across more tiles and a checked reference patch.
 
 ## Next slices
 
-1. **Real LidarBC tile validation**: run `classify_ground_ptd` on a small ALS tile, report
-   ground counts, HAG percentiles, low-point cut, and QA warnings.
+1. **P13.3 low-point-cut/SOR preprocessing**: remove near-ground noise before PTD, then
+   re-run this tile and a second tile.
 2. **CHM/ITD post-processing**: buffer flags, small-tree flags, and over-segmentation
    merging.
 3. **MLS/TLS semantic and instance segmentation**: a future `fresh-pointcloud` package,

@@ -465,15 +465,15 @@ def _thin_support(indices: NDArray[np.int64]) -> NDArray[np.int64]:
 
 
 def _tin_surface(
-    xy: NDArray[np.float64],
+    points: PointArray,
     support: PointArray,
 ) -> tuple[NDArray[np.float64], BoolMask, NDArray[np.float64]]:
-    """Interpolate a TIN surface and its facet slope at each query point.
+    """Interpolate a TIN surface and the point-to-vertex angle at each query point.
 
     Parameters
     ----------
-    xy : ndarray
-        Query coordinates with shape ``(N, 2)``.
+    points : ndarray
+        Query points with shape ``(N, 3)``.
     support : ndarray
         Support points with shape ``(M, 3)``. At least three non-collinear points are
         required.
@@ -484,19 +484,21 @@ def _tin_surface(
         Interpolated or nearest-support ground elevation.
     inside : ndarray of bool
         ``True`` where the query point falls inside the TIN hull.
-    slope_deg : ndarray of float64
-        TIN facet slope in degrees. Outside the hull the slope is zero.
+    point_angle_deg : ndarray of float64
+        Maximum angle between the point and the three triangle vertices, measured from
+        the triangle plane. Outside the hull the angle is 90 degrees.
 
     Raises
     ------
     scipy.spatial.QhullError
         When the support points cannot form a triangulation.
     """
+    xy = points[:, :2]
     triangulation = Delaunay(support[:, :2])
     simplex = triangulation.find_simplex(xy)
     inside = simplex >= 0
-    ground_z = np.empty(xy.shape[0], dtype=np.float64)
-    slope_deg = np.zeros(xy.shape[0], dtype=np.float64)
+    ground_z = np.empty(points.shape[0], dtype=np.float64)
+    point_angle_deg = np.full(points.shape[0], 90.0, dtype=np.float64)
 
     if np.any(inside):
         selected = simplex[inside]
@@ -508,15 +510,25 @@ def _tin_surface(
         ground_z[inside] = np.einsum("ni,ni->n", bary, vertices[:, :, 2])
         normal = np.cross(vertices[:, 1] - vertices[:, 0], vertices[:, 2] - vertices[:, 0])
         norm = np.linalg.norm(normal, axis=1)
-        cosine = np.abs(normal[:, 2]) / np.maximum(norm, 1e-12)
-        slope_deg[inside] = np.degrees(np.arccos(np.clip(cosine, -1.0, 1.0)))
+        unit_normal = normal / np.maximum(norm[:, None], 1e-12)
+        vectors = points[inside, None, :] - vertices
+        lengths = np.linalg.norm(vectors, axis=2)
+        sines = np.abs(np.einsum("nvi,ni->nv", vectors, unit_normal))
+        sines = np.divide(
+            sines,
+            np.maximum(lengths, 1e-12),
+            out=np.zeros_like(sines),
+            where=lengths > 0,
+        )
+        angles = np.degrees(np.arcsin(np.clip(sines, 0.0, 1.0)))
+        point_angle_deg[inside] = angles.max(axis=1)
 
     if np.any(~inside):
         tree = cKDTree(support[:, :2])
         _, nearest = tree.query(xy[~inside], k=1, workers=-1)
         ground_z[~inside] = support[np.asarray(nearest, dtype=np.int64), 2]
 
-    return ground_z, inside, slope_deg
+    return ground_z, inside, point_angle_deg
 
 
 def classify_ground_ptd(
@@ -531,7 +543,7 @@ def classify_ground_ptd(
 
     The method seeds a triangulated surface from the lowest point in each grid cell, then
     progressively adds points whose vertical residual from the TIN is within
-    ``max_distance_m`` and whose TIN facet slope is within ``max_angle_deg``. The final TIN
+    ``max_distance_m`` and whose point-to-vertex angle is within ``max_angle_deg``. The final TIN
     provides the ground elevation and height above ground.
 
     Parameters
@@ -542,7 +554,7 @@ def classify_ground_ptd(
         Grid cell edge used to pick the lowest seed per cell. The default is ``1.0``.
         Must be positive.
     max_angle_deg : float, optional
-        Maximum accepted TIN facet slope, in degrees. The default is ``30.0``. Must be
+        Maximum accepted point-to-vertex angle, in degrees. The default is ``30.0``. Must be
         between 0 and 90.
     max_distance_m : float, optional
         Maximum vertical residual from the TIN for a candidate ground point, in metres.
@@ -564,8 +576,8 @@ def classify_ground_ptd(
     Notes
     -----
     This is a simplified, PTD-inspired implementation, not a line-by-line port of Arbor,
-    lidR, or the original PTD code. The angle test uses the TIN facet slope rather than the
-    full point-to-vertex angle test. The default vertical residual is deliberately
+    lidR, or the original PTD code. The angle test uses the maximum point-to-triangle-vertex
+    angle measured from the triangle plane. The default vertical residual is deliberately
     permissive. A real LidarBC tile must be validated before this function is used as an
     operational ground classifier.
 
@@ -622,12 +634,12 @@ def classify_ground_ptd(
             warning = "fewer than three ground seeds; TIN densification skipped"
             break
         try:
-            surface, inside, slope = _tin_surface(cloud[:, :2], cloud[support_indices])
+            surface, inside, point_angle = _tin_surface(cloud, cloud[support_indices])
         except QhullError:
             warning = "degenerate ground seed TIN; TIN densification skipped"
             break
         residual = cloud[:, 2] - surface
-        candidate = inside & (np.abs(residual) <= max_distance_m) & (slope <= max_angle_deg)
+        candidate = inside & (np.abs(residual) <= max_distance_m) & (point_angle <= max_angle_deg)
         new = candidate & ~ground
         if not np.any(new):
             break
@@ -644,7 +656,7 @@ def classify_ground_ptd(
     else:
         try:
             ground_elevation, _, _ = _tin_surface(
-                cloud[:, :2],
+                cloud,
                 cloud[support_indices],
             )
         except QhullError:
