@@ -71,9 +71,17 @@ def test_full_map_layers_are_optional(tmp_path: Path) -> None:
     (tmp_path / "dataset" / "map_buildings.geojson.gz").write_bytes(
         gzip.compress(b'{"type":"FeatureCollection","features":[]}')
     )
+    (tmp_path / "dataset" / "full_scene.json.gz").write_bytes(gzip.compress(b'{"compact":true}'))
+    (tmp_path / "dataset" / "roads.geojson.gz").write_bytes(
+        gzip.compress(b'{"type":"FeatureCollection","features":[]}')
+    )
     dataset = client.get("/api/dataset").json()
     assert dataset["has_map_trees"] is True
     assert dataset["has_map_buildings"] is True
+    assert dataset["has_full_scene"] is True
+    assert dataset["has_roads"] is True
+    assert client.get("/api/full-scene").status_code == 200
+    assert client.get("/api/roads").status_code == 200
     response = client.get("/api/map-trees")
     assert response.status_code == 200
     assert response.headers["content-encoding"] == "gzip"

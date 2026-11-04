@@ -30,6 +30,7 @@ from fresh_urban_forest.models import (
     TreeRecord,
     UrbanForestDataset,
 )
+from fresh_urban_forest.scene import build_scene
 from fresh_urban_forest.terrain import (
     RasterData,
     build_terrain_grid,
@@ -97,11 +98,8 @@ def build_city_pack(
     """
     generated = generated_utc or dt.datetime.now(dt.UTC).isoformat()
     selected_trees = _select_visual_trees(trees, max_trees)
-    buildings = _select_buildings(
-        load_buildings(building_footprints),
-        building_height,
-        max_buildings,
-    )
+    all_buildings = load_buildings(building_footprints)
+    buildings = _select_buildings(all_buildings, building_height, max_buildings)
     terrain = build_terrain_grid(dem, chm, max_size=terrain_max_size)
     metrics = _canopy_metrics(trees, city_metrics)
     dataset_id = "vancouver-city-2022"
@@ -127,6 +125,8 @@ def build_city_pack(
             "inventory_summary": "inventory_summary.json",
             "map_trees": "map_trees.json.gz",
             "map_buildings": "map_buildings.geojson.gz",
+            "full_scene": "full_scene.json.gz",
+            "roads": "roads.geojson.gz",
         },
     )
     dataset = UrbanForestDataset(
@@ -150,7 +150,123 @@ def build_city_pack(
         gzip.open(out_dir / "map_buildings.geojson.gz", "wb") as destination,
     ):
         shutil.copyfileobj(source, destination)
+    full_scene = _full_scene_payload(
+        dataset,
+        selected_trees,
+        trees,
+        all_buildings,
+        dem=dem,
+        building_height=building_height,
+        origin_z=float(np.nanmin(dataset.terrain.elevation)),
+    )
+    with gzip.open(out_dir / "full_scene.json.gz", "wt", encoding="utf-8") as handle:
+        json.dump(full_scene, handle, separators=(",", ":"))
     return dataset
+
+
+def _full_scene_payload(
+    dataset: UrbanForestDataset,
+    selected_trees: list[TreeRecord],
+    all_trees: tuple[TreeRecord, ...],
+    buildings: tuple[Building, ...],
+    *,
+    dem: RasterData,
+    building_height: RasterData,
+    origin_z: float,
+) -> dict[str, object]:
+    """Build a compact all-tree/all-building 3D scene payload."""
+    base = build_scene(dataset, selected_trees, max_trees=len(selected_trees))
+    origin = cast(Mapping[str, float], base["origin"])
+    origin_x = float(origin["x"])
+    origin_y = float(origin["y"])
+    origin_lonlat = cast(list[float], base["origin_lonlat"])
+    tree_arrays: dict[str, list[float | int]] = {
+        "x": [],
+        "y": [],
+        "z": [],
+        "height": [],
+        "crown_width": [],
+        "group": [],
+        "native": [],
+    }
+    for tree in all_trees:
+        x = (tree.x_m if tree.x_m is not None else origin_x) - origin_x
+        y = (tree.y_m if tree.y_m is not None else origin_y) - origin_y
+        z = (tree.elevation_m if tree.elevation_m is not None else origin_z) - origin_z
+        group = species_group(tree.species or tree.common_name)
+        tree_arrays["x"].append(round(x, 2))
+        tree_arrays["y"].append(round(y, 2))
+        tree_arrays["z"].append(round(z, 2))
+        tree_arrays["height"].append(round(float(tree.height_m or 0.0), 2))
+        tree_arrays["crown_width"].append(round(float(tree.crown_width_m or 0.0), 2))
+        tree_arrays["group"].append(0 if group == "conifer" else 1 if group == "deciduous" else 2)
+        tree_arrays["native"].append(1 if tree.native else 0)
+    boxes = _building_boxes(
+        buildings,
+        dem=dem,
+        building_height=building_height,
+        origin_x=origin_x,
+        origin_y=origin_y,
+        origin_z=origin_z,
+    )
+    payload = dict(base)
+    payload["compact"] = True
+    payload["origin_lonlat"] = origin_lonlat
+    payload["tree_count"] = len(all_trees)
+    payload["building_count"] = len(boxes)
+    payload["tree_arrays"] = tree_arrays
+    payload["building_boxes"] = boxes
+    payload.pop("trees", None)
+    payload.pop("buildings", None)
+    return payload
+
+
+def _building_boxes(
+    buildings: tuple[Building, ...],
+    *,
+    dem: RasterData,
+    building_height: RasterData,
+    origin_x: float,
+    origin_y: float,
+    origin_z: float,
+) -> dict[str, list[float]]:
+    """Represent every building footprint as an axis-aligned massing box."""
+    transformer = Transformer.from_crs("EPSG:4326", dem.crs, always_xy=True)
+    boxes: dict[str, list[float]] = {key: [] for key in ("x", "z", "w", "d", "h", "base")}
+    for building in buildings:
+        if not building.rings or len(building.rings[0]) < 3:
+            continue
+        ring = building.rings[0]
+        projected = [transformer.transform(lon, lat) for lon, lat in ring]
+        min_x = min(point[0] for point in projected)
+        max_x = max(point[0] for point in projected)
+        min_y = min(point[1] for point in projected)
+        max_y = max(point[1] for point in projected)
+        width = max_x - min_x
+        depth = max_y - min_y
+        if width <= 0.5 or depth <= 0.5:
+            continue
+        lon = sum(point[0] for point in ring) / len(ring)
+        lat = sum(point[1] for point in ring) / len(ring)
+        elevation = sample_raster_lonlat(
+            dem, np.asarray([lon], dtype=np.float64), np.asarray([lat], dtype=np.float64)
+        )[0]
+        height = sample_raster_lonlat(
+            building_height,
+            np.asarray([lon], dtype=np.float64),
+            np.asarray([lat], dtype=np.float64),
+        )[0]
+        if not np.isfinite(elevation):
+            elevation = origin_z
+        if not np.isfinite(height) or height <= 0.5:
+            height = 8.0
+        boxes["x"].append(round((min_x + max_x) / 2.0 - origin_x, 2))
+        boxes["z"].append(round((min_y + max_y) / 2.0 - origin_y, 2))
+        boxes["w"].append(round(width, 2))
+        boxes["d"].append(round(depth, 2))
+        boxes["h"].append(round(float(height), 2))
+        boxes["base"].append(round(float(elevation) - origin_z, 2))
+    return boxes
 
 
 def _select_visual_trees(trees: tuple[TreeRecord, ...], max_trees: int) -> list[TreeRecord]:

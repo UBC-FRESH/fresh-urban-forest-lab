@@ -16,6 +16,7 @@ publishing a new derivative.
 | City of Vancouver local-area boundary | City of Vancouver | Open Government Licence – Vancouver | City AOI and 22 local-area summaries | 22 polygons; the union is 118.76 km². |
 | City of Vancouver building footprints 2015 | City of Vancouver | Open Government Licence – Vancouver | Building mask and 3D context | 154,124 approximate footprints; heights sampled from the 2022 LiDAR. |
 | Environment Canada climate normals, Vancouver Harbour CS | Environment and Climate Change Canada | Open Government Licence – Canada | Rainfall-interception screening estimate | 1981–2010 annual precipitation 1,098.8 mm. |
+| OpenStreetMap road centrelines | © OpenStreetMap contributors | Open Database License (ODbL) 1.0 | Pale 2D street underlay and 3D road overlay | Queried from the Overpass API for the demo bbox; attribution is shown in the map HUD. |
 | Metro Vancouver classified LiDAR 2022 | Metro Vancouver | Metro Vancouver open-data terms | Regional cross-check | About 16.5 GB for the Vancouver/UBC/UEL area; classified vegetation. |
 | LidarBC open LiDAR data | Government of British Columbia / GeoBC | Open Government Licence – British Columbia | Provincial point clouds, DEM/DSM, CHM, and some tree metrics | Tile metadata carries acquisition year, CRS, and quality level. |
 | LiDAR Point Clouds – CanElevation Series | Natural Resources Canada | Open Government Licence – Canada | Federal LAZ/COPC point clouds | Distributed by project; projects can overlap. |

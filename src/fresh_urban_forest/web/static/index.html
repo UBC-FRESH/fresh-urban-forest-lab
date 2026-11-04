@@ -175,6 +175,7 @@
         <div class="layer-toggles">
           <label><input id="toggle-canopy" type="checkbox" checked> canopy</label>
           <label><input id="toggle-hillshade" type="checkbox" checked> terrain</label>
+          <label><input id="toggle-roads" type="checkbox" checked> streets</label>
           <label><input id="toggle-buildings" type="checkbox" checked> buildings</label>
           <label><input id="toggle-off-inventory" type="checkbox"> off-inventory</label>
         </div>
@@ -184,13 +185,14 @@
         <div id="map"></div>
         <div class="map-hud">
           <span id="map-hint">Click a tree to inspect it.</span>
+          <span class="muted">Roads © OpenStreetMap contributors · ODbL</span>
         </div>
       </div>
 
       <div id="view-scene" class="view">
         <canvas id="scene-canvas"></canvas>
         <div class="scene-hud">
-          <span>Drag to orbit, scroll to zoom, click a crown to inspect · 3D visual sample; 2D map shows all public trees and buildings.</span>
+          <span>Drag to orbit, scroll to zoom, click a crown to inspect · 3D shows all trees and building massing; 2D map shows full footprints.</span>
           <span id="sun-readout" class="sun-readout">Sun: --</span>
           <button id="scene-reset" class="button tiny ghost" type="button">City view</button>
           <button id="scene-downtown" class="button tiny ghost" type="button">Downtown</button>

@@ -4,6 +4,8 @@ import { OrbitControls } from "three/addons/OrbitControls.js";
 const state = {
   dataset: null,
   scene: null,
+  scene3d: null,
+  roads: null,
   mapTrees: null,
   mapBuildings: null,
   offInventory: null,
@@ -298,6 +300,20 @@ async function init() {
     ]);
     state.dataset = dataset;
     state.scene = scene;
+    if (dataset.has_roads) {
+      try {
+        state.roads = await api("api/roads");
+      } catch (_error) {
+        state.roads = null;
+      }
+    }
+    if (dataset.has_full_scene) {
+      try {
+        state.scene3d = await api("api/full-scene");
+      } catch (_error) {
+        state.scene3d = null;
+      }
+    }
     state.scenarios = scenarios.scenarios || [];
     state.treeById = new Map(scene.trees.map((tree) => [tree.id, tree]));
     if (dataset.has_off_inventory) {
@@ -501,6 +517,7 @@ function initMap() {
         buildings: { type: "geojson", data: buildingFeatures() },
         offInventory: { type: "geojson", data: offInventoryFeatures() },
         boundary: { type: "geojson", data: boundaryFeatures() },
+        roads: { type: "geojson", data: state.roads || { type: "FeatureCollection", features: [] } },
         trees: {
           type: "geojson",
           data: state.mapTrees || treesToFeatureCollection(state.scene.trees),
@@ -513,13 +530,33 @@ function initMap() {
           id: "hillshade",
           type: "raster",
           source: "hillshade",
-          paint: { "raster-opacity": 0.55, "raster-resampling": "linear" },
+          paint: { "raster-opacity": 0.38, "raster-resampling": "linear" },
         },
         {
           id: "canopy",
           type: "raster",
           source: "canopy",
-          paint: { "raster-opacity": 0.72, "raster-resampling": "linear" },
+          paint: { "raster-opacity": 0.58, "raster-resampling": "linear" },
+        },
+        {
+          id: "roads-casing",
+          type: "line",
+          source: "roads",
+          paint: {
+            "line-color": "#ffffff",
+            "line-width": ["interpolate", ["linear"], ["zoom"], 12, 0.8, 16, 2.8],
+            "line-opacity": 0.55,
+          },
+        },
+        {
+          id: "roads",
+          type: "line",
+          source: "roads",
+          paint: {
+            "line-color": "#7b8479",
+            "line-width": ["interpolate", ["linear"], ["zoom"], 12, 0.4, 16, 1.4],
+            "line-opacity": 0.7,
+          },
         },
         {
           id: "buildings",
@@ -626,12 +663,14 @@ function ensureThree() {
   const container = $("view-scene");
   const canvas = $("scene-canvas");
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  const sourceScene = threeScene();
+  const compactScene = Boolean(sourceScene?.compact);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, compactScene ? 1 : 2));
   renderer.setSize(container.clientWidth, container.clientHeight, false);
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.05;
-  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.enabled = !compactScene;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
   const span = sceneSpan();
@@ -654,7 +693,7 @@ function ensureThree() {
   scene.add(ambient);
   const sun = new THREE.DirectionalLight(0xfff4dc, 1.8);
   sun.position.set(-span * 0.45, span * 0.72, span * 0.32);
-  sun.castShadow = true;
+  sun.castShadow = !compactScene;
   sun.shadow.mapSize.set(1024, 1024);
   sun.shadow.camera.left = -span * 0.45;
   sun.shadow.camera.right = span * 0.45;
@@ -675,6 +714,8 @@ function ensureThree() {
   scene.add(terrain);
   const buildings = buildBuildingMeshes();
   buildings.forEach((mesh) => scene.add(mesh));
+  const roads = buildRoadLines();
+  if (roads) scene.add(roads);
 
   const three = {
     renderer,
@@ -683,7 +724,9 @@ function ensureThree() {
     controls,
     container,
     terrain,
+    compact: compactScene,
     buildingMeshes: buildings,
+    roadLines: roads,
     crownMeshes: [],
     trunkMeshes: [],
     treeGroups: new Map(),
@@ -704,8 +747,9 @@ function ensureThree() {
       const terrainHits = raycaster.intersectObject(terrain, false);
       if (!terrainHits.length) return;
       const local = terrainHits[0].point;
-      const origin = state.scene.origin_lonlat;
-      const metres = state.scene.meters_per_degree;
+      const source = threeScene();
+      const origin = source.origin_lonlat;
+      const metres = source.meters_per_degree;
       placeAt(origin[0] + local.x / metres[0], origin[1] + local.z / metres[1]);
       return;
     }
@@ -722,8 +766,9 @@ function ensureThree() {
     }
     if (state.mode === "plant" || state.mode === "move") {
       const local = hit.point;
-      const origin = state.scene.origin_lonlat;
-      const metres = state.scene.meters_per_degree;
+      const source = threeScene();
+      const origin = source.origin_lonlat;
+      const metres = source.meters_per_degree;
       const lon = origin[0] + local.x / metres[0];
       const lat = origin[1] + local.z / metres[1];
       placeAt(lon, lat);
@@ -740,14 +785,15 @@ function ensureThree() {
     state.three.camera.aspect = width / height;
     state.three.camera.updateProjectionMatrix();
   });
-  rebuildThreeTrees(state.scene.trees);
+  const source = threeScene();
+  rebuildThreeTrees(source.compact ? source.tree_arrays : source.trees);
   applySun();
   animateThree();
   return three;
 }
 
 function buildTerrainMesh() {
-  const sceneData = state.scene;
+  const sceneData = threeScene();
   const { width, height, elevation, canopy_height: canopy } = sceneData.terrain;
   const [left, bottom, right, top] = sceneData.bounds;
   const spanX = right - left;
@@ -803,7 +849,106 @@ function buildTerrainMesh() {
   return mesh;
 }
 
+function buildRoadLines() {
+  const source = threeScene();
+  const features = state.roads?.features;
+  if (!Array.isArray(features) || !source) return null;
+  const [originLon, originLat] = source.origin_lonlat;
+  const [mx, my] = source.meters_per_degree;
+  const terrain = source.terrain;
+  const [left, bottom, right, top] = terrain.bounds;
+  const width = terrain.width;
+  const height = terrain.height;
+  const elevation = terrain.elevation;
+  const originX = source.origin.x;
+  const originY = source.origin.y;
+  const originZ = source.origin.z;
+  const positions = [];
+  const indices = [];
+  let vertex = 0;
+  const point = (lon, lat) => {
+    const x = (lon - originLon) * mx;
+    const y = (lat - originLat) * my;
+    const col = Math.round(((x + originX - left) / Math.max(right - left, 1e-9)) * (width - 1));
+    const row = Math.round(((top - (y + originY)) / Math.max(top - bottom, 1e-9)) * (height - 1));
+    if (col < 0 || row < 0 || col >= width || row >= height) return null;
+    const z = elevation[row * width + col];
+    return [x, Number.isFinite(z) ? z - originZ + 1.4 : 1.4, y];
+  };
+  const halfWidth = 10.0;
+  for (const feature of features) {
+    const coordinates = feature.geometry?.coordinates;
+    if (!Array.isArray(coordinates)) continue;
+    for (let index = 0; index < coordinates.length - 1; index += 1) {
+      const first = point(coordinates[index][0], coordinates[index][1]);
+      const second = point(coordinates[index + 1][0], coordinates[index + 1][1]);
+      if (!first || !second) continue;
+      const dx = second[0] - first[0];
+      const dz = second[2] - first[2];
+      const length = Math.hypot(dx, dz);
+      if (length < 0.1) continue;
+      const px = (-dz / length) * halfWidth;
+      const pz = (dx / length) * halfWidth;
+      positions.push(
+        first[0] - px, first[1], first[2] - pz,
+        first[0] + px, first[1], first[2] + pz,
+        second[0] - px, second[1], second[2] - pz,
+        second[0] + px, second[1], second[2] + pz,
+      );
+      indices.push(vertex, vertex + 1, vertex + 2, vertex + 1, vertex + 3, vertex + 2);
+      vertex += 4;
+    }
+  }
+  if (!positions.length) return null;
+  const geometry = new THREE.BufferGeometry();
+  geometry.setAttribute("position", new THREE.Float32BufferAttribute(positions, 3));
+  geometry.setIndex(indices);
+  const material = new THREE.MeshBasicMaterial({
+    color: 0xffffff,
+    transparent: true,
+    opacity: 0.9,
+    depthTest: false,
+    depthWrite: false,
+    side: THREE.DoubleSide,
+  });
+  const roads = new THREE.Mesh(geometry, material);
+  roads.name = "roads";
+  roads.userData.kind = "roads";
+  roads.renderOrder = 5;
+  return roads;
+}
+
+
 function buildBuildingMeshes() {
+  const sceneData = threeScene();
+  if (sceneData.compact && sceneData.building_boxes) {
+    const boxes = sceneData.building_boxes;
+    const count = Array.isArray(boxes.x) ? boxes.x.length : 0;
+    if (!count) return [];
+    const geometry = new THREE.BoxGeometry(1, 1, 1);
+    const material = new THREE.MeshStandardMaterial({
+      color: 0xc3c9bd,
+      roughness: 0.82,
+      metalness: 0.03,
+    });
+    const mesh = new THREE.InstancedMesh(geometry, material, count);
+    const matrix = new THREE.Matrix4();
+    const position = new THREE.Vector3();
+    const scale = new THREE.Vector3();
+    const quaternion = new THREE.Quaternion();
+    for (let index = 0; index < count; index += 1) {
+      position.set(boxes.x[index], boxes.base[index] + boxes.h[index] / 2, boxes.z[index]);
+      scale.set(Math.max(boxes.w[index], 1), Math.max(boxes.h[index], 2), Math.max(boxes.d[index], 1));
+      matrix.compose(position, quaternion, scale);
+      mesh.setMatrixAt(index, matrix);
+    }
+    mesh.instanceMatrix.needsUpdate = true;
+    mesh.castShadow = !threeScene().compact;
+    mesh.receiveShadow = !threeScene().compact;
+    mesh.userData.kind = "building";
+    mesh.name = "buildings";
+    return [mesh];
+  }
   const positions = [];
   const normals = [];
   for (const building of state.scene.buildings || []) {
@@ -861,9 +1006,85 @@ function buildBuildingMeshes() {
   return [mesh];
 }
 
+function rebuildCompactTrees(trees) {
+  const three = state.three;
+  for (const mesh of [...three.crownMeshes, ...three.trunkMeshes]) {
+    three.scene.remove(mesh);
+    mesh.geometry.dispose();
+    mesh.material.dispose();
+  }
+  three.crownMeshes = [];
+  three.trunkMeshes = [];
+  three.treeGroups = new Map();
+  const groups = { 0: [], 1: [], 2: [] };
+  for (let index = 0; index < trees.x.length; index += 1) {
+    groups[trees.group[index]]?.push(index);
+  }
+  const names = { 0: "conifer", 1: "deciduous", 2: "unknown" };
+  const colors = { 0: "#14563a", 1: "#91a948", 2: "#5f665f" };
+  const matrix = new THREE.Matrix4();
+  const quaternion = new THREE.Quaternion();
+  const scale = new THREE.Vector3();
+  const position = new THREE.Vector3();
+  const color = new THREE.Color();
+  for (const [groupKey, indices] of Object.entries(groups)) {
+    if (!indices.length) continue;
+    const groupName = names[groupKey] || "unknown";
+    const crownGeometry =
+      groupName === "conifer"
+        ? new THREE.ConeGeometry(0.5, 1, 6, 1, false)
+        : new THREE.SphereGeometry(0.5, 6, 5);
+    const trunkGeometry = new THREE.CylinderGeometry(0.12, 0.2, 1, 4);
+    const crownMaterial = new THREE.MeshStandardMaterial({ roughness: 0.9, metalness: 0.0 });
+    const trunkMaterial = new THREE.MeshStandardMaterial({ color: 0x6d5a45, roughness: 1 });
+    const crowns = new THREE.InstancedMesh(crownGeometry, crownMaterial, indices.length);
+    const trunks = new THREE.InstancedMesh(trunkGeometry, trunkMaterial, indices.length);
+    crowns.castShadow = !three.compact;
+    crowns.receiveShadow = !three.compact;
+    trunks.castShadow = !three.compact;
+    trunks.receiveShadow = !three.compact;
+    indices.forEach((treeIndex, instance) => {
+      const height = Math.max(trees.height[treeIndex] || 2, 1.5);
+      const crownWidth = Math.max(trees.crown_width[treeIndex] || height * 0.35, 0.8);
+      const crownDepth = Math.max(height * 0.55, 1.0);
+      const trunkHeight = Math.max(height - crownDepth, 0.8);
+      position.set(
+        trees.x[treeIndex],
+        trees.z[treeIndex] + trunkHeight + crownDepth * 0.5,
+        trees.y[treeIndex],
+      );
+      scale.set(crownWidth, crownDepth, crownWidth);
+      matrix.compose(position, quaternion, scale);
+      crowns.setMatrixAt(instance, matrix);
+      color.set(colors[groupKey] || colors[2]);
+      crowns.setColorAt(instance, color);
+      position.set(
+        trees.x[treeIndex],
+        trees.z[treeIndex] + trunkHeight * 0.5,
+        trees.y[treeIndex],
+      );
+      scale.set(1, trunkHeight, 1);
+      matrix.compose(position, quaternion, scale);
+      trunks.setMatrixAt(instance, matrix);
+    });
+    crowns.instanceMatrix.needsUpdate = true;
+    if (crowns.instanceColor) crowns.instanceColor.needsUpdate = true;
+    trunks.instanceMatrix.needsUpdate = true;
+    three.scene.add(crowns, trunks);
+    three.crownMeshes.push(crowns);
+    three.trunkMeshes.push(trunks);
+    three.treeGroups.set(groupName, indices);
+  }
+  updateSelectedMarker();
+}
+
 function rebuildThreeTrees(trees) {
   if (!state.three) return;
   const three = state.three;
+  if (!Array.isArray(trees) && trees && Array.isArray(trees.x)) {
+    rebuildCompactTrees(trees);
+    return;
+  }
   for (const mesh of [...three.crownMeshes, ...three.trunkMeshes]) {
     three.scene.remove(mesh);
     mesh.geometry.dispose();
@@ -893,10 +1114,10 @@ function rebuildThreeTrees(trees) {
     const trunkMaterial = new THREE.MeshStandardMaterial({ color: 0x6d5a45, roughness: 1 });
     const crowns = new THREE.InstancedMesh(crownGeometry, crownMaterial, groupTrees.length);
     const trunks = new THREE.InstancedMesh(trunkGeometry, trunkMaterial, groupTrees.length);
-    crowns.castShadow = true;
-    crowns.receiveShadow = true;
-    trunks.castShadow = true;
-    trunks.receiveShadow = true;
+    crowns.castShadow = !three.compact;
+    crowns.receiveShadow = !three.compact;
+    trunks.castShadow = !three.compact;
+    trunks.receiveShadow = !three.compact;
     crowns.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
     trunks.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
     const matrix = new THREE.Matrix4();
@@ -1081,6 +1302,16 @@ function bindControls() {
   $("toggle-hillshade").addEventListener("change", (event) => {
     if (state.map && state.map.getLayer("hillshade")) {
       state.map.setLayoutProperty("hillshade", "visibility", event.target.checked ? "visible" : "none");
+    }
+  });
+  $("toggle-roads").addEventListener("change", (event) => {
+    if (state.map && state.map.getLayer("roads")) {
+      const visibility = event.target.checked ? "visible" : "none";
+      state.map.setLayoutProperty("roads", "visibility", visibility);
+      state.map.setLayoutProperty("roads-casing", "visibility", visibility);
+    }
+    if (state.three?.roadLines) {
+      state.three.roadLines.visible = event.target.checked;
     }
   });
   $("toggle-buildings").addEventListener("change", (event) => {
@@ -2583,7 +2814,8 @@ function addEdit(edit, options = {}) {
     };
     state.treeById.set(tree.id, tree);
     state.scene.trees.push(tree);
-    rebuildThreeTrees(state.scene.trees);
+    const source = threeScene();
+  rebuildThreeTrees(source.compact ? source.tree_arrays : source.trees);
     updateMapTrees();
     selectTree(tree.id);
   }
@@ -2922,8 +3154,9 @@ function applyRecommendations() {
 function focusDowntown() {
   if (!state.three) return;
   const span = sceneSpan();
-  const [originLon, originLat] = state.scene.origin_lonlat;
-  const [mx, my] = state.scene.meters_per_degree;
+  const source = threeScene();
+  const [originLon, originLat] = source.origin_lonlat;
+  const [mx, my] = source.meters_per_degree;
   const targetX = (-123.1207 - originLon) * mx;
   const targetZ = (49.2827 - originLat) * my;
   const distance = Math.max(700, span * 0.22);
@@ -2939,8 +3172,12 @@ function focusDowntown() {
   state.three.controls.update();
 }
 
+function threeScene() {
+  return state.scene3d || state.scene;
+}
+
 function sceneSpan() {
-  const bounds = state.scene?.bounds || [0, 0, 100, 100];
+  const bounds = threeScene()?.bounds || [0, 0, 100, 100];
   return Math.max(Number(bounds[2]) - Number(bounds[0]), Number(bounds[3]) - Number(bounds[1]), 100);
 }
 

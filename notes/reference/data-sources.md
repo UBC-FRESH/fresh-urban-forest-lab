@@ -128,6 +128,16 @@ The Metro Vancouver 2022 classified product is a separate regional source.
 - Strong cross-check for the City product because vegetation is explicitly classified.
 - Trap: large download; plan a tile-level catalog and a local cache, not a single fetch.
 
+## OpenStreetMap road centrelines
+
+- Source: OpenStreetMap via the Overpass API, queried for the city and UBC demo bounding
+  boxes on 2026-11-04.
+- Licence: ODbL 1.0, © OpenStreetMap contributors.
+- Products: 29,318 vehicular road centrelines for Vancouver and 1,678 for the UBC core,
+  stored as compressed local GeoJSON.
+- Use: pale 2D street underlay and 3D road overlay. Attribution is shown in the map HUD.
+- Trap: these are road centrelines for orientation, not COV VanMaps engineering geometry.
+
 ## Full-city 2022 pilot (P30)
 
 - The P30 pilot uses the City 2022 LiDAR, 184,152 public-tree records, the 22 local-area

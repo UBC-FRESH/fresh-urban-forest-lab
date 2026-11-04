@@ -88,3 +88,4 @@ def test_build_city_pack_writes_dataset_and_metrics(tmp_path: Path) -> None:
     assert (out / "buildings.geojson").exists()
     assert (out / "map_trees.json.gz").exists()
     assert (out / "map_buildings.geojson.gz").exists()
+    assert (out / "full_scene.json.gz").exists()

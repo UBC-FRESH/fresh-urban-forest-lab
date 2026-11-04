@@ -642,3 +642,15 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Browser smoke: map loads in about 4.5 s to live, full map layers arrive after about 7 s,
   and there are no console or page errors.
 - Dashboard: GREEN.
+
+
+### P30 full 3D city and street basemap
+
+- The Vancouver 3D scene now loads all 184,151 trees and all 154,123 building footprints as
+  compact axis-aligned massing boxes; the full scene is 5.7 MB gzip.
+- Added OpenStreetMap road centrelines as a local compressed layer for a pale 2D underlay
+  and a 3D street overlay, with attribution in the map HUD and a shared `streets` toggle.
+- The 2D map continues to load all 184,151 trees and all 154,124 full building footprints.
+- Browser smoke: no console or page errors; app live in about 4.4 s, full 3D scene build
+  about 0.84 s, software-WebGL screenshot readback is the slow part.
+- Dashboard: GREEN.

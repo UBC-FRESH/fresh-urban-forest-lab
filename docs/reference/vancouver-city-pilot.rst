@@ -104,9 +104,10 @@ inspector, Light tab, and analytics use the same city dataset. The 3D scene uses
 representative visual tree sample; metrics always use the full inventory.
 
 The 2D map loads all 184,151 public-tree points and all 154,124 building footprints from
-compressed GeoJSON after the app is live. The 3D scene uses a spatially stratified visual
-sample of 29,096 trees and 12,000 buildings, labelled in the scene HUD; metrics always use
-the full inventory.
+compressed GeoJSON after the app is live. The 3D scene loads all 184,151 trees and all
+154,123 building footprints as axis-aligned building massing boxes; metrics always use the
+full inventory. Road centrelines are loaded from OpenStreetMap for a pale 2D underlay and a
+3D street overlay. The `streets` toggle controls both.
 
 Demo portal
 -----------

@@ -79,15 +79,19 @@ phase.
 - 2D map: all 184,151 public-tree points and all 154,124 building footprints, loaded as
   compressed GeoJSON after the app reaches live status. The map is no longer a visual
   sample.
-- 3D scene: 29,096 trees and 12,000 building footprints, selected to keep spatial coverage;
-  the scene HUD labels it as a visual sample.
+- 3D scene: all 184,151 trees and 154,123 building footprints as axis-aligned massing boxes.
+  Detailed footprint geometry is used on the 2D map; the 3D boxes are a fast city-scale
+  massing representation, not a survey model.
+- Streets: 29,318 OpenStreetMap road centrelines, loaded from a local compressed GeoJSON for
+  the pale 2D underlay and the 3D road overlay. Attribution is shown in the map HUD.
 - `/api/city-metrics` serves `city_metrics.json`; `/api/completeness` serves the full
   inventory summary.
 - Browser smoke check on the city dataset: no console errors and no page errors after the
   optional-layer flags were added.
 - UBC demo smoke check: still loads; the City tab stays hidden.
-- Scene payload: about 37 MB. Headless software-WebGL timing: 5.8 s to live and 18.7 s to
-  the 3D scene including a 1 s wait. This is a pre-GPU/optimisation number, not a promise.
+- Full scene payload: 5.7 MB gzip, about 18 MB of compact arrays. Headless software-WebGL
+  timing: about 4.4 s to live and 0.84 s to build the 3D scene; screenshot readback is slow
+  under software WebGL, so this is not a GPU frame-rate claim.
 - Light tab on the city dataset: single instant response about 3.4 s.
 - Screenshots: `docs/_static/vancouver-city-metrics.png`,
   `docs/_static/vancouver-city-3d.png`, `docs/_static/vancouver-city-map.png`.
@@ -117,7 +121,8 @@ Screenshot: `docs/_static/vancouver-city-portal.png`.
 - Carbon and sequestration use generic species-group allometry, not local calibration.
 - Rainfall interception is a screening range, not a measured flux.
 - Shade is a 2.5-D crown/building silhouette sample, not a temperature measurement.
-- The 3D scene is a visual sample, not a survey model.
+- The 3D building layer is axis-aligned massing derived from footprints, not exact extrusion
+  geometry. The 2D map carries the full footprint layer.
 - Building footprints are 2015 approximations; heights are sampled from 2022 LiDAR.
 
 ## Verification

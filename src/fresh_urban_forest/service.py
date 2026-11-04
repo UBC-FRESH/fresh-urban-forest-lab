@@ -468,6 +468,8 @@ def create_app(
         summary["has_city_metrics"] = _dataset_file(state, "city_metrics.json") is not None
         summary["has_map_trees"] = _dataset_file(state, "map_trees.json.gz") is not None
         summary["has_map_buildings"] = _dataset_file(state, "map_buildings.geojson.gz") is not None
+        summary["has_full_scene"] = _dataset_file(state, "full_scene.json.gz") is not None
+        summary["has_roads"] = _dataset_file(state, "roads.geojson.gz") is not None
         return summary
 
     @app.get("/api/completeness")
@@ -698,6 +700,36 @@ def create_app(
             "returned": len(page),
             "offset": offset,
         }
+
+    @app.get("/api/roads")
+    def roads() -> FileResponse:
+        """Return the compressed OSM road centreline layer."""
+        path = _dataset_file(state, "roads.geojson.gz")
+        if path is None:
+            raise HTTPException(status_code=404, detail="this dataset has no road layer")
+        return FileResponse(
+            path,
+            media_type="application/geo+json",
+            headers={
+                "Content-Encoding": "gzip",
+                "Cache-Control": "no-store, max-age=0",
+            },
+        )
+
+    @app.get("/api/full-scene")
+    def full_scene() -> FileResponse:
+        """Return the compact all-tree/all-building 3D scene."""
+        path = _dataset_file(state, "full_scene.json.gz")
+        if path is None:
+            raise HTTPException(status_code=404, detail="this dataset has no full 3D scene")
+        return FileResponse(
+            path,
+            media_type="application/json",
+            headers={
+                "Content-Encoding": "gzip",
+                "Cache-Control": "no-store, max-age=0",
+            },
+        )
 
     @app.get("/api/map-trees")
     def map_trees() -> FileResponse:
