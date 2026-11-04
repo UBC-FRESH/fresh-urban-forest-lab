@@ -311,6 +311,22 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Limits: no parcel/ownership layer, no field validation, 500-candidate cap, unknown species,
   screening-only carbon/canopy totals.
 
+### P10 bird habitat and demography
+
+- Added `habitat.py`: 3D canopy metrics, five guilds, guild suitability, relative-abundance
+  index, optional observation CSV, and evidence tiers.
+- Added `demography.py`: two-stage juvenile/adult matrix, lambda, prior range, survival
+  curve, stable adult fraction, and sensitivity.
+- Added `GET /api/birds` and `fresh-urban-forest birds`; both accept a scenario and year.
+- Added the Birds tab: habitat metrics, guild bars, lambda/prior range, sensitivity, and
+  adult survival chart.
+- Baseline demo: habitat score 0.78, p95 31.3 m, FHD 0.61, 4 layers, gap 19%, native 26%.
+- Guild lambda range: 0.78–1.09; all outputs are prior-driven.
+- Added method note, public docs, and the P10 report.
+- Tests: 319 passed. Dashboard: GREEN.
+- Limits: no local point counts, distance sampling, mark-recapture, or expert review response;
+  relative abundance is not density and lambda is not a local forecast.
+
 ### P13 ALS ground classification and height above ground
 
 - Added `classify_ground_ptd` and the typed `GroundClassification` result to
@@ -373,5 +389,6 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Reopen only with a checked reference patch, a second terrain type, a fuller PTD angle
   test, and a stable versioned contract.
 - Updated the P13 report, note, and docs. No FEMIC code changed.
+- Close-out report: `notes/reports/p13-closeout.md`. P13 is complete.
 - Tests: 318 passed; total coverage 87.84 percent. Dashboard: GREEN.
 - Limits: this is a scope decision, not an accuracy claim. No tag or release is included.

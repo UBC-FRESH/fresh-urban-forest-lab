@@ -22,6 +22,9 @@ def test_static_shell_has_required_hooks() -> None:
         "light-date",
         "tree-light",
         'data-view="optimize"',
+        'data-view="birds"',
+        "birds-metrics",
+        "birds-guild-select",
         "pareto-canvas",
         "optimize-run",
         "pareto-x",
@@ -75,6 +78,9 @@ def test_app_script_has_the_expected_endpoints_and_layers() -> None:
         "api/off-inventory",
         "renderOffInventory",
         "offInventoryFeatures",
+        "api/birds",
+        "loadBirds",
+        "renderBirdsChart",
     ):
         assert marker in script
     assert "eval(" not in script

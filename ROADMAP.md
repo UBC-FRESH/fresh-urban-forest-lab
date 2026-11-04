@@ -15,11 +15,11 @@ This roadmap is the plan of record and the issue tracker map for FRESH Urban For
 | P6 Operate and maintain | #7 | `feature/p6-operate` | planned |
 | P7 Solar shade and species-fit engine | #40 | `feature/p7-shade-species` | complete |
 | P8 Spatio-temporal optimization and Pareto explorer | #41 | `feature/p8-optimize-pareto` | complete |
-| P9 Off-inventory and private-canopy augmentation | #42 | `feature/p9-off-inventory` | pr-open |
-| P10 Bird habitat and demography | #43 | `feature/p10-birds` | planned |
+| P9 Off-inventory and private-canopy augmentation | #42 | `feature/p9-off-inventory` | complete |
+| P10 Bird habitat and demography | #43 | `feature/p10-birds` | pr-open |
 | P11 Integration and v0.3 release candidate | #44 | `feature/p11-integration` | planned |
 | P12 Arbor method mining and clean-room point-cloud primitives | #61 | `feature/p12-arbor-methods` | complete |
-| P13 ALS ground classification and height above ground | #70 | `feature/p13-als-ground` | active |
+| P13 ALS ground classification and height above ground | #70 | `feature/p13-als-ground` | complete |
 
 ## Lifecycle Map
 
@@ -367,7 +367,7 @@ Phase 8 verification:
 
 Parent issue: #42
 Branch: `feature/p9-off-inventory`
-Status: pr-open
+Status: complete
 
 Goal: detect and reconcile trees missing from the official inventory, estimate the value of including them, and keep private-property data safe.
 
@@ -398,19 +398,19 @@ Phase 9 verification:
 
 Parent issue: #43
 Branch: `feature/p10-birds`
-Status: planned
+Status: pr-open
 
 Goal: connect 3D canopy structure and management scenarios to bird habitat, relative abundance, and a prior-driven demographic projection with explicit uncertainty.
 
 Plan: `notes/design/urban-canopy-program-plan.md`.
 Evidence: `notes/reference/literature-review-shade-optimization-biodiversity.md`.
 
-- [ ] P10.1 Bird data and evidence tier
-- [ ] P10.2 3D habitat metrics
-- [ ] P10.3 Habitat and relative-abundance model
-- [ ] P10.4 Demographic layer and lambda
-- [ ] P10.5 Scenario UI and reporting
-- [ ] P10.6 Validation and expert review
+- [x] P10.1 Bird data and evidence tier
+- [x] P10.2 3D habitat metrics
+- [x] P10.3 Habitat and relative-abundance model
+- [x] P10.4 Demographic layer and lambda
+- [x] P10.5 Scenario UI and reporting
+- [x] P10.6 Validation and expert review
 
 Acceptance criteria:
 
@@ -489,7 +489,7 @@ Phase 12 verification:
 
 Parent issue: #70
 Branch: `feature/p13-als-ground`
-Status: active
+Status: complete
 
 Goal: add a PTD-inspired ground classification and height-above-ground capability for raw
 LidarBC/ALS point clouds, starting in this repository and validating on a real tile before

@@ -254,3 +254,20 @@ def test_off_inventory_command(tmp_path: Path) -> None:
     assert (tmp_path / "off-inventory" / "off_inventory.json").exists()
     assert (tmp_path / "off-inventory" / "off_inventory.geojson").exists()
     assert (tmp_path / "off-inventory" / "off_inventory_voi.json").exists()
+
+
+def test_birds_command(tmp_path: Path) -> None:
+    """The birds command writes a habitat and demography report."""
+    make_dataset(tmp_path / "birds")
+    result = RUNNER.invoke(
+        app,
+        [
+            "birds",
+            "--dataset",
+            str(tmp_path / "birds" / "dataset"),
+            "--out",
+            str(tmp_path / "birds.json"),
+        ],
+    )
+    assert result.exit_code == 0, result.stdout
+    assert (tmp_path / "birds.json").exists()

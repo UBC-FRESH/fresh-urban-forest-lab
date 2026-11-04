@@ -383,3 +383,20 @@ def test_off_inventory_endpoints(tmp_path: Path) -> None:
     value = client.get("/api/off-inventory/value")
     assert value.status_code == 200
     assert value.json()["plan_jaccard"] == 1.0
+
+
+def test_bird_habitat_and_demography_endpoint(tmp_path: Path) -> None:
+    """The bird endpoint returns structural metrics, guilds, and prior demography."""
+    client = _client(tmp_path)
+    response = client.get("/api/birds")
+    assert response.status_code == 200
+    payload = response.json()
+    assert payload["metrics"]["tree_count"] > 0
+    assert len(payload["guilds"]) == 5
+    assert 0.0 <= payload["metrics"]["habitat_score"] <= 1.0
+    guild = payload["guilds"][0]
+    assert 0.0 <= guild["suitability"] <= 1.0
+    assert guild["relative_abundance_index"] >= 0.0
+    assert guild["demography"]["lambda"] > 0.0
+    assert guild["demography"]["prior_range"][0] <= guild["demography"]["lambda"]
+    assert "not a density" in payload["caveat"]
