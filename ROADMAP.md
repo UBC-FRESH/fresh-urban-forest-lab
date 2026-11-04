@@ -15,8 +15,8 @@ This roadmap is the plan of record and the issue tracker map for FRESH Urban For
 | P6 Operate and maintain | #7 | `feature/p6-operate` | planned |
 | P7 Solar shade and species-fit engine | #40 | `feature/p7-shade-species` | complete |
 | P8 Spatio-temporal optimization and Pareto explorer | #41 | `feature/p8-optimize-pareto` | complete |
-| P9 Off-inventory and private-canopy augmentation | #42 | `feature/p9-off-inventory` | pr-open |
-| P10 Bird habitat and demography | #43 | `feature/p10-birds` | planned |
+| P9 Off-inventory and private-canopy augmentation | #42 | `feature/p9-off-inventory` | complete |
+| P10 Bird habitat and demography | #43 | `feature/p10-birds` | active |
 | P11 Integration and v0.3 release candidate | #44 | `feature/p11-integration` | planned |
 | P12 Arbor method mining and clean-room point-cloud primitives | #61 | `feature/p12-arbor-methods` | complete |
 
@@ -366,7 +366,7 @@ Phase 8 verification:
 
 Parent issue: #42
 Branch: `feature/p9-off-inventory`
-Status: pr-open
+Status: complete
 
 Goal: detect and reconcile trees missing from the official inventory, estimate the value of including them, and keep private-property data safe.
 
@@ -397,7 +397,7 @@ Phase 9 verification:
 
 Parent issue: #43
 Branch: `feature/p10-birds`
-Status: planned
+Status: active
 
 Goal: connect 3D canopy structure and management scenarios to bird habitat, relative abundance, and a prior-driven demographic projection with explicit uncertainty.
 
