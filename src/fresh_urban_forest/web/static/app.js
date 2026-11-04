@@ -248,7 +248,8 @@ function renderCityMetrics() {
       </div>`;
     })
     .join("");
-  $("city-local-areas").innerHTML = rows || '<p class="muted">No local-area metrics.</p>';
+  const head = `<div class="city-row city-head"><span>Local area</span><span class="num">Cover</span><span></span><span class="num hide-small">Carbon</span><span class="num">Trees</span></div>`;
+  $("city-local-areas").innerHTML = rows ? head + rows : '<p class="muted">No local-area metrics.</p>';
   const methods = Object.entries(data.methods || {})
     .map(([key, method]) => {
       const tier = method?.tier || "method";
@@ -256,7 +257,13 @@ function renderCityMetrics() {
     })
     .join("");
   const caveats = (data.caveats || []).map((item) => `<li>${escapeHtml(item)}</li>`).join("");
-  $("city-methods").innerHTML = `${methods}<ul class="city-caveats">${caveats}</ul>`;
+  const validation = data.validation
+    ? `<div class="city-method"><strong>published canopy-cover check</strong><span>City estimate ${formatNumber(data.validation.published_canopy_cover_pct, 1)}% vs this pilot ${formatNumber(city.canopy_cover_pct, 1)}% · sanity check, not calibration</span></div>`
+    : "";
+  const shade = data.shade
+    ? `<div class="city-method"><strong>tree shade</strong><span>${escapeHtml(data.shade.method || "")} · ${escapeHtml(data.shade.tier || "screening")}</span></div>`
+    : "";
+  $("city-methods").innerHTML = `${methods}${shade}${validation}<ul class="city-caveats">${caveats}</ul>`;
   $("city-source").textContent = `${formatNumber(city.tree_count)} public trees · ${local.length} local areas · 2022 LiDAR · ${formatNumber(visualTrees)} visual trees`;
 }
 
@@ -267,28 +274,35 @@ async function init() {
       api("/api/scene"),
       api("/api/scenarios"),
     ]);
-    try {
-      state.offInventory = await api("api/off-inventory");
-      renderOffInventory();
-      try {
-        state.offInventoryValue = await api("api/off-inventory/value");
-        renderOffInventory();
-      } catch (_error) {
-        // The value-of-information file is optional.
-      }
-    } catch (_error) {
-      state.offInventory = null;
-      renderOffInventory();
-    }
     state.dataset = dataset;
     state.scene = scene;
     state.scenarios = scenarios.scenarios || [];
     state.treeById = new Map(scene.trees.map((tree) => [tree.id, tree]));
-    try {
-      state.cityMetrics = await api("api/city-metrics");
-      renderCityMetrics();
-    } catch (_error) {
-      state.cityMetrics = null;
+    if (dataset.has_off_inventory) {
+      try {
+        state.offInventory = await api("api/off-inventory");
+        renderOffInventory();
+        try {
+          state.offInventoryValue = await api("api/off-inventory/value");
+          renderOffInventory();
+        } catch (_error) {
+          // The value-of-information file is optional.
+        }
+      } catch (_error) {
+        state.offInventory = null;
+        renderOffInventory();
+      }
+    } else {
+      state.offInventory = null;
+      renderOffInventory();
+    }
+    if (dataset.has_city_metrics) {
+      try {
+        state.cityMetrics = await api("api/city-metrics");
+        renderCityMetrics();
+      } catch (_error) {
+        state.cityMetrics = null;
+      }
     }
     $("dataset-name").textContent = `${dataset.name} · ${dataset.tree_count.toLocaleString("en-CA")} tree records · ${dataset.sources.length} sources`;
     setStatus("live");
@@ -594,39 +608,41 @@ function ensureThree() {
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
+  const span = sceneSpan();
   const scene = new THREE.Scene();
   scene.background = new THREE.Color("#dfe7dc");
-  scene.fog = new THREE.Fog("#dfe7dc", 900, 2400);
+  scene.fog = new THREE.Fog("#dfe7dc", span * 1.15, span * 4.2);
 
-  const camera = new THREE.PerspectiveCamera(46, container.clientWidth / Math.max(container.clientHeight, 1), 0.5, 9000);
-  camera.position.set(240, 170, 280);
+  const camera = new THREE.PerspectiveCamera(46, container.clientWidth / Math.max(container.clientHeight, 1), 0.5, span * 7);
+  const cameraDistance = Math.max(300, span * 0.62);
+  camera.position.set(cameraDistance * 0.55, cameraDistance * 0.52, cameraDistance * 0.85);
   const controls = new OrbitControls(camera, renderer.domElement);
-  controls.target.set(0, 14, 0);
+  controls.target.set(0, Math.max(12, span * 0.01), 0);
   controls.enableDamping = true;
   controls.dampingFactor = 0.08;
   controls.maxPolarAngle = Math.PI / 2.04;
   controls.minDistance = 30;
-  controls.maxDistance = 2400;
+  controls.maxDistance = span * 2.8;
 
   const ambient = new THREE.HemisphereLight(0xf7fbf4, 0x495243, 1.3);
   scene.add(ambient);
   const sun = new THREE.DirectionalLight(0xfff4dc, 1.8);
-  sun.position.set(-320, 520, 240);
+  sun.position.set(-span * 0.45, span * 0.72, span * 0.32);
   sun.castShadow = true;
   sun.shadow.mapSize.set(1024, 1024);
-  sun.shadow.camera.left = -420;
-  sun.shadow.camera.right = 420;
-  sun.shadow.camera.top = 420;
-  sun.shadow.camera.bottom = -420;
+  sun.shadow.camera.left = -span * 0.45;
+  sun.shadow.camera.right = span * 0.45;
+  sun.shadow.camera.top = span * 0.45;
+  sun.shadow.camera.bottom = -span * 0.45;
   sun.shadow.camera.near = 1;
-  sun.shadow.camera.far = 2400;
+  sun.shadow.camera.far = span * 4;
   scene.add(sun);
   scene.add(sun.target);
   const sunSphere = new THREE.Mesh(
-    new THREE.SphereGeometry(9, 18, 12),
+    new THREE.SphereGeometry(Math.max(9, span * 0.006), 18, 12),
     new THREE.MeshBasicMaterial({ color: 0xffe6a0 })
   );
-  sunSphere.position.set(-520, 620, 320);
+  sunSphere.position.set(-span * 0.7, span * 0.9, span * 0.4);
   scene.add(sunSphere);
 
   const terrain = buildTerrainMesh();
@@ -762,7 +778,8 @@ function buildTerrainMesh() {
 }
 
 function buildBuildingMeshes() {
-  const meshes = [];
+  const positions = [];
+  const normals = [];
   for (const building of state.scene.buildings || []) {
     const ring = (building.rings_local || [])[0] || [];
     if (ring.length < 3) continue;
@@ -783,26 +800,39 @@ function buildBuildingMeshes() {
         curveSegments: 1,
       });
       geometry.rotateX(-Math.PI / 2);
+      geometry.translate(0, Number(building.base_z) || 0, 0);
     } catch (_error) {
       continue;
     }
-    const material = new THREE.MeshStandardMaterial({
-      color: 0xc3c9bd,
-      roughness: 0.82,
-      metalness: 0.03,
-      transparent: true,
-      opacity: 0.82,
-      depthWrite: true,
-    });
-    const mesh = new THREE.Mesh(geometry, material);
-    mesh.position.y = Number(building.base_z) || 0;
-    mesh.castShadow = true;
-    mesh.receiveShadow = true;
-    mesh.userData.kind = "building";
-    mesh.name = building.name || building.id || "building";
-    meshes.push(mesh);
+    const flat = geometry.toNonIndexed();
+    const position = flat.getAttribute("position");
+    const normal = flat.getAttribute("normal");
+    if (position) positions.push(...position.array);
+    if (normal) normals.push(...normal.array);
+    flat.dispose();
+    geometry.dispose();
   }
-  return meshes;
+  if (!positions.length) return [];
+  const merged = new THREE.BufferGeometry();
+  merged.setAttribute("position", new THREE.Float32BufferAttribute(positions, 3));
+  if (normals.length === positions.length) {
+    merged.setAttribute("normal", new THREE.Float32BufferAttribute(normals, 3));
+  }
+  merged.computeBoundingSphere();
+  const material = new THREE.MeshStandardMaterial({
+    color: 0xc3c9bd,
+    roughness: 0.82,
+    metalness: 0.03,
+    transparent: true,
+    opacity: 0.82,
+    depthWrite: true,
+  });
+  const mesh = new THREE.Mesh(merged, material);
+  mesh.castShadow = true;
+  mesh.receiveShadow = true;
+  mesh.userData.kind = "building";
+  mesh.name = "buildings";
+  return [mesh];
 }
 
 function rebuildThreeTrees(trees) {
@@ -2861,10 +2891,20 @@ function applyRecommendations() {
   toast("Recommendations added to the scenario.");
 }
 
+function sceneSpan() {
+  const bounds = state.scene?.bounds || [0, 0, 100, 100];
+  return Math.max(Number(bounds[2]) - Number(bounds[0]), Number(bounds[3]) - Number(bounds[1]), 100);
+}
+
 function resetCamera() {
   if (!state.three) return;
-  state.three.camera.position.set(240, 170, 280);
-  state.three.controls.target.set(0, 14, 0);
+  const span = sceneSpan();
+  const distance = Math.max(300, span * 0.62);
+  state.three.camera.position.set(distance * 0.55, distance * 0.52, distance * 0.85);
+  state.three.controls.target.set(0, Math.max(12, span * 0.01), 0);
+  state.three.controls.maxDistance = span * 2.8;
+  state.three.camera.far = span * 7;
+  state.three.camera.updateProjectionMatrix();
   state.three.controls.update();
 }
 

@@ -41,8 +41,8 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         type=Path,
         default=Path("data/raw/vancouver/building_footprints.geojson"),
     )
-    parser.add_argument("--max-trees", type=int, default=50_000)
-    parser.add_argument("--max-buildings", type=int, default=40_000)
+    parser.add_argument("--max-trees", type=int, default=30_000)
+    parser.add_argument("--max-buildings", type=int, default=12_000)
     return parser.parse_args(argv)
 
 

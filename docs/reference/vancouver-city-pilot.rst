@@ -65,6 +65,27 @@ Every metric names its method and evidence tier in ``city_metrics.json``. Carbon
 sequestration, and rainfall are modelled or screening estimates, not contractor-grade
 audits.
 
+Results
+-------
+
+The first full build produced:
+
+- 181 tiles, 8,721,285,369 points, 118.77 km² AOI, 99.96% LiDAR coverage;
+- 184,151 mapped public trees from 184,152 source rows;
+- canopy cover 26.9%;
+- height-field canopy volume 350.2 million m³;
+- above-ground carbon storage about 95,800 t;
+- annual sequestration about 1,980 t/yr from the one-year growth model;
+- rainfall interception potential 3.50–7.01 million m³/yr at a 10–20% range;
+- inventory-to-LiDAR height bias -0.397 m and RMSE 4.292 m over 162,497 pairs;
+- tree shade 29.3% and combined building-plus-tree shade 43.1% on the representative
+  June/September samples.
+
+The City's 2025 Urban Forest Strategy reports about 25% canopy cover for 2022. The pilot's
+26.9% is a sanity check, not a calibration: the City mask, threshold, and land base differ.
+Local-area cover ranges from 47.5% in Shaughnessy to 9.6% in Strathcona; the app shows
+all 22 local areas.
+
 Web app
 -------
 
@@ -81,6 +102,18 @@ Build the city pack and serve it:
 The app exposes the city tab at ``/api/city-metrics``. The 2D map, 3D scene, tree
 inspector, Light tab, and analytics use the same city dataset. The 3D scene uses a
 representative visual tree sample; metrics always use the full inventory.
+
+.. image:: /_static/vancouver-city-metrics.png
+   :alt: Vancouver city metrics tab with canopy cover, volume, carbon, sequestration, rainfall, and local-area ranking
+   :width: 100%
+
+.. image:: /_static/vancouver-city-3d.png
+   :alt: Vancouver city 3D canopy, buildings, and terrain at city scale
+   :width: 100%
+
+.. image:: /_static/vancouver-city-map.png
+   :alt: Vancouver 2D canopy map with the city boundary and 47k visual tree points
+   :width: 100%
 
 Limits
 ------

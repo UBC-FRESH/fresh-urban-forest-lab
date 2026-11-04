@@ -505,3 +505,16 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Added tests for city rasterisation, inventory evidence, city metrics, city pack assembly,
   and the optional city-metrics endpoint.
 - Dashboard: GREEN.
+
+### P16 full Vancouver city pilot close-out
+
+- Built the full city mosaic: 181/181 tiles, 8,721,285,369 points, 99.96% AOI coverage.
+- Enriched 184,151 public trees; 162,497 height pairs, bias -0.397 m, RMSE 4.292 m.
+- City metrics: 26.854% canopy cover, 350.16M m³ canopy volume, 95,792 t carbon,
+  1,979 t/yr modelled sequestration, 3.50–7.01M m³/yr rainfall screening.
+- City validation: the City's 2022 estimate is about 25%, a +1.854-point difference;
+  a sanity check, not calibration.
+- City tab and city-scale 3D scene pass browser smoke with no console or page errors.
+- Storage: 165 GB raw LiDAR, 1.8 GB processed, 7.7 TB free; no dataset on the root disk.
+- Close-out report: `notes/reports/p16-vancouver-city.md`.
+- Dashboard: GREEN.

@@ -30,6 +30,7 @@ CANOPY_THRESHOLD_M = 2.0
 ANNUAL_PRECIPITATION_M = 1.0988
 INTERCEPTION_FRACTION_LOW = 0.10
 INTERCEPTION_FRACTION_HIGH = 0.20
+CITY_PUBLISHED_CANOPY_COVER_PCT = 25.0
 
 
 @dataclass(frozen=True, slots=True)
@@ -243,6 +244,18 @@ def compute_city_metrics(
         "local_areas": [item.to_dict() for item in local],
         "tree_count_total": len(trees),
         "tree_count_assigned": int(sum(1 for value in tree_area if value > 0)),
+        "validation": {
+            "published_canopy_cover_pct": CITY_PUBLISHED_CANOPY_COVER_PCT,
+            "published_source": (
+                "City of Vancouver 2025 Urban Forest Strategy, 2022 LiDAR estimate "
+                "(about 25% of the city)"
+            ),
+            "difference_pct": round(city.canopy_cover_pct - CITY_PUBLISHED_CANOPY_COVER_PCT, 3),
+            "note": (
+                "This is a sanity check, not a calibration: the City mask, threshold, and "
+                "land base differ from this pilot."
+            ),
+        },
         "methods": _methods(),
         "caveats": [
             "Canopy cover and height-field volume come from the 2022 leaf-on CHM.",

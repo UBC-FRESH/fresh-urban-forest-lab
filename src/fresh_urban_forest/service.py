@@ -462,8 +462,11 @@ def create_app(
 
     @app.get("/api/dataset")
     def dataset_info() -> dict[str, object]:
-        """Return the dataset manifest and baseline metrics."""
-        return dataset_summary(state.dataset)
+        """Return the dataset manifest, baseline metrics, and optional-layer flags."""
+        summary = dataset_summary(state.dataset)
+        summary["has_off_inventory"] = _dataset_file(state, "off_inventory.json") is not None
+        summary["has_city_metrics"] = _dataset_file(state, "city_metrics.json") is not None
+        return summary
 
     @app.get("/api/completeness")
     def completeness() -> dict[str, object]:
@@ -2655,10 +2658,10 @@ def _canopy_rgba(canopy: np.ndarray) -> np.ndarray:
     """
     clipped = np.clip(np.nan_to_num(canopy, nan=0.0), 0.0, 45.0)
     normalized = clipped / 45.0
-    red = 0.95 - 0.55 * normalized
-    green = 0.78 + 0.18 * np.sin(np.pi * normalized)
-    blue = 0.24 + 0.18 * normalized
-    alpha = np.where(clipped >= 1.0, 205.0, 0.0)
+    red = 0.22 + 0.38 * (1.0 - normalized)
+    green = 0.50 + 0.38 * (1.0 - normalized)
+    blue = 0.16 + 0.14 * (1.0 - normalized)
+    alpha = np.where(clipped >= 1.0, 210.0, 0.0)
     rgba = np.stack([red * 255.0, green * 255.0, blue * 255.0, alpha], axis=-1)
     return rgba.astype(np.uint8)
 

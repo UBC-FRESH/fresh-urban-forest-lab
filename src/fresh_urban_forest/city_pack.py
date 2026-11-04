@@ -47,8 +47,8 @@ def build_city_pack(
     sources: tuple[SourceRecord, ...],
     out_dir: Path,
     name: str = "City of Vancouver 2022 canopy pilot",
-    max_trees: int = 50_000,
-    max_buildings: int = 40_000,
+    max_trees: int = 30_000,
+    max_buildings: int = 12_000,
     terrain_max_size: int = 900,
     generated_utc: str | None = None,
 ) -> UrbanForestDataset:

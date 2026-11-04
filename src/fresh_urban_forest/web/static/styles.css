@@ -630,3 +630,6 @@ select:focus, input:focus { outline: 2px solid #b8d3ae; outline-offset: 1px; }
   .city-row { grid-template-columns: minmax(100px, 1.2fr) 58px minmax(70px, 1fr) 64px; }
   .city-row .hide-small { display: none; }
 }
+
+.city-head { background: transparent; border-color: transparent; padding-top: 0; padding-bottom: 0; color: var(--ink-soft); font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.08em; }
+.city-head .num { font-family: var(--body); }

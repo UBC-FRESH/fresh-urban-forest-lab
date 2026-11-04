@@ -21,7 +21,7 @@ This roadmap is the plan of record and the issue tracker map for FRESH Urban For
 | P13 ALS ground classification and height above ground | #70 | `feature/p13-als-ground` | complete |
 | P14 Ground reference and second terrain validation | #89 | `feature/p14-ground-reference` | complete |
 | P15 Manual ground reference and optional FEMIC adapter design | #95 | `feature/p15-ground-adapter` | complete |
-| P16 Full Vancouver city canopy and ecosystem-services pilot | #105 | `feature/p16-vancouver-city` | active |
+| P16 Full Vancouver city canopy and ecosystem-services pilot | #105 | `feature/p16-vancouver-city` | pr-open |
 
 ## Lifecycle Map
 
@@ -587,7 +587,7 @@ Phase 15 verification:
 
 Parent issue: #105
 Branch: `feature/p16-vancouver-city`
-Status: active
+Status: pr-open
 
 Goal: extend the UBC-core prototype to the full City of Vancouver using public data, with a
 1 m city canopy surface, all 184k public trees, city and local-area metrics, and a 3D city
@@ -595,12 +595,12 @@ scene.
 
 Plan: `notes/design/vancouver-city-pilot.md`.
 
-- [ ] P16.1 Source lock, AOI, storage budget, and full-city data manifest (#106)
-- [ ] P16.2 Full-city LiDAR mosaic and canopy surfaces (#107)
-- [ ] P16.3 Full public-tree inventory and tree-level evidence (#108)
-- [ ] P16.4 City-wide and local-area metrics and ecosystem services (#109)
-- [ ] P16.5 Vancouver 3D city scene and dashboard (#110)
-- [ ] P16.6 Validation, performance, docs, and close-out (#111)
+- [x] P16.1 Source lock, AOI, storage budget, and full-city data manifest (#106)
+- [x] P16.2 Full-city LiDAR mosaic and canopy surfaces (#107)
+- [x] P16.3 Full public-tree inventory and tree-level evidence (#108)
+- [x] P16.4 City-wide and local-area metrics and ecosystem services (#109)
+- [x] P16.5 Vancouver 3D city scene and dashboard (#110)
+- [x] P16.6 Validation, performance, docs, and close-out (#111)
 
 Acceptance criteria:
 
@@ -632,4 +632,4 @@ Phase 16 verification:
 9. P14 (#89) adds a class-2 reference surface and steep-tile validation. Class-2 recall is 0.9634 and high-confidence false-ground is 4.65% on the steep tile; the coastal tile is 0.9999 and 3.35%. An optional FEMIC adapter prototype is approved only with a manual reference patch and versioned contract.
 10. P15 (#95) adds a manually checked 20 m Golden-area patch and accepts an optional sidecar FEMIC adapter design. The patch shows class-2 recall 0.9507 and high-confidence false-ground 3.14%. The adapter is not implemented; the design defines `ground.laz`, `manifest.json`, and `qa.json`, no hard FEMIC dependency, and no default product change.
 
-11. P16 (#105) is the full Vancouver city pilot. It uses the City 2022 LiDAR (181 tiles, ~49 points/m²), all 184,152 public trees, the 22 local-area polygons, and building footprints. The AOI is 118.76 km² in EPSG:3157. Raw data stays under `/srv/shared-data`; the working budget is 250 GB against 7.9 TB free. The plan is `notes/design/vancouver-city-pilot.md`.
+11. P16 (#105) is the full Vancouver city pilot. It uses the City 2022 LiDAR (181 tiles, ~49 points/m²), all 184,152 public trees, the 22 local-area polygons, and building footprints. The AOI is 118.76 km² in EPSG:3157. The build produced 8.72 billion points, 99.96% LiDAR coverage, 184,151 mapped trees, 26.854% canopy cover, 350.16 million m³ canopy volume, 95,792 t above-ground carbon, and 1,979 t/yr modelled sequestration. The City's 2022 estimate is about 25%, a sanity check rather than calibration. Raw data is 165 GB under `/srv/shared-data`; processed outputs are 1.8 GB; free space remains 7.7 TB. The close-out is `notes/reports/p16-vancouver-city.md`.
