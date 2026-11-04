@@ -654,3 +654,12 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Browser smoke: no console or page errors; app live in about 4.4 s, full 3D scene build
   about 0.84 s, software-WebGL screenshot readback is the slow part.
 - Dashboard: GREEN.
+
+
+### P30 enable the portal assistant
+
+- The landing portal now passes `allow_agent=True` by default to both mounted apps, so the
+  `+ Ask` helper is available in the UBC and Vancouver UIs.
+- The portal remains behind the existing Cloudflare/CWL gateway; the assistant is still
+  opt-in at the service level and can be disabled with `FRESH_PORTAL_ALLOW_AGENT=0`.
+- Dashboard: GREEN.

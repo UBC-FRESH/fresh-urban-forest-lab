@@ -47,5 +47,5 @@ app = create_portal_app(
         ),
     ),
     assets_dir=ROOT / "docs" / "_static",
-    allow_agent=os.environ.get("FRESH_PORTAL_ALLOW_AGENT", "").lower() in {"1", "true", "yes"},
+    allow_agent=os.environ.get("FRESH_PORTAL_ALLOW_AGENT", "1").lower() in {"1", "true", "yes"},
 )

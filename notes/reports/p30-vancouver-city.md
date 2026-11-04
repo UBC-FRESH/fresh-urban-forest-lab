@@ -111,6 +111,8 @@ phase.
 The two apps share a landing page on the existing FRESH Urban Forest Lab demo port, 8101.
 The WS4 portal remains on 8790. The portal mounts `/ubc/` and `/vancouver/`, gives each app
 its own runtime directory, and passes a browser smoke check with no console or page errors.
+The local `+ Ask` assistant is enabled by default in both mounted apps; set
+`FRESH_PORTAL_ALLOW_AGENT=0` to disable it.
 Screenshot: `docs/_static/vancouver-city-portal.png`.
 
 ## Limits
