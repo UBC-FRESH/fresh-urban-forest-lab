@@ -22,6 +22,7 @@ This roadmap is the plan of record and the issue tracker map for FRESH Urban For
 | P14 Ground reference and second terrain validation | #89 | `feature/p14-ground-reference` | complete |
 | P15 Manual ground reference and optional FEMIC adapter design | #95 | `feature/p15-ground-adapter` | complete |
 | P16 Optional FEMIC ground-adapter implementation | #103 | `feature/p16-ground-adapter` | complete |
+| P17 CHM/ITD post-processing | #113 | `feature/p17-itd-postprocess` | complete |
 
 ## Lifecycle Map
 
@@ -615,6 +616,34 @@ Phase 16 verification:
 - `python scripts/dashboard.py`
 - `python scripts/check_workflow.py`
 
+## Phase 17: CHM/ITD post-processing
+
+Parent issue: #113
+Branch: `feature/p17-itd-postprocess`
+Status: complete
+
+Goal: add opt-in CHM/ITD post-processing for edge buffers, small trees, and conservative
+over-segmentation merging.
+
+- [x] P17.1 ITD post-processing module, tests, and docs (#114)
+  - [x] `TreePostprocessResult` and `postprocess_trees`
+  - [x] Edge buffer, small-tree flag, and conservative merge groups
+  - [x] `kept()` filtering and JSON summary
+  - [x] Synthetic tests and API/public docs
+
+Acceptance criteria:
+
+- Buffer, small-tree, and merge functions are opt-in and deterministic.
+- Merge groups record every source ID and keep a stable representative ID.
+- The `kept()` result excludes buffer and small-tree IDs.
+- Tests cover flags, merge, no-merge, empty input, and invalid parameters.
+- The dashboard is green.
+
+Phase 17 verification:
+
+- `python scripts/dashboard.py`
+- `python scripts/check_workflow.py`
+
 ## Detailed Next Steps Notes
 
 1. The repository was created from `UBC-FRESH/ubc-fresh-dev-workflow` on 2026-11-03. The seed's dashboard, validator, docs, and agent contract are retained.
@@ -628,3 +657,4 @@ Phase 16 verification:
 9. P14 (#89) adds a class-2 reference surface and steep-tile validation. Class-2 recall is 0.9634 and high-confidence false-ground is 4.65% on the steep tile; the coastal tile is 0.9999 and 3.35%. An optional FEMIC adapter prototype is approved only with a manual reference patch and versioned contract.
 10. P15 (#95) adds a manually checked 20 m Golden-area patch and accepts an optional sidecar FEMIC adapter design. The patch shows class-2 recall 0.9507 and high-confidence false-ground 3.14%. The adapter is not implemented; the design defines `ground.laz`, `manifest.json`, and `qa.json`, no hard FEMIC dependency, and no default product change.
 11. P16 (#103) implements the optional sidecar ground adapter: `write_ground_bundle`, the `ground-adapter` CLI, extra dimensions, manifest/QA schemas, and synthetic contract tests. It remains opt-in and does not change default FEMIC products.
+12. P17 (#113) adds opt-in CHM/ITD post-processing: edge buffer flags, small-tree height flags, and a conservative over-segmentation merge with source-ID groups. `kept()` excludes both flag sets; `detect_trees` defaults are unchanged.
