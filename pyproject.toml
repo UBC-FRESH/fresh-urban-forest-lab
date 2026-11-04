@@ -41,6 +41,7 @@ dependencies = [
 
 [project.optional-dependencies]
 fvs = ["fresh-fvsbc>=0.20.0"]
+optimize = ["fresh-solutions @ git+https://github.com/UBC-FRESH/fresh-solutions.git@v0.8.0"]
 web = ["fastapi>=0.110", "uvicorn>=0.29", "pillow>=10"]
 dev = [
   "pytest>=8.2",
@@ -95,6 +96,10 @@ strict = true
 warn_unreachable = true
 mypy_path = "src"
 files = ["src", "scripts", "tests", "docs/conf.py"]
+
+[[tool.mypy.overrides]]
+module = ["fresh_solutions", "fresh_solutions.*"]
+ignore_missing_imports = true
 
 [[tool.mypy.overrides]]
 module = [

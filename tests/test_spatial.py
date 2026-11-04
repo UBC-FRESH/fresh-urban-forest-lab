@@ -219,6 +219,19 @@ def test_enrich_trees_imputes_missing_dimensions(tmp_path: Path) -> None:
     assert enrich_trees([], dem, chm) == ()
 
 
+def test_fill_nan_nearest_removes_render_holes() -> None:
+    """Missing terrain cells are filled from their nearest valid neighbour."""
+    from fresh_urban_forest.terrain import fill_nan_nearest
+
+    values = np.asarray([[np.nan, 10.0], [20.0, np.nan]], dtype=np.float64)
+    filled = fill_nan_nearest(values)
+    assert np.isfinite(filled).all()
+    assert filled[0, 0] in {10.0, 20.0}
+    assert filled[1, 1] in {10.0, 20.0}
+    all_missing = fill_nan_nearest(np.full((2, 2), np.nan, dtype=np.float64))
+    assert np.isfinite(all_missing).all()
+
+
 def test_detect_trees_and_change(tmp_path: Path) -> None:
     """Local maxima and watershed detection find planted crowns, and change is additive."""
     chm = np.zeros((30, 30), dtype=np.float32)

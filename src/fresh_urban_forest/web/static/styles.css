@@ -251,10 +251,12 @@ select:focus, input:focus { outline: 2px solid #b8d3ae; outline-offset: 1px; }
 .maplibregl-popup-content { border-radius: 10px; font-size: 0.76rem; padding: 9px 11px; }
 
 @media (max-width: 980px) {
-  .app-shell { grid-template-columns: 1fr; grid-template-rows: minmax(260px, 38vh) minmax(0, 1fr); }
+  .app-shell { grid-template-columns: 1fr; grid-template-rows: minmax(220px, 32vh) minmax(0, 1fr); }
   .sidebar { border-right: 0; border-bottom: 1px solid var(--line); }
   .analytics-grid { grid-template-columns: 1fr; }
   .layer-toggles { display: none; }
+  .optimize-panel, .change-panel { max-height: calc(100% - 24px); overflow-y: auto; }
+  .view-tabs { overflow-x: auto; }
 }
 
 /* --------------------------------------------------------------- assistant */
@@ -448,6 +450,51 @@ select:focus, input:focus { outline: 2px solid #b8d3ae; outline-offset: 1px; }
   letter-spacing: 0.06em;
 }
 .evidence-badge strong { color: var(--green); font-weight: 700; }
+
+/* --------------------------------------------------------------- optimize view */
+#view-optimize { background: radial-gradient(circle at 50% 40%, #eef4ea, #cfd9c9); }
+#pareto-canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.optimize-panel { width: min(25rem, calc(100% - 28px)); max-height: calc(100% - 28px); overflow-y: auto; }
+.axis-fields { grid-template-columns: 1fr 1fr 1fr; }
+.axis-fields select { width: 100%; }
+.pareto-info { margin: 7px 0; padding: 7px; border: 1px solid #e3e9de; border-radius: 8px; background: #fbfcf8; font-size: 0.7rem; }
+.pareto-info strong { color: var(--green); font-family: var(--mono); }
+.pareto-axis-labels {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+}
+.pareto-axis-labels span {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transform: translate(-50%, -50%);
+  padding: 3px 7px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--ink-soft);
+  font-size: 0.64rem;
+  white-space: nowrap;
+  box-shadow: 0 1px 4px rgba(23, 35, 29, 0.08);
+}
+.pareto-axis-labels span::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--green); }
+.pareto-axis-labels #pareto-axis-x::before { background: #c85555; }
+.pareto-axis-labels #pareto-axis-y::before { background: #5f9f54; }
+.pareto-axis-labels #pareto-axis-z::before { background: #4d7fc4; }
+.pareto-compare { margin: 6px 0; overflow-x: auto; }
+.pareto-compare table { width: 100%; border-collapse: collapse; font-size: 0.64rem; }
+.pareto-compare th, .pareto-compare td { padding: 4px 5px; border-bottom: 1px solid #e7ece3; text-align: right; white-space: nowrap; }
+.pareto-compare th:first-child, .pareto-compare td:first-child { text-align: left; color: var(--ink-soft); }
+.pareto-compare th { color: var(--ink-soft); font-weight: 650; }
+.pareto-compare .pin-id { font-family: var(--mono); color: var(--green); }
+
+.pareto-info .mini-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
+.pareto-info .mini-card { padding: 5px; border: 1px solid #e3e9de; border-radius: 7px; background: #ffffff; }
+.pareto-info .mini-card span { display: block; color: var(--ink-soft); font-size: 0.58rem; text-transform: uppercase; letter-spacing: 0.05em; }
+.pareto-info .mini-card strong { display: block; margin-top: 2px; color: var(--green); font-family: var(--mono); font-size: 0.76rem; }
 
 /* --------------------------------------------------------------- change view */
 #map-change { position: absolute; inset: 0; width: 100%; height: 100%; }

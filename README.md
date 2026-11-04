@@ -39,7 +39,7 @@ The demo runs offline from a small, derived core-campus dataset.
 ```bash
 python -m venv .venv
 . .venv/bin/activate
-python -m pip install -e ".[dev,web]"
+python -m pip install -e ".[dev,web,optimize]"
 fresh-urban-forest serve --dataset data/demo/ubc_core --port 8000
 ```
 
@@ -62,9 +62,10 @@ fresh-urban-forest build \
 
 ## Status
 
-The prototype is complete through Phase 4 (verify and demo) on `main`. Phase 5 is a
-release candidate at v0.2.0. The documentation site is live on GitHub Pages; the tag and
-GitHub release await approval. Phase 6 (operate and maintain) is planned. `ROADMAP.md` is the
+The prototype is complete through Phase 7 (shade, species fit, water, and irrigation) on
+`main`. P8 (Fresh Solutions optimization and Pareto explorer) is active. Phase 5 is a
+release candidate at v0.2.0; the tag and GitHub release await approval. The documentation
+site is live on GitHub Pages. `ROADMAP.md` is the
 plan of record; the GitHub issues carry the live status.
 
 ## Repository map

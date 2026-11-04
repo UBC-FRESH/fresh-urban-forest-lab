@@ -229,6 +229,46 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Limits: no field shade survey, no Radiance/SOLWEIG benchmark, 2.5-D crowns, priors for
   species/water, and a scaled annual estimate.
 
+### P8 optimization and Pareto explorer
+
+- Added `optimize.py`: candidate sites, species options, seven objectives, three constraints,
+  exact evaluation, weighted scalarisation jobs, and solution-to-scenario edits.
+- Added `pareto.py`: dominance, non-dominated archive, approximate hypervolume, bootstrap
+  robustness, and objective slices.
+- Added `surrogate.py`: aggregate features and a validated ridge screening surrogate.
+- Delegated hard combinatorial search to **Fresh Solutions v0.8.0** through the optional
+  `optimize` extra. No custom metaheuristic engine was added.
+- Added `optimize` and `pareto` CLI commands and the `/api/optimize` job endpoints.
+- Added the Optimize tab: job controls, 3D orbitable archive, axis/colour/size/slice
+  controls, solution inspector, and load-as-scenario.
+- Benchmark: 48 sites / 72 scalarizations / 7 objectives / 37,224 evaluations; 5.34 s on
+  one worker and 3.64 s on four workers (1.47x), same archive and hypervolume.
+- Whole-campus run: 387 sites / 72 scalarizations / 1,010,952 evaluations / 71 archive
+  solutions / hypervolume 0.0508 / 100.94 s.
+- Z* convergence: balanced scalarization, 387 sites, 112,116 evaluations, 36 rounds,
+  patience stop, best scalar objective -0.293285, 333 planted sites.
+- Small 24-site run: 13 archive solutions, hypervolume 0.0006, 0.34 s on one worker.
+- Surrogate holdout: shade R2 0.91, equity 0.86, native 0.89, diversity -0.41; archive
+  always uses exact evaluation.
+- Added `docs/reference/optimization-and-pareto.rst` and the P8 report.
+- Fixed optimizer UI state bugs: requested scalarization count, scenario dropdown sync,
+  load/slice reset, fixed-reference hypervolume, mobile layout, and scenario selection now
+  switches to the 3D scene so the loaded scenario is visible.
+- Added saved Pareto archives: completed jobs are written to
+  `runtime/optimizations/<job_id>.json`, loaded at startup, and available through the
+  **Saved Pareto archive** dropdown. The full-campus 387-site archive loads instantly and
+  can produce a 385-tree scenario.
+- Added archive metadata, rename/delete controls, a three-solution pin/compare table,
+  coloured on-cube axis lines and X/Y/Z labels, and a jump-back link from a `Pareto <id>`
+  scenario to its source archive point.
+- Fixed the 3D scene ground alignment: the terrain mesh now uses the scene origin instead
+  of the grid centre, so trees and buildings are no longer shifted about 1.4 km against the
+  terrain; missing DEM cells are filled from their nearest valid neighbour instead of being
+  rendered as a zero-elevation hole. Building opacity is less ghostly at low camera angles.
+- Tests: 285 passed. Dashboard: GREEN.
+- Limits: weighted-sum finite approximation, Monte Carlo hypervolume, bootstrap robustness,
+  precomputed P7 evaluator, and no city-scale claim.
+
 ### P12 Arbor method mining and clean-room point-cloud primitives
 
 - Audited `r-lidar/arbor` 1.1.5 at commit `a2b487f4a23236a42eec50cb6583a5eae15593ed`.

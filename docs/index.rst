@@ -27,6 +27,7 @@ act, and cite it in their reports. Start with the repository's ``AGENTS.md`` and
    reference/project-status
    reference/research-agenda
    reference/shade-and-species
+   reference/optimization-and-pareto
    reference/methods
    reference/arbor-method-mining
    reference/change-products

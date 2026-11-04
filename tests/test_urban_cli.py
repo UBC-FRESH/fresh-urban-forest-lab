@@ -177,3 +177,46 @@ def test_bad_shade_date_is_rejected(tmp_path: Path) -> None:
         ["shade", "--dataset", str(tmp_path / "bad-date" / "dataset"), "--date", "nope"],
     )
     assert result.exit_code != 0
+
+
+def test_optimize_and_pareto_commands(tmp_path: Path) -> None:
+    """The optimizer and archive summary run end to end."""
+    make_dataset(tmp_path / "optimize")
+    result = RUNNER.invoke(
+        app,
+        [
+            "optimize",
+            "--dataset",
+            str(tmp_path / "optimize" / "dataset"),
+            "--out",
+            str(tmp_path / "optimize.json"),
+            "--sites",
+            "6",
+            "--horizon",
+            "5",
+            "--population",
+            "6",
+            "--generations",
+            "1",
+            "--scalarizations",
+            "4",
+            "--local-iterations",
+            "10",
+            "--workers",
+            "1",
+        ],
+    )
+    assert result.exit_code == 0, result.stdout
+    assert (tmp_path / "optimize.json").exists()
+    summary = RUNNER.invoke(
+        app,
+        [
+            "pareto",
+            "--archive",
+            str(tmp_path / "optimize.json"),
+            "--out",
+            str(tmp_path / "pareto.json"),
+        ],
+    )
+    assert summary.exit_code == 0, summary.stdout
+    assert (tmp_path / "pareto.json").exists()

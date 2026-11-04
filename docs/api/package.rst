@@ -77,6 +77,15 @@ in ``fresh_urban_forest.models``; the analysis functions are grouped by concern.
 .. automodule:: fresh_urban_forest.irrigation
    :members:
 
+.. automodule:: fresh_urban_forest.optimize
+   :members:
+
+.. automodule:: fresh_urban_forest.pareto
+   :members:
+
+.. automodule:: fresh_urban_forest.surrogate
+   :members:
+
 .. automodule:: fresh_urban_forest.calibration
 
 .. automodule:: fresh_urban_forest.validation
