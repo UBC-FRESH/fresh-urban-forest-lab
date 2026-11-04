@@ -97,6 +97,6 @@ No response is recorded yet. This is a stated limit, not a completed review.
 
 ## Next phase
 
-P11 integrates P7-P10, writes the v0.3 benchmark, and queues the release candidate.
+P11 integrates P7-P10, writes the v0.3 benchmark, and releases v0.3.0.
 
-No tag or release is created by this phase.
+The release is created in P5.

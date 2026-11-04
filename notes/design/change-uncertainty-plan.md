@@ -179,7 +179,7 @@ Tag and publish only after the change and uncertainty story is defensible.
 - Write release notes with the change-product method and caveats.
 - Add the completeness and validation results to the public docs.
 - Check Pages, demo, and clean clone.
-- Tag v0.2.0 and publish.
+- Tag v0.3.0 and publish. Completed 2026-11-04.
 
 ## Order of work
 
@@ -187,7 +187,7 @@ Tag and publish only after the change and uncertainty story is defensible.
 2. Add inventory completeness and confidence flags.
 3. Run the detection validation on the UBC 2021 tile and inventory.
 4. Fit the first local growth calibration.
-5. Release v0.2.0.
+5. Release v0.3.0. Completed 2026-11-04.
 
 ## Risks
 

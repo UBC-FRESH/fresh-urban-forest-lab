@@ -60,6 +60,6 @@ Operational limits
 Release limits
 --------------
 
-- A tag, GitHub release, Pages setting change, or branch-protection change needs explicit
+- v0.3.0 is a research prototype, not a final product.
+- Future tag, GitHub release, Pages setting, or branch-protection changes need explicit
   approval.
-- The release candidate is v0.2.0; the current docs and code are not a final product.

@@ -13,13 +13,13 @@
 ## Reference
 
 - [Architecture](reference/architecture.html): layers, modules, contracts, and extension points.
-- [Project status](reference/project-status.html): phases, release candidate, repository map, known gaps.
+- [Project status](reference/project-status.html): phases, v0.3.0 release, repository map, known gaps.
 - [Research agenda](reference/research-agenda.html): P7-P11 shade, optimization, off-inventory canopy, and bird programme; novelty and evidence tiers.
 - [Shade, species, water, and irrigation](reference/shade-and-species.html): marginal shade, solar method, species fit, water balance, irrigation cost, API, and limits.
 - [Optimization and Pareto explorer](reference/optimization-and-pareto.html): Fresh Solutions scalarizations, parallel search, fuzzy archive, 3D solution space, API, and limits.
 - [Off-inventory canopy](reference/off-inventory-canopy.html): LiDAR unmatched-tree candidates, land-class proxy, privacy rule, value of information, API, and limits.
 - [Bird habitat and demography](reference/bird-habitat-and-demography.html): 3D canopy metrics, guild relative abundance, prior-driven lambda, Birds tab, and limits.
-- [Integration and release](reference/integration-and-release.html): unified lab report, v0.3 release candidate, benchmark, and approval gates.
+- [Integration and release](reference/integration-and-release.html): unified lab report, v0.3.0 release, benchmark, and approval gates.
 - [Data contracts](reference/data-contracts.html): dataset directory, tree record, scenario, scene payload.
 - [Methods](reference/methods.html): cover, volume, growth, carbon, detection, change, and DSS assumptions.
 - [Arbor method mining](reference/arbor-method-mining.html): the clean-room provenance policy and the point-cloud primitives borrowed from Arbor's published methods.

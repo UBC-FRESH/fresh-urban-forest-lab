@@ -13,7 +13,7 @@ Keep private material out of this directory.
 
 - `design/architecture.md`: the layer diagram, contracts, and deliberate simplifications.
 - `design/change-uncertainty-plan.md`: observed change, completeness, validation, and calibration plan.
-- `design/urban-canopy-program-plan.md`: the queued P7-P11 programme for shade, species fit, optimization, off-inventory canopy, and birds.
+- `design/urban-canopy-program-plan.md`: the completed P7-P11 programme for shade, species fit, optimization, off-inventory canopy, and birds.
 - `reference/literature-review-shade-optimization-biodiversity.md`: rapid peer-reviewed and grey-literature review, novelty assessment, and citations.
 - `reference/shade-review-protocol.md`: P7.1 search protocol, screening log, capability comparison, and frozen claim.
 - `reports/detection-and-allometry-2021.md`: first detection validation and local allometry results.
@@ -26,8 +26,8 @@ Keep private material out of this directory.
 - `reference/off-inventory-terminology.md`: terminology, land-class proxy, privacy, and refresh workflow.
 - `reference/bird-habitat-methods.md`: guild scope, structural metrics, demographic priors, and evidence tiers.
 - `reports/p10-birds.md`: bird habitat, guild relative abundance, prior lambda, and limits.
-- `reports/p11-integration.md`: unified report, integration limits, and v0.3 release candidate.
-- `releases/v0.3.0.md`: v0.3.0 release candidate notes, not tagged.
+- `reports/p11-integration.md`: unified report, integration limits, and v0.3.0 release.
+- `releases/v0.3.0.md`: v0.3.0 release notes; tagged and released.
 - `reports/growth-calibration-readiness.md`: why the current inventory cannot support growth calibration.
 - `reports/p12-arbor-method-mining.md`: P12 close-out, licence evidence, gate results, and the P13 recommendation.
 - `reports/p13-als-ground-validation.md` and `.json`: P13.2 real LidarBC tile validation, class-2 recall, HAG, and noise caveats.
@@ -39,7 +39,7 @@ Keep private material out of this directory.
 - `design/femic-ground-adapter.md`: optional sidecar adapter contract, bundle schema, failure modes, and test strategy.
 - `adr/0007-optional-femic-ground-adapter.md`: accept the sidecar contract; no default FEMIC change.
 - `reports/p15-closeout.md`: P15 close-out, acceptance evidence, and the P16 recommendation.
-- `releases/v0.2.0.md`: draft release notes; not tagged.
+- `releases/v0.2.0.md`: superseded draft; never tagged.
 - `reference/data-sources.md`: public UBC, Vancouver, and Metro Vancouver sources, with
   coverage, licences, and traps.
 - `reference/software-landscape.md`: comparable inventory, LiDAR, growth, and DSS systems;

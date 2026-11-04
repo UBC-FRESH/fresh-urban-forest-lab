@@ -454,12 +454,15 @@ python scripts/dashboard.py
 fresh-urban-forest birds --dataset data/demo/ubc_core --observations data/raw/ebird.csv --out tmp/birds
 ```
 
-### Phase 11: Integration and v0.3 release candidate
+### Phase 11: Integration and v0.3.0 release
 
-Parent issue: P11 (queued).
+Parent issue: #44 (closed).
 Branch: `feature/p11-integration`.
-Goal: make the new layers one coherent lab, document them, benchmark them, and queue a
-release candidate.
+Goal: make the new layers one coherent lab, document them, benchmark them, and release
+v0.3.0.
+
+Status: historical plan. Completion evidence is in ``ROADMAP.md`` and
+``notes/reports/p11-integration.md``.
 
 P11.1 Unified scenario and evidence contract
 - [ ] One scenario reports shade, water, cost, biodiversity, and birds.
@@ -477,17 +480,17 @@ P11.3 Benchmark, reproducibility, and docs
 - [ ] Docs for every new method and API.
 - [ ] A limitations page and a publication-readiness memo.
 
-P11.4 v0.3 release candidate
-- [ ] Release notes and known gaps.
-- [ ] Dashboard and CI green.
-- [ ] Tag and release only after maintainer approval.
+P11.4 v0.3.0 release
+- [x] Release notes and known gaps.
+- [x] Dashboard and CI green.
+- [x] Tag and release after maintainer approval.
 
 Acceptance criteria:
 
 - A user can run a scenario and see shade, water, cost, birds, and a Pareto archive.
 - A clean clone reproduces the benchmark from a manifest.
 - The docs describe every method and limit.
-- The release candidate is queued; no tag exists without approval.
+- The v0.3.0 tag and GitHub release exist.
 
 ## 7. Cross-cutting workstreams
 

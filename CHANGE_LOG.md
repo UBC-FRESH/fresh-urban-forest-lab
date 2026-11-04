@@ -431,10 +431,10 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Tagged and released the integrated lab as v0.3.0.
 - P5 release gate closed with the stated data limit: no field validation or repeat-measure
   growth calibration yet.
-- Removed the invented P6 operate-and-maintain phase, quarterly review, source-triage rule,
-  and contract-migration checklist. These were not requested and do not map to a concrete
-  workflow task.
-- Closed P6 issue #7 and P5.0 issue #39 with evidence and explicit limitations.
+- Removed an unrequested administrative phase and its review, triage, and contract-migration
+  content. It did not map to a workflow task or an explicit instruction.
+- Deleted the removed phase's issue and closed P5.0 issue #39 with evidence and explicit
+  limitations.
 - Release notes: `notes/releases/v0.3.0.md`.
 
 ### P15 Manual ground reference and optional FEMIC adapter design
@@ -452,3 +452,9 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Close-out report: `notes/reports/p15-closeout.md`. P15 is complete.
 - Limits: the patch is visually checked, not point-by-point labelled; the adapter is
   designed but not implemented; no tag or release is included.
+
+### v0.3.0 release documentation correction
+
+- Corrected stale v0.2.0 and release-candidate status in the roadmap, project status, notes,
+  and live docs.
+- Moved tag `v0.3.0` to the final release commit and refreshed the GitHub release notes.
