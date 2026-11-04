@@ -291,6 +291,7 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
   PTD ground classification, semantic/instance segmentation, QSM, and QSF are future work.
 - P12 is complete. P13 is recommended for ALS ground classification and HAG; the MLS/TLS
   semantic/instance/QSM stack remains a separate future package.
+
 ### P9 off-inventory canopy and value of information
 
 - Added `off_inventory.py`: CHM detection, inventory matching, confidence-scored
@@ -326,6 +327,71 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Limits: no local point counts, distance sampling, mark-recapture, or expert review response;
   relative abundance is not density and lambda is not a local forecast.
 
+### P13 ALS ground classification and height above ground
+
+- Added `classify_ground_ptd` and the typed `GroundClassification` result to
+  `src/fresh_urban_forest/pointcloud.py`.
+- The classifier seeds a TIN from the lowest point per grid cell, progressively adds points
+  within a vertical residual and point-to-vertex angle threshold, and interpolates HAG from the
+  final ground surface.
+- Added seed/iteration counters and a warning for degenerate or too-small TINs.
+- Added synthetic tests for a flat plane, a gentle slope, high vegetation, a collinear
+  degenerate seed set, an empty cloud, and invalid parameters.
+- Documented the simplified, PTD-inspired method, the provenance to Axelsson (2000) and
+  Arbor chapter 4, and the real-tile validation gate in the note and Sphinx page.
+- Tests: 311 passed; total coverage 87.55 percent. Dashboard: GREEN.
+- Limits: this is not a full PTD implementation. The default vertical residual is
+  permissive, points outside the TIN hull are not ground, and no FEMIC integration is
+  included.
+
+### P13.2 Real LidarBC tile validation
+
+- Acquired the 415,068-point LidarBC 2025 tile
+  `bc_092g024_4_3_1_xyes_8_utm10_20250826_20250826.laz` under OGL-BC. The LAZ stays in
+  `runtime/p13/` and is not tracked.
+- Replaced the initial TIN-facet-slope gate with a point-to-triangle-vertex angle gate after
+  the first validation pass showed that the facet gate over-labelled low vegetation.
+- Strict setting (`cell_size_m=1`, `max_angle_deg=15`, `max_distance_m=0.5`): class-2
+  recall 0.9998, class-2 HAG p99 0.021 m, 376,587 predicted ground points (90.73%),
+  67.6 s.
+- Class-1 (unclassified) is not a negative label; class-7 (noise) is not a negative label.
+  About 80% of class-7 near-ground noise is labelled ground. Precision against class 2 is
+  therefore not a valid accuracy estimate.
+- Added `notes/reports/p13-als-ground-validation.md` and
+  `notes/reports/p13-als-ground-validation.json`.
+- Tests: 311 passed; total coverage 87.55 percent. Dashboard: GREEN.
+- Limits: one coastal/low-relief tile, no exhaustive ground truth, and near-ground noise is
+  still over-labelled. P13.3 low-point-cut/SOR preprocessing is the next gate. No FEMIC
+  integration or operational claim is included.
+
+### P13.3 Low-point-cut and SOR policy
+
+- Added `low_point_mask(height_above_ground, cut_m=0.15)` as the downstream segmentation
+  contract. It flags low points without changing the ground labels.
+- Ran `statistical_outlier_mask(k=10, multiplier=2.0)` before PTD on the 2025 P13.2 tile
+  and a 3,042,883-point 2016 tile.
+- SOR removed 3.98-4.09% of points, including 8.6% of class-7 noise but only 0.04-0.61% of
+  class-2 ground. Class-2 recall after SOR+PTD was 0.9999 on the 2025 tile and 0.9802 on
+  the 2016 tile.
+- SOR does not fix near-ground noise. On the 2025 tile, 86.75% of retained class-7 points
+  were still labelled ground. However, 99.84% of class-7 false ground is within 0.15 m HAG.
+- Added `notes/reports/p13-als-ground-sor.json` and extended the P13 validation report with
+  the SOR/low-point policy.
+- Tests: 318 passed; total coverage 87.84 percent. Dashboard: GREEN.
+- Limits: SOR is optional and loses a small amount of ground; the low-point flag is not a
+  ground label; no operational or FEMIC claim is included.
+
+### P13.4 FEMIC integration decision
+
+- Deferred FEMIC integration. The classifier remains opt-in in `fresh-urban-forest-lab`.
+- Reasons: two tiles from one coastal/low-relief map sheet, no exhaustive ground truth, and
+  near-ground class-7 noise remains in the ground class.
+- Reopen only with a checked reference patch, a second terrain type, a fuller PTD angle
+  test, and a stable versioned contract.
+- Updated the P13 report, note, and docs. No FEMIC code changed.
+- Close-out report: `notes/reports/p13-closeout.md`. P13 is complete.
+- Tests: 318 passed; total coverage 87.84 percent. Dashboard: GREEN.
+- Limits: this is a scope decision, not an accuracy claim. No tag or release is included.
 ### P11 integration and v0.3 release candidate
 
 - Added `integration.py`: unified lab report across dataset, scenario, metrics,

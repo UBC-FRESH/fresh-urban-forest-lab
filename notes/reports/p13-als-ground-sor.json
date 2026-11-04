@@ -1,0 +1,88 @@
+{
+  "schema_version": "fresh-urban-forest.ground-sor.v1",
+  "date": "2026-11-04",
+  "method": {
+    "sor": {"k": 10, "multiplier": 2.0},
+    "ptd": {"cell_size_m": 1.0, "max_angle_deg": 15.0, "max_distance_m": 0.5, "max_iterations": 8},
+    "low_point_cut_m": 0.15
+  },
+  "tiles": [
+    {
+      "filename": "bc_092g024_4_3_1_xyes_8_utm10_20250826_20250826.laz",
+      "acquisition": "2025-08-26",
+      "crs": "EPSG:3157",
+      "points": 415068,
+      "class_counts": {"1_unclassified": 133558, "2_ground": 89760, "7_noise": 191750},
+      "sor": {
+        "removed": 16526,
+        "removed_fraction": 0.039815,
+        "removed_by_class": {"1_unclassified": 89, "2_ground": 33, "7_noise": 16404},
+        "kept_by_class": {"1_unclassified": 133469, "2_ground": 89727, "7_noise": 175346},
+        "elapsed_seconds": 0.197
+      },
+      "ptd_after_sor": {
+        "predicted_ground": 374711,
+        "predicted_fraction_of_kept": 0.940205,
+        "class_2_recall": 0.999866,
+        "class_2_precision_not_a_valid_negative_set": 0.239425,
+        "predicted_ground_by_class": {
+          "1_unclassified": {"points": 133469, "predicted_ground": 132890, "fraction": 0.995662},
+          "2_ground": {"points": 89727, "predicted_ground": 89715, "fraction": 0.999866},
+          "7_noise": {"points": 175346, "predicted_ground": 152106, "fraction": 0.867462}
+        },
+        "elapsed_seconds": 65.797
+      },
+      "false_ground_hag": {
+        "class_7_false_ground": {
+          "n": 152106,
+          "p50": 0.0,
+          "p90": 0.0289,
+          "p95": 0.0413,
+          "p99": 0.0723,
+          "max": 52.4409,
+          "fraction_lt_0_15_m": 0.998442,
+          "fraction_lt_0_5_m": 0.998646
+        },
+        "class_2_ground": {
+          "n": 89715,
+          "p50": 0.0,
+          "p90": 0.0033,
+          "p95": 0.0094,
+          "p99": 0.0217,
+          "max": 0.1047
+        }
+      }
+    },
+    {
+      "filename": "bc_092g024_4_3_2_xyes_8_utm10_20170714.laz",
+      "acquisition": "2017-07-14",
+      "crs": "EPSG:3157",
+      "points": 3042883,
+      "class_counts": {"1_unclassified": 2890116, "2_ground": 152767},
+      "sor": {
+        "removed": 124566,
+        "removed_fraction": 0.040937,
+        "removed_by_class": {"1_unclassified": 123639, "2_ground": 927},
+        "kept_by_class": {"1_unclassified": 2766477, "2_ground": 151840},
+        "elapsed_seconds": 1.414
+      },
+      "ptd_after_sor": {
+        "predicted_ground": 2611483,
+        "predicted_fraction_of_kept": 0.894859,
+        "class_2_recall": 0.980183,
+        "class_2_precision_not_a_valid_negative_set": 0.056991,
+        "predicted_ground_by_class": {
+          "1_unclassified": {"points": 2766477, "predicted_ground": 2462652, "fraction": 0.890176},
+          "2_ground": {"points": 151840, "predicted_ground": 148831, "fraction": 0.980183}
+        },
+        "elapsed_seconds": 68.629
+      }
+    }
+  ],
+  "policy": {
+    "sor": "Use before PTD when high-noise removal matters; report the small class-2 ground loss.",
+    "low_point_cut": "Use low_point_mask(HAG, cut_m=0.15) before tree segmentation or QSM. It does not change ground labels.",
+    "claim": "The ground labels are not noise-free; the low-point flag is the downstream contract.",
+    "operational": false
+  }
+}

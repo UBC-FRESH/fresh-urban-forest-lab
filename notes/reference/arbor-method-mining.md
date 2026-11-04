@@ -73,9 +73,9 @@ on Arbor's code.
 
 | ID | Candidate | Arbor source | What it does | Why it matters here | Complexity | Status |
 | --- | --- | --- | --- | --- | --- | --- |
-| G1 | Progressive TIN densification (PTD) | `src/segment/segment_ground_api.cpp`, `src/vendor/ptd/PTD.cpp`, book ch. 4 | Sparse ground seed, iterative TIN densification under angle/distance thresholds, ground class and HAG | Directly relevant to unclassified or inconsistently classified LidarBC/ALS tiles | Medium-high | Future ALS lane |
-| G2 | TIN interpolation and 1-NN fallback | `src/segment/segment_ground_api.cpp` | Interpolate ground elevation on the TIN; nearest ground point outside the TIN | Robust HAG at tile edges and sparse coverage | Medium | Future ALS lane |
-| G3 | Ground QA and low-outlier handling | Book ch. 4 | Record low-point cut, ground class, and HAG assumptions | Makes ground classification auditable | Low | Future ALS lane |
+| G1 | Progressive TIN densification (PTD) | `src/segment/segment_ground_api.cpp`, `src/vendor/ptd/PTD.cpp`, book ch. 4 | Sparse ground seed, iterative TIN densification under angle/distance thresholds, ground class and HAG | Directly relevant to unclassified or inconsistently classified LidarBC/ALS tiles | Medium-high | Implemented as simplified `classify_ground_ptd` in P13.1 |
+| G2 | TIN interpolation and 1-NN fallback | `src/segment/segment_ground_api.cpp` | Interpolate ground elevation on the TIN; nearest ground point outside the TIN | Robust HAG at tile edges and sparse coverage | Medium | Implemented as part of P13.1; real-tile edge validation pending |
+| G3 | Ground QA and low-outlier handling | Book ch. 4 | Record low-point cut, ground class, and HAG assumptions | Makes ground classification auditable | Low | Seed/iteration counters and `low_point_mask(0.15)` implemented |
 
 Underlying method to cite for PTD: Axelsson (2000), adaptive TIN models. Arbor's vendored
 PTD implementation is MIT, but the planned implementation is a new Python version.
@@ -157,11 +157,54 @@ They are opt-in utilities. They are not wired into the default CHM/ITD pipeline.
 Each function carries a `Method provenance` docstring section naming Arbor 1.1.5, the
 source file or book chapter, the GPL-3.0 source licence, and the clean-room statement.
 
+## ALS ground classification (P13.1-P13.2)
+
+`classify_ground_ptd` is the first ALS-specific function. It seeds a TIN from the lowest
+point in each grid cell, then progressively adds points whose vertical residual from the
+TIN is within `max_distance_m` and whose point-to-triangle-vertex angle is within
+`max_angle_deg`. The final TIN provides `ground_elevation` and `height_above_ground`.
+
+This is a **simplified, PTD-inspired** implementation, not a line-by-line port:
+
+- the angle test uses the maximum point-to-triangle-vertex angle measured from the triangle
+  plane, not the full multi-pass PTD angle logic;
+- the default vertical residual is permissive (2 m);
+- points outside the TIN hull are not classified as ground; their HAG uses the nearest
+  support point;
+- the TIN support is thinned to 200,000 points for large tiles;
+- a degenerate TIN returns the seed-only result with a warning.
+
+The synthetic fixtures cover a flat plane, a gentle slope, a high outlier, a collinear
+degenerate seed set, an empty cloud, and invalid parameters.
+
+P13.2 validates a 415,068-point LidarBC 2025 tile
+(`bc_092g024_4_3_1_xyes_8_utm10_20250826_20250826.laz`, EPSG:3157, OGL-BC). At the strict
+setting, class-2 recall is 0.9998 and class-2 HAG p99 is 0.021 m. The tile's class 1 is
+unclassified and class 7 is noise, so neither is a valid negative set. About 80% of class-7
+near-ground noise is labelled ground; the high-noise tail is not. Precision against class 2
+is therefore not an accuracy estimate. See `notes/reports/p13-als-ground-validation.md`.
+
+P13.3 tested SOR and the low-point policy on the 2025 tile and a 3,042,883-point 2016 tile.
+SOR (`k=10`, `multiplier=2`) removes 3.98-4.09% of points, including 8.6% of class-7 noise
+but only 0.04-0.61% of class-2 ground. It does not fix near-ground noise: after SOR, 86.75%
+of retained class-7 points are still labelled ground. However, 99.84% of class-7 false
+ground is within 0.15 m HAG. The policy is therefore:
+
+1. use `statistical_outlier_mask` before PTD when high-noise removal matters;
+2. run `classify_ground_ptd`;
+3. use `low_point_mask(height_above_ground, cut_m=0.15)` before tree segmentation or QSM.
+
+The low-point flag is a downstream contract, not a ground label. The ground labels are not
+noise-free.
+
+**Do not use this as an operational ground classifier yet.** P13.4 defers FEMIC
+integration. The classifier stays opt-in in `fresh-urban-forest-lab` until there is a
+checked reference patch, a second terrain type, and a fuller PTD angle test.
+
 ## Next slices
 
-1. **ALS ground classification**: PTD-inspired ground and HAG in `femic` or the
-   preprocessing path, with ground QA and a low-point cut. This is the most relevant
-   Arbor-derived capability for LidarBC/ALS.
+1. **Reference patch and second terrain type**: resolve class 1/7 and test a steep or
+   interior forest tile before reopening FEMIC integration.
 2. **CHM/ITD post-processing**: buffer flags, small-tree flags, and over-segmentation
    merging.
 3. **MLS/TLS semantic and instance segmentation**: a future `fresh-pointcloud` package,

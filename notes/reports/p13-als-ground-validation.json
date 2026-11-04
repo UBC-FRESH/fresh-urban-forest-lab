@@ -1,0 +1,91 @@
+{
+  "schema_version": "fresh-urban-forest.ground-validation.v1",
+  "date": "2026-11-04",
+  "tile": {
+    "source": "LidarBC open point cloud",
+    "licence": "OGL-BC",
+    "filename": "bc_092g024_4_3_1_xyes_8_utm10_20250826_20250826.laz",
+    "url": "https://nrs.objectstore.gov.bc.ca/gdwuts/092/092g/2025/pointcloud/bc_092g024_4_3_1_xyes_8_utm10_20250826_20250826.laz",
+    "acquisition": "2025-08-26",
+    "crs": "EPSG:3157",
+    "bounds": {
+      "min": [479854.02, 5458064.28, -0.79],
+      "max": [479998.44, 5458635.92, 63.44]
+    },
+    "points": 415068,
+    "class_counts": {
+      "1_unclassified": 133558,
+      "2_ground": 89760,
+      "7_noise": 191750
+    }
+  },
+  "runs": [
+    {
+      "name": "default",
+      "parameters": {
+        "cell_size_m": 1.0,
+        "max_angle_deg": 30.0,
+        "max_distance_m": 2.0,
+        "max_iterations": 8
+      },
+      "predicted_ground": 377058,
+      "predicted_ground_fraction": 0.908425,
+      "seed_count": 45971,
+      "iterations": 8,
+      "warning": null,
+      "elapsed_seconds": 65.897,
+      "confusion_against_class_2": {
+        "tp": 89748,
+        "fp": 287310,
+        "fn": 12,
+        "tn": 37998
+      },
+      "class_2_recall": 0.999866,
+      "class_2_precision_not_a_valid_negative_set": 0.238022,
+      "hag_m": {
+        "all": {"p50": 0.0, "p75": 0.0206, "p90": 0.0846, "p95": 32.2117, "p99": 44.266, "max": 61.5277},
+        "predicted_ground": {"p50": 0.0, "p75": 0.0126, "p90": 0.0331, "p95": 0.048, "p99": 0.0845, "max": 55.3749},
+        "class_2": {"p50": 0.0, "p75": 0.0, "p90": 0.0032, "p95": 0.0092, "p99": 0.021, "max": 0.1051}
+      }
+    },
+    {
+      "name": "strict",
+      "parameters": {
+        "cell_size_m": 1.0,
+        "max_angle_deg": 15.0,
+        "max_distance_m": 0.5,
+        "max_iterations": 8
+      },
+      "predicted_ground": 376587,
+      "predicted_ground_fraction": 0.90729,
+      "seed_count": 45971,
+      "iterations": 8,
+      "warning": null,
+      "elapsed_seconds": 67.622,
+      "confusion_against_class_2": {
+        "tp": 89744,
+        "fp": 286843,
+        "fn": 16,
+        "tn": 38465
+      },
+      "class_2_recall": 0.999822,
+      "class_2_precision_not_a_valid_negative_set": 0.238309,
+      "predicted_ground_by_class": {
+        "1_unclassified": {"points": 133558, "predicted_ground": 132883, "fraction": 0.994946},
+        "2_ground": {"points": 89760, "predicted_ground": 89744, "fraction": 0.999822},
+        "7_noise": {"points": 191750, "predicted_ground": 153960, "fraction": 0.80292}
+      },
+      "hag_m": {
+        "all": {"p50": 0.0, "p75": 0.0206, "p90": 0.0855, "p95": 32.2875, "p99": 44.2961, "max": 61.5205},
+        "predicted_ground": {"p50": 0.0, "p75": 0.0126, "p90": 0.0328, "p95": 0.0475, "p99": 0.0829, "max": 55.4352},
+        "class_2": {"p50": 0.0, "p75": 0.0, "p90": 0.0032, "p95": 0.0094, "p99": 0.0212, "max": 0.1049}
+      }
+    }
+  ],
+  "conclusion": {
+    "supported": "Class-2 recall is high on this tile; class-2 HAG is tight.",
+    "not_supported": "Precision, specificity, or a general accuracy claim; the reference classes are not exhaustive negatives.",
+    "observed_weakness": "Near-ground class-7 noise and low vegetation are over-labelled as ground.",
+    "next": "Add a low-point cut and SOR pre-pass, then validate across multiple tiles and a checked reference patch."
+  }
+}
