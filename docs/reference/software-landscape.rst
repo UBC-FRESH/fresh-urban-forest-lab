@@ -15,6 +15,10 @@ What we borrowed
   naming every input variable.
 - ForestTools, lidR, PyCrown, itcSegment: local maxima plus watershed crown segmentation.
   Reimplemented from the published method with ``scipy.ndimage``.
+- Arbor: barycentric voxel decimation, statistical outlier removal, sparse voxel
+  connected components, and kNN anisotropy. Reimplemented from the Arbor book and
+  published method descriptions; no GPL code was copied. See
+  :doc:`arbor-method-mining`.
 - Treepedia: street-level Green View Index as a future layer. Not implemented because it
   needs proprietary Street View imagery.
 - UBC-FRESH systems: FEMIC materialization, FHOPS edits and scene, WS4 manifests, and
@@ -24,7 +28,7 @@ What we refused to copy
 -----------------------
 
 - AGPL code from OpenTreeMap.
-- GPL code from ForestTools, lidR, PyCrown, or itcSegment.
+- GPL code from ForestTools, lidR, PyCrown, itcSegment, or Arbor.
 - A hard runtime dependency on femic, nemora, fhops, ws4, fresh-hectaresbc, or
   fresh-fvsbc.
 - A proprietary basemap or street-view service.
