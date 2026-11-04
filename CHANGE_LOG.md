@@ -458,3 +458,20 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Corrected stale v0.2.0 and release-candidate status in the roadmap, project status, notes,
   and live docs.
 - Moved tag `v0.3.0` to the final release commit and refreshed the GitHub release notes.
+
+### P16 Optional FEMIC ground-adapter implementation
+
+- Added `fresh_urban_forest.ground_adapter` with `GroundAdapterParameters`,
+  `GroundAdapterParameters.sha256`, `GroundBundleResult`, and `write_ground_bundle`.
+- The writer copies the input LAZ and adds `is_ground`, `hag`, `is_low`, and `ref_class`
+  dimensions, then writes a versioned `manifest.json` and `qa.json`.
+- Added the opt-in `ground-adapter` CLI command. It is not part of `build`, `serve`, or the
+  default dataset path.
+- Added synthetic-LAZ contract tests for the nominal bundle, extra dimensions, hashes,
+  schemas, missing CRS/vertical datum warnings, overwrite refusal, empty input, and the CLI.
+- Tests: 337 passed; total coverage 87.68 percent. Dashboard: GREEN.
+- Real-tile smoke: Golden-area tile, 113,775 points, 82,530 predicted ground, 5.8 s;
+  local only, not a CI network job.
+- Close-out report: `notes/reports/p16-closeout.md`. P16 is complete.
+- Limits: the adapter is not a FEMIC core import; no real-tile smoke test is in CI; the
+  classifier remains opt-in and does not change default FEMIC products.

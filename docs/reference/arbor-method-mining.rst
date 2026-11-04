@@ -85,17 +85,22 @@ confirms class 2 is the lowest continuous surface; class 1 mixes unclassified gr
 above-surface vegetation. Patch metrics: class-2 recall 0.9507, high-confidence false-ground
 3.14%, class-2 HAG p99 0.0434 m.
 
-The optional FEMIC adapter design is a sidecar contract, not a core import: `ground.laz`,
+The optional FEMIC adapter is a sidecar contract, not a core import: `ground.laz`,
 `manifest.json`, and `qa.json`, with versioned schemas and no default product change. The
 design is in `notes/design/femic-ground-adapter.md`; ADR 0007 records the decision. The
-adapter is designed but not implemented.
+writer and `ground-adapter` CLI are implemented in `fresh_urban_forest.ground_adapter`.
+
+The bundle adds `is_ground`, `hag`, `is_low`, and `ref_class` to a copy of the input LAZ.
+The manifest records input/output hashes, CRS, vertical datum, parameters, provenance, and
+warnings. The QA file records counts, HAG percentiles, class summaries, and the explicit
+`ground_truth_used: false` note.
 
 What is next
 ------------
 
-The next step is an optional FEMIC adapter implementation with a contract test, or CHM/ITD
-post-processing (buffer flags, small-tree flags, over-segmentation merging). QSM and QSF
-work belongs in a dedicated point-cloud package, not this app's core.
+The next step is a real-tile smoke test of the optional adapter and a CHM/ITD
+post-processing pass (buffer flags, small-tree flags, over-segmentation merging). QSM and
+QSF work belongs in a dedicated point-cloud package, not this app's core.
 
 Citations
 ---------

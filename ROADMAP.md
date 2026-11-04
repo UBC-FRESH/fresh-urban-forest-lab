@@ -21,6 +21,7 @@ This roadmap is the plan of record and the issue tracker map for FRESH Urban For
 | P13 ALS ground classification and height above ground | #70 | `feature/p13-als-ground` | complete |
 | P14 Ground reference and second terrain validation | #89 | `feature/p14-ground-reference` | complete |
 | P15 Manual ground reference and optional FEMIC adapter design | #95 | `feature/p15-ground-adapter` | complete |
+| P16 Optional FEMIC ground-adapter implementation | #103 | `feature/p16-ground-adapter` | complete |
 
 ## Lifecycle Map
 
@@ -582,6 +583,38 @@ Phase 15 verification:
 - `python scripts/dashboard.py`
 - `python scripts/check_workflow.py`
 
+## Phase 16: Optional FEMIC ground-adapter implementation
+
+Parent issue: #103
+Branch: `feature/p16-ground-adapter`
+Status: complete
+
+Goal: implement the optional sidecar ground-adapter designed in P15, with contract tests,
+CLI, docs, and no default FEMIC product change.
+
+Plan: `notes/design/femic-ground-adapter.md`.
+
+- [x] P16.1 Sidecar ground-bundle writer, CLI, tests, and docs (#104)
+  - [x] `GroundAdapterParameters`, `GroundAdapterParameters.sha256`, `GroundBundleResult`
+  - [x] `write_ground_bundle` with extra dimensions, hashes, manifest, and QA
+  - [x] `ground-adapter` CLI command
+  - [x] Synthetic-LAZ contract tests and failure-mode tests
+  - [x] API and public docs
+
+Acceptance criteria:
+
+- The writer produces `ground.laz`, `manifest.json`, and `qa.json`.
+- The manifest and QA files validate their versioned schemas.
+- Hashes, parameters, CRS, vertical datum, warnings, and provenance are recorded.
+- The CLI is opt-in and does not change default paths.
+- Contract tests cover the nominal path, missing metadata, overwrite, and empty input.
+- The dashboard is green.
+
+Phase 16 verification:
+
+- `python scripts/dashboard.py`
+- `python scripts/check_workflow.py`
+
 ## Detailed Next Steps Notes
 
 1. The repository was created from `UBC-FRESH/ubc-fresh-dev-workflow` on 2026-11-03. The seed's dashboard, validator, docs, and agent contract are retained.
@@ -594,3 +627,4 @@ Phase 15 verification:
 8. P13 (#70) adds `classify_ground_ptd` and `GroundClassification` for the ALS ground lane. P13.4 defers FEMIC integration until a checked reference patch, a second terrain type, and a fuller PTD angle test exist.
 9. P14 (#89) adds a class-2 reference surface and steep-tile validation. Class-2 recall is 0.9634 and high-confidence false-ground is 4.65% on the steep tile; the coastal tile is 0.9999 and 3.35%. An optional FEMIC adapter prototype is approved only with a manual reference patch and versioned contract.
 10. P15 (#95) adds a manually checked 20 m Golden-area patch and accepts an optional sidecar FEMIC adapter design. The patch shows class-2 recall 0.9507 and high-confidence false-ground 3.14%. The adapter is not implemented; the design defines `ground.laz`, `manifest.json`, and `qa.json`, no hard FEMIC dependency, and no default product change.
+11. P16 (#103) implements the optional sidecar ground adapter: `write_ground_bundle`, the `ground-adapter` CLI, extra dimensions, manifest/QA schemas, and synthetic contract tests. It remains opt-in and does not change default FEMIC products.

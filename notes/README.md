@@ -39,6 +39,8 @@ Keep private material out of this directory.
 - `design/femic-ground-adapter.md`: optional sidecar adapter contract, bundle schema, failure modes, and test strategy.
 - `adr/0007-optional-femic-ground-adapter.md`: accept the sidecar contract; no default FEMIC change.
 - `reports/p15-closeout.md`: P15 close-out, acceptance evidence, and the P16 recommendation.
+- `reports/p16-ground-adapter.md`: P16 implementation, contract tests, and the real-tile smoke result.
+- `reports/p16-closeout.md`: P16 close-out and the P17 recommendation.
 - `releases/v0.2.0.md`: superseded draft; never tagged.
 - `reference/data-sources.md`: public UBC, Vancouver, and Metro Vancouver sources, with
   coverage, licences, and traps.
