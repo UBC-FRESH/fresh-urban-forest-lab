@@ -5,7 +5,7 @@ The Vancouver pilot applies the lab to the full City of Vancouver using only pub
 downloadable data. It is the first city-scale test of the same canopy, carbon, and 3D
 stack that the UBC demo uses.
 
-Status: active P21 work. The plan of record is
+Status: active P30 work. The plan of record is
 ``notes/design/vancouver-city-pilot.md``; the task state is in ``ROADMAP.md``.
 
 Data
@@ -34,7 +34,7 @@ Data
      - Open Government Licence – Canada
 
 The full raw and processed products stay outside git. Source counts, byte sizes, and
-SHA-256 hashes are in ``notes/reports/p21-source-lock.json``. The working storage budget
+SHA-256 hashes are in ``notes/reports/p30-source-lock.json``. The working storage budget
 is 250 GB on ``/srv/shared-data``.
 
 Processing

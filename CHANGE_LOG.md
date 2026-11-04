@@ -536,9 +536,23 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Limits: synthetic audit patch, one demo dataset, and no orthophoto/field crown labels.
   The anchor merge is a safety filter, not a validated instance solver.
 
-### P21 full Vancouver city pilot
+### P21 Ground-adapter second-tile smoke test
 
-- Activated P21 (#105) and its six tasks (#106–#111) for a full City of Vancouver public-data
+- Ran `write_ground_bundle` on the 2025 coastal LidarBC tile
+  `bc_092g024_4_3_1_xyes_8_utm10_20250826_20250826.laz` with EPSG:3157 and CGVD2013.
+- Coastal bundle: 415,068 points, 374,711 predicted ground, 68.8 s, no warnings.
+- Golden comparison: 113,775 points, 82,530 predicted ground, 5.8 s, no warnings.
+- Both bundles use `femic.ground-bundle.v1` and `femic.ground-qa.v1`, with hashes, explicit
+  CRS/vertical datum, and the four extra dimensions.
+- Added `notes/reports/p21-ground-smoke.md` and updated the public adapter section.
+- Tests: 353 passed; total coverage 87.82 percent. Dashboard: GREEN.
+- Close-out report: `notes/reports/p21-closeout.md`. P21 is complete.
+- Limits: two tiles, no field/manual point labels, and no CI network job for real-tile
+  smoke.
+
+### P30 full Vancouver city pilot
+
+- Activated P30 (#105) and its six tasks (#106–#111) for a full City of Vancouver public-data
   pilot.
 - Locked the source set: City 2022 LiDAR (181 tiles, ~49 points/m²), 184,152 public trees,
   the 22 local-area polygons, building footprints, and climate normals.
@@ -548,18 +562,18 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
   and storage plan.
 - Dashboard: GREEN. Tests: 331 passed.
 
-### P21.1 source lock
+### P30.1 source lock
 
 - Locked the Vancouver AOI at 118.76 km² from the union of 22 local-area polygons.
 - Downloaded and hashed 184,152 public trees, the local-area polygons, and 154,124 building
   footprints. The 2022 City LiDAR manifest contains all 181 tiles.
 - Climate normal locked at 1,098.8 mm/yr (Vancouver Harbour CS, 1981–2010).
-- Source evidence: `notes/reports/p21-source-lock.json`.
+- Source evidence: `notes/reports/p30-source-lock.json`.
 - Started the resumable browser-assisted LiDAR download into
   `data/raw/city_lidar/2022/`.
 - Dashboard: GREEN.
 
-### P21 city pipeline
+### P30 city pipeline
 
 - Added `city.py` for 1 m classified-LAS rasterisation and city mosaic assembly.
 - Added `city_inventory.py`, `city_metrics.py`, and `city_pack.py` for the full inventory,
@@ -572,7 +586,7 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
   portal text; the rasteriser uses the ASPRS classes.
 - Dashboard: GREEN.
 
-### P21 city metrics UI, docs, and shade
+### P30 city metrics UI, docs, and shade
 
 - Added the city metrics endpoint and City tab with city KPIs, local-area ranking, method
   labels, and caveats.
@@ -583,7 +597,7 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
   and the optional city-metrics endpoint.
 - Dashboard: GREEN.
 
-### P21 full Vancouver city pilot close-out
+### P30 full Vancouver city pilot close-out
 
 - Built the full city mosaic: 181/181 tiles, 8,721,285,369 points, 99.96% AOI coverage.
 - Enriched 184,151 public trees; 162,497 height pairs, bias -0.397 m, RMSE 4.292 m.
@@ -593,5 +607,5 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
   a sanity check, not calibration.
 - City tab and city-scale 3D scene pass browser smoke with no console or page errors.
 - Storage: 165 GB raw LiDAR, 1.8 GB processed, 7.7 TB free; no dataset on the root disk.
-- Close-out report: `notes/reports/p21-vancouver-city.md`.
+- Close-out report: `notes/reports/p30-vancouver-city.md`.
 - Dashboard: GREEN.

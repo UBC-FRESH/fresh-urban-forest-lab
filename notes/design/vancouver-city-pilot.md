@@ -1,9 +1,9 @@
 # Vancouver full-city pilot
 
-Status: active P21 plan, 2026-11-04.
+Status: active P30 plan, 2026-11-04.
 
 Parent issue: #105
-Branch: `feature/p21-vancouver-city`
+Branch: `feature/p30-vancouver-city`
 
 ## Purpose
 
@@ -30,12 +30,12 @@ stormwater audit.
 | Public trees | City of Vancouver `public-trees` | 184,152 records, modified 2026-11-02 | OGL – Vancouver | EPSG:4326 | `data/raw/vancouver/public_trees.csv` |
 | Local areas | City of Vancouver `local-area-boundary` | 22 polygons | OGL – Vancouver | EPSG:4326 | `data/raw/vancouver/local_area_boundary.geojson` |
 | Buildings | City of Vancouver `building-footprints-2015` | 154,124 footprints | OGL – Vancouver | EPSG:4326 | `data/raw/vancouver/building_footprints.geojson` |
-| Rainfall normals | Environment Canada climate normals, Vancouver Harbour CS | 1981–2010 normal, 1,098.8 mm/yr | Open Government Licence – Canada | n/a | Environment Canada climate normals (recorded in `notes/reports/p21-source-lock.json`) |
+| Rainfall normals | Environment Canada climate normals, Vancouver Harbour CS | 1981–2010 normal, 1,098.8 mm/yr | Open Government Licence – Canada | n/a | Environment Canada climate normals (recorded in `notes/reports/p30-source-lock.json`) |
 | Cross-check LiDAR | Metro Vancouver 2022 classified LAS, 16.5 GB | 2022, QL3, ground/water classes | OGL – Metro Vancouver | EPSG:3157, CGVD28GVRD2018 | optional `data/raw/metro_van_2022/` |
 
 The City LiDAR tile manifest is `data/raw/tiles/vancouver_2022_city.json` and contains all
 181 tiles. Source counts, byte sizes, and SHA-256 hashes are in
-`notes/reports/p21-source-lock.json`. The webtransfer host blocks plain HTTP clients; use the headed Chromium helper in
+`notes/reports/p30-source-lock.json`. The webtransfer host blocks plain HTTP clients; use the headed Chromium helper in
 `scripts/browser_download_tiles.py` under `xvfb-run`.
 
 The union of the 22 local areas is 118.76 km² in EPSG:3157. LiDAR coverage is larger
@@ -158,12 +158,12 @@ local-area totals must reconcile within rounding.
 
 | Task | Issue | Acceptance |
 | --- | --- | --- |
-| P21.1 Source lock, AOI, storage budget, manifest | #106 | 181-tile manifest, 118.76 km² AOI, licence table, free-space guard |
-| P21.2 Full-city LiDAR mosaic | #107 | 1 m DEM/DSM/CHM, full AOI, seam/nodata QA |
-| P21.3 Full inventory | #108 | 184,152 rows, one unmapped counted, evidence flags, height comparison |
-| P21.4 City metrics | #109 | City + 22 local-area metrics with method/evidence fields |
-| P21.5 3D city scene | #110 | City mode, fit-to-city, metrics panel, no browser errors |
-| P21.6 Validation/docs/close-out | #111 | Dashboard green, docs, screenshots, reproducibility report |
+| P30.1 Source lock, AOI, storage budget, manifest | #106 | 181-tile manifest, 118.76 km² AOI, licence table, free-space guard |
+| P30.2 Full-city LiDAR mosaic | #107 | 1 m DEM/DSM/CHM, full AOI, seam/nodata QA |
+| P30.3 Full inventory | #108 | 184,152 rows, one unmapped counted, evidence flags, height comparison |
+| P30.4 City metrics | #109 | City + 22 local-area metrics with method/evidence fields |
+| P30.5 3D city scene | #110 | City mode, fit-to-city, metrics panel, no browser errors |
+| P30.6 Validation/docs/close-out | #111 | Dashboard green, docs, screenshots, reproducibility report |
 
 ## Verification commands
 

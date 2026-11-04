@@ -128,15 +128,15 @@ The Metro Vancouver 2022 classified product is a separate regional source.
 - Strong cross-check for the City product because vegetation is explicitly classified.
 - Trap: large download; plan a tile-level catalog and a local cache, not a single fetch.
 
-## Full-city 2022 pilot (P21)
+## Full-city 2022 pilot (P30)
 
-- The P21 pilot uses the City 2022 LiDAR, 184,152 public-tree records, the 22 local-area
+- The P30 pilot uses the City 2022 LiDAR, 184,152 public-tree records, the 22 local-area
   polygons, and 154,124 building footprints. The union AOI is 118.76 km² in EPSG:3157.
 - The LAS uses ASPRS classes: 3 low vegetation, 4 medium vegetation, 5 high vegetation,
   6 building, 9 water. The portal text says class 5 is water; the point counts and
   spatial pattern show that is wrong. The rasteriser uses class 9 for water and 3/4/5 for
   vegetation.
-- Source hashes are in `notes/reports/p21-source-lock.json`. The raw and processed city
+- Source hashes are in `notes/reports/p30-source-lock.json`. The raw and processed city
   products stay under `/srv/shared-data`; the working budget is 250 GB.
 - The City download host blocks plain HTTP clients. The headed Chromium helper is the
   supported path.
