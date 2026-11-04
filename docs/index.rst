@@ -29,6 +29,7 @@ act, and cite it in their reports. Start with the repository's ``AGENTS.md`` and
    reference/shade-and-species
    reference/optimization-and-pareto
    reference/off-inventory-canopy
+   reference/bird-habitat-and-demography
    reference/methods
    reference/arbor-method-mining
    reference/change-products

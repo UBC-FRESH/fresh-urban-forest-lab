@@ -404,12 +404,12 @@ Goal: connect 3D canopy structure and management scenarios to bird habitat, rela
 Plan: `notes/design/urban-canopy-program-plan.md`.
 Evidence: `notes/reference/literature-review-shade-optimization-biodiversity.md`.
 
-- [ ] P10.1 Bird data and evidence tier
-- [ ] P10.2 3D habitat metrics
-- [ ] P10.3 Habitat and relative-abundance model
-- [ ] P10.4 Demographic layer and lambda
-- [ ] P10.5 Scenario UI and reporting
-- [ ] P10.6 Validation and expert review
+- [x] P10.1 Bird data and evidence tier
+- [x] P10.2 3D habitat metrics
+- [x] P10.3 Habitat and relative-abundance model
+- [x] P10.4 Demographic layer and lambda
+- [x] P10.5 Scenario UI and reporting
+- [x] P10.6 Validation and expert review
 
 Acceptance criteria:
 

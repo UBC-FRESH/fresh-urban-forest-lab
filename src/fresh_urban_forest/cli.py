@@ -29,8 +29,10 @@ from fresh_urban_forest.catalog import DatasetSource, load_catalog
 from fresh_urban_forest.change import canopy_change
 from fresh_urban_forest.change_product import build_change_product
 from fresh_urban_forest.dataset import build_dataset, dataset_summary, load_dataset
+from fresh_urban_forest.demography import project_demography
 from fresh_urban_forest.field_analysis import analyze_field_packet, write_field_analysis
 from fresh_urban_forest.field_packet import build_field_packet
+from fresh_urban_forest.habitat import GUILDS, guild_habitat, habitat_metrics, write_bird_report
 from fresh_urban_forest.inventory import (
     load_boundary,
     load_buildings,
@@ -42,7 +44,7 @@ from fresh_urban_forest.itd import detect_trees, detected_trees_geojson
 from fresh_urban_forest.lidar import PointCloudSummary, canopies_from_pair, summarize_point_cloud
 from fresh_urban_forest.lidarbc import discover_lidarbc_tiles
 from fresh_urban_forest.materialize import materialize_sources, read_materialization_manifest
-from fresh_urban_forest.models import TerrainGrid, UrbanForestDataset
+from fresh_urban_forest.models import TerrainGrid, UrbanForestDataset, scenario_from_dict
 from fresh_urban_forest.off_inventory import (
     detect_off_inventory,
     value_of_information,
@@ -188,6 +190,8 @@ SURROGATE_SAMPLES_OPTION = typer.Option(
     0, "--surrogate-samples", help="Fit a screening surrogate on this many samples."
 )
 ARCHIVE_OPTION = typer.Option(..., "--archive", help="Optimization result JSON.")
+SCENARIO_FILE_OPTION = typer.Option(None, "--scenario", help="Optional scenario JSON.")
+PROJECT_YEAR_OPTION = typer.Option(None, "--year", help="Optional projection year.")
 GRID_SIZE_OPTION = typer.Option(700, "--grid-size", help="Detection grid maximum rows/columns.")
 MAX_CANDIDATES_OPTION = typer.Option(
     500, "--max-candidates", help="Maximum off-inventory candidates."
@@ -722,6 +726,55 @@ def tune_detection_command(
             f"detected={row.detected_count} matched={row.matched_count} "
             f"precision={row.precision} recall={row.recall} f1={row.f1}"
         )
+
+
+@app.command("birds")
+def birds_command(
+    dataset: Path = DATASET_OPTION,
+    out: Path = OUT_OPTION,
+    scenario: Path | None = SCENARIO_FILE_OPTION,
+    year: int | None = PROJECT_YEAR_OPTION,
+) -> None:
+    """Write a bird habitat and prior-demography report.
+
+    Parameters
+    ----------
+    dataset : Path
+        Dataset directory.
+    out : Path
+        Output JSON path.
+    scenario : Path or None
+        Optional scenario JSON.
+    year : int or None
+        Optional projection year.
+    """
+    loaded = load_dataset(dataset)
+    trees = loaded.trees
+    target = 0
+    if scenario is not None:
+        parsed_scenario = scenario_from_dict(json.loads(scenario.read_text(encoding="utf-8")))
+        target = min(max(year or parsed_scenario.years, 0), parsed_scenario.years)
+        from fresh_urban_forest.growth import project_trees_to_year
+
+        trees = project_trees_to_year(loaded, parsed_scenario, target)
+    metrics = habitat_metrics(trees, loaded.terrain)
+    guilds = []
+    for guild in GUILDS:
+        habitat = guild_habitat(metrics, guild)
+        demography = project_demography(guild, habitat.suitability, years=25)
+        guilds.append({**habitat.to_dict(), "demography": demography.to_dict()})
+    payload = {
+        "metrics": metrics.to_dict(),
+        "guilds": guilds,
+        "year": target,
+        "evidence": metrics.evidence.to_dict(),
+        "caveat": (
+            "Relative abundance is a screening index, not a density. Demographic outputs "
+            "are prior-driven, not local survival estimates."
+        ),
+    }
+    path = write_bird_report(payload, out)
+    console.print(f"Bird report: {path}")
 
 
 @app.command("off-inventory")

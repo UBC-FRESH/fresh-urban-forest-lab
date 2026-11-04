@@ -6,6 +6,8 @@ const state = {
   scene: null,
   offInventory: null,
   offInventoryValue: null,
+  birds: null,
+  birdsLoading: false,
   treeById: new Map(),
   scenarios: [],
   scenarioId: "",
@@ -1183,6 +1185,9 @@ function switchView(view) {
       if (state.lightMap) state.lightMap.resize();
     }, 60);
   }
+  if (view === "birds") {
+    loadBirds();
+  }
   if (view === "optimize") {
     ensureOptimizeChart();
     window.setTimeout(() => {
@@ -1492,6 +1497,98 @@ function renderTreeLight(data) {
 function evidenceBadge(evidence) {
   if (!evidence || !evidence.tier) return "";
   return `<span class="evidence-badge">evidence <strong>${escapeHtml(evidence.tier)}</strong> · ${escapeHtml(evidence.method || "")}</span>`;
+}
+
+async function loadBirds() {
+  if (state.birdsLoading) return;
+  state.birdsLoading = true;
+  try {
+    const params = new URLSearchParams();
+    if (state.scenarioId) {
+      params.set("scenario_id", state.scenarioId);
+      params.set("year", String(state.previewYear || state.years));
+    }
+    const payload = await api(`api/birds${params.toString() ? `?${params}` : ""}`);
+    state.birds = payload;
+    renderBirds(payload);
+  } catch (error) {
+    $("birds-note").textContent = `Bird view unavailable: ${error.message}`;
+  } finally {
+    state.birdsLoading = false;
+  }
+}
+
+function renderBirds(payload) {
+  const metrics = payload.metrics || {};
+  $("birds-metrics").innerHTML = `
+    <div class="bird-metric-grid">
+      <div><span>Habitat score</span><strong>${formatNumber(Number(metrics.habitat_score || 0), 2)}</strong></div>
+      <div><span>P95 height</span><strong>${formatNumber(Number(metrics.p95_height_m || 0), 1)} m</strong></div>
+      <div><span>Foliage diversity</span><strong>${formatNumber(Number(metrics.foliage_height_diversity || 0), 2)}</strong></div>
+      <div><span>Layers</span><strong>${formatNumber(Number(metrics.layering_count || 0))}</strong></div>
+      <div><span>Gap fraction</span><strong>${formatNumber(Number(metrics.gap_fraction || 0) * 100, 0)}%</strong></div>
+      <div><span>Native share</span><strong>${formatNumber(Number(metrics.native_fraction || 0) * 100, 0)}%</strong></div>
+    </div>
+    ${evidenceBadge(payload.evidence || {})}`;
+  const guilds = payload.guilds || [];
+  $("birds-guilds").innerHTML = guilds
+    .map(
+      (item) => `<div class="guild-row">
+        <div class="guild-meta"><span>${escapeHtml(item.guild.label)}</span><code>${formatNumber(Number(item.relative_abundance_index || 0), 1)}</code></div>
+        <div class="bar-track"><div class="bar-fill" style="width:${Number(item.suitability || 0) * 100}%"></div></div>
+        <small>suitability ${formatNumber(Number(item.suitability || 0), 2)} · λ ${formatNumber(Number(item.demography?.lambda || 0), 2)}</small>
+      </div>`
+    )
+    .join("");
+  const select = $("birds-guild-select");
+  const current = select.value;
+  select.innerHTML = guilds
+    .map((item, index) => `<option value="${index}">${escapeHtml(item.guild.label)}</option>`)
+    .join("");
+  select.value = current && Number(current) < guilds.length ? current : "0";
+  select.onchange = () => renderBirdsGuild(guilds[Number(select.value) || 0]);
+  renderBirdsGuild(guilds[Number(select.value) || 0]);
+  $("birds-note").textContent = payload.caveat || "Relative abundance is a screening index, not a density.";
+}
+
+function renderBirdsGuild(item) {
+  if (!item) return;
+  const demo = item.demography || {};
+  const range = demo.prior_range || [0, 0];
+  $("birds-demography").innerHTML = `
+    <div class="bird-metric-grid">
+      <div><span>Lambda</span><strong>${formatNumber(Number(demo.lambda || 0), 2)}</strong></div>
+      <div><span>Prior range</span><strong>${formatNumber(Number(range[0] || 0), 2)}–${formatNumber(Number(range[1] || 0), 2)}</strong></div>
+      <div><span>Stable adult share</span><strong>${formatNumber(Number(demo.stable_adult_fraction || 0) * 100, 0)}%</strong></div>
+      <div><span>Adult survival sensitivity</span><strong>${formatNumber(Number(demo.sensitivity?.adult_survival || 0), 2)}</strong></div>
+    </div>
+    <p class="hint">${escapeHtml((item.limiting_factors || []).length ? `Limiting: ${(item.limiting_factors || []).join(", ")}` : "No structural factor is below 0.4.")}</p>`;
+  renderBirdsChart(demo.survival_curve || []);
+}
+
+function renderBirdsChart(values) {
+  const svg = $("birds-chart");
+  const width = 640;
+  const height = 220;
+  const padding = { left: 38, right: 14, top: 18, bottom: 28 };
+  const pointCount = Math.max(values.length, 2);
+  const plotWidth = width - padding.left - padding.right;
+  const plotHeight = height - padding.top - padding.bottom;
+  const x = (index) => padding.left + (index / Math.max(pointCount - 1, 1)) * plotWidth;
+  const y = (value) => padding.top + plotHeight - Math.max(0, Math.min(1, value)) * plotHeight;
+  const points = values
+    .map((value, index) => `${index === 0 ? "M" : "L"}${x(index).toFixed(1)},${y(Number(value)).toFixed(1)}`)
+    .join(" ");
+  const grid = [0, 0.25, 0.5, 0.75, 1]
+    .map((fraction) => {
+      const position = y(fraction);
+      return `<line x1="${padding.left}" y1="${position}" x2="${width - padding.right}" y2="${position}" stroke="#e6ebe1" stroke-width="1"/>
+        <text x="${padding.left - 7}" y="${position + 4}" text-anchor="end" font-size="10" fill="#6b7a70">${fraction.toFixed(2)}</text>`;
+    })
+    .join("");
+  svg.innerHTML = `${grid}<path d="${points}" fill="none" stroke="#2f6b4f" stroke-width="2.5"></path>
+    <text x="${padding.left}" y="${height - 8}" font-size="10" fill="#6b7a70">year 0</text>
+    <text x="${width - padding.right}" y="${height - 8}" text-anchor="end" font-size="10" fill="#6b7a70">year ${values.length - 1}</text>`;
 }
 
 function initOptimizeControls() {
@@ -2503,6 +2600,7 @@ async function previewScenario() {
     rebuildThreeTrees(scene.trees);
     renderKPIs(result.final);
     renderTimeline(result.timeline);
+    if ($("view-birds").classList.contains("active")) loadBirds();
     renderComposition({ species_composition: result.final.species_composition || [] });
     renderSize(result.final);
     const baseline = result.baseline;
