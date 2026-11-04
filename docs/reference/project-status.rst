@@ -3,7 +3,7 @@ Project status and repository map
 
 Status as of 2026-11-04:
 
-- Phases 0–11 are complete on ``main``.
+- Phases 0–15 are complete on ``main``.
 - v0.3.0 is released. The tag and GitHub release exist, and the documentation site is live
   on GitHub Pages. See :doc:`research-agenda`, :doc:`shade-and-species`,
   :doc:`optimization-and-pareto`, :doc:`off-inventory-canopy`,
