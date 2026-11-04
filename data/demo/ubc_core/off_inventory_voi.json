@@ -1,0 +1,28 @@
+{
+  "official_archive_size": 7,
+  "augmented_archive_size": 7,
+  "official_hypervolume": 0.00015,
+  "augmented_hypervolume": 0.00015,
+  "official_best_shade": 101148.737,
+  "augmented_best_shade": 101148.737,
+  "official_best_native": 0.8,
+  "augmented_best_native": 0.8,
+  "plan_jaccard": 1.0,
+  "changed_sites": 0,
+  "official_plan_size": 4,
+  "augmented_plan_size": 4,
+  "candidate_count": 500,
+  "official_tree_count": 9259,
+  "augmented_tree_count": 9759,
+  "official_canopy_volume_m3": 2854588.657,
+  "augmented_canopy_volume_m3": 3669191.416,
+  "official_carbon_kg": 3826728.425,
+  "augmented_carbon_kg": 5024361.437,
+  "evidence": {
+    "tier": "scenario",
+    "method": "p8-value-of-information",
+    "uncertainty": "The comparison uses a screening candidate layer, a finite Pareto archive, and a fixed solver budget; it is not a field-validated decision.",
+    "source": "P8 optimizer on official and augmented populations"
+  },
+  "caveat": "This is a screening comparison. It does not prove that the candidates are real or private, and it is not a field validation."
+}

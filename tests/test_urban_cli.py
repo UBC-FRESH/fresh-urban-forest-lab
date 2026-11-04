@@ -220,3 +220,37 @@ def test_optimize_and_pareto_commands(tmp_path: Path) -> None:
     )
     assert summary.exit_code == 0, summary.stdout
     assert (tmp_path / "pareto.json").exists()
+
+
+def test_off_inventory_command(tmp_path: Path) -> None:
+    """The off-inventory command writes a candidate layer and VOI result."""
+    make_dataset(tmp_path / "off")
+    result = RUNNER.invoke(
+        app,
+        [
+            "off-inventory",
+            "--dataset",
+            str(tmp_path / "off" / "dataset"),
+            "--out-dir",
+            str(tmp_path / "off-inventory"),
+            "--min-height",
+            "2",
+            "--window",
+            "2",
+            "--min-confidence",
+            "0.1",
+            "--max-candidates",
+            "20",
+            "--voi",
+            "--voi-sites",
+            "6",
+            "--voi-scalarizations",
+            "4",
+            "--voi-workers",
+            "1",
+        ],
+    )
+    assert result.exit_code == 0, result.stdout
+    assert (tmp_path / "off-inventory" / "off_inventory.json").exists()
+    assert (tmp_path / "off-inventory" / "off_inventory.geojson").exists()
+    assert (tmp_path / "off-inventory" / "off_inventory_voi.json").exists()

@@ -145,6 +145,20 @@
         <div id="recommend-list" class="edit-list"></div>
         <button id="apply-recommend" class="button ghost" type="button" disabled>Apply all recommendations</button>
       </section>
+
+      <section class="panel">
+        <div class="panel-heading">
+          <h2>Off-inventory canopy</h2>
+          <span id="off-inventory-status" class="muted">checking</span>
+        </div>
+        <div id="off-inventory-summary" class="off-inventory-summary">
+          <p class="muted">No candidate layer loaded.</p>
+        </div>
+        <p class="hint">
+          Unmatched LiDAR crowns are candidates, not confirmed trees. The land class is a
+          proxy; no owner data is stored or shown.
+        </p>
+      </section>
     </aside>
 
     <section class="stage">
@@ -159,6 +173,7 @@
           <label><input id="toggle-canopy" type="checkbox" checked> canopy</label>
           <label><input id="toggle-hillshade" type="checkbox" checked> terrain</label>
           <label><input id="toggle-buildings" type="checkbox" checked> buildings</label>
+          <label><input id="toggle-off-inventory" type="checkbox"> off-inventory</label>
         </div>
       </nav>
 

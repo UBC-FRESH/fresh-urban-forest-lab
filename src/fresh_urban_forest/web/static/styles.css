@@ -408,6 +408,18 @@ select:focus, input:focus { outline: 2px solid #b8d3ae; outline-offset: 1px; }
   font-size: 0.64rem;
   white-space: nowrap;
 }
+.off-inventory-summary { margin-top: 4px; }
+.off-inventory-summary .kpi { padding: 7px; }
+.off-inventory-voi {
+  margin-top: 7px;
+  padding: 7px;
+  border: 1px solid #ecd6ba;
+  border-radius: 8px;
+  background: #fff8ee;
+}
+.off-inventory-voi span { display: block; color: var(--ink-soft); font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.06em; }
+.off-inventory-voi strong { display: block; color: #a45d12; font-family: var(--mono); font-size: 0.95rem; }
+.off-inventory-voi small { color: var(--ink-soft); font-size: 0.66rem; }
 .tree-light { margin-top: 8px; }
 .tree-light .mini-grid {
   display: grid;

@@ -372,12 +372,12 @@ Goal: detect and reconcile trees missing from the official inventory, estimate t
 Plan: `notes/design/urban-canopy-program-plan.md`.
 Evidence: `notes/reference/literature-review-shade-optimization-biodiversity.md`.
 
-- [ ] P9.1 Terminology, privacy, and data governance
-- [ ] P9.2 Land mask and ownership proxy
-- [ ] P9.3 Off-inventory detection and attribution
-- [ ] P9.4 Inventory reconciliation and update workflow
-- [ ] P9.5 Value-of-information experiment
-- [ ] P9.6 UI, confidence layer, and report
+- [x] P9.1 Terminology, privacy, and data governance
+- [x] P9.2 Land mask and ownership proxy
+- [x] P9.3 Off-inventory detection and attribution
+- [x] P9.4 Inventory reconciliation and update workflow
+- [x] P9.5 Value-of-information experiment
+- [x] P9.6 UI, confidence layer, and report
 
 Acceptance criteria:
 

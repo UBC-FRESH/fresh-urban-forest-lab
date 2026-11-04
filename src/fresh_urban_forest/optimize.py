@@ -401,6 +401,8 @@ def build_problem(
     max_species_share: float = 0.6,
     seed: int = 42,
     grid_m: float = 12.0,
+    center_lonlat: tuple[float, float] | None = None,
+    radius_m: float | None = None,
 ) -> OptimizationProblem:
     """Build a planting optimization problem from a dataset.
 
@@ -424,6 +426,10 @@ def build_problem(
         Default search seed.
     grid_m : float
         Candidate grid spacing.
+    center_lonlat : tuple of float or None
+        Optional candidate-search centre.
+    radius_m : float or None
+        Optional candidate-search radius.
 
     Returns
     -------
@@ -441,6 +447,8 @@ def build_problem(
         count=max(site_count * 2, site_count),
         species=names[0],
         grid_m=grid_m,
+        center_lonlat=center_lonlat,
+        radius_m=radius_m,
     )
     if not candidates:
         raise ValueError("no planting candidates are available in this dataset")

@@ -1,0 +1,9005 @@
+{
+ "type": "FeatureCollection",
+ "features": [
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25096143,
+     49.26024514
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0001",
+    "height_m": 62.92,
+    "crown_radius_m": 3.39,
+    "confidence": 0.776,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 16.6
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25090618,
+     49.26019122
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0002",
+    "height_m": 62.79,
+    "crown_radius_m": 4.37,
+    "confidence": 0.84,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 18.42
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25090636,
+     49.26022725
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0003",
+    "height_m": 62.49,
+    "crown_radius_m": 1.13,
+    "confidence": 0.679,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 15.8
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25217334,
+     49.26072887
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0004",
+    "height_m": 60.46,
+    "crown_radius_m": 2.26,
+    "confidence": 0.785,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 22.97
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25211845,
+     49.260747
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0005",
+    "height_m": 60.45,
+    "crown_radius_m": 2.99,
+    "confidence": 0.812,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 25.19
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25220055,
+     49.26067477
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0006",
+    "height_m": 60.3,
+    "crown_radius_m": 1.6,
+    "confidence": 0.76,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 23.57
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25220064,
+     49.26069278
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0007",
+    "height_m": 60.22,
+    "crown_radius_m": 3.39,
+    "confidence": 0.827,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 24.3
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25211827,
+     49.26071098
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0008",
+    "height_m": 59.78,
+    "crown_radius_m": 2.52,
+    "confidence": 0.794,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 27.37
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25101594,
+     49.26015496
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0009",
+    "height_m": 59.71,
+    "crown_radius_m": 5.3,
+    "confidence": 0.868,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 17.95
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25107147,
+     49.26026292
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0010",
+    "height_m": 59.67,
+    "crown_radius_m": 6.68,
+    "confidence": 0.951,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 21.79
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.252118,
+     49.26065694
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0011",
+    "height_m": 58.41,
+    "crown_radius_m": 6.96,
+    "confidence": 0.961,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 25.66
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25115475,
+     49.26042486
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0012",
+    "height_m": 57.92,
+    "crown_radius_m": 3.91,
+    "confidence": 0.831,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 18.95
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25176158,
+     49.26083785
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0013",
+    "height_m": 57.13,
+    "crown_radius_m": 3.74,
+    "confidence": 0.84,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 25.39
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25435974,
+     49.26362425
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0014",
+    "height_m": 56.91,
+    "crown_radius_m": 2.77,
+    "confidence": 0.804,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 24.73
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25107192,
+     49.26035298
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0015",
+    "height_m": 56.76,
+    "crown_radius_m": 6.58,
+    "confidence": 0.903,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 17.08
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25181637,
+     49.2608017
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0016",
+    "height_m": 56.65,
+    "crown_radius_m": 2.99,
+    "confidence": 0.812,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 27.36
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25093321,
+     49.2601011
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0017",
+    "height_m": 56.56,
+    "crown_radius_m": 5.05,
+    "confidence": 0.741,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 10.14
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25438742,
+     49.26366022
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0018",
+    "height_m": 56.37,
+    "crown_radius_m": 1.13,
+    "confidence": 0.742,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 21.79
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25189865,
+     49.2607655
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0019",
+    "height_m": 56.22,
+    "crown_radius_m": 8.96,
+    "confidence": 1.0,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 27.34
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25123758,
+     49.26049673
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0020",
+    "height_m": 55.9,
+    "crown_radius_m": 10.53,
+    "confidence": 0.975,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 18.35
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25178916,
+     49.2608558
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0021",
+    "height_m": 55.77,
+    "crown_radius_m": 3.19,
+    "confidence": 0.82,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 22.92
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.2544423,
+     49.26364208
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0022",
+    "height_m": 55.6,
+    "crown_radius_m": 6.87,
+    "confidence": 0.934,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 18.4
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25187088,
+     49.26071152
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0023",
+    "height_m": 55.52,
+    "crown_radius_m": 1.13,
+    "confidence": 0.742,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 33.63
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25433244,
+     49.26366034
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0024",
+    "height_m": 55.41,
+    "crown_radius_m": 1.96,
+    "confidence": 0.774,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 21.9
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25195325,
+     49.26069332
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0025",
+    "height_m": 55.36,
+    "crown_radius_m": 1.96,
+    "confidence": 0.774,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 33.52
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25123703,
+     49.26038865
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0026",
+    "height_m": 55.36,
+    "crown_radius_m": 1.13,
+    "confidence": 0.729,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 19.08
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25187153,
+     49.26083761
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0027",
+    "height_m": 55.3,
+    "crown_radius_m": 2.52,
+    "confidence": 0.794,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 21.71
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25176112,
+     49.26074778
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0028",
+    "height_m": 55.26,
+    "crown_radius_m": 1.6,
+    "confidence": 0.76,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 31.24
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.2519539,
+     49.26081942
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0029",
+    "height_m": 54.99,
+    "crown_radius_m": 1.13,
+    "confidence": 0.742,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 20.21
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25200878,
+     49.26080128
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0030",
+    "height_m": 54.95,
+    "crown_radius_m": 1.13,
+    "confidence": 0.742,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 20.93
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25422248,
+     49.26366058
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0031",
+    "height_m": 54.85,
+    "crown_radius_m": 7.32,
+    "confidence": 0.907,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 15.47
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.2512647,
+     49.26042462
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0032",
+    "height_m": 54.85,
+    "crown_radius_m": 1.13,
+    "confidence": 0.716,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 18.25
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.251816,
+     49.26072965
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0033",
+    "height_m": 54.72,
+    "crown_radius_m": 1.13,
+    "confidence": 0.742,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 33.79
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25134771,
+     49.26053252
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0034",
+    "height_m": 54.7,
+    "crown_radius_m": 1.6,
+    "confidence": 0.709,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 16.59
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25129237,
+     49.26046059
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0035",
+    "height_m": 54.68,
+    "crown_radius_m": 1.13,
+    "confidence": 0.707,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 17.65
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25436011,
+     49.2636963
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0036",
+    "height_m": 54.59,
+    "crown_radius_m": 1.13,
+    "confidence": 0.742,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 20.75
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.254497,
+     49.26358792
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0037",
+    "height_m": 54.18,
+    "crown_radius_m": 5.05,
+    "confidence": 0.858,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 17.92
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.2511553,
+     49.26053294
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0038",
+    "height_m": 54.09,
+    "crown_radius_m": 1.13,
+    "confidence": 0.629,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 12.43
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25121064,
+     49.26060487
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0039",
+    "height_m": 54.03,
+    "crown_radius_m": 1.13,
+    "confidence": 0.541,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 6.56
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25118297,
+     49.2605689
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0040",
+    "height_m": 54.02,
+    "crown_radius_m": 1.13,
+    "confidence": 0.607,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 10.97
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25167884,
+     49.26078399
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0041",
+    "height_m": 53.96,
+    "crown_radius_m": 1.13,
+    "confidence": 0.742,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 24.98
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25167893,
+     49.260802
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0042",
+    "height_m": 53.62,
+    "crown_radius_m": 2.77,
+    "confidence": 0.804,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 25.06
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25496582,
+     49.25854311
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0043",
+    "height_m": 53.58,
+    "crown_radius_m": 5.05,
+    "confidence": 0.889,
+    "land_class": "outside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 44.64
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25159656,
+     49.26082019
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0044",
+    "height_m": 52.81,
+    "crown_radius_m": 1.96,
+    "confidence": 0.765,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 19.4
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25151419,
+     49.26083839
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0045",
+    "height_m": 52.56,
+    "crown_radius_m": 1.13,
+    "confidence": 0.657,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 14.31
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25165181,
+     49.26087411
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0046",
+    "height_m": 52.51,
+    "crown_radius_m": 5.87,
+    "confidence": 0.92,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 24.82
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25159674,
+     49.26085622
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0047",
+    "height_m": 52.42,
+    "crown_radius_m": 1.13,
+    "confidence": 0.742,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 20.61
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25151456,
+     49.26091044
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0048",
+    "height_m": 52.34,
+    "crown_radius_m": 3.91,
+    "confidence": 0.802,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 17.05
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25425034,
+     49.26373257
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0049",
+    "height_m": 52.08,
+    "crown_radius_m": 5.87,
+    "confidence": 0.8,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 11.99
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25151437,
+     49.26087441
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0050",
+    "height_m": 51.76,
+    "crown_radius_m": 5.05,
+    "confidence": 0.835,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 16.41
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25154223,
+     49.26094641
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0051",
+    "height_m": 51.26,
+    "crown_radius_m": 4.07,
+    "confidence": 0.804,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 16.78
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25154232,
+     49.26096442
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0052",
+    "height_m": 51.24,
+    "crown_radius_m": 1.13,
+    "confidence": 0.684,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 16.12
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25492356,
+     49.26101105
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0053",
+    "height_m": 48.83,
+    "crown_radius_m": 1.13,
+    "confidence": 0.617,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 11.63
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25489635,
+     49.26106515
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0054",
+    "height_m": 48.25,
+    "crown_radius_m": 5.87,
+    "confidence": 0.82,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 13.3
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25484128,
+     49.26104726
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0055",
+    "height_m": 48.02,
+    "crown_radius_m": 1.13,
+    "confidence": 0.621,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 11.93
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.2548957,
+     49.26093906
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0056",
+    "height_m": 47.58,
+    "crown_radius_m": 1.96,
+    "confidence": 0.562,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 5.88
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25489691,
+     49.26117323
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0057",
+    "height_m": 47.53,
+    "crown_radius_m": 1.13,
+    "confidence": 0.606,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 10.89
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25495105,
+     49.26101099
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0058",
+    "height_m": 47.5,
+    "crown_radius_m": 3.39,
+    "confidence": 0.686,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 10.56
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25470412,
+     49.2611016
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0059",
+    "height_m": 46.85,
+    "crown_radius_m": 1.13,
+    "confidence": 0.509,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 4.44
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.2547591,
+     49.26110148
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0060",
+    "height_m": 46.83,
+    "crown_radius_m": 5.17,
+    "confidence": 0.7,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 7.06
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25500584,
+     49.26097484
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0061",
+    "height_m": 46.77,
+    "crown_radius_m": 1.96,
+    "confidence": 0.555,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 5.41
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25497816,
+     49.26093888
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0062",
+    "height_m": 46.77,
+    "crown_radius_m": 5.17,
+    "confidence": 0.642,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 3.24
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25484193,
+     49.26117335
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0063",
+    "height_m": 46.75,
+    "crown_radius_m": 5.17,
+    "confidence": 0.775,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 12.05
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25486933,
+     49.26115528
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0064",
+    "height_m": 46.49,
+    "crown_radius_m": 1.96,
+    "confidence": 0.659,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 12.38
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.2539826,
+     49.25977019
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0065",
+    "height_m": 46.28,
+    "crown_radius_m": 4.66,
+    "confidence": 0.658,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 5.53
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.2549516,
+     49.26111907
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0066",
+    "height_m": 45.74,
+    "crown_radius_m": 5.05,
+    "confidence": 0.69,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 6.73
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25478612,
+     49.26101135
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0067",
+    "height_m": 45.71,
+    "crown_radius_m": 6.39,
+    "confidence": 0.786,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 9.78
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25478603,
+     49.26099334
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0068",
+    "height_m": 45.34,
+    "crown_radius_m": 1.13,
+    "confidence": 0.567,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 8.29
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25499201,
+     49.25829086
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0069",
+    "height_m": 44.52,
+    "crown_radius_m": 3.39,
+    "confidence": 0.827,
+    "land_class": "outside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 52.26
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25499256,
+     49.25839894
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0070",
+    "height_m": 44.0,
+    "crown_radius_m": 1.13,
+    "confidence": 0.742,
+    "land_class": "outside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 49.89
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25493564,
+     49.25802078
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0071",
+    "height_m": 43.98,
+    "crown_radius_m": 5.53,
+    "confidence": 0.907,
+    "land_class": "outside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 55.38
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25436603,
+     49.25949914
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0072",
+    "height_m": 43.14,
+    "crown_radius_m": 1.13,
+    "confidence": 0.507,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 4.29
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25457879,
+     49.25811163
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0073",
+    "height_m": 42.7,
+    "crown_radius_m": 3.91,
+    "confidence": 0.847,
+    "land_class": "outside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 27.88
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25466106,
+     49.25807543
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0074",
+    "height_m": 42.4,
+    "crown_radius_m": 6.18,
+    "confidence": 0.932,
+    "land_class": "outside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 34.52
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.2541715,
+     49.25908526
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0075",
+    "height_m": 42.07,
+    "crown_radius_m": 2.26,
+    "confidence": 0.547,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 4.12
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25409098,
+     49.25946372
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0076",
+    "height_m": 42.01,
+    "crown_radius_m": 5.53,
+    "confidence": 0.717,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 7.28
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25499089,
+     49.2580747
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0077",
+    "height_m": 41.47,
+    "crown_radius_m": 2.52,
+    "confidence": 0.794,
+    "land_class": "outside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 58.14
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25499238,
+     49.25836291
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0078",
+    "height_m": 40.65,
+    "crown_radius_m": 1.6,
+    "confidence": 0.76,
+    "land_class": "outside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 50.74
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25450245,
+     49.25930069
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0079",
+    "height_m": 40.51,
+    "crown_radius_m": 15.36,
+    "confidence": 0.766,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 4.37
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25411948,
+     49.25966181
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0080",
+    "height_m": 40.36,
+    "crown_radius_m": 7.4,
+    "confidence": 0.717,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 2.62
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.2548893,
+     49.25969614
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0081",
+    "height_m": 40.17,
+    "crown_radius_m": 3.74,
+    "confidence": 0.621,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 5.37
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25389968,
+     49.2596803
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0082",
+    "height_m": 40.0,
+    "crown_radius_m": 6.68,
+    "confidence": 0.738,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 5.83
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25452484,
+     49.2583099
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0083",
+    "height_m": 39.44,
+    "crown_radius_m": 5.41,
+    "confidence": 0.9,
+    "land_class": "outside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 19.81
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25433993,
+     49.2597694
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0084",
+    "height_m": 39.28,
+    "crown_radius_m": 2.99,
+    "confidence": 0.573,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 4.08
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25485513,
+     49.25839924
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0085",
+    "height_m": 39.22,
+    "crown_radius_m": 10.65,
+    "confidence": 1.0,
+    "land_class": "outside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 40.44
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25442175,
+     49.25964313
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0086",
+    "height_m": 39.08,
+    "crown_radius_m": 2.52,
+    "confidence": 0.574,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 5.31
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25389774,
+     49.25930203
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0087",
+    "height_m": 38.74,
+    "crown_radius_m": 1.13,
+    "confidence": 0.465,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 1.49
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25490936,
+     49.25825501
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0088",
+    "height_m": 38.67,
+    "crown_radius_m": 4.92,
+    "confidence": 0.885,
+    "land_class": "outside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 47.72
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.2545303,
+     49.25937269
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0089",
+    "height_m": 38.26,
+    "crown_radius_m": 1.13,
+    "confidence": 0.5,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 3.84
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.2549452,
+     49.25987615
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0090",
+    "height_m": 38.18,
+    "crown_radius_m": 2.26,
+    "confidence": 0.55,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 4.32
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25499479,
+     49.25883126
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0091",
+    "height_m": 37.99,
+    "crown_radius_m": 1.6,
+    "confidence": 0.76,
+    "land_class": "outside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 38.14
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25491159,
+     49.25868733
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0092",
+    "height_m": 37.9,
+    "crown_radius_m": 8.89,
+    "confidence": 1.0,
+    "land_class": "outside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 37.84
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25500055,
+     49.25994808
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0093",
+    "height_m": 37.42,
+    "crown_radius_m": 1.6,
+    "confidence": 0.488,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 1.86
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25499145,
+     49.25818278
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0094",
+    "height_m": 37.19,
+    "crown_radius_m": 1.6,
+    "confidence": 0.76,
+    "land_class": "outside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 54.77
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25414799,
+     49.25985989
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0095",
+    "height_m": 36.65,
+    "crown_radius_m": 5.17,
+    "confidence": 0.668,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 4.93
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25482718,
+     49.25830924
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0096",
+    "height_m": 36.49,
+    "crown_radius_m": 4.66,
+    "confidence": 0.875,
+    "land_class": "outside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 40.17
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.2542584,
+     49.25994972
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0097",
+    "height_m": 36.16,
+    "crown_radius_m": 7.98,
+    "confidence": 0.714,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 0.96
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25381639,
+     49.25951837
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0098",
+    "height_m": 36.08,
+    "crown_radius_m": 1.6,
+    "confidence": 0.535,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 5.03
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25453308,
+     49.25991309
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0099",
+    "height_m": 36.01,
+    "crown_radius_m": 1.13,
+    "confidence": 0.541,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 6.58
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25345869,
+     49.2594471
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0100",
+    "height_m": 35.71,
+    "crown_radius_m": 5.17,
+    "confidence": 0.654,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 3.98
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25482607,
+     49.25809308
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0101",
+    "height_m": 35.68,
+    "crown_radius_m": 9.31,
+    "confidence": 1.0,
+    "land_class": "outside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 45.98
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25362435,
+     49.25959084
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0102",
+    "height_m": 35.38,
+    "crown_radius_m": 6.58,
+    "confidence": 0.728,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 5.43
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25490909,
+     49.25820097
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0103",
+    "height_m": 35.33,
+    "crown_radius_m": 6.77,
+    "confidence": 0.954,
+    "land_class": "outside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 48.5
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25082344,
+     49.26013736
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0104",
+    "height_m": 35.29,
+    "crown_radius_m": 4.52,
+    "confidence": 0.719,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 9.95
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25480665,
+     49.25966029
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0105",
+    "height_m": 35.16,
+    "crown_radius_m": 14.42,
+    "confidence": 0.761,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 4.05
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25395124,
+     49.25901369
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0106",
+    "height_m": 35.11,
+    "crown_radius_m": 3.57,
+    "confidence": 0.611,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 5.17
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25442341,
+     49.25996737
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0107",
+    "height_m": 34.56,
+    "crown_radius_m": 14.76,
+    "confidence": 0.825,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 8.35
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25444581,
+     49.25897658
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0108",
+    "height_m": 33.94,
+    "crown_radius_m": 11.57,
+    "confidence": 0.781,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 5.42
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25373181,
+     49.25910424
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0109",
+    "height_m": 33.08,
+    "crown_radius_m": 1.6,
+    "confidence": 0.546,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 5.71
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24633637,
+     49.26432615
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0110",
+    "height_m": 33.07,
+    "crown_radius_m": 1.13,
+    "confidence": 0.664,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 14.78
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25423026,
+     49.25982369
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0111",
+    "height_m": 32.6,
+    "crown_radius_m": 4.22,
+    "confidence": 0.649,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 6.05
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25389645,
+     49.25904984
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0112",
+    "height_m": 32.57,
+    "crown_radius_m": 2.77,
+    "confidence": 0.572,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 4.56
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25376155,
+     49.26490452
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0113",
+    "height_m": 32.42,
+    "crown_radius_m": 4.07,
+    "confidence": 0.853,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 27.68
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24552827,
+     49.26213022
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0114",
+    "height_m": 32.39,
+    "crown_radius_m": 1.6,
+    "confidence": 0.76,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 22.06
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25491011,
+     49.25839912
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0115",
+    "height_m": 32.28,
+    "crown_radius_m": 1.13,
+    "confidence": 0.742,
+    "land_class": "outside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 44.34
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25231096,
+     49.2607646
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0116",
+    "height_m": 32.04,
+    "crown_radius_m": 5.17,
+    "confidence": 0.789,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 13.02
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24693089,
+     49.26227134
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0117",
+    "height_m": 32.0,
+    "crown_radius_m": 1.13,
+    "confidence": 0.615,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 11.5
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25417334,
+     49.26479554
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0118",
+    "height_m": 31.82,
+    "crown_radius_m": 1.13,
+    "confidence": 0.6,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 10.48
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25392639,
+     49.26488615
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0119",
+    "height_m": 31.44,
+    "crown_radius_m": 2.26,
+    "confidence": 0.785,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 26.11
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24849247,
+     49.26122321
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0120",
+    "height_m": 31.43,
+    "crown_radius_m": 4.07,
+    "confidence": 0.8,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 16.49
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.2467947,
+     49.26252382
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0121",
+    "height_m": 31.41,
+    "crown_radius_m": 2.99,
+    "confidence": 0.794,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 18.79
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24633457,
+     49.26396588
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0122",
+    "height_m": 31.39,
+    "crown_radius_m": 1.13,
+    "confidence": 0.742,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 26.18
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25389862,
+     49.26483217
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0123",
+    "height_m": 31.24,
+    "crown_radius_m": 1.96,
+    "confidence": 0.77,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 19.8
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24726111,
+     49.26234269
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0124",
+    "height_m": 31.21,
+    "crown_radius_m": 2.77,
+    "confidence": 0.8,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 19.77
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25413983,
+     49.26362473
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0125",
+    "height_m": 31.18,
+    "crown_radius_m": 3.74,
+    "confidence": 0.744,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 13.59
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.2549401,
+     49.25888542
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0126",
+    "height_m": 31.18,
+    "crown_radius_m": 6.68,
+    "confidence": 0.951,
+    "land_class": "outside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 32.73
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24630915,
+     49.26438025
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0127",
+    "height_m": 31.11,
+    "crown_radius_m": 1.13,
+    "confidence": 0.571,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 8.6
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25126406,
+     49.26029853
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0128",
+    "height_m": 31.06,
+    "crown_radius_m": 10.1,
+    "confidence": 0.875,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 11.67
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25395351,
+     49.26481403
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0129",
+    "height_m": 31.03,
+    "crown_radius_m": 1.13,
+    "confidence": 0.726,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 18.9
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25403616,
+     49.26484988
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0130",
+    "height_m": 31.01,
+    "crown_radius_m": 1.6,
+    "confidence": 0.76,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 22.15
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25387113,
+     49.26483223
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0131",
+    "height_m": 30.99,
+    "crown_radius_m": 3.19,
+    "confidence": 0.811,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 19.4
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24695828,
+     49.26225327
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0132",
+    "height_m": 30.97,
+    "crown_radius_m": 1.96,
+    "confidence": 0.628,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 10.32
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24647381,
+     49.26432585
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0133",
+    "height_m": 30.96,
+    "crown_radius_m": 1.13,
+    "confidence": 0.712,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 17.97
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24628121,
+     49.26429024
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0134",
+    "height_m": 30.88,
+    "crown_radius_m": 2.26,
+    "confidence": 0.765,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 18.68
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25398408,
+     49.2600584
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0135",
+    "height_m": 30.85,
+    "crown_radius_m": 6.68,
+    "confidence": 0.719,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 4.54
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25392621,
+     49.26485012
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0136",
+    "height_m": 30.77,
+    "crown_radius_m": 6.77,
+    "confidence": 0.954,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 22.27
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24652825,
+     49.26421766
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0137",
+    "height_m": 30.71,
+    "crown_radius_m": 1.6,
+    "confidence": 0.76,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 29.02
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24641749,
+     49.26405577
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0138",
+    "height_m": 30.69,
+    "crown_radius_m": 1.13,
+    "confidence": 0.742,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 23.59
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24531096,
+     49.26265307
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0139",
+    "height_m": 30.59,
+    "crown_radius_m": 1.13,
+    "confidence": 0.742,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 23.64
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24625408,
+     49.26436235
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0140",
+    "height_m": 30.44,
+    "crown_radius_m": 1.13,
+    "confidence": 0.611,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 11.21
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24552827,
+     49.26213022
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0141",
+    "height_m": 30.44,
+    "crown_radius_m": 5.41,
+    "confidence": 0.903,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 22.06
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24528329,
+     49.26261711
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0142",
+    "height_m": 30.43,
+    "crown_radius_m": 2.52,
+    "confidence": 0.794,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 27.5
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25497974,
+     49.2612451
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0143",
+    "height_m": 30.4,
+    "crown_radius_m": 6.77,
+    "confidence": 0.795,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 9.42
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25460692,
+     49.25823767
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0144",
+    "height_m": 30.32,
+    "crown_radius_m": 7.05,
+    "confidence": 0.964,
+    "land_class": "outside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 26.14
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25417261,
+     49.25930142
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0145",
+    "height_m": 30.28,
+    "crown_radius_m": 1.13,
+    "confidence": 0.603,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 10.73
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24628157,
+     49.26436229
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0146",
+    "height_m": 30.26,
+    "crown_radius_m": 4.07,
+    "confidence": 0.713,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 10.72
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24619749,
+     49.26403823
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0147",
+    "height_m": 30.23,
+    "crown_radius_m": 1.13,
+    "confidence": 0.742,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 37.54
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25414575,
+     49.26477758
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0148",
+    "height_m": 30.21,
+    "crown_radius_m": 2.26,
+    "confidence": 0.656,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 11.45
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.2521464,
+     49.26083701
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0149",
+    "height_m": 30.18,
+    "crown_radius_m": 9.58,
+    "confidence": 0.945,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 16.33
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24606219,
+     49.26447084
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0150",
+    "height_m": 30.12,
+    "crown_radius_m": 2.26,
+    "confidence": 0.688,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 13.55
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24860242,
+     49.26122297
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0151",
+    "height_m": 30.12,
+    "crown_radius_m": 4.37,
+    "confidence": 0.864,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 23.79
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24629184,
+     49.26090368
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0152",
+    "height_m": 30.12,
+    "crown_radius_m": 2.99,
+    "confidence": 0.587,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 4.99
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24865812,
+     49.26136696
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0153",
+    "height_m": 30.05,
+    "crown_radius_m": 1.96,
+    "confidence": 0.774,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 23.91
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24854817,
+     49.2613672
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0154",
+    "height_m": 30.04,
+    "crown_radius_m": 3.19,
+    "confidence": 0.779,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 17.28
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25195408,
+     49.26085544
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0155",
+    "height_m": 30.03,
+    "crown_radius_m": 3.57,
+    "confidence": 0.783,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 16.62
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24734348,
+     49.2623245
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0156",
+    "height_m": 30.01,
+    "crown_radius_m": 4.92,
+    "confidence": 0.823,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 15.9
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.2545804,
+     49.26376787
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0157",
+    "height_m": 29.89,
+    "crown_radius_m": 9.51,
+    "confidence": 0.858,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 10.52
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.2451736,
+     49.26267138
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0158",
+    "height_m": 29.87,
+    "crown_radius_m": 2.26,
+    "confidence": 0.785,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 31.98
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.2540905,
+     49.26472367
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0159",
+    "height_m": 29.84,
+    "crown_radius_m": 2.77,
+    "confidence": 0.704,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 13.37
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.2511006,
+     49.2605871
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0160",
+    "height_m": 29.8,
+    "crown_radius_m": 11.18,
+    "confidence": 0.798,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 6.56
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25455112,
+     49.25807567
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0161",
+    "height_m": 29.79,
+    "crown_radius_m": 10.47,
+    "confidence": 1.0,
+    "land_class": "outside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 26.8
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24671233,
+     49.26254201
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0162",
+    "height_m": 29.78,
+    "crown_radius_m": 4.92,
+    "confidence": 0.777,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 12.85
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.2540357,
+     49.26475981
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0163",
+    "height_m": 29.7,
+    "crown_radius_m": 7.57,
+    "confidence": 0.897,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 14.22
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24617188,
+     49.26441657
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0164",
+    "height_m": 29.69,
+    "crown_radius_m": 5.3,
+    "confidence": 0.74,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 9.39
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25160132,
+     49.26175689
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0165",
+    "height_m": 29.67,
+    "crown_radius_m": 1.6,
+    "confidence": 0.736,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 18.43
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24633475,
+     49.26400191
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0166",
+    "height_m": 29.64,
+    "crown_radius_m": 1.13,
+    "confidence": 0.742,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 26.84
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24600685,
+     49.2643989
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0167",
+    "height_m": 29.6,
+    "crown_radius_m": 1.6,
+    "confidence": 0.759,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 19.94
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.245896,
+     49.264219
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0168",
+    "height_m": 29.58,
+    "crown_radius_m": 1.13,
+    "confidence": 0.742,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 23.63
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24611547,
+     49.26412847
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0169",
+    "height_m": 29.56,
+    "crown_radius_m": 29.14,
+    "confidence": 1.0,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 39.1
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24547526,
+     49.26252663
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0170",
+    "height_m": 29.53,
+    "crown_radius_m": 1.13,
+    "confidence": 0.742,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 26.36
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24616964,
+     49.26396623
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0171",
+    "height_m": 29.52,
+    "crown_radius_m": 2.52,
+    "confidence": 0.794,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 37.75
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24614197,
+     49.26393027
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0172",
+    "height_m": 29.52,
+    "crown_radius_m": 1.6,
+    "confidence": 0.76,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 38.57
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25329035,
+     49.26414899
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0173",
+    "height_m": 29.52,
+    "crown_radius_m": 71.49,
+    "confidence": 1.0,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 27.44
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.2465287,
+     49.26430772
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0174",
+    "height_m": 29.51,
+    "crown_radius_m": 3.19,
+    "confidence": 0.817,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 19.83
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24514558,
+     49.26256336
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0175",
+    "height_m": 29.51,
+    "crown_radius_m": 1.96,
+    "confidence": 0.774,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 39.14
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24600712,
+     49.26445294
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0176",
+    "height_m": 29.48,
+    "crown_radius_m": 5.53,
+    "confidence": 0.875,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 17.83
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.2462804,
+     49.26412812
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0177",
+    "height_m": 29.45,
+    "crown_radius_m": 4.07,
+    "confidence": 0.853,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 36.34
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24630816,
+     49.2641821
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0178",
+    "height_m": 29.44,
+    "crown_radius_m": 1.6,
+    "confidence": 0.76,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 30.62
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24628013,
+     49.26407408
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0179",
+    "height_m": 29.43,
+    "crown_radius_m": 1.13,
+    "confidence": 0.742,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 33.34
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24517333,
+     49.26261734
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0180",
+    "height_m": 29.42,
+    "crown_radius_m": 5.87,
+    "confidence": 0.92,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 34.33
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25149009,
+     49.26150494
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0181",
+    "height_m": 29.4,
+    "crown_radius_m": 1.13,
+    "confidence": 0.742,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 24.55
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24704084,
+     49.2622711
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0182",
+    "height_m": 29.39,
+    "crown_radius_m": 4.92,
+    "confidence": 0.806,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 14.74
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24625282,
+     49.26411016
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0183",
+    "height_m": 29.32,
+    "crown_radius_m": 7.66,
+    "confidence": 0.987,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 36.98
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25398072,
+     49.26475993
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0184",
+    "height_m": 29.31,
+    "crown_radius_m": 1.13,
+    "confidence": 0.638,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 13.05
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25154534,
+     49.26155886
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0185",
+    "height_m": 29.31,
+    "crown_radius_m": 1.96,
+    "confidence": 0.774,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 24.34
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24860287,
+     49.26131304
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0186",
+    "height_m": 29.31,
+    "crown_radius_m": 8.3,
+    "confidence": 1.0,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 22.46
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25474408,
+     49.25818332
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0187",
+    "height_m": 29.29,
+    "crown_radius_m": 1.6,
+    "confidence": 0.76,
+    "land_class": "outside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 37.34
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25165621,
+     49.26173875
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0188",
+    "height_m": 29.26,
+    "crown_radius_m": 4.37,
+    "confidence": 0.847,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 18.85
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25370629,
+     49.2648506
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0189",
+    "height_m": 29.25,
+    "crown_radius_m": 1.96,
+    "confidence": 0.774,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 21.74
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.2462239,
+     49.26382201
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0190",
+    "height_m": 29.24,
+    "crown_radius_m": 1.6,
+    "confidence": 0.76,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 25.45
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24569436,
+     49.26236404
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0191",
+    "height_m": 29.24,
+    "crown_radius_m": 2.77,
+    "confidence": 0.804,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 22.82
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24655592,
+     49.26425363
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0192",
+    "height_m": 29.21,
+    "crown_radius_m": 5.41,
+    "confidence": 0.903,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 25.99
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24603201,
+     49.2639305
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0193",
+    "height_m": 29.19,
+    "crown_radius_m": 3.57,
+    "confidence": 0.834,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 37.59
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24600417,
+     49.2638585
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0194",
+    "height_m": 29.12,
+    "crown_radius_m": 1.6,
+    "confidence": 0.76,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 31.85
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24555549,
+     49.26207612
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0195",
+    "height_m": 29.12,
+    "crown_radius_m": 1.96,
+    "confidence": 0.744,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 18.04
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25157255,
+     49.26150476
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0196",
+    "height_m": 29.12,
+    "crown_radius_m": 4.92,
+    "confidence": 0.885,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 29.18
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24668475,
+     49.26252405
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0197",
+    "height_m": 29.1,
+    "crown_radius_m": 1.13,
+    "confidence": 0.604,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 10.8
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24625166,
+     49.26387599
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0198",
+    "height_m": 29.09,
+    "crown_radius_m": 17.89,
+    "confidence": 1.0,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 29.73
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24734348,
+     49.2623245
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0199",
+    "height_m": 29.09,
+    "crown_radius_m": 1.13,
+    "confidence": 0.681,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 15.9
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24625345,
+     49.26423626
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0200",
+    "height_m": 29.03,
+    "crown_radius_m": 1.13,
+    "confidence": 0.742,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 24.88
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24595098,
+     49.26421889
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0201",
+    "height_m": 29.03,
+    "crown_radius_m": 5.3,
+    "confidence": 0.899,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 27.47
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25334847,
+     49.2593933
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0202",
+    "height_m": 29.03,
+    "crown_radius_m": 12.32,
+    "confidence": 0.796,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 6.42
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25398045,
+     49.26470589
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0203",
+    "height_m": 29.02,
+    "crown_radius_m": 1.13,
+    "confidence": 0.55,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 7.17
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.2471507,
+     49.26225286
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0204",
+    "height_m": 29.02,
+    "crown_radius_m": 4.92,
+    "confidence": 0.839,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 16.98
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24550284,
+     49.26254459
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0205",
+    "height_m": 29.01,
+    "crown_radius_m": 4.79,
+    "confidence": 0.88,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 23.64
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24671251,
+     49.26257804
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0206",
+    "height_m": 28.97,
+    "crown_radius_m": 1.13,
+    "confidence": 0.649,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 13.77
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24851942,
+     49.26111507
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0207",
+    "height_m": 28.95,
+    "crown_radius_m": 6.49,
+    "confidence": 0.943,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 23.96
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.2536241,
+     49.26490483
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0208",
+    "height_m": 28.94,
+    "crown_radius_m": 1.13,
+    "confidence": 0.742,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 23.76
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.2536514,
+     49.26486874
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0209",
+    "height_m": 28.93,
+    "crown_radius_m": 4.66,
+    "confidence": 0.875,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 21.0
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24542037,
+     49.26254476
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0210",
+    "height_m": 28.93,
+    "crown_radius_m": 1.13,
+    "confidence": 0.742,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 26.9
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24737079,
+     49.26228841
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0211",
+    "height_m": 28.93,
+    "crown_radius_m": 1.13,
+    "confidence": 0.621,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 11.92
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.2537335,
+     49.2647965
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0212",
+    "height_m": 28.92,
+    "crown_radius_m": 1.13,
+    "confidence": 0.694,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 16.78
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24597659,
+     49.26384055
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0213",
+    "height_m": 28.92,
+    "crown_radius_m": 2.52,
+    "confidence": 0.794,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 29.21
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25195811,
+     49.26164803
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0214",
+    "height_m": 28.89,
+    "crown_radius_m": 1.96,
+    "confidence": 0.562,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 5.9
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25378839,
+     49.26477837
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0215",
+    "height_m": 28.88,
+    "crown_radius_m": 6.58,
+    "confidence": 0.85,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 13.55
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25181976,
+     49.26146819
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0216",
+    "height_m": 28.84,
+    "crown_radius_m": 1.13,
+    "confidence": 0.742,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 21.72
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24639108,
+     49.26427199
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0217",
+    "height_m": 28.81,
+    "crown_radius_m": 1.6,
+    "confidence": 0.76,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 21.56
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24649951,
+     49.26396553
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0218",
+    "height_m": 28.79,
+    "crown_radius_m": 1.6,
+    "confidence": 0.674,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 14.27
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24605691,
+     49.26340805
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0219",
+    "height_m": 28.72,
+    "crown_radius_m": 2.99,
+    "confidence": 0.691,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 11.93
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25400482,
+     49.25874337
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0220",
+    "height_m": 28.7,
+    "crown_radius_m": 4.07,
+    "confidence": 0.616,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 4.19
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24846417,
+     49.26106115
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0221",
+    "height_m": 28.69,
+    "crown_radius_m": 1.13,
+    "confidence": 0.701,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 17.22
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.2463196,
+     49.26095766
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0222",
+    "height_m": 28.59,
+    "crown_radius_m": 1.6,
+    "confidence": 0.627,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 11.1
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24840919,
+     49.26106127
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0223",
+    "height_m": 28.58,
+    "crown_radius_m": 3.57,
+    "confidence": 0.764,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 15.35
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.2517099,
+     49.26148645
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0224",
+    "height_m": 28.57,
+    "crown_radius_m": 4.22,
+    "confidence": 0.858,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 26.77
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24500947,
+     49.26283385
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0225",
+    "height_m": 28.55,
+    "crown_radius_m": 1.13,
+    "confidence": 0.742,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 38.3
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.2517384,
+     49.26168453
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0226",
+    "height_m": 28.51,
+    "crown_radius_m": 1.13,
+    "confidence": 0.712,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 18.0
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25190323,
+     49.26166616
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0227",
+    "height_m": 28.5,
+    "crown_radius_m": 1.96,
+    "confidence": 0.627,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 10.26
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24668403,
+     49.26237995
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0228",
+    "height_m": 28.47,
+    "crown_radius_m": 1.96,
+    "confidence": 0.684,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 14.03
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25173858,
+     49.26172056
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0229",
+    "height_m": 28.46,
+    "crown_radius_m": 3.39,
+    "confidence": 0.765,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 15.85
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24634736,
+     49.26101164
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0230",
+    "height_m": 28.4,
+    "crown_radius_m": 1.13,
+    "confidence": 0.681,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 15.9
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25134835,
+     49.26065861
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0231",
+    "height_m": 28.4,
+    "crown_radius_m": 9.65,
+    "confidence": 0.813,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 7.52
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25176588,
+     49.26168447
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0232",
+    "height_m": 28.39,
+    "crown_radius_m": 1.6,
+    "confidence": 0.707,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 16.48
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24623687,
+     49.26090379
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0233",
+    "height_m": 28.38,
+    "crown_radius_m": 2.52,
+    "confidence": 0.594,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 6.64
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25187583,
+     49.26168423
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0234",
+    "height_m": 28.37,
+    "crown_radius_m": 1.13,
+    "confidence": 0.62,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 11.87
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25182691,
+     49.26287323
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0235",
+    "height_m": 28.36,
+    "crown_radius_m": 2.26,
+    "confidence": 0.785,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 23.07
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24614367,
+     49.26427252
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0236",
+    "height_m": 28.33,
+    "crown_radius_m": 1.13,
+    "confidence": 0.742,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 23.69
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24637565,
+     49.2611737
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0237",
+    "height_m": 28.33,
+    "crown_radius_m": 1.13,
+    "confidence": 0.742,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 21.7
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24868615,
+     49.26147498
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0238",
+    "height_m": 28.27,
+    "crown_radius_m": 1.13,
+    "confidence": 0.739,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 19.8
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24874104,
+     49.26145685
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0239",
+    "height_m": 28.27,
+    "crown_radius_m": 9.58,
+    "confidence": 1.0,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 24.24
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24618333,
+     49.26119212
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0240",
+    "height_m": 28.25,
+    "crown_radius_m": 1.13,
+    "confidence": 0.624,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 12.08
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24634825,
+     49.26119177
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0241",
+    "height_m": 28.25,
+    "crown_radius_m": 5.05,
+    "confidence": 0.889,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 24.0
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24610042,
+     49.26110223
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0242",
+    "height_m": 28.25,
+    "crown_radius_m": 1.96,
+    "confidence": 0.614,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 9.38
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24608636,
+     49.26380429
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0243",
+    "height_m": 28.24,
+    "crown_radius_m": 1.13,
+    "confidence": 0.742,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 30.58
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24634852,
+     49.26124581
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0244",
+    "height_m": 28.2,
+    "crown_radius_m": 2.99,
+    "confidence": 0.812,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 24.27
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25071441,
+     49.26031773
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0245",
+    "height_m": 28.18,
+    "crown_radius_m": 9.1,
+    "confidence": 0.802,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 6.79
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24835467,
+     49.26115145
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0246",
+    "height_m": 28.16,
+    "crown_radius_m": 10.22,
+    "confidence": 0.871,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 11.42
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25499442,
+     49.2587592
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0247",
+    "height_m": 28.15,
+    "crown_radius_m": 2.52,
+    "confidence": 0.794,
+    "land_class": "outside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 40.8
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24626651,
+     49.26133606
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0248",
+    "height_m": 28.13,
+    "crown_radius_m": 1.13,
+    "confidence": 0.742,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 22.8
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24687609,
+     49.26230748
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0249",
+    "height_m": 28.1,
+    "crown_radius_m": 4.37,
+    "confidence": 0.77,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 13.71
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24536575,
+     49.26261693
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0250",
+    "height_m": 28.08,
+    "crown_radius_m": 4.66,
+    "confidence": 0.875,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 22.87
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24632086,
+     49.26120985
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0251",
+    "height_m": 28.07,
+    "crown_radius_m": 1.13,
+    "confidence": 0.742,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 21.93
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.2508239,
+     49.26022743
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0252",
+    "height_m": 28.05,
+    "crown_radius_m": 4.52,
+    "confidence": 0.778,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 13.93
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25176506,
+     49.26152235
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0253",
+    "height_m": 28.02,
+    "crown_radius_m": 5.17,
+    "confidence": 0.894,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 21.34
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25176488,
+     49.26148633
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0254",
+    "height_m": 28.02,
+    "crown_radius_m": 1.13,
+    "confidence": 0.742,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 23.43
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24640332,
+     49.26120967
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0255",
+    "height_m": 28.02,
+    "crown_radius_m": 1.13,
+    "confidence": 0.742,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 21.73
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24621162,
+     49.26135419
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0256",
+    "height_m": 28.01,
+    "crown_radius_m": 1.13,
+    "confidence": 0.742,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 21.28
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24626642,
+     49.26131804
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0257",
+    "height_m": 27.99,
+    "crown_radius_m": 6.18,
+    "confidence": 0.932,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 21.62
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24629301,
+     49.26113785
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0258",
+    "height_m": 27.99,
+    "crown_radius_m": 18.86,
+    "confidence": 1.0,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 21.45
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24882377,
+     49.26151071
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0259",
+    "height_m": 27.97,
+    "crown_radius_m": 1.13,
+    "confidence": 0.738,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 19.7
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24615566,
+     49.26115616
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0260",
+    "height_m": 27.97,
+    "crown_radius_m": 2.26,
+    "confidence": 0.655,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 11.38
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24605879,
+     49.26378633
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0261",
+    "height_m": 27.96,
+    "crown_radius_m": 2.26,
+    "confidence": 0.785,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 28.39
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24618395,
+     49.26131822
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0262",
+    "height_m": 27.96,
+    "crown_radius_m": 1.13,
+    "confidence": 0.697,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 16.98
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25190928,
+     49.26285504
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0263",
+    "height_m": 27.95,
+    "crown_radius_m": 2.52,
+    "confidence": 0.794,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 20.22
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.2461562,
+     49.26126424
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0264",
+    "height_m": 27.91,
+    "crown_radius_m": 2.26,
+    "confidence": 0.659,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 11.64
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25184321,
+     49.26067555
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0265",
+    "height_m": 27.87,
+    "crown_radius_m": 9.1,
+    "confidence": 1.0,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 38.11
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24503527,
+     49.26249154
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0266",
+    "height_m": 27.83,
+    "crown_radius_m": 2.52,
+    "confidence": 0.794,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 41.97
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25436344,
+     49.25899477
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0267",
+    "height_m": 27.81,
+    "crown_radius_m": 4.79,
+    "confidence": 0.695,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 7.67
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24648551,
+     49.26115545
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0268",
+    "height_m": 27.79,
+    "crown_radius_m": 2.52,
+    "confidence": 0.7,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 13.71
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24572239,
+     49.26247206
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0269",
+    "height_m": 27.78,
+    "crown_radius_m": 1.13,
+    "confidence": 0.74,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 19.87
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24651381,
+     49.26131751
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0270",
+    "height_m": 27.78,
+    "crown_radius_m": 1.96,
+    "confidence": 0.747,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 18.21
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24643027,
+     49.26110153
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0271",
+    "height_m": 27.78,
+    "crown_radius_m": 2.26,
+    "confidence": 0.712,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 15.17
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25301845,
+     49.25935799
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0272",
+    "height_m": 27.78,
+    "crown_radius_m": 3.91,
+    "confidence": 0.63,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 5.58
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.2514802,
+     49.2595595
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0273",
+    "height_m": 27.78,
+    "crown_radius_m": 92.63,
+    "confidence": 0.812,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 7.5
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24506418,
+     49.26277969
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0274",
+    "height_m": 27.77,
+    "crown_radius_m": 5.3,
+    "confidence": 0.899,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 35.83
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24500903,
+     49.26274378
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0275",
+    "height_m": 27.76,
+    "crown_radius_m": 1.6,
+    "confidence": 0.76,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 40.99
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24509132,
+     49.26270758
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0276",
+    "height_m": 27.75,
+    "crown_radius_m": 1.6,
+    "confidence": 0.76,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 36.88
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24509007,
+     49.26245539
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0277",
+    "height_m": 27.75,
+    "crown_radius_m": 3.39,
+    "confidence": 0.827,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 41.12
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24604517,
+     49.26104831
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0278",
+    "height_m": 27.75,
+    "crown_radius_m": 1.6,
+    "confidence": 0.632,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 11.5
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24682138,
+     49.26236164
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0279",
+    "height_m": 27.73,
+    "crown_radius_m": 14.81,
+    "confidence": 0.944,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 16.27
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24640395,
+     49.26133576
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0280",
+    "height_m": 27.7,
+    "crown_radius_m": 1.96,
+    "confidence": 0.774,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 26.04
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24654094,
+     49.2612454
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0281",
+    "height_m": 27.7,
+    "crown_radius_m": 1.96,
+    "confidence": 0.669,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 13.0
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24643,
+     49.26104749
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0282",
+    "height_m": 27.7,
+    "crown_radius_m": 1.6,
+    "confidence": 0.646,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 12.39
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25193026,
+     49.26157603
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0283",
+    "height_m": 27.69,
+    "crown_radius_m": 1.13,
+    "confidence": 0.561,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 7.92
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25187492,
+     49.2615041
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0284",
+    "height_m": 27.68,
+    "crown_radius_m": 1.13,
+    "confidence": 0.683,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 16.06
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25195793,
+     49.261612
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0285",
+    "height_m": 27.65,
+    "crown_radius_m": 1.13,
+    "confidence": 0.518,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 5.01
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25179319,
+     49.26164839
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0286",
+    "height_m": 27.65,
+    "crown_radius_m": 6.96,
+    "confidence": 0.924,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 17.54
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25190268,
+     49.26155808
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0287",
+    "height_m": 27.63,
+    "crown_radius_m": 1.96,
+    "confidence": 0.633,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 10.65
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24879574,
+     49.26140269
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0288",
+    "height_m": 27.62,
+    "crown_radius_m": 1.13,
+    "confidence": 0.742,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 22.2
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25157301,
+     49.26159483
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0289",
+    "height_m": 27.57,
+    "crown_radius_m": 1.13,
+    "confidence": 0.742,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 24.73
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24832664,
+     49.26104343
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0290",
+    "height_m": 27.53,
+    "crown_radius_m": 1.6,
+    "confidence": 0.634,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 11.59
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.2542273,
+     49.25924726
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0291",
+    "height_m": 27.51,
+    "crown_radius_m": 9.03,
+    "confidence": 0.794,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 6.29
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25173785,
+     49.26157645
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0292",
+    "height_m": 27.49,
+    "crown_radius_m": 1.13,
+    "confidence": 0.742,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 21.32
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24882341,
+     49.26143866
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0293",
+    "height_m": 27.48,
+    "crown_radius_m": 1.13,
+    "confidence": 0.732,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 19.3
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24802897,
+     49.26198077
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0294",
+    "height_m": 27.47,
+    "crown_radius_m": 1.13,
+    "confidence": 0.742,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 30.53
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24500671,
+     49.26227544
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0295",
+    "height_m": 27.42,
+    "crown_radius_m": 1.6,
+    "confidence": 0.76,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 20.5
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24623812,
+     49.26115598
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0296",
+    "height_m": 27.39,
+    "crown_radius_m": 2.52,
+    "confidence": 0.749,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 17.0
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24728814,
+     49.26225256
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0297",
+    "height_m": 27.31,
+    "crown_radius_m": 4.07,
+    "confidence": 0.705,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 10.14
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25165676,
+     49.26184683
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0298",
+    "height_m": 27.28,
+    "crown_radius_m": 9.17,
+    "confidence": 0.817,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 7.81
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24611072,
+     49.26317376
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0299",
+    "height_m": 27.26,
+    "crown_radius_m": 8.82,
+    "confidence": 1.0,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 24.1
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24629292,
+     49.26111984
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0300",
+    "height_m": 27.25,
+    "crown_radius_m": 3.57,
+    "confidence": 0.834,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 21.71
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24503634,
+     49.2627077
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0301",
+    "height_m": 27.18,
+    "crown_radius_m": 3.91,
+    "confidence": 0.847,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 40.84
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24840956,
+     49.26113332
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0302",
+    "height_m": 27.18,
+    "crown_radius_m": 4.22,
+    "confidence": 0.797,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 15.89
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24520091,
+     49.26263529
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0303",
+    "height_m": 27.12,
+    "crown_radius_m": 1.13,
+    "confidence": 0.742,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 31.64
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24657444,
+     49.26245224
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0304",
+    "height_m": 27.1,
+    "crown_radius_m": 1.13,
+    "confidence": 0.542,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 6.61
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24654067,
+     49.26119136
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0305",
+    "height_m": 27.07,
+    "crown_radius_m": 2.26,
+    "confidence": 0.659,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 11.6
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25367563,
+     49.25887019
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0306",
+    "height_m": 27.07,
+    "crown_radius_m": 3.57,
+    "confidence": 0.614,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 5.32
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.2516016,
+     49.26181093
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0307",
+    "height_m": 27.05,
+    "crown_radius_m": 1.6,
+    "confidence": 0.662,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 13.45
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24561681,
+     49.26335495
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0308",
+    "height_m": 27.03,
+    "crown_radius_m": 6.29,
+    "confidence": 0.821,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 12.32
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25151913,
+     49.26181111
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0309",
+    "height_m": 26.98,
+    "crown_radius_m": 4.52,
+    "confidence": 0.806,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 15.77
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24840892,
+     49.26100723
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0310",
+    "height_m": 26.96,
+    "crown_radius_m": 5.3,
+    "confidence": 0.756,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 10.45
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24617304,
+     49.26465074
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0311",
+    "height_m": 26.93,
+    "crown_radius_m": 2.26,
+    "confidence": 0.683,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 13.23
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24618198,
+     49.26092193
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0312",
+    "height_m": 26.93,
+    "crown_radius_m": 2.52,
+    "confidence": 0.658,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 10.92
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25151977,
+     49.2619372
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0313",
+    "height_m": 26.87,
+    "crown_radius_m": 4.07,
+    "confidence": 0.615,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 4.15
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24860378,
+     49.26149317
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0314",
+    "height_m": 26.85,
+    "crown_radius_m": 6.77,
+    "confidence": 0.856,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 13.48
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24512371,
+     49.26369825
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0315",
+    "height_m": 26.83,
+    "crown_radius_m": 1.13,
+    "confidence": 0.519,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 5.1
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24660201,
+     49.26247019
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0316",
+    "height_m": 26.76,
+    "crown_radius_m": 1.96,
+    "confidence": 0.591,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 7.83
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24655637,
+     49.26434369
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0317",
+    "height_m": 26.74,
+    "crown_radius_m": 8.22,
+    "confidence": 0.941,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 16.09
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25162799,
+     49.26159471
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0318",
+    "height_m": 26.73,
+    "crown_radius_m": 6.49,
+    "confidence": 0.943,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 28.12
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24712285,
+     49.26218086
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0319",
+    "height_m": 26.65,
+    "crown_radius_m": 7.74,
+    "confidence": 0.822,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 8.77
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24522867,
+     49.26268928
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0320",
+    "height_m": 26.61,
+    "crown_radius_m": 5.53,
+    "confidence": 0.907,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 27.57
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24517396,
+     49.26274343
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0321",
+    "height_m": 26.6,
+    "crown_radius_m": 1.13,
+    "confidence": 0.742,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 30.11
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24860396,
+     49.2615292
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0322",
+    "height_m": 26.6,
+    "crown_radius_m": 1.13,
+    "confidence": 0.616,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 11.6
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24821678,
+     49.26106168
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0323",
+    "height_m": 26.58,
+    "crown_radius_m": 1.13,
+    "confidence": 0.566,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 8.23
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.2483827,
+     49.26125947
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0324",
+    "height_m": 26.55,
+    "crown_radius_m": 1.13,
+    "confidence": 0.556,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 7.56
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24550257,
+     49.26249055
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0325",
+    "height_m": 26.52,
+    "crown_radius_m": 6.87,
+    "confidence": 0.958,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 28.85
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.2465191,
+     49.2623803
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0326",
+    "height_m": 26.51,
+    "crown_radius_m": 1.6,
+    "confidence": 0.563,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 6.88
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24574952,
+     49.26239995
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0327",
+    "height_m": 26.5,
+    "crown_radius_m": 5.3,
+    "confidence": 0.894,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 19.68
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24611735,
+     49.26450675
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0328",
+    "height_m": 26.49,
+    "crown_radius_m": 3.19,
+    "confidence": 0.666,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 9.74
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24819363,
+     49.26192638
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0329",
+    "height_m": 26.49,
+    "crown_radius_m": 1.13,
+    "confidence": 0.742,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 29.52
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24824409,
+     49.26102559
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0330",
+    "height_m": 26.49,
+    "crown_radius_m": 1.13,
+    "confidence": 0.602,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 10.63
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25146452,
+     49.26188328
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0331",
+    "height_m": 26.44,
+    "crown_radius_m": 3.39,
+    "confidence": 0.692,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 11.0
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25165236,
+     49.26098219
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0332",
+    "height_m": 26.42,
+    "crown_radius_m": 9.17,
+    "confidence": 0.915,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 14.36
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.2469855,
+     49.26219917
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0333",
+    "height_m": 26.41,
+    "crown_radius_m": 1.13,
+    "confidence": 0.533,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 6.06
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24660139,
+     49.2623441
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0334",
+    "height_m": 26.39,
+    "crown_radius_m": 1.96,
+    "confidence": 0.576,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 6.85
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24558369,
+     49.26222017
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0335",
+    "height_m": 26.38,
+    "crown_radius_m": 20.85,
+    "confidence": 1.0,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 22.13
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24662879,
+     49.26232603
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0336",
+    "height_m": 26.37,
+    "crown_radius_m": 1.13,
+    "confidence": 0.556,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 7.58
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24679434,
+     49.26245177
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0337",
+    "height_m": 26.35,
+    "crown_radius_m": 1.13,
+    "confidence": 0.742,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 20.67
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24704039,
+     49.26218104
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0338",
+    "height_m": 26.35,
+    "crown_radius_m": 1.13,
+    "confidence": 0.55,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 7.16
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25154644,
+     49.26177502
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0339",
+    "height_m": 26.35,
+    "crown_radius_m": 1.13,
+    "confidence": 0.72,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 18.5
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24832736,
+     49.26118754
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0340",
+    "height_m": 26.35,
+    "crown_radius_m": 1.13,
+    "confidence": 0.564,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 8.08
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.2482997,
+     49.26115157
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0341",
+    "height_m": 26.35,
+    "crown_radius_m": 1.13,
+    "confidence": 0.565,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 8.2
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24673856,
+     49.26228976
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0342",
+    "height_m": 26.34,
+    "crown_radius_m": 1.13,
+    "confidence": 0.536,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 6.27
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24668367,
+     49.26230789
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0343",
+    "height_m": 26.33,
+    "crown_radius_m": 1.13,
+    "confidence": 0.552,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 7.31
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24679345,
+     49.26227163
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0344",
+    "height_m": 26.33,
+    "crown_radius_m": 1.13,
+    "confidence": 0.542,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 6.63
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24709528,
+     49.26216291
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0345",
+    "height_m": 26.32,
+    "crown_radius_m": 1.13,
+    "confidence": 0.536,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 6.25
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24715016,
+     49.26214478
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0346",
+    "height_m": 26.32,
+    "crown_radius_m": 1.13,
+    "confidence": 0.54,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 6.49
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24723263,
+     49.2621446
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0347",
+    "height_m": 26.31,
+    "crown_radius_m": 1.13,
+    "confidence": 0.565,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 8.2
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24827203,
+     49.2611156
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0348",
+    "height_m": 26.3,
+    "crown_radius_m": 1.13,
+    "confidence": 0.584,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 9.46
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.2455032,
+     49.26261664
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0349",
+    "height_m": 26.28,
+    "crown_radius_m": 6.58,
+    "confidence": 0.9,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 16.9
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24654677,
+     49.26241627
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0350",
+    "height_m": 26.28,
+    "crown_radius_m": 1.13,
+    "confidence": 0.542,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 6.62
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24709618,
+     49.26234304
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0351",
+    "height_m": 26.28,
+    "crown_radius_m": 1.13,
+    "confidence": 0.742,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 23.63
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24690412,
+     49.26241551
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0352",
+    "height_m": 26.25,
+    "crown_radius_m": 1.13,
+    "confidence": 0.742,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 24.38
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24512362,
+     49.26368024
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0353",
+    "height_m": 26.24,
+    "crown_radius_m": 1.6,
+    "confidence": 0.554,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 6.25
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24621189,
+     49.26140823
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0354",
+    "height_m": 26.24,
+    "crown_radius_m": 4.52,
+    "confidence": 0.869,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 22.01
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.2472603,
+     49.26218057
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0355",
+    "height_m": 26.23,
+    "crown_radius_m": 1.13,
+    "confidence": 0.559,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 7.81
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24811098,
+     49.26189053
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0356",
+    "height_m": 26.23,
+    "crown_radius_m": 12.62,
+    "confidence": 1.0,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 35.46
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25149183,
+     49.26184719
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0357",
+    "height_m": 26.23,
+    "crown_radius_m": 1.13,
+    "confidence": 0.64,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 13.16
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24693152,
+     49.26239743
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0358",
+    "height_m": 26.22,
+    "crown_radius_m": 1.96,
+    "confidence": 0.774,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 23.82
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25182654,
+     49.26280118
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0359",
+    "height_m": 26.18,
+    "crown_radius_m": 9.58,
+    "confidence": 1.0,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 25.43
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25493973,
+     49.25881337
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0360",
+    "height_m": 26.16,
+    "crown_radius_m": 1.96,
+    "confidence": 0.774,
+    "land_class": "outside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 35.14
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.2518478,
+     49.26157621
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0361",
+    "height_m": 26.12,
+    "crown_radius_m": 6.87,
+    "confidence": 0.86,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 13.52
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.2465686,
+     49.26128137
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0362",
+    "height_m": 26.11,
+    "crown_radius_m": 4.07,
+    "confidence": 0.742,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 12.65
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24835133,
+     49.26048496
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0363",
+    "height_m": 26.08,
+    "crown_radius_m": 1.13,
+    "confidence": 0.742,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 31.33
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24748688,
+     49.25801896
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0364",
+    "height_m": 26.08,
+    "crown_radius_m": 2.26,
+    "confidence": 0.785,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 158.98
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25387021,
+     49.2646521
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0365",
+    "height_m": 26.06,
+    "crown_radius_m": 9.1,
+    "confidence": 0.745,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 2.98
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24511755,
+     49.26245534
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0366",
+    "height_m": 26.06,
+    "crown_radius_m": 14.89,
+    "confidence": 1.0,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 41.51
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24704129,
+     49.26236117
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0367",
+    "height_m": 26.04,
+    "crown_radius_m": 1.13,
+    "confidence": 0.742,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 23.61
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25199184,
+     49.26287287
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0368",
+    "height_m": 26.01,
+    "crown_radius_m": 6.08,
+    "confidence": 0.86,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 15.43
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25199211,
+     49.26292691
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0369",
+    "height_m": 25.97,
+    "crown_radius_m": 1.13,
+    "confidence": 0.717,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 18.28
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24658386,
+     49.26434363
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0370",
+    "height_m": 25.96,
+    "crown_radius_m": 1.13,
+    "confidence": 0.691,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 16.58
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25187602,
+     49.26172026
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0371",
+    "height_m": 25.94,
+    "crown_radius_m": 6.08,
+    "confidence": 0.752,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 8.24
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24566768,
+     49.26252622
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0372",
+    "height_m": 25.88,
+    "crown_radius_m": 1.13,
+    "confidence": 0.742,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 21.14
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24661126,
+     49.26432556
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0373",
+    "height_m": 25.86,
+    "crown_radius_m": 1.6,
+    "confidence": 0.747,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 19.13
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24796059,
+     49.26479102
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0374",
+    "height_m": 25.81,
+    "crown_radius_m": 5.41,
+    "confidence": 0.733,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 8.69
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25255412,
+     49.25993544
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0375",
+    "height_m": 25.81,
+    "crown_radius_m": 1.13,
+    "confidence": 0.479,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 2.47
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24797427,
+     49.26203493
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0376",
+    "height_m": 25.8,
+    "crown_radius_m": 1.13,
+    "confidence": 0.742,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 29.79
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24797409,
+     49.2619989
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0377",
+    "height_m": 25.79,
+    "crown_radius_m": 1.13,
+    "confidence": 0.742,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 32.13
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24550337,
+     49.26265267
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0378",
+    "height_m": 25.78,
+    "crown_radius_m": 1.13,
+    "confidence": 0.646,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 13.55
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24791938,
+     49.26205306
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0379",
+    "height_m": 25.76,
+    "crown_radius_m": 1.13,
+    "confidence": 0.742,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 29.74
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24644372,
+     49.26380353
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0380",
+    "height_m": 25.73,
+    "crown_radius_m": 1.6,
+    "confidence": 0.683,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 14.86
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24815928,
+     49.26055743
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0381",
+    "height_m": 25.7,
+    "crown_radius_m": 1.13,
+    "confidence": 0.742,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 29.85
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24830358,
+     49.26192614
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0382",
+    "height_m": 25.66,
+    "crown_radius_m": 1.6,
+    "confidence": 0.76,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 28.11
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24569508,
+     49.26250815
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0383",
+    "height_m": 25.65,
+    "crown_radius_m": 4.22,
+    "confidence": 0.858,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 22.19
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24863317,
+     49.26187139
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0384",
+    "height_m": 25.64,
+    "crown_radius_m": 2.26,
+    "confidence": 0.719,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 15.61
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24611771,
+     49.2645788
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0385",
+    "height_m": 25.58,
+    "crown_radius_m": 9.97,
+    "confidence": 0.911,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 14.03
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.2479192,
+     49.26201703
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0386",
+    "height_m": 25.55,
+    "crown_radius_m": 1.13,
+    "confidence": 0.742,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 29.96
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24602924,
+     49.26337209
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0387",
+    "height_m": 25.54,
+    "crown_radius_m": 3.39,
+    "confidence": 0.771,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 16.29
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25163577,
+     49.26312584
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0388",
+    "height_m": 25.54,
+    "crown_radius_m": 1.13,
+    "confidence": 0.486,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 2.89
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24539253,
+     49.26247277
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0389",
+    "height_m": 25.48,
+    "crown_radius_m": 2.26,
+    "confidence": 0.785,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 34.59
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24583932,
+     49.26387687
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0390",
+    "height_m": 25.47,
+    "crown_radius_m": 1.6,
+    "confidence": 0.76,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 22.88
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25258179,
+     49.25997141
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0391",
+    "height_m": 25.45,
+    "crown_radius_m": 7.9,
+    "confidence": 0.728,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 2.09
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.2455023,
+     49.26243651
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0392",
+    "height_m": 25.39,
+    "crown_radius_m": 3.74,
+    "confidence": 0.84,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 34.19
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24615656,
+     49.26133629
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0393",
+    "height_m": 25.39,
+    "crown_radius_m": 3.19,
+    "confidence": 0.778,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 17.24
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25198597,
+     49.26172002
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0394",
+    "height_m": 25.37,
+    "crown_radius_m": 1.6,
+    "confidence": 0.538,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 5.18
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24611341,
+     49.26371416
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0395",
+    "height_m": 25.36,
+    "crown_radius_m": 5.41,
+    "confidence": 0.903,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 21.14
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25474445,
+     49.25825538
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0396",
+    "height_m": 25.35,
+    "crown_radius_m": 5.3,
+    "confidence": 0.899,
+    "land_class": "outside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 35.76
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24561315,
+     49.26261641
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0397",
+    "height_m": 25.34,
+    "crown_radius_m": 1.13,
+    "confidence": 0.633,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 12.71
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24586976,
+     49.26447125
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0398",
+    "height_m": 25.33,
+    "crown_radius_m": 6.77,
+    "confidence": 0.954,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 23.64
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24500689,
+     49.26231146
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0399",
+    "height_m": 25.33,
+    "crown_radius_m": 2.26,
+    "confidence": 0.785,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 24.49
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24555826,
+     49.26263454
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0400",
+    "height_m": 25.31,
+    "crown_radius_m": 1.13,
+    "confidence": 0.637,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 12.94
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25182132,
+     49.26177442
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0401",
+    "height_m": 25.31,
+    "crown_radius_m": 1.6,
+    "confidence": 0.584,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 8.24
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25265552,
+     49.263646
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0402",
+    "height_m": 25.22,
+    "crown_radius_m": 1.6,
+    "confidence": 0.636,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 11.75
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24533737,
+     49.26243686
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0403",
+    "height_m": 25.22,
+    "crown_radius_m": 3.74,
+    "confidence": 0.84,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 40.14
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24821416,
+     49.26053929
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0404",
+    "height_m": 25.2,
+    "crown_radius_m": 1.13,
+    "confidence": 0.742,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 31.03
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25193109,
+     49.26173815
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0405",
+    "height_m": 25.16,
+    "crown_radius_m": 1.6,
+    "confidence": 0.537,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 5.12
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25163559,
+     49.26308981
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0406",
+    "height_m": 25.14,
+    "crown_radius_m": 6.29,
+    "confidence": 0.671,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 2.34
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24860586,
+     49.26190748
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0407",
+    "height_m": 25.14,
+    "crown_radius_m": 1.6,
+    "confidence": 0.672,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 14.14
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24672104,
+     49.2642893
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0408",
+    "height_m": 25.13,
+    "crown_radius_m": 1.13,
+    "confidence": 0.742,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 26.47
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25131775,
+     49.26004622
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0409",
+    "height_m": 25.11,
+    "crown_radius_m": 10.83,
+    "confidence": 0.895,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 13.01
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24541984,
+     49.26243668
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0410",
+    "height_m": 25.09,
+    "crown_radius_m": 5.17,
+    "confidence": 0.894,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 37.08
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24664162,
+     49.26490193
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0411",
+    "height_m": 25.04,
+    "crown_radius_m": 1.13,
+    "confidence": 0.699,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 17.1
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24661395,
+     49.26486596
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0412",
+    "height_m": 25.03,
+    "crown_radius_m": 1.13,
+    "confidence": 0.742,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 21.55
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24564037,
+     49.26256231
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0413",
+    "height_m": 25.03,
+    "crown_radius_m": 2.26,
+    "confidence": 0.748,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 17.55
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24832393,
+     49.26050303
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0414",
+    "height_m": 25.02,
+    "crown_radius_m": 1.96,
+    "confidence": 0.774,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 30.84
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24550203,
+     49.26238247
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0415",
+    "height_m": 25.0,
+    "crown_radius_m": 1.6,
+    "confidence": 0.76,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 35.89
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25226875,
+     49.26326856
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0416",
+    "height_m": 24.97,
+    "crown_radius_m": 1.13,
+    "confidence": 0.742,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 28.22
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24588741,
+     49.26248973
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0417",
+    "height_m": 24.96,
+    "crown_radius_m": 1.13,
+    "confidence": 0.563,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 8.06
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24685822,
+     49.26423497
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0418",
+    "height_m": 24.95,
+    "crown_radius_m": 2.26,
+    "confidence": 0.772,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 19.23
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24835169,
+     49.26055701
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0419",
+    "height_m": 24.93,
+    "crown_radius_m": 1.96,
+    "confidence": 0.772,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 24.76
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24583252,
+     49.26250786
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0420",
+    "height_m": 24.91,
+    "crown_radius_m": 1.13,
+    "confidence": 0.628,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 12.45
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24556488,
+     49.26396752
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0421",
+    "height_m": 24.9,
+    "crown_radius_m": 2.99,
+    "confidence": 0.811,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 20.21
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24504133,
+     49.26371644
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0422",
+    "height_m": 24.9,
+    "crown_radius_m": 1.13,
+    "confidence": 0.53,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 5.93
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24533701,
+     49.2623648
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0423",
+    "height_m": 24.86,
+    "crown_radius_m": 1.13,
+    "confidence": 0.74,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 39.54
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.2453371,
+     49.26238282
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0424",
+    "height_m": 24.85,
+    "crown_radius_m": 5.87,
+    "confidence": 0.918,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 41.1
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24577763,
+     49.26252599
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0425",
+    "height_m": 24.81,
+    "crown_radius_m": 1.13,
+    "confidence": 0.693,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 16.88
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24536441,
+     49.26234673
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0426",
+    "height_m": 24.76,
+    "crown_radius_m": 2.26,
+    "confidence": 0.781,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 39.17
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24556506,
+     49.26400355
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0427",
+    "height_m": 24.71,
+    "crown_radius_m": 2.26,
+    "confidence": 0.78,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 21.76
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24613946,
+     49.26342589
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0428",
+    "height_m": 24.7,
+    "crown_radius_m": 6.49,
+    "confidence": 0.747,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 7.26
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24561968,
+     49.26393138
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0429",
+    "height_m": 24.69,
+    "crown_radius_m": 1.13,
+    "confidence": 0.737,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 21.46
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24824192,
+     49.26059327
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0430",
+    "height_m": 24.69,
+    "crown_radius_m": 1.13,
+    "confidence": 0.737,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 24.69
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24824192,
+     49.26059327
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0431",
+    "height_m": 24.68,
+    "crown_radius_m": 22.81,
+    "confidence": 0.995,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 24.69
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25109795,
+     49.26006471
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0432",
+    "height_m": 24.68,
+    "crown_radius_m": 5.3,
+    "confidence": 0.788,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 12.94
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.2454193,
+     49.2623286
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0433",
+    "height_m": 24.67,
+    "crown_radius_m": 1.96,
+    "confidence": 0.768,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 38.26
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25021419,
+     49.26467808
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0434",
+    "height_m": 24.65,
+    "crown_radius_m": 2.52,
+    "confidence": 0.789,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 27.62
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24628282,
+     49.26461448
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0435",
+    "height_m": 24.65,
+    "crown_radius_m": 1.6,
+    "confidence": 0.578,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 8.26
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24528106,
+     49.26216677
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0436",
+    "height_m": 24.65,
+    "crown_radius_m": 2.99,
+    "confidence": 0.781,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 18.27
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24533603,
+     49.26216666
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0437",
+    "height_m": 24.65,
+    "crown_radius_m": 1.13,
+    "confidence": 0.737,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 20.0
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24567456,
+     49.26391325
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0438",
+    "height_m": 24.64,
+    "crown_radius_m": 1.13,
+    "confidence": 0.737,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 20.05
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24677593,
+     49.26427117
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0439",
+    "height_m": 24.63,
+    "crown_radius_m": 1.6,
+    "confidence": 0.754,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 23.58
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24680297,
+     49.26418104
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0440",
+    "height_m": 24.59,
+    "crown_radius_m": 5.87,
+    "confidence": 0.839,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 15.03
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24813215,
+     49.26062954
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0441",
+    "height_m": 24.59,
+    "crown_radius_m": 1.13,
+    "confidence": 0.736,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 24.85
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24515084,
+     49.26362614
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0442",
+    "height_m": 24.58,
+    "crown_radius_m": 5.76,
+    "confidence": 0.768,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 10.6
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.246063,
+     49.26463296
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0443",
+    "height_m": 24.55,
+    "crown_radius_m": 1.13,
+    "confidence": 0.701,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 17.74
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24536379,
+     49.26222064
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0444",
+    "height_m": 24.54,
+    "crown_radius_m": 1.13,
+    "confidence": 0.735,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 26.22
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24522617,
+     49.2621849
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0445",
+    "height_m": 24.53,
+    "crown_radius_m": 2.99,
+    "confidence": 0.794,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 19.31
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.2450957,
+     49.25804207
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0446",
+    "height_m": 24.53,
+    "crown_radius_m": 6.68,
+    "confidence": 0.943,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 58.29
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24583234,
+     49.26247183
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0447",
+    "height_m": 24.52,
+    "crown_radius_m": 6.49,
+    "confidence": 0.814,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 11.87
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24530935,
+     49.26232883
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0448",
+    "height_m": 24.52,
+    "crown_radius_m": 5.17,
+    "confidence": 0.886,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 35.2
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24528177,
+     49.26231088
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0449",
+    "height_m": 24.52,
+    "crown_radius_m": 2.26,
+    "confidence": 0.777,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 32.37
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24625524,
+     49.26459652
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0450",
+    "height_m": 24.51,
+    "crown_radius_m": 1.96,
+    "confidence": 0.573,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 7.16
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24530926,
+     49.26231082
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0451",
+    "height_m": 24.5,
+    "crown_radius_m": 1.13,
+    "confidence": 0.734,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 33.71
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24528159,
+     49.26227485
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0452",
+    "height_m": 24.49,
+    "crown_radius_m": 6.77,
+    "confidence": 0.946,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 29.46
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24536415,
+     49.26229269
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0453",
+    "height_m": 24.46,
+    "crown_radius_m": 2.99,
+    "confidence": 0.803,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 33.51
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25041879,
+     49.26165137
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0454",
+    "height_m": 24.46,
+    "crown_radius_m": 1.6,
+    "confidence": 0.498,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 3.11
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24570196,
+     49.26389517
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0455",
+    "height_m": 24.44,
+    "crown_radius_m": 1.96,
+    "confidence": 0.746,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 18.75
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24944603,
+     49.26498598
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0456",
+    "height_m": 24.42,
+    "crown_radius_m": 3.91,
+    "confidence": 0.638,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 6.71
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24666893,
+     49.26486584
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0457",
+    "height_m": 24.41,
+    "crown_radius_m": 4.07,
+    "confidence": 0.843,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 20.44
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24622757,
+     49.26456056
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0458",
+    "height_m": 24.41,
+    "crown_radius_m": 1.96,
+    "confidence": 0.554,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 6.01
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24889397,
+     49.26453683
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0459",
+    "height_m": 24.38,
+    "crown_radius_m": 1.6,
+    "confidence": 0.516,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 4.4
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24519895,
+     49.262239
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0460",
+    "height_m": 24.36,
+    "crown_radius_m": 6.18,
+    "confidence": 0.922,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 22.4
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25047377,
+     49.26165125
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0461",
+    "height_m": 24.36,
+    "crown_radius_m": 2.77,
+    "confidence": 0.527,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 2.19
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25201951,
+     49.26290884
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0462",
+    "height_m": 24.31,
+    "crown_radius_m": 2.26,
+    "confidence": 0.708,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 15.64
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24580351,
+     49.26220169
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0463",
+    "height_m": 24.29,
+    "crown_radius_m": 1.13,
+    "confidence": 0.543,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 7.49
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25199267,
+     49.26303499
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0464",
+    "height_m": 24.27,
+    "crown_radius_m": 1.6,
+    "confidence": 0.748,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 24.09
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24603103,
+     49.26373235
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0465",
+    "height_m": 24.26,
+    "crown_radius_m": 1.13,
+    "confidence": 0.731,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 22.33
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24584245,
+     49.26450733
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0466",
+    "height_m": 24.22,
+    "crown_radius_m": 1.13,
+    "confidence": 0.73,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 23.73
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25431541,
+     49.26034589
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0467",
+    "height_m": 24.21,
+    "crown_radius_m": 13.31,
+    "confidence": 0.909,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 14.8
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24589761,
+     49.26454324
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0468",
+    "height_m": 24.2,
+    "crown_radius_m": 1.6,
+    "confidence": 0.747,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 26.23
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24955589,
+     49.26496772
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0469",
+    "height_m": 24.19,
+    "crown_radius_m": 6.77,
+    "confidence": 0.715,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 4.92
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24780961,
+     49.26208932
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0470",
+    "height_m": 24.17,
+    "crown_radius_m": 1.13,
+    "confidence": 0.729,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 22.15
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24594874,
+     49.26376856
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0471",
+    "height_m": 24.15,
+    "crown_radius_m": 4.07,
+    "confidence": 0.839,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 25.11
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25190983,
+     49.26296312
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0472",
+    "height_m": 24.15,
+    "crown_radius_m": 8.75,
+    "confidence": 0.986,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 24.11
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25466292,
+     49.25843569
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0473",
+    "height_m": 24.15,
+    "crown_radius_m": 8.96,
+    "confidence": 0.986,
+    "land_class": "outside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 26.48
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24581487,
+     49.26448938
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0474",
+    "height_m": 24.13,
+    "crown_radius_m": 1.96,
+    "confidence": 0.76,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 20.97
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25033615,
+     49.26161553
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0475",
+    "height_m": 24.13,
+    "crown_radius_m": 11.06,
+    "confidence": 0.811,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 8.31
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25452042,
+     49.26279528
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0476",
+    "height_m": 24.07,
+    "crown_radius_m": 2.26,
+    "confidence": 0.6,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 8.65
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25232363,
+     49.26325043
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0477",
+    "height_m": 24.05,
+    "crown_radius_m": 3.19,
+    "confidence": 0.804,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 25.04
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25028072,
+     49.26152558
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0478",
+    "height_m": 24.05,
+    "crown_radius_m": 4.22,
+    "confidence": 0.634,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 6.03
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24627798,
+     49.26364176
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0479",
+    "height_m": 24.04,
+    "crown_radius_m": 1.13,
+    "confidence": 0.565,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 9.21
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25218545,
+     49.26310662
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0480",
+    "height_m": 24.02,
+    "crown_radius_m": 1.13,
+    "confidence": 0.65,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 14.9
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25063797,
+     49.26150679
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0481",
+    "height_m": 24.02,
+    "crown_radius_m": 1.96,
+    "confidence": 0.543,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 5.69
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24577593,
+     49.26218373
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0482",
+    "height_m": 24.0,
+    "crown_radius_m": 1.96,
+    "confidence": 0.573,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 7.72
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24758835,
+     49.2618196
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0483",
+    "height_m": 23.98,
+    "crown_radius_m": 1.13,
+    "confidence": 0.681,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 17.01
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25452069,
+     49.26284932
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0484",
+    "height_m": 23.96,
+    "crown_radius_m": 1.6,
+    "confidence": 0.577,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 8.91
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24802924,
+     49.26203481
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0485",
+    "height_m": 23.94,
+    "crown_radius_m": 16.86,
+    "confidence": 0.983,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 26.51
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24591821,
+     49.26315616
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0486",
+    "height_m": 23.92,
+    "crown_radius_m": 6.18,
+    "confidence": 0.914,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 20.81
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25446572,
+     49.26284944
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0487",
+    "height_m": 23.86,
+    "crown_radius_m": 1.6,
+    "confidence": 0.632,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 12.7
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25268301,
+     49.26364594
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0488",
+    "height_m": 23.85,
+    "crown_radius_m": 5.05,
+    "confidence": 0.717,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 9.76
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.2477266,
+     49.26198142
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0489",
+    "height_m": 23.85,
+    "crown_radius_m": 1.13,
+    "confidence": 0.687,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 17.52
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.2456991,
+     49.26331875
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0490",
+    "height_m": 23.84,
+    "crown_radius_m": 16.13,
+    "confidence": 0.882,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 13.38
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24775427,
+     49.26201739
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0491",
+    "height_m": 23.83,
+    "crown_radius_m": 1.13,
+    "confidence": 0.695,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 18.12
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25211387,
+     49.25984634
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0492",
+    "height_m": 23.83,
+    "crown_radius_m": 7.32,
+    "confidence": 0.72,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 4.27
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25229642,
+     49.26330453
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0493",
+    "height_m": 23.82,
+    "crown_radius_m": 1.6,
+    "confidence": 0.741,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 24.11
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24583896,
+     49.26380482
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0494",
+    "height_m": 23.78,
+    "crown_radius_m": 4.52,
+    "confidence": 0.827,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 18.44
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.2476436,
+     49.26187352
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0495",
+    "height_m": 23.75,
+    "crown_radius_m": 1.6,
+    "confidence": 0.712,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 18.13
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25039058,
+     49.26150733
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0496",
+    "height_m": 23.75,
+    "crown_radius_m": 3.39,
+    "confidence": 0.534,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 1.81
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25400923,
+     49.26495802
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0497",
+    "height_m": 23.74,
+    "crown_radius_m": 7.98,
+    "confidence": 0.979,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 26.17
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24625058,
+     49.26365983
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0498",
+    "height_m": 23.73,
+    "crown_radius_m": 2.52,
+    "confidence": 0.653,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 11.89
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.25354172,
+     49.26492302
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0499",
+    "height_m": 23.71,
+    "crown_radius_m": 11.12,
+    "confidence": 0.965,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 19.02
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.24810439,
+     49.26057556
+    ]
+   },
+   "properties": {
+    "candidate_id": "off-0500",
+    "height_m": 23.71,
+    "crown_radius_m": 1.13,
+    "confidence": 0.722,
+    "land_class": "inside analysis boundary (ownership unknown)",
+    "nearest_inventory_m": 27.54
+   }
+  }
+ ]
+}

@@ -28,6 +28,8 @@ def test_static_shell_has_required_hooks() -> None:
         "pareto-axis-x",
         "pareto-axis-y",
         "pareto-axis-z",
+        "off-inventory-summary",
+        "toggle-off-inventory",
     ):
         assert marker in html
     assert "static/vendor/maplibre-gl.js" in html
@@ -70,6 +72,9 @@ def test_app_script_has_the_expected_endpoints_and_layers() -> None:
         "loadParetoScenario",
         "positionParetoAxisLabels",
         "updateParetoAxes",
+        "api/off-inventory",
+        "renderOffInventory",
+        "offInventoryFeatures",
     ):
         assert marker in script
     assert "eval(" not in script
