@@ -504,3 +504,19 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Close-out report: `notes/reports/p18-closeout.md`. P18 is complete.
 - Limits: one demo dataset, no field validation of the merge reduction, and the small-tree
   flag is not exercised because the detector minimum height is above the threshold.
+
+### P19 Merge-reduction audit and guard
+
+- Audited the demo merge: 57 groups, 215 source crowns, one group with 67 crowns spanning
+  4.6 km. The old union-find merged transitively across the whole dataset.
+- Added `merge_max_group_members` (default 4) and `merge_max_group_extent_m` (default 30 m)
+  guards. A union is rejected when the combined group exceeds either cap.
+- Guarded demo: 3 local groups, 6 source crowns, 859 detected -> 856 kept. The old rule kept
+  701. The guarded merge is conservative and may under-merge real over-segmentation.
+- Exposed `--merge-max-area-ratio`, `--merge-max-height-delta`,
+  `--merge-max-group-members`, and `--merge-max-group-extent` on `detect-trees`.
+- Added guard and invalid-parameter tests; rendered a before/after audit map in `runtime/`.
+- Tests: 350 passed; total coverage 87.82 percent. Dashboard: GREEN.
+- Close-out report: `notes/reports/p19-closeout.md`. P19 is complete.
+- Limits: one demo dataset and a visual audit; no field crown labels; the merge is a safety
+  filter, not an instance solver; the default detector is unchanged.

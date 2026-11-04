@@ -24,6 +24,7 @@ This roadmap is the plan of record and the issue tracker map for FRESH Urban For
 | P16 Optional FEMIC ground-adapter implementation | #103 | `feature/p16-ground-adapter` | complete |
 | P17 CHM/ITD post-processing | #113 | `feature/p17-itd-postprocess` | complete |
 | P18 CHM/ITD post-processing exports and smoke test | #116 | `feature/p18-itd-exports` | complete |
+| P19 Merge-reduction audit and guard | #119 | `feature/p19-merge-audit` | complete |
 
 ## Lifecycle Map
 
@@ -672,6 +673,35 @@ Phase 18 verification:
 - `python scripts/dashboard.py`
 - `python scripts/check_workflow.py`
 
+## Phase 19: Merge-reduction audit and guard
+
+Parent issue: #119
+Branch: `feature/p19-merge-audit`
+Status: complete
+
+Goal: audit the P17/P18 merge on the demo, fix the transitive chain collapse, and expose
+merge tuning options.
+
+- [x] P19.1 Merge audit, guard, CLI options, tests, and report (#120)
+  - [x] Old rule: 57 groups, 215 crowns, largest group 67 crowns over 4.6 km
+  - [x] Guarded rule: 3 local groups, 6 crowns, 859 detected -> 856 kept
+  - [x] `merge_max_group_members` and `merge_max_group_extent_m`
+  - [x] CLI tuning options and guard tests
+
+Acceptance criteria:
+
+- The audit reports the old and guarded merge-group counts and extents.
+- The chain-collapse false merge is documented with evidence.
+- The guarded rule prevents the chain collapse.
+- The CLI exposes merge tuning options.
+- Tests cover the guard behavior.
+- The dashboard is green.
+
+Phase 19 verification:
+
+- `python scripts/dashboard.py`
+- `python scripts/check_workflow.py`
+
 ## Detailed Next Steps Notes
 
 1. The repository was created from `UBC-FRESH/ubc-fresh-dev-workflow` on 2026-11-03. The seed's dashboard, validator, docs, and agent contract are retained.
@@ -687,3 +717,4 @@ Phase 18 verification:
 11. P16 (#103) implements the optional sidecar ground adapter: `write_ground_bundle`, the `ground-adapter` CLI, extra dimensions, manifest/QA schemas, and synthetic contract tests. It remains opt-in and does not change default FEMIC products.
 12. P17 (#113) adds opt-in CHM/ITD post-processing: edge buffer flags, small-tree height flags, and a conservative over-segmentation merge with source-ID groups. `kept()` excludes both flag sets; `detect_trees` defaults are unchanged.
 13. P18 (#116) exposes the P17 post-processing through `detect-trees --postprocess` and writes a sidecar summary. The UBC demo detects 859 crowns, keeps 701 after 57 merge groups, and a 50 m stress buffer flags 5. The default detector path is unchanged; the merge reduction needs visual review before operational use.
+14. P19 (#119) audits the demo merge and finds a transitive chain collapse: the old rule merged 67 crowns across 4.6 km. The guarded rule caps groups at 4 crowns and 30 m, reducing the demo to 3 local groups and 856 kept crowns. The guard prevents false merges but may under-merge real over-segmentation; the merge is a safety filter, not an instance solver.

@@ -168,3 +168,53 @@ def test_result_is_json_friendly() -> None:
     assert payload["tree_count"] == 2
     assert payload["buffer_ids"] == ["edge"]
     assert payload["kept_ids"] == ["center"]
+
+
+def test_group_extent_guard_blocks_a_chain_merge() -> None:
+    """A chain that would grow past the group extent is stopped."""
+    trees = (
+        _tree("a", 0.0, 0.0, height_m=10.0, crown_radius_m=20.0),
+        _tree("b", 15.0, 0.0, height_m=10.0, crown_radius_m=10.0),
+        _tree("c", 25.0, 0.0, height_m=10.0, crown_radius_m=5.0),
+    )
+    result = postprocess_trees(
+        trees,
+        (-50.0, -50.0, 50.0, 50.0),
+        buffer_m=0.0,
+        merge_max_group_extent_m=20.0,
+    )
+    assert result.merge_groups == (("a", "b"),)
+    assert {tree.tree_id for tree in result.trees} == {"a", "c"}
+
+
+def test_group_member_guard_limits_group_size() -> None:
+    """No merge group exceeds the member cap."""
+    trees = (
+        _tree("a", 0.0, 0.0, height_m=10.0, crown_radius_m=20.0),
+        _tree("b", 5.0, 0.0, height_m=10.0, crown_radius_m=5.0),
+        _tree("c", 10.0, 0.0, height_m=10.0, crown_radius_m=5.0),
+    )
+    result = postprocess_trees(
+        trees,
+        (-50.0, -50.0, 50.0, 50.0),
+        buffer_m=0.0,
+        merge_max_group_members=2,
+    )
+    assert all(len(group) <= 2 for group in result.merge_groups)
+
+
+def test_invalid_group_guards_raise() -> None:
+    """Group-size and extent guards reject invalid values."""
+    trees = (_tree("one", 0.0, 0.0),)
+    with pytest.raises(ValueError, match="merge_max_group_members"):
+        postprocess_trees(
+            trees,
+            (-10.0, -10.0, 10.0, 10.0),
+            merge_max_group_members=1,
+        )
+    with pytest.raises(ValueError, match="merge_max_group_extent_m"):
+        postprocess_trees(
+            trees,
+            (-10.0, -10.0, 10.0, 10.0),
+            merge_max_group_extent_m=0.0,
+        )

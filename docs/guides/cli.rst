@@ -78,7 +78,10 @@ sidecar summary to ``<out>.summary.json`` unless ``--summary`` is supplied.
      --buffer 10 \
      --max-small-height 2
 
-Without ``--postprocess`` the command and output are unchanged.
+Without ``--postprocess`` the command and output are unchanged. The merge is guarded by
+``--merge-max-group-members`` (default 4) and ``--merge-max-group-extent`` (default 30 m)
+so a chain of small pairwise merges cannot collapse crowns across the whole dataset. Use
+``--merge-max-area-ratio`` and ``--merge-max-height-delta`` to tune the pairwise rule.
 
 Tile discovery
 --------------

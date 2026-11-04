@@ -160,6 +160,26 @@ MAX_SMALL_HEIGHT_OPTION = typer.Option(
 MERGE_OPTION = typer.Option(
     True, "--merge/--no-merge", help="Conservatively merge overlapping crowns."
 )
+MERGE_AREA_RATIO_OPTION = typer.Option(
+    0.6,
+    "--merge-max-area-ratio",
+    help="Maximum smaller/larger crown-area ratio for a merge.",
+)
+MERGE_HEIGHT_DELTA_OPTION = typer.Option(
+    2.0,
+    "--merge-max-height-delta",
+    help="Maximum crown height difference for a merge.",
+)
+MERGE_GROUP_MEMBERS_OPTION = typer.Option(
+    4,
+    "--merge-max-group-members",
+    help="Maximum source crowns in one merge group.",
+)
+MERGE_GROUP_EXTENT_OPTION = typer.Option(
+    30.0,
+    "--merge-max-group-extent",
+    help="Maximum merge-group XY extent in metres.",
+)
 SUMMARY_OPTION = typer.Option(None, "--summary", help="Optional post-processing summary JSON path.")
 THRESHOLD_OPTION = typer.Option(2.0, "--threshold", help="Canopy threshold in metres.")
 LAYER_OPTION = typer.Option(4, "--layer", help="LidarBC ArcGIS layer id (4 is point cloud).")
@@ -651,6 +671,10 @@ def detect_trees_command(
     buffer: float = BUFFER_OPTION,
     max_small_height: float = MAX_SMALL_HEIGHT_OPTION,
     merge: bool = MERGE_OPTION,
+    merge_max_area_ratio: float = MERGE_AREA_RATIO_OPTION,
+    merge_max_height_delta: float = MERGE_HEIGHT_DELTA_OPTION,
+    merge_max_group_members: int = MERGE_GROUP_MEMBERS_OPTION,
+    merge_max_group_extent: float = MERGE_GROUP_EXTENT_OPTION,
     summary: Path | None = SUMMARY_OPTION,
 ) -> None:
     """Detect individual crowns from a dataset canopy-height grid.
@@ -673,6 +697,14 @@ def detect_trees_command(
         Small-tree height threshold in metres.
     merge : bool
         Conservatively merge overlapping crowns.
+    merge_max_area_ratio : float
+        Maximum smaller/larger crown-area ratio for a merge.
+    merge_max_height_delta : float
+        Maximum crown height difference for a merge.
+    merge_max_group_members : int
+        Maximum source crowns in one merge group.
+    merge_max_group_extent : float
+        Maximum merge-group XY extent in metres.
     summary : Path or None
         Optional post-processing summary JSON path. Defaults to a sidecar next to ``out``.
     """
@@ -685,6 +717,10 @@ def detect_trees_command(
             buffer_m=buffer,
             max_small_height_m=max_small_height,
             merge=merge,
+            merge_max_area_ratio=merge_max_area_ratio,
+            merge_max_height_delta_m=merge_max_height_delta,
+            merge_max_group_members=merge_max_group_members,
+            merge_max_group_extent_m=merge_max_group_extent,
         )
         kept = result.kept()
         out.parent.mkdir(parents=True, exist_ok=True)

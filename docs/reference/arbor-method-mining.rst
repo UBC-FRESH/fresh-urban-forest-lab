@@ -104,10 +104,11 @@ merge is deliberately narrow: the smaller crown must be much smaller by area, it
 must fall inside the larger crown, and the height difference must be small. Every merge
 group records its source IDs. The default `detect_trees` output is unchanged.
 
-The `detect-trees --postprocess` CLI path writes kept crowns and a sidecar summary. On the
-UBC demo, the default run detects 859 crowns and keeps 701 after 57 merge groups; a 50 m
-stress buffer flags 5 crowns. The merge reduction is large and needs visual review before
-operational use.
+The `detect-trees --postprocess` CLI path writes kept crowns and a sidecar summary. P19
+found that the first merge rule chain-collapsed 67 crowns across the whole UBC demo. The
+rule now caps a group at 4 source crowns and 30 m XY extent. On the demo, the guarded run
+detects 859 crowns and keeps 856 after 3 local merge groups; a 50 m stress buffer flags 5.
+The guarded merge is conservative and may under-merge real over-segmentation.
 
 What is next
 ------------
