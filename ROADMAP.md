@@ -20,6 +20,7 @@ This roadmap is the plan of record and the issue tracker map for FRESH Urban For
 | P11 Integration and v0.3 release candidate | #44 | `feature/p11-integration` | pr-open |
 | P12 Arbor method mining and clean-room point-cloud primitives | #61 | `feature/p12-arbor-methods` | complete |
 | P13 ALS ground classification and height above ground | #70 | `feature/p13-als-ground` | complete |
+| P14 Ground reference and second terrain validation | #89 | `feature/p14-ground-reference` | complete |
 
 ## Lifecycle Map
 
@@ -532,6 +533,40 @@ Phase 13 verification:
 - `python scripts/dashboard.py`
 - `python scripts/check_workflow.py`
 
+## Phase 14: Ground reference and second terrain validation
+
+Parent issue: #89
+Branch: `feature/p14-ground-reference`
+Status: complete
+
+Goal: close the P13 validation gap with a reproducible class-2 reference construction and a
+second, steeper terrain tile, then revisit the FEMIC decision.
+
+Plan: `notes/reports/p14-ground-reference.md`.
+
+- [x] P14.1 Ground reference protocol and high-confidence negatives (#90)
+  - [x] Positive = class 2; high-confidence negative = non-class-2 with reference HAG > 2 m
+  - [x] Ambiguous 0-2 m band excluded; no classifier HAG used to define negatives
+- [x] P14.2 Steep interior tile validation (#91)
+  - [x] 2021 Golden-area tile, 113,775 points, about 62 m relief
+  - [x] Class-2 recall 0.9634; high-confidence false-ground 4.65%; HAG p99 0.0441 m
+- [x] P14.3 FEMIC decision revisit (#92)
+  - [x] Approve an optional adapter prototype, not a default pipeline change
+  - [x] Conditions recorded: manual patch, versioned adapter, stable contract
+
+Acceptance criteria:
+
+- The reference construction is documented and reproducible.
+- The coastal and steep tiles report class-2 recall and high-confidence false-ground rate.
+- The report states what the reference does and does not prove.
+- The FEMIC decision is updated explicitly.
+- The dashboard is green.
+
+Phase 14 verification:
+
+- `python scripts/dashboard.py`
+- `python scripts/check_workflow.py`
+
 ## Detailed Next Steps Notes
 
 1. The repository was created from `UBC-FRESH/ubc-fresh-dev-workflow` on 2026-11-03. The seed's dashboard, validator, docs, and agent contract are retained.
@@ -547,3 +582,4 @@ Phase 13 verification:
 11. The P7-P11 queue does not block the v0.2.0 release candidate. P5 remains the release gate; its tag, release, and settings actions still need explicit maintainer approval.
 12. P12 (#61) mines Arbor 1.1.5 methods without copying its GPL-3.0 code. The first slice adds four opt-in point-cloud primitives, the provenance note, ADR 0006, and the public docs page. The next ALS-relevant candidate is PTD-inspired ground classification; the MLS/TLS semantic, instance, and QSM stack belongs in a future separately tested package.
 13. P13 (#70) adds `classify_ground_ptd` and `GroundClassification` for the ALS ground lane. P13.1 covers the core algorithm, synthetic fixtures, and provenance. P13.2 validates a 415,068-point LidarBC 2025 tile: class-2 recall is 0.9998 and class-2 HAG p99 is 0.021 m, but the reference classes are not exhaustive negatives and near-ground class-7 noise is over-labelled as ground. P13.3 shows SOR removes high noise with 0.04-0.6% class-2 ground loss but does not fix near-ground noise; 99.84% of class-7 false ground is within 0.15 m HAG, so `low_point_mask(0.15)` is the downstream segmentation contract. P13.4 defers FEMIC integration until a checked reference patch, a second terrain type, and a fuller PTD angle test exist. The classifier remains an opt-in consumer-side utility; no operational or FEMIC claim is made.
+14. P14 (#89) closes the P13 validation gap with a class-2 reference surface and a steep Golden-area tile. Class-2 recall is 0.9634 and high-confidence false-ground is 4.65% on the steep tile; the coastal tile is 0.9999 and 3.35%. P14.3 approves an optional FEMIC adapter prototype only, with a manual reference patch and versioned contract as conditions. No default pipeline change or operational claim is made.

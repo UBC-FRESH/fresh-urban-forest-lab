@@ -404,3 +404,24 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Tests: 331 passed. Dashboard: GREEN.
 - Release limits: no tag, GitHub release, Pages setting, or public deployment has been
   created; those actions remain approval-gated.
+
+### P14 Ground reference and second terrain validation
+
+- Added a reproducible reference protocol: class 2 as positive ground, nearest class-2
+  surface for reference HAG, high-confidence negative as non-class-2 with reference HAG
+  > 2 m, and the ambiguous 0-2 m band excluded.
+- Validated the 2021 Golden-area steep tile
+  `bc_082n025_4_2_1_xyes_8_utm11_2021.laz` (113,775 points, about 62 m relief,
+  EPSG:2955 + CGVD2013) under OGL-BC.
+- Steep tile: class-2 recall 0.9634, high-confidence false-ground 4.65%, class-2 HAG p99
+  0.0441 m, predicted ground 76.12% of kept points.
+- Coastal tile: class-2 recall 0.9999, high-confidence false-ground 3.35%, class-2 HAG p99
+  0.0217 m.
+- P14.3 approves an optional FEMIC adapter prototype, not a default pipeline change.
+  Conditions: manual reference patch, versioned optional adapter, stable
+  `GroundClassification`/`low_point_mask` contract, second steep and coastal tile.
+- Added `notes/reports/p14-ground-reference.md` and `.json`.
+- Tests: 331 passed; total coverage 87.66 percent. Dashboard: GREEN.
+- Close-out report: `notes/reports/p14-closeout.md`. P14 is complete.
+- Limits: the reference is not manually labelled; the 0-2 m band is excluded; one small
+  steep tile; no production FEMIC integration.
