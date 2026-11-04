@@ -20,6 +20,7 @@ This roadmap is the plan of record and the issue tracker map for FRESH Urban For
 | P12 Arbor method mining and clean-room point-cloud primitives | #61 | `feature/p12-arbor-methods` | complete |
 | P13 ALS ground classification and height above ground | #70 | `feature/p13-als-ground` | complete |
 | P14 Ground reference and second terrain validation | #89 | `feature/p14-ground-reference` | complete |
+| P15 Manual ground reference and optional FEMIC adapter design | #95 | `feature/p15-ground-adapter` | complete |
 
 ## Lifecycle Map
 
@@ -547,6 +548,40 @@ Phase 14 verification:
 - `python scripts/dashboard.py`
 - `python scripts/check_workflow.py`
 
+## Phase 15: Manual ground reference and optional FEMIC adapter design
+
+Parent issue: #95
+Branch: `feature/p15-ground-adapter`
+Status: complete
+
+Goal: add a manually checked 20 m ground reference patch and design an optional, versioned
+sidecar FEMIC adapter without changing default FEMIC products.
+
+Plan: `notes/reports/p15-ground-reference.md`, `notes/design/femic-ground-adapter.md`.
+Decision: `notes/adr/0007-optional-femic-ground-adapter.md`.
+
+- [x] P15.1 Manually checked 20 m reference patch (#96)
+  - [x] 20 m x 20 m Golden-area patch, side/top view, class 1/2/7 check
+  - [x] Class-2 recall 0.9507; high-confidence false-ground 3.14%; HAG p99 0.0434 m
+- [x] P15.2 Optional FEMIC adapter design (#97)
+  - [x] Sidecar `ground.laz`, `manifest.json`, and `qa.json`
+  - [x] Optional dependency, versioned schemas, warnings, and contract-test plan
+- [x] P15.3 Decision and close-out (#98)
+  - [x] Accept the design; implementation deferred to a later phase
+
+Acceptance criteria:
+
+- The reference patch is documented with a cross-section check and metrics.
+- The FEMIC adapter design is versioned, optional, and does not change default products.
+- The design names provenance, QA fields, failure modes, and test strategy.
+- The classifier remains opt-in.
+- The dashboard is green.
+
+Phase 15 verification:
+
+- `python scripts/dashboard.py`
+- `python scripts/check_workflow.py`
+
 ## Detailed Next Steps Notes
 
 1. The repository was created from `UBC-FRESH/ubc-fresh-dev-workflow` on 2026-11-03. The seed's dashboard, validator, docs, and agent contract are retained.
@@ -558,3 +593,4 @@ Phase 14 verification:
 7. P12 (#61) mines Arbor 1.1.5 methods without copying its GPL-3.0 code. Four opt-in point-cloud primitives, the provenance note, ADR 0006, and the public docs page are complete.
 8. P13 (#70) adds `classify_ground_ptd` and `GroundClassification` for the ALS ground lane. P13.4 defers FEMIC integration until a checked reference patch, a second terrain type, and a fuller PTD angle test exist.
 9. P14 (#89) adds a class-2 reference surface and steep-tile validation. Class-2 recall is 0.9634 and high-confidence false-ground is 4.65% on the steep tile; the coastal tile is 0.9999 and 3.35%. An optional FEMIC adapter prototype is approved only with a manual reference patch and versioned contract.
+10. P15 (#95) adds a manually checked 20 m Golden-area patch and accepts an optional sidecar FEMIC adapter design. The patch shows class-2 recall 0.9507 and high-confidence false-ground 3.14%. The adapter is not implemented; the design defines `ground.laz`, `manifest.json`, and `qa.json`, no hard FEMIC dependency, and no default product change.

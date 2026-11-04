@@ -436,3 +436,19 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
   workflow task.
 - Closed P6 issue #7 and P5.0 issue #39 with evidence and explicit limitations.
 - Release notes: `notes/releases/v0.3.0.md`.
+
+### P15 Manual ground reference and optional FEMIC adapter design
+
+- Added a manually checked 20 m x 20 m reference patch from the Golden-area steep tile:
+  6,393 points, classes 1=5,410, 2=975, 7=8.
+- Side/top views confirm class 2 is the lowest continuous surface and class 1 mixes
+  unclassified ground with above-surface vegetation. The check is not point-by-point.
+- Patch metrics: class-2 recall 0.9507, high-confidence false-ground 3.14%, class-2 HAG p99
+  0.0434 m.
+- Added the optional FEMIC sidecar adapter design: `ground.laz`, `manifest.json`, and
+  `qa.json`; versioned schemas; no hard FEMIC dependency; no default product change.
+- Added ADR 0007: the adapter is a sidecar contract, not a FEMIC core import.
+- Tests: 331 passed; total coverage 87.66 percent. Dashboard: GREEN.
+- Close-out report: `notes/reports/p15-closeout.md`. P15 is complete.
+- Limits: the patch is visually checked, not point-by-point labelled; the adapter is
+  designed but not implemented; no tag or release is included.

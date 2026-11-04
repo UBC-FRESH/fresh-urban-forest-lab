@@ -80,13 +80,22 @@ P14.3 approves an optional FEMIC adapter prototype, not a default pipeline chang
 conditions are a manually labelled reference patch, a versioned optional FEMIC-side design,
 and a stable contract. The classifier stays opt-in in this repository.
 
+P15 adds a manually checked 20 m x 20 m Golden-area patch (6,393 points). The side view
+confirms class 2 is the lowest continuous surface; class 1 mixes unclassified ground with
+above-surface vegetation. Patch metrics: class-2 recall 0.9507, high-confidence false-ground
+3.14%, class-2 HAG p99 0.0434 m.
+
+The optional FEMIC adapter design is a sidecar contract, not a core import: `ground.laz`,
+`manifest.json`, and `qa.json`, with versioned schemas and no default product change. The
+design is in `notes/design/femic-ground-adapter.md`; ADR 0007 records the decision. The
+adapter is designed but not implemented.
+
 What is next
 ------------
 
-The next step is a manual reference patch and an optional FEMIC adapter design. CHM/ITD
-post-processing (buffer flags, small-tree flags, over-segmentation merging) is a smaller
-intermediate step. QSM and QSF work belongs in a dedicated point-cloud package, not this
-app's core.
+The next step is an optional FEMIC adapter implementation with a contract test, or CHM/ITD
+post-processing (buffer flags, small-tree flags, over-segmentation merging). QSM and QSF
+work belongs in a dedicated point-cloud package, not this app's core.
 
 Citations
 ---------

@@ -35,6 +35,10 @@ Keep private material out of this directory.
 - `reports/p13-closeout.md`: P13 close-out, acceptance evidence, CI, and the P14 recommendation.
 - `reports/p14-ground-reference.md` and `.json`: P14 class-2 reference, steep-tile validation, and the optional FEMIC decision.
 - `reports/p14-closeout.md`: P14 close-out, acceptance evidence, and the P15 recommendation.
+- `reports/p15-ground-reference.md` and `.json`: P15 manual 20 m patch check and the optional-adapter decision.
+- `design/femic-ground-adapter.md`: optional sidecar adapter contract, bundle schema, failure modes, and test strategy.
+- `adr/0007-optional-femic-ground-adapter.md`: accept the sidecar contract; no default FEMIC change.
+- `reports/p15-closeout.md`: P15 close-out, acceptance evidence, and the P16 recommendation.
 - `releases/v0.2.0.md`: draft release notes; not tagged.
 - `reference/data-sources.md`: public UBC, Vancouver, and Metro Vancouver sources, with
   coverage, licences, and traps.

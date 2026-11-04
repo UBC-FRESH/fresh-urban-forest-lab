@@ -1,0 +1,60 @@
+{
+  "schema_version": "fresh-urban-forest.ground-patch.v1",
+  "date": "2026-11-04",
+  "tile": {
+    "filename": "bc_082n025_4_2_1_xyes_8_utm11_2021.laz",
+    "setting": "Golden-area 2021, steep",
+    "crs": "EPSG:2955 + CGVD2013",
+    "licence": "OGL-BC"
+  },
+  "patch": {
+    "center": [496582.375, 5678993.665],
+    "extent_m": [20, 20],
+    "bounds": [496572.38, 5678990.2, 496592.37, 5679003.66],
+    "points": 6393,
+    "class_counts": {"1_unclassified": 5410, "2_ground": 975, "7_noise": 8}
+  },
+  "manual_check": {
+    "method": "side-view scatter, 20 m x 20 m, colored by class",
+    "confirmed": [
+      "class 2 forms the lowest continuous surface",
+      "high points above the class-2 surface are not ground",
+      "class 1 mixes unclassified ground and vegetation"
+    ],
+    "not_confirmed": [
+      "point-by-point labels for class-1 points",
+      "exhaustive class-2 ground truth",
+      "full-tile accuracy"
+    ],
+    "artifact": "runtime/p15/reference_patch.png"
+  },
+  "reference": {
+    "positive": "class 2",
+    "high_confidence_negative": "non-class-2 with reference HAG > 2 m",
+    "ambiguous_band": "non-class-2 with 0-2 m reference HAG",
+    "positive_count": 975,
+    "high_confidence_negative_count": 1235,
+    "ambiguous_count": 4183
+  },
+  "result": {
+    "sor_removed": 227,
+    "predicted_ground": 4497,
+    "predicted_fraction_of_kept": 0.729322,
+    "class_2_recall": 0.950668,
+    "high_confidence_false_ground": 34,
+    "high_confidence_negative_total": 1083,
+    "high_confidence_false_ground_rate": 0.031394,
+    "class_2_hag_p95_m": 0.0024,
+    "class_2_hag_p99_m": 0.0434,
+    "low_point_fraction_false_ground": 0.529412,
+    "iterations": 8,
+    "seed_count": 224,
+    "warning": null
+  },
+  "decision": {
+    "adapter_design": "accepted",
+    "implementation": "not in this phase",
+    "femic_default": "unchanged",
+    "classifier": "opt-in"
+  }
+}
