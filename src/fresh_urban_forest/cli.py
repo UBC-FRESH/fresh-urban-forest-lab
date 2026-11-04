@@ -43,6 +43,12 @@ from fresh_urban_forest.lidar import PointCloudSummary, canopies_from_pair, summ
 from fresh_urban_forest.lidarbc import discover_lidarbc_tiles
 from fresh_urban_forest.materialize import materialize_sources, read_materialization_manifest
 from fresh_urban_forest.models import TerrainGrid, UrbanForestDataset
+from fresh_urban_forest.off_inventory import (
+    detect_off_inventory,
+    value_of_information,
+    write_report,
+    write_value_of_information,
+)
 from fresh_urban_forest.shade import (
     default_step_hours,
     shade_period,
@@ -182,6 +188,20 @@ SURROGATE_SAMPLES_OPTION = typer.Option(
     0, "--surrogate-samples", help="Fit a screening surrogate on this many samples."
 )
 ARCHIVE_OPTION = typer.Option(..., "--archive", help="Optimization result JSON.")
+GRID_SIZE_OPTION = typer.Option(700, "--grid-size", help="Detection grid maximum rows/columns.")
+MAX_CANDIDATES_OPTION = typer.Option(
+    500, "--max-candidates", help="Maximum off-inventory candidates."
+)
+MIN_CONFIDENCE_OPTION = typer.Option(0.3, "--min-confidence", help="Minimum candidate confidence.")
+VOI_OPTION = typer.Option(False, "--voi", help="Run the value-of-information experiment.")
+VOI_SITES_OPTION = typer.Option(24, "--voi-sites", help="Sites in each VOI problem.")
+VOI_SCALARIZATIONS_OPTION = typer.Option(
+    8, "--voi-scalarizations", help="Scalarizations in each VOI problem."
+)
+VOI_WORKERS_OPTION = typer.Option(1, "--voi-workers", help="VOI solver workers.")
+VOI_RADIUS_OPTION = typer.Option(
+    700.0, "--voi-radius", help="VOI candidate-search radius in metres."
+)
 TRACE_OPTION = typer.Option(False, "--trace", help="Keep per-scalarization convergence histories.")
 
 
@@ -704,6 +724,101 @@ def tune_detection_command(
         )
 
 
+@app.command("off-inventory")
+def off_inventory_command(
+    dataset: Path = DATASET_OPTION,
+    out_dir: Path = OUT_DIR_OPTION,
+    chm: Path | None = CHM_OPTION,
+    bbox: str | None = BBOX_OPTION,
+    min_height: float = MIN_HEIGHT_OPTION,
+    window: float = WINDOW_OPTION,
+    max_distance: float = MAX_DISTANCE_OPTION,
+    grid_size: int = GRID_SIZE_OPTION,
+    max_candidates: int = MAX_CANDIDATES_OPTION,
+    min_confidence: float = MIN_CONFIDENCE_OPTION,
+    voi: bool = VOI_OPTION,
+    voi_sites: int = VOI_SITES_OPTION,
+    voi_scalarizations: int = VOI_SCALARIZATIONS_OPTION,
+    voi_workers: int = VOI_WORKERS_OPTION,
+    voi_radius: float = VOI_RADIUS_OPTION,
+) -> None:
+    """Detect unmatched crowns and write an off-inventory candidate layer.
+
+    Parameters
+    ----------
+    dataset : Path
+        Dataset directory.
+    out_dir : Path
+        Output directory.
+    chm : Path or None
+        Optional higher-resolution CHM.
+    bbox : str or None
+        Optional WGS84 patch box.
+    min_height : float
+        Minimum detected canopy height.
+    window : float
+        Local-maxima window.
+    max_distance : float
+        Inventory match tolerance.
+    grid_size : int
+        Maximum detection-grid rows or columns.
+    max_candidates : int
+        Candidate cap.
+    min_confidence : float
+        Minimum candidate confidence.
+    voi : bool
+        Run the value-of-information experiment.
+    voi_sites : int
+        Sites per VOI problem.
+    voi_scalarizations : int
+        Scalarizations per VOI problem.
+    voi_workers : int
+        VOI solver workers.
+    voi_radius : float
+        VOI candidate-search radius.
+    """
+    loaded = load_dataset(dataset)
+    parsed = _parse_bbox(bbox)
+    if parsed is None:
+        grid = loaded.terrain
+    else:
+        grid = _detection_grid(loaded, chm, parsed, max_size=grid_size)
+    report = detect_off_inventory(
+        loaded,
+        grid,
+        title=f"{loaded.manifest.name} off-inventory pilot",
+        bbox_wgs84=parsed,
+        min_height_m=min_height,
+        window_m=window,
+        max_distance_m=max_distance,
+        min_confidence=min_confidence,
+        max_candidates=max_candidates,
+    )
+    path = write_report(report, out_dir)
+    console.print(
+        f"Off-inventory: {report.candidate_count} candidates from "
+        f"{report.detected_count} detected crowns -> {path}"
+    )
+    if voi:
+        center = (
+            ((parsed[0] + parsed[2]) / 2.0, (parsed[1] + parsed[3]) / 2.0)
+            if parsed is not None
+            else None
+        )
+        value = value_of_information(
+            loaded,
+            report,
+            sites=voi_sites,
+            scalarizations=voi_scalarizations,
+            workers=voi_workers,
+            center_lonlat=center,
+            radius_m=voi_radius if center is not None else None,
+        )
+        voi_path = write_value_of_information(value, out_dir / "off_inventory_voi.json")
+        console.print_json(json.dumps(value.to_dict()))
+        console.print(f"Value of information: {voi_path}")
+
+
 @app.command("fit-allometry")
 def fit_allometry_command(
     dataset: Path = DATASET_OPTION,
@@ -1087,6 +1202,8 @@ def _detection_grid(
     loaded: UrbanForestDataset,
     chm: Path | None,
     bbox: tuple[float, float, float, float] | None,
+    *,
+    max_size: int = 1600,
 ) -> TerrainGrid:
     """Build a detection grid from a CHM or a dataset terrain.
 
@@ -1098,6 +1215,8 @@ def _detection_grid(
         Optional full-resolution CHM.
     bbox : tuple of float or None
         Optional WGS84 bounding box.
+    max_size : int
+        Maximum rows or columns in the detection grid.
 
     Returns
     -------
@@ -1120,7 +1239,7 @@ def _detection_grid(
             xs.append(x)
             ys.append(y)
         raster = crop_raster(raster, (min(xs), min(ys), max(xs), max(ys)))
-    return build_terrain_grid(raster, raster, max_size=1600)
+    return build_terrain_grid(raster, raster, max_size=max_size)
 
 
 def _parse_float_list(value: str) -> tuple[float, ...]:

@@ -4,6 +4,8 @@ import { OrbitControls } from "three/addons/OrbitControls.js";
 const state = {
   dataset: null,
   scene: null,
+  offInventory: null,
+  offInventoryValue: null,
   treeById: new Map(),
   scenarios: [],
   scenarioId: "",
@@ -119,6 +121,51 @@ function treesToFeatureCollection(trees) {
   return { type: "FeatureCollection", features: trees.map(treeFeature) };
 }
 
+function offInventoryFeatures() {
+  const candidates = state.offInventory?.candidates || [];
+  return {
+    type: "FeatureCollection",
+    features: candidates.map((candidate) => ({
+      type: "Feature",
+      geometry: { type: "Point", coordinates: [candidate.lon, candidate.lat] },
+      properties: {
+        candidate_id: candidate.candidate_id,
+        confidence: candidate.confidence,
+        height_m: candidate.height_m,
+        land_class: candidate.land_class,
+      },
+    })),
+  };
+}
+
+function renderOffInventory() {
+  const container = $("off-inventory-summary");
+  if (!container) return;
+  const data = state.offInventory;
+  if (!data) {
+    $("off-inventory-status").textContent = "none";
+    container.innerHTML = '<p class="muted">No off-inventory layer in this dataset.</p>';
+    return;
+  }
+  const high = (data.candidates || []).filter((candidate) => Number(candidate.confidence) >= 0.6).length;
+  const areaHa = Number(data.candidate_area_m2 || 0) / 10000;
+  const value = state.offInventoryValue;
+  const volumeDelta = value ? Number(value.augmented_canopy_volume_m3 || 0) - Number(value.official_canopy_volume_m3 || 0) : 0;
+  const carbonDelta = value ? Number(value.augmented_carbon_kg || 0) - Number(value.official_carbon_kg || 0) : 0;
+  const voi = value
+    ? `<div class="off-inventory-voi"><span>Plan change</span><strong>${(1 - Number(value.plan_jaccard || 1)).toFixed(2)}</strong><small>${formatNumber(value.changed_sites)} sites differ · +${formatCompact(volumeDelta, " m³")} canopy · +${formatCompact(carbonDelta / 1000, " t")} carbon</small></div>`
+    : "";
+  container.innerHTML = `
+    <div class="kpi-grid">
+      <article class="kpi"><span>Candidates</span><strong>${formatNumber(data.candidate_count)}</strong><small>unmatched crowns</small></article>
+      <article class="kpi"><span>High confidence</span><strong>${formatNumber(high)}</strong><small>score >= 0.6</small></article>
+      <article class="kpi"><span>Candidate area</span><strong>${formatNumber(areaHa, 1)} ha</strong><small>crown area</small></article>
+      <article class="kpi"><span>Detected</span><strong>${formatNumber(data.detected_count)}</strong><small>${formatNumber(data.matched_count)} matched</small></article>
+    </div>
+    ${voi}`;
+  $("off-inventory-status").textContent = "pilot";
+}
+
 function buildingFeatures() {
   return {
     type: "FeatureCollection",
@@ -159,6 +206,19 @@ async function init() {
       api("/api/scene"),
       api("/api/scenarios"),
     ]);
+    try {
+      state.offInventory = await api("api/off-inventory");
+      renderOffInventory();
+      try {
+        state.offInventoryValue = await api("api/off-inventory/value");
+        renderOffInventory();
+      } catch (_error) {
+        // The value-of-information file is optional.
+      }
+    } catch (_error) {
+      state.offInventory = null;
+      renderOffInventory();
+    }
     state.dataset = dataset;
     state.scene = scene;
     state.scenarios = scenarios.scenarios || [];
@@ -335,6 +395,7 @@ function initMap() {
         hillshade: { type: "image", url: "api/hillshade.png?width=1400", coordinates },
         canopy: { type: "image", url: "api/canopy.png?width=1400", coordinates },
         buildings: { type: "geojson", data: buildingFeatures() },
+        offInventory: { type: "geojson", data: offInventoryFeatures() },
         boundary: { type: "geojson", data: boundaryFeatures() },
         trees: { type: "geojson", data: treesToFeatureCollection(state.scene.trees) },
         selected: { type: "geojson", data: selectedFeatures() },
@@ -364,6 +425,19 @@ function initMap() {
           type: "line",
           source: "buildings",
           paint: { "line-color": "#7d887c", "line-width": 0.7 },
+        },
+        {
+          id: "off-inventory",
+          type: "circle",
+          source: "offInventory",
+          layout: { visibility: "none" },
+          paint: {
+            "circle-color": "#d98a2b",
+            "circle-radius": ["interpolate", ["linear"], ["get", "height_m"], 3, 2, 30, 5, 70, 8],
+            "circle-opacity": ["interpolate", ["linear"], ["get", "confidence"], 0.3, 0.35, 0.9, 0.9],
+            "circle-stroke-color": "#7b4a12",
+            "circle-stroke-width": 0.6,
+          },
         },
         {
           id: "boundary",
@@ -890,6 +964,11 @@ function bindControls() {
       state.map.setLayoutProperty("buildings-outline", "visibility", visibility);
     }
   });
+  $("toggle-off-inventory").addEventListener("change", (event) => {
+    if (state.map && state.map.getLayer("off-inventory")) {
+      state.map.setLayoutProperty("off-inventory", "visibility", event.target.checked ? "visible" : "none");
+    }
+  });
 }
 
 async function loadAssistantInfo() {
@@ -1180,6 +1259,7 @@ function ensureLightView() {
         canopy: { type: "image", url: "api/canopy.png?width=1400", coordinates },
         shade: { type: "image", url: "api/shade.png?width=1400", coordinates },
         buildings: { type: "geojson", data: buildingFeatures() },
+        offInventory: { type: "geojson", data: offInventoryFeatures() },
         boundary: { type: "geojson", data: boundaryFeatures() },
       },
       layers: [

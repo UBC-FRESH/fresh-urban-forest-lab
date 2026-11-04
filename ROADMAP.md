@@ -14,8 +14,8 @@ This roadmap is the plan of record and the issue tracker map for FRESH Urban For
 | P5 Release and public deployment | #6 | `feature/p5-release` | planned |
 | P6 Operate and maintain | #7 | `feature/p6-operate` | planned |
 | P7 Solar shade and species-fit engine | #40 | `feature/p7-shade-species` | complete |
-| P8 Spatio-temporal optimization and Pareto explorer | #41 | `feature/p8-optimize-pareto` | pr-open |
-| P9 Off-inventory and private-canopy augmentation | #42 | `feature/p9-off-inventory` | planned |
+| P8 Spatio-temporal optimization and Pareto explorer | #41 | `feature/p8-optimize-pareto` | complete |
+| P9 Off-inventory and private-canopy augmentation | #42 | `feature/p9-off-inventory` | pr-open |
 | P10 Bird habitat and demography | #43 | `feature/p10-birds` | planned |
 | P11 Integration and v0.3 release candidate | #44 | `feature/p11-integration` | planned |
 | P12 Arbor method mining and clean-room point-cloud primitives | #61 | `feature/p12-arbor-methods` | complete |
@@ -335,7 +335,7 @@ Phase 7 verification:
 
 Parent issue: #41
 Branch: `feature/p8-optimize-pareto`
-Status: pr-open
+Status: complete
 
 Goal: solve many spatio-temporal planting, removal, species, and irrigation problems, compile a fuzzy Pareto archive, and explore the high-dimensional tradeoff space as an interactive 3D solution cloud.
 
@@ -366,19 +366,19 @@ Phase 8 verification:
 
 Parent issue: #42
 Branch: `feature/p9-off-inventory`
-Status: planned
+Status: pr-open
 
 Goal: detect and reconcile trees missing from the official inventory, estimate the value of including them, and keep private-property data safe.
 
 Plan: `notes/design/urban-canopy-program-plan.md`.
 Evidence: `notes/reference/literature-review-shade-optimization-biodiversity.md`.
 
-- [ ] P9.1 Terminology, privacy, and data governance
-- [ ] P9.2 Land mask and ownership proxy
-- [ ] P9.3 Off-inventory detection and attribution
-- [ ] P9.4 Inventory reconciliation and update workflow
-- [ ] P9.5 Value-of-information experiment
-- [ ] P9.6 UI, confidence layer, and report
+- [x] P9.1 Terminology, privacy, and data governance
+- [x] P9.2 Land mask and ownership proxy
+- [x] P9.3 Off-inventory detection and attribution
+- [x] P9.4 Inventory reconciliation and update workflow
+- [x] P9.5 Value-of-information experiment
+- [x] P9.6 UI, confidence layer, and report
 
 Acceptance criteria:
 

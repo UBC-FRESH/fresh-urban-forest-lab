@@ -22,6 +22,8 @@ Keep private material out of this directory.
 - `reports/observed-change-vancouver.md`: City 2018↔2022 product and browser-assisted tile retrieval.
 - `reports/p8-optimization-pareto.md`: Fresh Solutions scalarisation benchmark, surrogate error, archive, and Pareto explorer.
 - `reports/p8-benchmark-evidence.json`: machine-readable whole-campus and convergence evidence.
+- `reports/p9-off-inventory.md`: Main Mall off-inventory pilot, privacy, and value-of-information results.
+- `reference/off-inventory-terminology.md`: terminology, land-class proxy, privacy, and refresh workflow.
 - `reports/growth-calibration-readiness.md`: why the current inventory cannot support growth calibration.
 - `reports/p12-arbor-method-mining.md`: P12 close-out, licence evidence, gate results, and the P13 recommendation.
 - `releases/v0.2.0.md`: draft release notes; not tagged.
