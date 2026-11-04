@@ -11,12 +11,12 @@ This roadmap is the plan of record and the issue tracker map for FRESH Urban For
 | P2 Tree-level analytics and growth | #3 | `feature/p0-p4-prototype` | complete |
 | P3 2D and 3D decision-support prototype | #4 | `feature/p0-p4-prototype` | complete |
 | P4 Verify and demo | #5 | `feature/p0-p4-prototype` | complete |
-| P5 Release and public deployment | #6 | `feature/p5-release` | complete |
+| P5 Release and public deployment | #6 | `release/v0.3.0` | complete |
 | P7 Solar shade and species-fit engine | #40 | `feature/p7-shade-species` | complete |
 | P8 Spatio-temporal optimization and Pareto explorer | #41 | `feature/p8-optimize-pareto` | complete |
 | P9 Off-inventory and private-canopy augmentation | #42 | `feature/p9-off-inventory` | complete |
 | P10 Bird habitat and demography | #43 | `feature/p10-birds` | complete |
-| P11 Integration and v0.3 release candidate | #44 | `feature/p11-integration` | complete |
+| P11 Integration and v0.3.0 release | #44 | `feature/p11-integration` | complete |
 | P12 Arbor method mining and clean-room point-cloud primitives | #61 | `feature/p12-arbor-methods` | complete |
 | P13 ALS ground classification and height above ground | #70 | `feature/p13-als-ground` | complete |
 | P14 Ground reference and second terrain validation | #89 | `feature/p14-ground-reference` | complete |
@@ -263,7 +263,7 @@ Phase 4 verification:
 ## Phase 5: Release and public deployment
 
 Parent issue: #6
-Branch: `feature/p5-release`
+Branch: `release/v0.3.0`
 Status: complete
 
 Goal: tag v0.3.0, publish the docs site, and verify the demo from a clean clone.
@@ -407,27 +407,27 @@ Phase 10 verification:
 - `python scripts/dashboard.py`
 - `fresh-urban-forest birds --dataset data/demo/ubc_core --observations data/raw/ebird.csv --out tmp/birds`
 
-## Phase 11: Integration and v0.3 release candidate
+## Phase 11: Integration and v0.3.0 release
 
 Parent issue: #44
 Branch: `feature/p11-integration`
 Status: complete
 
-Goal: make the shade, species, optimization, off-inventory, and bird layers one coherent lab, document them, benchmark them, and queue a v0.3 release candidate.
+Goal: make the shade, species, optimization, off-inventory, and bird layers one coherent lab, document them, benchmark them, and release v0.3.0.
 
 Plan: `notes/design/urban-canopy-program-plan.md`.
 
 - [x] P11.1 Unified scenario and evidence contract
 - [x] P11.2 Integrated UI and exports
 - [x] P11.3 Benchmark, reproducibility, and docs
-- [x] P11.4 v0.3 release candidate
+- [x] P11.4 v0.3.0 release
 
 Acceptance criteria:
 
 - A user can run a scenario and see shade, water, cost, birds, and a Pareto archive.
 - A clean clone reproduces the benchmark from a manifest.
 - The docs describe every method and limit.
-- The release candidate is queued; no tag exists without approval.
+- The v0.3.0 tag and GitHub release exist.
 
 Phase 11 verification:
 

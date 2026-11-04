@@ -1,5 +1,5 @@
-Integration and the v0.3 release candidate
-==========================================
+Integration and v0.3.0 release
+==============================
 
 P11 composes the shade, water, optimization, off-inventory, and bird layers into one
 portable lab report. v0.3.0 is the released integrated lab.
@@ -34,8 +34,8 @@ preview year. The baseline button exports the baseline report.
 The report is a **composition**, not a new model. It keeps each layer's evidence tier and
 caveats instead of collapsing them into one score.
 
-v0.3 release candidate
-----------------------
+v0.3.0 release
+--------------
 
 The integrated lab includes:
 
@@ -45,7 +45,7 @@ The integrated lab includes:
 - P10 bird habitat and prior demography;
 - P11 unified report and browser export.
 
-Version metadata is ``0.3.0``. The release notes are
+Version metadata is ``0.3.0``. Tag ``v0.3.0`` and the GitHub release exist. The release notes are
 ``notes/releases/v0.3.0.md``.
 
 Release

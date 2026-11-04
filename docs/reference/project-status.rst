@@ -1,11 +1,13 @@
 Project status and repository map
 =================================
 
-Status as of 2026-11-03:
+Status as of 2026-11-04:
 
-- Phase 0–4 are complete on ``main``.
-- Phase 5 is a **v0.2.0 release candidate**. The tag, GitHub release, and Pages settings
-  change are approval-gated.
+- Phases 0–11 are complete on ``main``.
+- v0.3.0 is released. The tag and GitHub release exist, and the documentation site is live
+  on GitHub Pages. See :doc:`research-agenda`, :doc:`shade-and-species`,
+  :doc:`optimization-and-pareto`, :doc:`off-inventory-canopy`,
+  :doc:`bird-habitat-and-demography`, and :doc:`integration-and-release`.
 
 The live plan is ``ROADMAP.md`` and the GitHub issues. The dated narrative is
 ``CHANGE_LOG.md``.
@@ -33,7 +35,7 @@ Repository map
    * - ``DATA_LICENSES.md``
      - Source licences and attribution.
    * - ``CITATION.cff``
-     - Citation metadata for v0.2.0.
+     - Citation metadata for v0.3.0.
    * - ``AGENTS.md``
      - The coding-agent contract.
 
@@ -61,18 +63,11 @@ Known gaps
 - No repeat measurements for annual growth calibration.
 - City coverage is two core tiles, not the whole city.
 - No accounts, work orders, risk assessment, or mobile field app.
-- No tagged release yet. The documentation site is live on GitHub Pages.
-- P5-P11 are complete. v0.3.0 is released. See :doc:`research-agenda`, :doc:`shade-and-species`, :doc:`optimization-and-pareto`, :doc:`off-inventory-canopy`, :doc:`bird-habitat-and-demography`, and :doc:`integration-and-release`.
 
 Release actions
 ---------------
 
-The following need explicit maintainer approval:
-
-- create a tag or GitHub release
-- enable or change GitHub Pages
-- change repository visibility, settings, or branch protection
-- deploy a public live demo
-- publish an announcement
+The v0.3.0 tag and GitHub release are complete. Future tag, release, Pages, repository
+settings, public deployment, and announcement actions need explicit maintainer approval.
 
 The repository itself is public by design.

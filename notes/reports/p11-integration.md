@@ -1,18 +1,18 @@
-# P11 close-out: integration and v0.3 release candidate
+# P11 close-out: integration and v0.3.0 release
 
 Date: 2026-11-04
 Phase: P11
 Parent issue: #44
 Branch: `feature/p11-integration`
-Implementation head: `923feec`
-Status: ready for review
+Implementation head: `c57bc96`
+Status: complete
 
 ## Summary
 
 P11 composes the P7-P10 layers into one portable lab report, adds the report export to the
-browser, and prepares the v0.3.0 release candidate.
+browser, and releases v0.3.0.
 
-No tag or GitHub release has been created.
+The tag and GitHub release were created in P5.
 
 ## Acceptance evidence
 
@@ -21,7 +21,7 @@ No tag or GitHub release has been created.
 | One scenario reports shade, water, cost, birds, and a Pareto archive | met with limit | unified report composes metrics, shade, birds, off-inventory; water/cost remain in scenario/irrigation cards; Pareto archive is linked through the Optimize tab, not embedded in every report |
 | Clean clone reproduces the benchmark from a manifest | met with limit | benchmark commands and evidence JSON recorded; no CI clean-clone job yet |
 | Docs describe every method and limit | met | new integration page plus P7-P10 docs |
-| Release candidate queued; no tag without approval | met | version 0.3.0 and release notes; no tag |
+| v0.3.0 release created with approval | met | tag `v0.3.0`, GitHub release, and release notes |
 
 ## What was implemented
 
@@ -65,12 +65,12 @@ No tag or GitHub release has been created.
 
 These are stated limits, not hidden behavior.
 
-## Release candidate
+## Release
 
 - Version: `0.3.0`
 - Release notes: `notes/releases/v0.3.0.md`
-- No tag, release, Pages setting change, or public deployment has been performed.
-- Release actions require explicit maintainer approval.
+- Tag and GitHub release: created.
+- Future release actions require explicit maintainer approval.
 
 ## Known gaps
 
@@ -80,7 +80,5 @@ These are stated limits, not hidden behavior.
 - Optimization is a finite scalarisation approximation.
 - City LiDAR coverage is two core tiles.
 - The unified report is a composition, not a new calibrated model.
-
-## Release
 
 v0.3.0 is released. The tag and GitHub release point to the release commit.

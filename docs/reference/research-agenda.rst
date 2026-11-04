@@ -70,8 +70,8 @@ Queued phases
      - Bird habitat and demography
      - 3D habitat metrics, relative abundance, prior-driven survival and lambda
    * - P11
-     - Integration and v0.3 release candidate
-     - One scenario/evidence contract, integrated UI, benchmark, docs, release candidate
+     - Integration and v0.3.0 release
+     - One scenario/evidence contract, integrated UI, benchmark, docs, release
 
 Recommended order: P7, P8, P9, P10, P11. P9 uses the P8 solver for its value-of-information
 experiment; P10 adds an objective to the P8 problem; P11 integrates and releases.
