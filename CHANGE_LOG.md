@@ -558,3 +558,108 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
   `INV-01` as candidates for later evaluation, with fit risks and a proposed
   sequence. No integration is claimed and no registry target changed.
 - Dashboard on the note head: GREEN on all gates; 353 tests pass.
+
+
+### P30 full Vancouver city pilot
+
+- Activated P30 (#105) and its six tasks (#106–#111) for a full City of Vancouver public-data
+  pilot.
+- Locked the source set: City 2022 LiDAR (181 tiles, ~49 points/m²), 184,152 public trees,
+  the 22 local-area polygons, building footprints, and climate normals.
+- The city AOI is 118.76 km² in EPSG:3157. The working storage budget is 250 GB against
+  7.9 TB free on `/srv/shared-data`; no dataset is written to the container root disk.
+- Added `notes/design/vancouver-city-pilot.md` with the processing, metrics, 3D, validation,
+  and storage plan.
+- Dashboard: GREEN. Tests: 331 passed.
+
+### P30.1 source lock
+
+- Locked the Vancouver AOI at 118.76 km² from the union of 22 local-area polygons.
+- Downloaded and hashed 184,152 public trees, the local-area polygons, and 154,124 building
+  footprints. The 2022 City LiDAR manifest contains all 181 tiles.
+- Climate normal locked at 1,098.8 mm/yr (Vancouver Harbour CS, 1981–2010).
+- Source evidence: `notes/reports/p30-source-lock.json`.
+- Started the resumable browser-assisted LiDAR download into
+  `data/raw/city_lidar/2022/`.
+- Dashboard: GREEN.
+
+### P30 city pipeline
+
+- Added `city.py` for 1 m classified-LAS rasterisation and city mosaic assembly.
+- Added `city_inventory.py`, `city_metrics.py`, and `city_pack.py` for the full inventory,
+  local-area metrics, and portable city dataset.
+- Added operator scripts for LiDAR rasterisation, inventory enrichment, metrics, and pack
+  assembly.
+- Added `/api/city-metrics` and a City tab in the web app for city KPIs, local-area ranking,
+  methods, and caveats.
+- Verified class 5 is high vegetation and class 9 is water in the City LAS despite the
+  portal text; the rasteriser uses the ASPRS classes.
+- Dashboard: GREEN.
+
+### P30 city metrics UI, docs, and shade
+
+- Added the city metrics endpoint and City tab with city KPIs, local-area ranking, method
+  labels, and caveats.
+- Added the full-city source/licence rows, data-source note, city pilot docs page, and
+  README build path.
+- Added the optional representative-day shade script.
+- Added tests for city rasterisation, inventory evidence, city metrics, city pack assembly,
+  and the optional city-metrics endpoint.
+- Dashboard: GREEN.
+
+### P30 full Vancouver city pilot close-out
+
+- Built the full city mosaic: 181/181 tiles, 8,721,285,369 points, 99.96% AOI coverage.
+- Enriched 184,151 public trees; 162,497 height pairs, bias -0.397 m, RMSE 4.292 m.
+- City metrics: 26.854% canopy cover, 350.16M m³ canopy volume, 95,792 t carbon,
+  1,979 t/yr modelled sequestration, 3.50–7.01M m³/yr rainfall screening.
+- City validation: the City's 2022 estimate is about 25%, a +1.854-point difference;
+  a sanity check, not calibration.
+- City tab and city-scale 3D scene pass browser smoke with no console or page errors.
+- Storage: 165 GB raw LiDAR, 1.8 GB processed, 7.7 TB free; no dataset on the root disk.
+- Close-out report: `notes/reports/p30-vancouver-city.md`.
+- Dashboard: GREEN.
+
+
+### P30.7 demo portal
+
+- Added `fresh_urban_forest.portal` and `portal_app.py` for a landing page on port 8101.
+- Mounted the UBC demo at `/ubc/` and the Vancouver city demo at `/vancouver/`, with
+  separate runtime directories.
+- Kept the WS4 portal on port 8790 unchanged.
+- Portal browser smoke: both cards load, both apps reach live status, the City tab is
+  visible only in Vancouver, and there are no console or page errors.
+- Dashboard: GREEN.
+
+
+### P30 full 2D map layers
+
+- The Vancouver 2D map now loads all 184,151 public-tree points and all 154,124 building
+  footprints from compressed GeoJSON, after the app reaches live status.
+- The 3D scene keeps a spatially stratified visual sample of 29,096 trees and 12,000
+  buildings, with an explicit sample label in the scene HUD.
+- Added a Downtown camera preset alongside the city view.
+- Browser smoke: map loads in about 4.5 s to live, full map layers arrive after about 7 s,
+  and there are no console or page errors.
+- Dashboard: GREEN.
+
+
+### P30 full 3D city and street basemap
+
+- The Vancouver 3D scene now loads all 184,151 trees and all 154,123 building footprints as
+  compact axis-aligned massing boxes; the full scene is 5.7 MB gzip.
+- Added OpenStreetMap road centrelines as a local compressed layer for a pale 2D underlay
+  and a 3D street overlay, with attribution in the map HUD and a shared `streets` toggle.
+- The 2D map continues to load all 184,151 trees and all 154,124 full building footprints.
+- Browser smoke: no console or page errors; app live in about 4.4 s, full 3D scene build
+  about 0.84 s, software-WebGL screenshot readback is the slow part.
+- Dashboard: GREEN.
+
+
+### P30 enable the portal assistant
+
+- The landing portal now passes `allow_agent=True` by default to both mounted apps, so the
+  `+ Ask` helper is available in the UBC and Vancouver UIs.
+- The portal remains behind the existing Cloudflare/CWL gateway; the assistant is still
+  opt-in at the service level and can be disabled with `FRESH_PORTAL_ALLOW_AGENT=0`.
+- Dashboard: GREEN.

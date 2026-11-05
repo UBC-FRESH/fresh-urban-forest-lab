@@ -27,14 +27,15 @@ This roadmap is the plan of record and the issue tracker map for FRESH Urban For
 | P19 Merge-reduction audit and guard | #119 | `feature/p19-merge-audit` | complete |
 | P20 Non-transitive crown merge and manual audit patch | #122 | `feature/p20-anchor-merge` | complete |
 | P21 Ground-adapter second-tile smoke test | #126 | `feature/p21-ground-smoke` | complete |
+| P30 Full Vancouver city canopy and ecosystem-services pilot | #105 | `feature/p30-vancouver-city` | pr-open |
 
 ## Lifecycle Map
 
 | Stage | Phases | Exit criteria |
 | --- | --- | --- |
 | Scope and design | P0, P7.1 | Sources, licences, architecture, evidence review, and ADRs recorded |
-| Build | P1, P2, P3, P7, P8, P9, P10 | A dataset, a growth/DSS core, a working 2D/3D app, and the shade/optimization/canopy/bird layers |
-| Verify | P4, P11 | Dashboard green, real data built, browser checked, method notes written, benchmark reproduced |
+| Build | P1, P2, P3, P7, P8, P9, P10, P30 | A dataset, a growth/DSS core, a working 2D/3D app, and the shade/optimization/canopy/bird layers |
+| Verify | P4, P11, P30 | Dashboard green, real data built, browser checked, method notes written, benchmark reproduced |
 | Release and deploy | P5, P11.4 | Tag, release notes, Pages, clean-clone verification |
 
 ## Conventions
@@ -759,6 +760,44 @@ Phase 21 verification:
 - `python scripts/dashboard.py`
 - `python scripts/check_workflow.py`
 
+
+## Phase 30: Full Vancouver city canopy and ecosystem-services pilot
+
+Parent issue: #105
+Branch: `feature/p30-vancouver-city`
+Status: pr-open
+
+Goal: extend the UBC-core prototype to the full City of Vancouver using public data, with a
+1 m city canopy surface, all 184k public trees, city and local-area metrics, and a 3D city
+scene.
+
+Plan: `notes/design/vancouver-city-pilot.md`.
+
+- [x] P30.1 Source lock, AOI, storage budget, and full-city data manifest (#106)
+- [x] P30.2 Full-city LiDAR mosaic and canopy surfaces (#107)
+- [x] P30.3 Full public-tree inventory and tree-level evidence (#108)
+- [x] P30.4 City-wide and local-area metrics and ecosystem services (#109)
+- [x] P30.5 Vancouver 3D city scene and dashboard (#110)
+- [x] P30.6 Validation, performance, docs, and close-out (#111)
+- [x] P30.7 Portal landing page for the UBC and Vancouver demos (#132)
+
+Acceptance criteria:
+
+- The full city AOI is covered by a 1 m CHM with no unexplained gaps.
+- The public-tree inventory loads at full count with measured/imputed flags.
+- City and 22 local-area metrics are reproducible and carry method/evidence labels.
+- The 3D Vancouver scene opens from the web app and fits the city.
+- The browser smoke check and full dashboard pass.
+- Docs describe every source, method, licence, and limit.
+- Storage stays under a 250 GB working budget and no dataset is written outside
+  `/srv/shared-data`.
+
+Phase 30 verification:
+
+- `python scripts/dashboard.py`
+- `python scripts/check_workflow.py`
+- `fresh-urban-forest serve --dataset data/processed/vancouver_2022 --port 8000`
+
 ## Detailed Next Steps Notes
 
 1. The repository was created from `UBC-FRESH/ubc-fresh-dev-workflow` on 2026-11-03. The seed's dashboard, validator, docs, and agent contract are retained.
@@ -777,3 +816,4 @@ Phase 21 verification:
 14. P19 (#119) audits the demo merge and finds a transitive chain collapse: the old rule merged 67 crowns across 4.6 km. The guarded rule caps groups at 4 crowns and 30 m, reducing the demo to 3 local groups and 856 kept crowns. The guard prevents false merges but may under-merge real over-segmentation; the merge is a safety filter, not an instance solver.
 15. P20 (#122) replaces the guarded union-find merge with a non-transitive anchor rule: only larger crowns absorb, and absorbed crowns cannot anchor. The synthetic audit patch merges a known split crown and keeps similar distinct crowns separate. The demo remains 3 local groups and 856 kept; a real orthophoto/field audit is still needed.
 16. P21 (#126) runs the optional ground adapter on the 2025 coastal tile and compares it with the Golden 2021 tile. Coastal: 415,068 points, 374,711 predicted ground, 68.8 s. Golden: 113,775 points, 82,530 predicted ground, 5.8 s. Both bundles are schema-valid with no warnings. The low-point fraction differs because the point distributions differ.
+17. P30 (#105) is the full Vancouver city pilot. It uses the City 2022 LiDAR (181 tiles, ~49 points/m²), all 184,152 public trees, the 22 local-area polygons, and building footprints. The AOI is 118.76 km² in EPSG:3157. The build produced 8.72 billion points, 99.96% LiDAR coverage, 184,151 mapped trees, 26.854% canopy cover, 350.16 million m³ canopy volume, 95,792 t above-ground carbon, and 1,979 t/yr modelled sequestration. The City's 2022 estimate is about 25%, a sanity check rather than calibration. Raw data is 165 GB under `/srv/shared-data`; processed outputs are 1.8 GB; free space remains 7.7 TB. The close-out is `notes/reports/p30-vancouver-city.md`. P30.7 adds the landing portal on port 8101 with mounted `/ubc/` and `/vancouver/` apps; the WS4 portal remains on 8790.

@@ -31,6 +31,7 @@ act, and cite it in their reports. Start with the repository's ``AGENTS.md`` and
    reference/off-inventory-canopy
    reference/bird-habitat-and-demography
    reference/integration-and-release
+   reference/vancouver-city-pilot
    reference/methods
    reference/arbor-method-mining
    reference/change-products

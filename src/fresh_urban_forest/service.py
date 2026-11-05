@@ -20,12 +20,12 @@ import uuid
 from collections.abc import Awaitable, Callable, Mapping
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Literal
+from typing import Literal, cast
 from zoneinfo import ZoneInfo
 
 import numpy as np
 from fastapi import FastAPI, HTTPException, Query, Request
-from fastapi.responses import FileResponse, HTMLResponse, Response
+from fastapi.responses import FileResponse, HTMLResponse, JSONResponse, Response
 from fastapi.staticfiles import StaticFiles
 from PIL import Image
 from pydantic import BaseModel, Field
@@ -462,8 +462,15 @@ def create_app(
 
     @app.get("/api/dataset")
     def dataset_info() -> dict[str, object]:
-        """Return the dataset manifest and baseline metrics."""
-        return dataset_summary(state.dataset)
+        """Return the dataset manifest, baseline metrics, and optional-layer flags."""
+        summary = dataset_summary(state.dataset)
+        summary["has_off_inventory"] = _dataset_file(state, "off_inventory.json") is not None
+        summary["has_city_metrics"] = _dataset_file(state, "city_metrics.json") is not None
+        summary["has_map_trees"] = _dataset_file(state, "map_trees.json.gz") is not None
+        summary["has_map_buildings"] = _dataset_file(state, "map_buildings.geojson.gz") is not None
+        summary["has_full_scene"] = _dataset_file(state, "full_scene.json.gz") is not None
+        summary["has_roads"] = _dataset_file(state, "roads.geojson.gz") is not None
+        return summary
 
     @app.get("/api/completeness")
     def completeness() -> dict[str, object]:
@@ -474,6 +481,12 @@ def create_app(
         dict
             Live-tree count and measured counts/fractions by field.
         """
+        city_summary = _dataset_file(state, "inventory_summary.json")
+        if city_summary is not None:
+            payload = json.loads(city_summary.read_text(encoding="utf-8"))
+            completeness_payload = payload.get("completeness")
+            if isinstance(completeness_payload, dict):
+                return cast(dict[str, object], completeness_payload)
         return inventory_completeness(state.dataset.trees)
 
     @app.get("/api/off-inventory")
@@ -613,6 +626,23 @@ def create_app(
         metrics = state.dataset.manifest.metrics
         return _metrics_payload(metrics)
 
+    @app.get("/api/city-metrics")
+    def city_metrics() -> JSONResponse:
+        """Return optional city-wide and local-area metrics.
+
+        Returns
+        -------
+        JSONResponse
+            The city metrics JSON, or a 404 when this dataset has no city pack.
+        """
+        path = _dataset_file(state, "city_metrics.json")
+        if path is None:
+            raise HTTPException(status_code=404, detail="this dataset has no city metrics")
+        return JSONResponse(
+            json.loads(path.read_text(encoding="utf-8")),
+            headers={"Cache-Control": "no-store, max-age=0"},
+        )
+
     @app.get("/api/trees")
     def trees(
         min_lon: float | None = None,
@@ -670,6 +700,68 @@ def create_app(
             "returned": len(page),
             "offset": offset,
         }
+
+    @app.get("/api/roads")
+    def roads() -> FileResponse:
+        """Return the compressed OSM road centreline layer."""
+        path = _dataset_file(state, "roads.geojson.gz")
+        if path is None:
+            raise HTTPException(status_code=404, detail="this dataset has no road layer")
+        return FileResponse(
+            path,
+            media_type="application/geo+json",
+            headers={
+                "Content-Encoding": "gzip",
+                "Cache-Control": "no-store, max-age=0",
+            },
+        )
+
+    @app.get("/api/full-scene")
+    def full_scene() -> FileResponse:
+        """Return the compact all-tree/all-building 3D scene."""
+        path = _dataset_file(state, "full_scene.json.gz")
+        if path is None:
+            raise HTTPException(status_code=404, detail="this dataset has no full 3D scene")
+        return FileResponse(
+            path,
+            media_type="application/json",
+            headers={
+                "Content-Encoding": "gzip",
+                "Cache-Control": "no-store, max-age=0",
+            },
+        )
+
+    @app.get("/api/map-trees")
+    def map_trees() -> FileResponse:
+        """Return the full-tree compressed GeoJSON map layer."""
+        path = _dataset_file(state, "map_trees.json.gz")
+        if path is None:
+            raise HTTPException(status_code=404, detail="this dataset has no full map-tree layer")
+        return FileResponse(
+            path,
+            media_type="application/json",
+            headers={
+                "Content-Encoding": "gzip",
+                "Cache-Control": "no-store, max-age=0",
+            },
+        )
+
+    @app.get("/api/map-buildings")
+    def map_buildings() -> FileResponse:
+        """Return the full building-footprint compressed GeoJSON map layer."""
+        path = _dataset_file(state, "map_buildings.geojson.gz")
+        if path is None:
+            raise HTTPException(
+                status_code=404, detail="this dataset has no full map-building layer"
+            )
+        return FileResponse(
+            path,
+            media_type="application/geo+json",
+            headers={
+                "Content-Encoding": "gzip",
+                "Cache-Control": "no-store, max-age=0",
+            },
+        )
 
     @app.get("/api/scene")
     def scene(
@@ -2632,10 +2724,10 @@ def _canopy_rgba(canopy: np.ndarray) -> np.ndarray:
     """
     clipped = np.clip(np.nan_to_num(canopy, nan=0.0), 0.0, 45.0)
     normalized = clipped / 45.0
-    red = 0.95 - 0.55 * normalized
-    green = 0.78 + 0.18 * np.sin(np.pi * normalized)
-    blue = 0.24 + 0.18 * normalized
-    alpha = np.where(clipped >= 1.0, 205.0, 0.0)
+    red = 0.22 + 0.38 * (1.0 - normalized)
+    green = 0.50 + 0.38 * (1.0 - normalized)
+    blue = 0.16 + 0.14 * (1.0 - normalized)
+    alpha = np.where(clipped >= 1.0, 210.0, 0.0)
     rgba = np.stack([red * 255.0, green * 255.0, blue * 255.0, alpha], axis=-1)
     return rgba.astype(np.uint8)
 

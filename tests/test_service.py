@@ -47,6 +47,46 @@ def test_health_dataset_metrics_and_trees(tmp_path: Path) -> None:
     assert bbox["returned"] == 1
 
 
+def test_city_metrics_endpoint_is_optional(tmp_path: Path) -> None:
+    """A dataset without a city pack returns 404; adding one serves it."""
+    client = _client(tmp_path)
+    assert client.get("/api/city-metrics").status_code == 404
+    (tmp_path / "dataset" / "city_metrics.json").write_text(
+        '{"city": {"tree_count": 2}, "local_areas": []}', encoding="utf-8"
+    )
+    response = client.get("/api/city-metrics")
+    assert response.status_code == 200
+    assert response.json()["city"]["tree_count"] == 2
+
+
+def test_full_map_layers_are_optional(tmp_path: Path) -> None:
+    """The compressed full map layers are served when present."""
+    import gzip
+
+    client = _client(tmp_path)
+    assert client.get("/api/map-trees").status_code == 404
+    (tmp_path / "dataset" / "map_trees.json.gz").write_bytes(
+        gzip.compress(b'{"type":"FeatureCollection","features":[]}')
+    )
+    (tmp_path / "dataset" / "map_buildings.geojson.gz").write_bytes(
+        gzip.compress(b'{"type":"FeatureCollection","features":[]}')
+    )
+    (tmp_path / "dataset" / "full_scene.json.gz").write_bytes(gzip.compress(b'{"compact":true}'))
+    (tmp_path / "dataset" / "roads.geojson.gz").write_bytes(
+        gzip.compress(b'{"type":"FeatureCollection","features":[]}')
+    )
+    dataset = client.get("/api/dataset").json()
+    assert dataset["has_map_trees"] is True
+    assert dataset["has_map_buildings"] is True
+    assert dataset["has_full_scene"] is True
+    assert dataset["has_roads"] is True
+    assert client.get("/api/full-scene").status_code == 200
+    assert client.get("/api/roads").status_code == 200
+    response = client.get("/api/map-trees")
+    assert response.status_code == 200
+    assert response.headers["content-encoding"] == "gzip"
+
+
 def test_scene_and_image_endpoints(tmp_path: Path) -> None:
     """Scene and PNG endpoints return usable payloads."""
     client = _client(tmp_path)

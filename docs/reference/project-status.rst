@@ -8,6 +8,8 @@ Status as of 2026-11-04:
   on GitHub Pages. See :doc:`research-agenda`, :doc:`shade-and-species`,
   :doc:`optimization-and-pareto`, :doc:`off-inventory-canopy`,
   :doc:`bird-habitat-and-demography`, and :doc:`integration-and-release`.
+- P30 is active: a full-City-of-Vancouver public-data pilot. See
+  :doc:`vancouver-city-pilot`.
 
 The live plan is ``ROADMAP.md`` and the GitHub issues. The dated narrative is
 ``CHANGE_LOG.md``.

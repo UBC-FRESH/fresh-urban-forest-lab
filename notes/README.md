@@ -14,6 +14,7 @@ Keep private material out of this directory.
 - `design/architecture.md`: the layer diagram, contracts, and deliberate simplifications.
 - `design/change-uncertainty-plan.md`: observed change, completeness, validation, and calibration plan.
 - `design/urban-canopy-program-plan.md`: the completed P7-P11 programme for shade, species fit, optimization, off-inventory canopy, and birds.
+- `design/vancouver-city-pilot.md`: P30 full-city Vancouver data lock, storage budget, processing design, metrics, and acceptance criteria.
 - `reference/literature-review-shade-optimization-biodiversity.md`: rapid peer-reviewed and grey-literature review, novelty assessment, and citations.
 - `reference/irss-silva21-method-provenance.md`: what the urban LiDAR canopy methods owe to IRSS/Silva21 (currently no direct integration), the implemented/derived distinction, and a candidate map for future work.
 - `reference/shade-review-protocol.md`: P7.1 search protocol, screening log, capability comparison, and frozen claim.
@@ -51,6 +52,7 @@ Keep private material out of this directory.
 - `reports/p20-closeout.md`: P20 close-out and the P21 recommendation.
 - `reports/p21-ground-smoke.md`: P21 coastal-tile bundle smoke and Golden comparison.
 - `reports/p21-closeout.md`: P21 close-out and the P22 recommendation.
+- `reports/p30-vancouver-city.md`: full Vancouver city pilot close-out, metrics, validation, performance, storage, and limits.
 - `releases/v0.2.0.md`: superseded draft; never tagged.
 - `reference/data-sources.md`: public UBC, Vancouver, and Metro Vancouver sources, with
   coverage, licences, and traps.

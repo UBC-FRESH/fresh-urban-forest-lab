@@ -1,0 +1,45 @@
+{
+  "schema_version": "fresh-urban-forest.p30-source-lock.v1",
+  "generated_utc": "2026-11-04T05:38:26.232437+00:00",
+  "sources": {
+    "public_trees": {
+      "path": "data/raw/vancouver/public_trees.csv",
+      "bytes": 39251715,
+      "sha256": "0c10bff6ea88cf8d6b17d55eae8e027a8ad42ca74d79fa29f7c854b9a9be7747",
+      "record_count": 184152
+    },
+    "local_area_boundary": {
+      "path": "data/raw/vancouver/local_area_boundary.geojson",
+      "bytes": 52441,
+      "sha256": "3144cc6b045e24df8b4c324e976aa4d826c75ac7fb1ab4a1dfadf07f09a7bbb2",
+      "record_count": 22,
+      "area_km2_epsg3157": 118.75883879606945
+    },
+    "building_footprints": {
+      "path": "data/raw/vancouver/building_footprints.geojson",
+      "bytes": 97477498,
+      "sha256": "b9050d43dd2af16042f393b58b0a11fbde1947b03926cf111f48bb48d424de7a",
+      "record_count": 154124
+    },
+    "vancouver_lidar_manifest": {
+      "path": "data/raw/tiles/vancouver_2022_city.json",
+      "bytes": 120104,
+      "sha256": "212a9159f0777282a1cb956852376b7b96c42e1839b9792ca65d2e02d53d9f82"
+    },
+    "city_lidar_2022": {
+      "tile_count": 181,
+      "crs": "EPSG:3157",
+      "vertical_datum": "CGVD28GVRD",
+      "density_pts_m2": 49,
+      "licence": "Open Government Licence \u2013 Vancouver",
+      "url": "https://opendata.vancouver.ca/explore/dataset/lidar-2022/"
+    },
+    "climate_normals": {
+      "station": "Vancouver Harbour CS",
+      "period": "1981-2010",
+      "annual_precipitation_mm": 1098.8,
+      "licence": "Open Government Licence \u2013 Canada",
+      "url": "https://climate.weather.gc.ca/climate_normals/"
+    }
+  }
+}

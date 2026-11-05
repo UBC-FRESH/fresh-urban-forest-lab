@@ -4,6 +4,10 @@ import { OrbitControls } from "three/addons/OrbitControls.js";
 const state = {
   dataset: null,
   scene: null,
+  scene3d: null,
+  roads: null,
+  mapTrees: null,
+  mapBuildings: null,
   offInventory: null,
   offInventoryValue: null,
   birds: null,
@@ -25,6 +29,7 @@ const state = {
   assistant: { enabled: false, available: false, busy: false, session: null },
   changeMap: null,
   changeData: null,
+  cityMetrics: null,
   changeProduct: "change.json",
   changeProductsLoaded: false,
   lightMap: null,
@@ -169,6 +174,9 @@ function renderOffInventory() {
 }
 
 function buildingFeatures() {
+  if (state.mapBuildings && Array.isArray(state.mapBuildings.features)) {
+    return state.mapBuildings;
+  }
   return {
     type: "FeatureCollection",
     features: (state.scene.buildings || []).map((building) => ({
@@ -201,6 +209,88 @@ function selectedFeatures() {
   return tree ? treesToFeatureCollection([tree]) : { type: "FeatureCollection", features: [] };
 }
 
+function loadFullMapLayers() {
+  if (!state.dataset?.has_map_trees && !state.dataset?.has_map_buildings) return;
+  const apply = () => {
+    if (state.dataset.has_map_trees) {
+      const trees = state.map?.getSource("trees");
+      if (trees) trees.setData("api/map-trees");
+    }
+    if (state.dataset.has_map_buildings) {
+      const buildings = state.map?.getSource("buildings");
+      if (buildings) buildings.setData("api/map-buildings");
+    }
+  };
+  if (!state.map) return;
+  if (state.map.isStyleLoaded()) apply();
+  else state.map.once("load", apply);
+}
+
+function renderCityMetrics() {
+  const data = state.cityMetrics;
+  if (!data) return;
+  const tab = document.querySelector('.tab[data-view="city"]');
+  if (tab) tab.hidden = false;
+  const city = data.city || {};
+  const local = Array.isArray(data.local_areas) ? data.local_areas : [];
+  const metrics = state.dataset?.metrics || {};
+  const visualTrees = state.scene?.trees?.length || 0;
+  const cards = [
+    ["Canopy cover", `${formatNumber(city.canopy_cover_pct, 1)}%`, "of city area"],
+    ["Canopy volume", `${formatCompact(city.canopy_volume_m3)} m³`, "LiDAR height field"],
+    ["Carbon storage", `${formatCompact(Number(city.carbon_kg) / 1000)} t`, "above ground"],
+    ["Annual sequestration", `${formatCompact(Number(city.annual_sequestration_kg) / 1000)} t/yr`, "one-year model"],
+    ["Rainfall interception", `${formatCompact(city.rainfall_interception_m3_low)}–${formatCompact(city.rainfall_interception_m3_high)} m³`, "10–20% screening"],
+    ["Public trees", formatNumber(city.tree_count), "mapped records"],
+    ["Species", formatNumber(metrics.species_count), "distinct labels"],
+    ["Native share", `${formatNumber(Number(city.native_fraction) * 100, 1)}%`, "of public trees"],
+  ];
+  if (data.shade?.metrics) {
+    cards.push([
+      "Tree shade",
+      `${formatNumber(Number(data.shade.metrics.tree_shade_fraction) * 100, 1)}%`,
+      "representative day",
+    ]);
+  }
+  $("city-kpis").innerHTML = cards
+    .map(
+      ([label, value, note]) =>
+        `<article class="kpi"><span>${escapeHtml(label)}</span><strong>${escapeHtml(value)}</strong><small>${escapeHtml(note)}</small></article>`,
+    )
+    .join("");
+  const maxCover = Math.max(...local.map((area) => Number(area.canopy_cover_pct) || 0), 1);
+  const rows = [...local]
+    .sort((a, b) => Number(b.canopy_cover_pct) - Number(a.canopy_cover_pct))
+    .map((area) => {
+      const width = Math.max(2, (Number(area.canopy_cover_pct) / maxCover) * 100);
+      return `<div class="city-row">
+        <span class="name">${escapeHtml(area.name)}</span>
+        <span class="num">${formatNumber(area.canopy_cover_pct, 1)}%</span>
+        <span class="bar"><span style="width:${width.toFixed(1)}%"></span></span>
+        <span class="num hide-small">${formatCompact(Number(area.carbon_kg) / 1000)} t</span>
+        <span class="num">${formatNumber(area.tree_count)}</span>
+      </div>`;
+    })
+    .join("");
+  const head = `<div class="city-row city-head"><span>Local area</span><span class="num">Cover</span><span></span><span class="num hide-small">Carbon</span><span class="num">Trees</span></div>`;
+  $("city-local-areas").innerHTML = rows ? head + rows : '<p class="muted">No local-area metrics.</p>';
+  const methods = Object.entries(data.methods || {})
+    .map(([key, method]) => {
+      const tier = method?.tier || "method";
+      return `<div class="city-method"><strong>${escapeHtml(key.replaceAll("_", " "))}</strong><span>${escapeHtml(method?.method || "")} · ${escapeHtml(tier)}</span></div>`;
+    })
+    .join("");
+  const caveats = (data.caveats || []).map((item) => `<li>${escapeHtml(item)}</li>`).join("");
+  const validation = data.validation
+    ? `<div class="city-method"><strong>published canopy-cover check</strong><span>City estimate ${formatNumber(data.validation.published_canopy_cover_pct, 1)}% vs this pilot ${formatNumber(city.canopy_cover_pct, 1)}% · sanity check, not calibration</span></div>`
+    : "";
+  const shade = data.shade
+    ? `<div class="city-method"><strong>tree shade</strong><span>${escapeHtml(data.shade.method || "")} · ${escapeHtml(data.shade.tier || "screening")}</span></div>`
+    : "";
+  $("city-methods").innerHTML = `${methods}${shade}${validation}<ul class="city-caveats">${caveats}</ul>`;
+  $("city-source").textContent = `${formatNumber(city.tree_count)} public trees · ${local.length} local areas · 2022 LiDAR · ${formatNumber(visualTrees)} visual trees`;
+}
+
 async function init() {
   try {
     const [dataset, scene, scenarios] = await Promise.all([
@@ -208,23 +298,50 @@ async function init() {
       api("/api/scene"),
       api("/api/scenarios"),
     ]);
-    try {
-      state.offInventory = await api("api/off-inventory");
-      renderOffInventory();
+    state.dataset = dataset;
+    state.scene = scene;
+    if (dataset.has_roads) {
       try {
-        state.offInventoryValue = await api("api/off-inventory/value");
-        renderOffInventory();
+        state.roads = await api("api/roads");
       } catch (_error) {
-        // The value-of-information file is optional.
+        state.roads = null;
       }
-    } catch (_error) {
+    }
+    if (dataset.has_full_scene) {
+      try {
+        state.scene3d = await api("api/full-scene");
+      } catch (_error) {
+        state.scene3d = null;
+      }
+    }
+    state.scenarios = scenarios.scenarios || [];
+    state.treeById = new Map(scene.trees.map((tree) => [tree.id, tree]));
+    if (dataset.has_off_inventory) {
+      try {
+        state.offInventory = await api("api/off-inventory");
+        renderOffInventory();
+        try {
+          state.offInventoryValue = await api("api/off-inventory/value");
+          renderOffInventory();
+        } catch (_error) {
+          // The value-of-information file is optional.
+        }
+      } catch (_error) {
+        state.offInventory = null;
+        renderOffInventory();
+      }
+    } else {
       state.offInventory = null;
       renderOffInventory();
     }
-    state.dataset = dataset;
-    state.scene = scene;
-    state.scenarios = scenarios.scenarios || [];
-    state.treeById = new Map(scene.trees.map((tree) => [tree.id, tree]));
+    if (dataset.has_city_metrics) {
+      try {
+        state.cityMetrics = await api("api/city-metrics");
+        renderCityMetrics();
+      } catch (_error) {
+        state.cityMetrics = null;
+      }
+    }
     $("dataset-name").textContent = `${dataset.name} · ${dataset.tree_count.toLocaleString("en-CA")} tree records · ${dataset.sources.length} sources`;
     setStatus("live");
     renderKPIs(dataset.metrics);
@@ -234,6 +351,7 @@ async function init() {
     renderScenarioOptions();
     renderBaselineTimeline(dataset.metrics);
     initMap();
+    loadFullMapLayers();
     bindControls();
     initLightControls();
     initOptimizeControls();
@@ -399,7 +517,11 @@ function initMap() {
         buildings: { type: "geojson", data: buildingFeatures() },
         offInventory: { type: "geojson", data: offInventoryFeatures() },
         boundary: { type: "geojson", data: boundaryFeatures() },
-        trees: { type: "geojson", data: treesToFeatureCollection(state.scene.trees) },
+        roads: { type: "geojson", data: state.roads || { type: "FeatureCollection", features: [] } },
+        trees: {
+          type: "geojson",
+          data: state.mapTrees || treesToFeatureCollection(state.scene.trees),
+        },
         selected: { type: "geojson", data: selectedFeatures() },
       },
       layers: [
@@ -408,13 +530,33 @@ function initMap() {
           id: "hillshade",
           type: "raster",
           source: "hillshade",
-          paint: { "raster-opacity": 0.55, "raster-resampling": "linear" },
+          paint: { "raster-opacity": 0.38, "raster-resampling": "linear" },
         },
         {
           id: "canopy",
           type: "raster",
           source: "canopy",
-          paint: { "raster-opacity": 0.72, "raster-resampling": "linear" },
+          paint: { "raster-opacity": 0.58, "raster-resampling": "linear" },
+        },
+        {
+          id: "roads-casing",
+          type: "line",
+          source: "roads",
+          paint: {
+            "line-color": "#ffffff",
+            "line-width": ["interpolate", ["linear"], ["zoom"], 12, 0.8, 16, 2.8],
+            "line-opacity": 0.55,
+          },
+        },
+        {
+          id: "roads",
+          type: "line",
+          source: "roads",
+          paint: {
+            "line-color": "#7b8479",
+            "line-width": ["interpolate", ["linear"], ["zoom"], 12, 0.4, 16, 1.4],
+            "line-opacity": 0.7,
+          },
         },
         {
           id: "buildings",
@@ -453,10 +595,10 @@ function initMap() {
           source: "trees",
           paint: {
             "circle-color": ["get", "color"],
-            "circle-radius": ["interpolate", ["linear"], ["zoom"], 13, 1.6, 16, 3.2, 19, 6],
+            "circle-radius": ["interpolate", ["linear"], ["zoom"], 13, 0.55, 15, 1.2, 17, 2.8, 19, 6],
             "circle-stroke-color": "#ffffff",
-            "circle-stroke-width": 0.45,
-            "circle-opacity": 0.9,
+            "circle-stroke-width": ["interpolate", ["linear"], ["zoom"], 13, 0, 16, 0.25, 19, 0.8],
+            "circle-opacity": ["interpolate", ["linear"], ["zoom"], 13, 0.34, 16, 0.74, 19, 0.95],
           },
         },
         {
@@ -490,7 +632,7 @@ function initMap() {
   map.on("click", "trees", (event) => {
     const feature = event.features && event.features[0];
     if (!feature) return;
-    selectTree(feature.properties.tree_id);
+    selectTree(feature.properties.tree_id, feature.properties);
   });
   map.on("click", (event) => {
     if (state.mode === "zone") {
@@ -521,53 +663,59 @@ function ensureThree() {
   const container = $("view-scene");
   const canvas = $("scene-canvas");
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  const sourceScene = threeScene();
+  const compactScene = Boolean(sourceScene?.compact);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, compactScene ? 1 : 2));
   renderer.setSize(container.clientWidth, container.clientHeight, false);
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.05;
-  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.enabled = !compactScene;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
+  const span = sceneSpan();
   const scene = new THREE.Scene();
   scene.background = new THREE.Color("#dfe7dc");
-  scene.fog = new THREE.Fog("#dfe7dc", 900, 2400);
+  scene.fog = new THREE.Fog("#dfe7dc", span * 1.15, span * 4.2);
 
-  const camera = new THREE.PerspectiveCamera(46, container.clientWidth / Math.max(container.clientHeight, 1), 0.5, 9000);
-  camera.position.set(240, 170, 280);
+  const camera = new THREE.PerspectiveCamera(46, container.clientWidth / Math.max(container.clientHeight, 1), 0.5, span * 7);
+  const cameraDistance = Math.max(300, span * 0.62);
+  camera.position.set(cameraDistance * 0.55, cameraDistance * 0.52, cameraDistance * 0.85);
   const controls = new OrbitControls(camera, renderer.domElement);
-  controls.target.set(0, 14, 0);
+  controls.target.set(0, Math.max(12, span * 0.01), 0);
   controls.enableDamping = true;
   controls.dampingFactor = 0.08;
   controls.maxPolarAngle = Math.PI / 2.04;
   controls.minDistance = 30;
-  controls.maxDistance = 2400;
+  controls.maxDistance = span * 2.8;
 
   const ambient = new THREE.HemisphereLight(0xf7fbf4, 0x495243, 1.3);
   scene.add(ambient);
   const sun = new THREE.DirectionalLight(0xfff4dc, 1.8);
-  sun.position.set(-320, 520, 240);
-  sun.castShadow = true;
+  sun.position.set(-span * 0.45, span * 0.72, span * 0.32);
+  sun.castShadow = !compactScene;
   sun.shadow.mapSize.set(1024, 1024);
-  sun.shadow.camera.left = -420;
-  sun.shadow.camera.right = 420;
-  sun.shadow.camera.top = 420;
-  sun.shadow.camera.bottom = -420;
+  sun.shadow.camera.left = -span * 0.45;
+  sun.shadow.camera.right = span * 0.45;
+  sun.shadow.camera.top = span * 0.45;
+  sun.shadow.camera.bottom = -span * 0.45;
   sun.shadow.camera.near = 1;
-  sun.shadow.camera.far = 2400;
+  sun.shadow.camera.far = span * 4;
   scene.add(sun);
   scene.add(sun.target);
   const sunSphere = new THREE.Mesh(
-    new THREE.SphereGeometry(9, 18, 12),
+    new THREE.SphereGeometry(Math.max(9, span * 0.006), 18, 12),
     new THREE.MeshBasicMaterial({ color: 0xffe6a0 })
   );
-  sunSphere.position.set(-520, 620, 320);
+  sunSphere.position.set(-span * 0.7, span * 0.9, span * 0.4);
   scene.add(sunSphere);
 
   const terrain = buildTerrainMesh();
   scene.add(terrain);
   const buildings = buildBuildingMeshes();
   buildings.forEach((mesh) => scene.add(mesh));
+  const roads = buildRoadLines();
+  if (roads) scene.add(roads);
 
   const three = {
     renderer,
@@ -576,7 +724,9 @@ function ensureThree() {
     controls,
     container,
     terrain,
+    compact: compactScene,
     buildingMeshes: buildings,
+    roadLines: roads,
     crownMeshes: [],
     trunkMeshes: [],
     treeGroups: new Map(),
@@ -597,8 +747,9 @@ function ensureThree() {
       const terrainHits = raycaster.intersectObject(terrain, false);
       if (!terrainHits.length) return;
       const local = terrainHits[0].point;
-      const origin = state.scene.origin_lonlat;
-      const metres = state.scene.meters_per_degree;
+      const source = threeScene();
+      const origin = source.origin_lonlat;
+      const metres = source.meters_per_degree;
       placeAt(origin[0] + local.x / metres[0], origin[1] + local.z / metres[1]);
       return;
     }
@@ -615,8 +766,9 @@ function ensureThree() {
     }
     if (state.mode === "plant" || state.mode === "move") {
       const local = hit.point;
-      const origin = state.scene.origin_lonlat;
-      const metres = state.scene.meters_per_degree;
+      const source = threeScene();
+      const origin = source.origin_lonlat;
+      const metres = source.meters_per_degree;
       const lon = origin[0] + local.x / metres[0];
       const lat = origin[1] + local.z / metres[1];
       placeAt(lon, lat);
@@ -633,14 +785,15 @@ function ensureThree() {
     state.three.camera.aspect = width / height;
     state.three.camera.updateProjectionMatrix();
   });
-  rebuildThreeTrees(state.scene.trees);
+  const source = threeScene();
+  rebuildThreeTrees(source.compact ? source.tree_arrays : source.trees);
   applySun();
   animateThree();
   return three;
 }
 
 function buildTerrainMesh() {
-  const sceneData = state.scene;
+  const sceneData = threeScene();
   const { width, height, elevation, canopy_height: canopy } = sceneData.terrain;
   const [left, bottom, right, top] = sceneData.bounds;
   const spanX = right - left;
@@ -696,8 +849,108 @@ function buildTerrainMesh() {
   return mesh;
 }
 
+function buildRoadLines() {
+  const source = threeScene();
+  const features = state.roads?.features;
+  if (!Array.isArray(features) || !source) return null;
+  const [originLon, originLat] = source.origin_lonlat;
+  const [mx, my] = source.meters_per_degree;
+  const terrain = source.terrain;
+  const [left, bottom, right, top] = terrain.bounds;
+  const width = terrain.width;
+  const height = terrain.height;
+  const elevation = terrain.elevation;
+  const originX = source.origin.x;
+  const originY = source.origin.y;
+  const originZ = source.origin.z;
+  const positions = [];
+  const indices = [];
+  let vertex = 0;
+  const point = (lon, lat) => {
+    const x = (lon - originLon) * mx;
+    const y = (lat - originLat) * my;
+    const col = Math.round(((x + originX - left) / Math.max(right - left, 1e-9)) * (width - 1));
+    const row = Math.round(((top - (y + originY)) / Math.max(top - bottom, 1e-9)) * (height - 1));
+    if (col < 0 || row < 0 || col >= width || row >= height) return null;
+    const z = elevation[row * width + col];
+    return [x, Number.isFinite(z) ? z - originZ + 1.4 : 1.4, y];
+  };
+  const halfWidth = 10.0;
+  for (const feature of features) {
+    const coordinates = feature.geometry?.coordinates;
+    if (!Array.isArray(coordinates)) continue;
+    for (let index = 0; index < coordinates.length - 1; index += 1) {
+      const first = point(coordinates[index][0], coordinates[index][1]);
+      const second = point(coordinates[index + 1][0], coordinates[index + 1][1]);
+      if (!first || !second) continue;
+      const dx = second[0] - first[0];
+      const dz = second[2] - first[2];
+      const length = Math.hypot(dx, dz);
+      if (length < 0.1) continue;
+      const px = (-dz / length) * halfWidth;
+      const pz = (dx / length) * halfWidth;
+      positions.push(
+        first[0] - px, first[1], first[2] - pz,
+        first[0] + px, first[1], first[2] + pz,
+        second[0] - px, second[1], second[2] - pz,
+        second[0] + px, second[1], second[2] + pz,
+      );
+      indices.push(vertex, vertex + 1, vertex + 2, vertex + 1, vertex + 3, vertex + 2);
+      vertex += 4;
+    }
+  }
+  if (!positions.length) return null;
+  const geometry = new THREE.BufferGeometry();
+  geometry.setAttribute("position", new THREE.Float32BufferAttribute(positions, 3));
+  geometry.setIndex(indices);
+  const material = new THREE.MeshBasicMaterial({
+    color: 0xffffff,
+    transparent: true,
+    opacity: 0.9,
+    depthTest: false,
+    depthWrite: false,
+    side: THREE.DoubleSide,
+  });
+  const roads = new THREE.Mesh(geometry, material);
+  roads.name = "roads";
+  roads.userData.kind = "roads";
+  roads.renderOrder = 5;
+  return roads;
+}
+
+
 function buildBuildingMeshes() {
-  const meshes = [];
+  const sceneData = threeScene();
+  if (sceneData.compact && sceneData.building_boxes) {
+    const boxes = sceneData.building_boxes;
+    const count = Array.isArray(boxes.x) ? boxes.x.length : 0;
+    if (!count) return [];
+    const geometry = new THREE.BoxGeometry(1, 1, 1);
+    const material = new THREE.MeshStandardMaterial({
+      color: 0xc3c9bd,
+      roughness: 0.82,
+      metalness: 0.03,
+    });
+    const mesh = new THREE.InstancedMesh(geometry, material, count);
+    const matrix = new THREE.Matrix4();
+    const position = new THREE.Vector3();
+    const scale = new THREE.Vector3();
+    const quaternion = new THREE.Quaternion();
+    for (let index = 0; index < count; index += 1) {
+      position.set(boxes.x[index], boxes.base[index] + boxes.h[index] / 2, boxes.z[index]);
+      scale.set(Math.max(boxes.w[index], 1), Math.max(boxes.h[index], 2), Math.max(boxes.d[index], 1));
+      matrix.compose(position, quaternion, scale);
+      mesh.setMatrixAt(index, matrix);
+    }
+    mesh.instanceMatrix.needsUpdate = true;
+    mesh.castShadow = !threeScene().compact;
+    mesh.receiveShadow = !threeScene().compact;
+    mesh.userData.kind = "building";
+    mesh.name = "buildings";
+    return [mesh];
+  }
+  const positions = [];
+  const normals = [];
   for (const building of state.scene.buildings || []) {
     const ring = (building.rings_local || [])[0] || [];
     if (ring.length < 3) continue;
@@ -718,31 +971,120 @@ function buildBuildingMeshes() {
         curveSegments: 1,
       });
       geometry.rotateX(-Math.PI / 2);
+      geometry.translate(0, Number(building.base_z) || 0, 0);
     } catch (_error) {
       continue;
     }
-    const material = new THREE.MeshStandardMaterial({
-      color: 0xc3c9bd,
-      roughness: 0.82,
-      metalness: 0.03,
-      transparent: true,
-      opacity: 0.82,
-      depthWrite: true,
-    });
-    const mesh = new THREE.Mesh(geometry, material);
-    mesh.position.y = Number(building.base_z) || 0;
-    mesh.castShadow = true;
-    mesh.receiveShadow = true;
-    mesh.userData.kind = "building";
-    mesh.name = building.name || building.id || "building";
-    meshes.push(mesh);
+    const flat = geometry.toNonIndexed();
+    const position = flat.getAttribute("position");
+    const normal = flat.getAttribute("normal");
+    if (position) positions.push(...position.array);
+    if (normal) normals.push(...normal.array);
+    flat.dispose();
+    geometry.dispose();
   }
-  return meshes;
+  if (!positions.length) return [];
+  const merged = new THREE.BufferGeometry();
+  merged.setAttribute("position", new THREE.Float32BufferAttribute(positions, 3));
+  if (normals.length === positions.length) {
+    merged.setAttribute("normal", new THREE.Float32BufferAttribute(normals, 3));
+  }
+  merged.computeBoundingSphere();
+  const material = new THREE.MeshStandardMaterial({
+    color: 0xc3c9bd,
+    roughness: 0.82,
+    metalness: 0.03,
+    transparent: true,
+    opacity: 0.82,
+    depthWrite: true,
+  });
+  const mesh = new THREE.Mesh(merged, material);
+  mesh.castShadow = true;
+  mesh.receiveShadow = true;
+  mesh.userData.kind = "building";
+  mesh.name = "buildings";
+  return [mesh];
+}
+
+function rebuildCompactTrees(trees) {
+  const three = state.three;
+  for (const mesh of [...three.crownMeshes, ...three.trunkMeshes]) {
+    three.scene.remove(mesh);
+    mesh.geometry.dispose();
+    mesh.material.dispose();
+  }
+  three.crownMeshes = [];
+  three.trunkMeshes = [];
+  three.treeGroups = new Map();
+  const groups = { 0: [], 1: [], 2: [] };
+  for (let index = 0; index < trees.x.length; index += 1) {
+    groups[trees.group[index]]?.push(index);
+  }
+  const names = { 0: "conifer", 1: "deciduous", 2: "unknown" };
+  const colors = { 0: "#14563a", 1: "#91a948", 2: "#5f665f" };
+  const matrix = new THREE.Matrix4();
+  const quaternion = new THREE.Quaternion();
+  const scale = new THREE.Vector3();
+  const position = new THREE.Vector3();
+  const color = new THREE.Color();
+  for (const [groupKey, indices] of Object.entries(groups)) {
+    if (!indices.length) continue;
+    const groupName = names[groupKey] || "unknown";
+    const crownGeometry =
+      groupName === "conifer"
+        ? new THREE.ConeGeometry(0.5, 1, 6, 1, false)
+        : new THREE.SphereGeometry(0.5, 6, 5);
+    const trunkGeometry = new THREE.CylinderGeometry(0.12, 0.2, 1, 4);
+    const crownMaterial = new THREE.MeshStandardMaterial({ roughness: 0.9, metalness: 0.0 });
+    const trunkMaterial = new THREE.MeshStandardMaterial({ color: 0x6d5a45, roughness: 1 });
+    const crowns = new THREE.InstancedMesh(crownGeometry, crownMaterial, indices.length);
+    const trunks = new THREE.InstancedMesh(trunkGeometry, trunkMaterial, indices.length);
+    crowns.castShadow = !three.compact;
+    crowns.receiveShadow = !three.compact;
+    trunks.castShadow = !three.compact;
+    trunks.receiveShadow = !three.compact;
+    indices.forEach((treeIndex, instance) => {
+      const height = Math.max(trees.height[treeIndex] || 2, 1.5);
+      const crownWidth = Math.max(trees.crown_width[treeIndex] || height * 0.35, 0.8);
+      const crownDepth = Math.max(height * 0.55, 1.0);
+      const trunkHeight = Math.max(height - crownDepth, 0.8);
+      position.set(
+        trees.x[treeIndex],
+        trees.z[treeIndex] + trunkHeight + crownDepth * 0.5,
+        trees.y[treeIndex],
+      );
+      scale.set(crownWidth, crownDepth, crownWidth);
+      matrix.compose(position, quaternion, scale);
+      crowns.setMatrixAt(instance, matrix);
+      color.set(colors[groupKey] || colors[2]);
+      crowns.setColorAt(instance, color);
+      position.set(
+        trees.x[treeIndex],
+        trees.z[treeIndex] + trunkHeight * 0.5,
+        trees.y[treeIndex],
+      );
+      scale.set(1, trunkHeight, 1);
+      matrix.compose(position, quaternion, scale);
+      trunks.setMatrixAt(instance, matrix);
+    });
+    crowns.instanceMatrix.needsUpdate = true;
+    if (crowns.instanceColor) crowns.instanceColor.needsUpdate = true;
+    trunks.instanceMatrix.needsUpdate = true;
+    three.scene.add(crowns, trunks);
+    three.crownMeshes.push(crowns);
+    three.trunkMeshes.push(trunks);
+    three.treeGroups.set(groupName, indices);
+  }
+  updateSelectedMarker();
 }
 
 function rebuildThreeTrees(trees) {
   if (!state.three) return;
   const three = state.three;
+  if (!Array.isArray(trees) && trees && Array.isArray(trees.x)) {
+    rebuildCompactTrees(trees);
+    return;
+  }
   for (const mesh of [...three.crownMeshes, ...three.trunkMeshes]) {
     three.scene.remove(mesh);
     mesh.geometry.dispose();
@@ -772,10 +1114,10 @@ function rebuildThreeTrees(trees) {
     const trunkMaterial = new THREE.MeshStandardMaterial({ color: 0x6d5a45, roughness: 1 });
     const crowns = new THREE.InstancedMesh(crownGeometry, crownMaterial, groupTrees.length);
     const trunks = new THREE.InstancedMesh(trunkGeometry, trunkMaterial, groupTrees.length);
-    crowns.castShadow = true;
-    crowns.receiveShadow = true;
-    trunks.castShadow = true;
-    trunks.receiveShadow = true;
+    crowns.castShadow = !three.compact;
+    crowns.receiveShadow = !three.compact;
+    trunks.castShadow = !three.compact;
+    trunks.receiveShadow = !three.compact;
     crowns.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
     trunks.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
     const matrix = new THREE.Matrix4();
@@ -847,9 +1189,10 @@ function animateThree() {
   requestAnimationFrame(animateThree);
 }
 
-function selectTree(treeId) {
-  const tree = state.treeById.get(treeId);
+function selectTree(treeId, treeData = null) {
+  const tree = treeData || state.treeById.get(treeId);
   if (!tree) return;
+  if (treeData) state.treeById.set(treeId, treeData);
   state.selectedId = treeId;
   updateMapSelection();
   updateSelectedMarker();
@@ -950,6 +1293,7 @@ function bindControls() {
   $("play-year").addEventListener("click", togglePlay);
   $("apply-recommend").addEventListener("click", applyRecommendations);
   $("scene-reset").addEventListener("click", resetCamera);
+  $("scene-downtown").addEventListener("click", focusDowntown);
   $("toggle-canopy").addEventListener("change", (event) => {
     if (state.map && state.map.getLayer("canopy")) {
       state.map.setLayoutProperty("canopy", "visibility", event.target.checked ? "visible" : "none");
@@ -958,6 +1302,16 @@ function bindControls() {
   $("toggle-hillshade").addEventListener("change", (event) => {
     if (state.map && state.map.getLayer("hillshade")) {
       state.map.setLayoutProperty("hillshade", "visibility", event.target.checked ? "visible" : "none");
+    }
+  });
+  $("toggle-roads").addEventListener("change", (event) => {
+    if (state.map && state.map.getLayer("roads")) {
+      const visibility = event.target.checked ? "visible" : "none";
+      state.map.setLayoutProperty("roads", "visibility", visibility);
+      state.map.setLayoutProperty("roads-casing", "visibility", visibility);
+    }
+    if (state.three?.roadLines) {
+      state.three.roadLines.visible = event.target.checked;
     }
   });
   $("toggle-buildings").addEventListener("change", (event) => {
@@ -2460,7 +2814,8 @@ function addEdit(edit, options = {}) {
     };
     state.treeById.set(tree.id, tree);
     state.scene.trees.push(tree);
-    rebuildThreeTrees(state.scene.trees);
+    const source = threeScene();
+  rebuildThreeTrees(source.compact ? source.tree_arrays : source.trees);
     updateMapTrees();
     selectTree(tree.id);
   }
@@ -2796,10 +3151,45 @@ function applyRecommendations() {
   toast("Recommendations added to the scenario.");
 }
 
+function focusDowntown() {
+  if (!state.three) return;
+  const span = sceneSpan();
+  const source = threeScene();
+  const [originLon, originLat] = source.origin_lonlat;
+  const [mx, my] = source.meters_per_degree;
+  const targetX = (-123.1207 - originLon) * mx;
+  const targetZ = (49.2827 - originLat) * my;
+  const distance = Math.max(700, span * 0.22);
+  state.three.camera.position.set(
+    targetX + distance * 0.55,
+    distance * 0.48,
+    targetZ + distance * 0.9,
+  );
+  state.three.controls.target.set(targetX, 25, targetZ);
+  state.three.controls.maxDistance = span * 2.8;
+  state.three.camera.far = span * 7;
+  state.three.camera.updateProjectionMatrix();
+  state.three.controls.update();
+}
+
+function threeScene() {
+  return state.scene3d || state.scene;
+}
+
+function sceneSpan() {
+  const bounds = threeScene()?.bounds || [0, 0, 100, 100];
+  return Math.max(Number(bounds[2]) - Number(bounds[0]), Number(bounds[3]) - Number(bounds[1]), 100);
+}
+
 function resetCamera() {
   if (!state.three) return;
-  state.three.camera.position.set(240, 170, 280);
-  state.three.controls.target.set(0, 14, 0);
+  const span = sceneSpan();
+  const distance = Math.max(300, span * 0.62);
+  state.three.camera.position.set(distance * 0.55, distance * 0.52, distance * 0.85);
+  state.three.controls.target.set(0, Math.max(12, span * 0.01), 0);
+  state.three.controls.maxDistance = span * 2.8;
+  state.three.camera.far = span * 7;
+  state.three.camera.updateProjectionMatrix();
   state.three.controls.update();
 }
 

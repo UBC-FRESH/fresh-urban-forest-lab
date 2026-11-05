@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>FRESH Urban Forest Lab</title>
   <link rel="stylesheet" href="static/vendor/maplibre-gl.css">
-  <link rel="stylesheet" href="static/styles.css?v=p8b">
+  <link rel="stylesheet" href="static/styles.css?v=p30b">
   <script src="static/vendor/maplibre-gl.js"></script>
   <script type="importmap">
     {
@@ -47,7 +47,7 @@
           <span class="muted" id="metric-date">inventory</span>
         </div>
         <div class="kpi-grid">
-          <article class="kpi"><span>Canopy cover</span><strong id="kpi-cover">--</strong><small>percent of campus</small></article>
+          <article class="kpi"><span>Canopy cover</span><strong id="kpi-cover">--</strong><small>percent of area</small></article>
           <article class="kpi"><span>Trees</span><strong id="kpi-trees">--</strong><small>live records</small></article>
           <article class="kpi"><span>Canopy volume</span><strong id="kpi-volume">--</strong><small>cubic metres</small></article>
           <article class="kpi"><span>Carbon</span><strong id="kpi-carbon">--</strong><small>tonnes above ground</small></article>
@@ -64,7 +64,7 @@
         </div>
         <label class="field">
           <span>Name</span>
-          <input id="scenario-name" type="text" value="Campus canopy 2050" maxlength="120">
+          <input id="scenario-name" type="text" value="Canopy 2050" maxlength="120">
         </label>
         <label class="field">
           <span>Projection horizon</span>
@@ -166,6 +166,7 @@
       <nav class="view-tabs" role="tablist" aria-label="View">
         <button class="tab active" data-view="map" role="tab" aria-selected="true">2D map</button>
         <button class="tab" data-view="scene" role="tab" aria-selected="false">3D scene</button>
+        <button class="tab" data-view="city" role="tab" aria-selected="false" hidden>City</button>
         <button class="tab" data-view="light" role="tab" aria-selected="false">Light</button>
         <button class="tab" data-view="change" role="tab" aria-selected="false">Change</button>
         <button class="tab" data-view="analytics" role="tab" aria-selected="false">Analytics</button>
@@ -174,6 +175,7 @@
         <div class="layer-toggles">
           <label><input id="toggle-canopy" type="checkbox" checked> canopy</label>
           <label><input id="toggle-hillshade" type="checkbox" checked> terrain</label>
+          <label><input id="toggle-roads" type="checkbox" checked> streets</label>
           <label><input id="toggle-buildings" type="checkbox" checked> buildings</label>
           <label><input id="toggle-off-inventory" type="checkbox"> off-inventory</label>
         </div>
@@ -183,15 +185,42 @@
         <div id="map"></div>
         <div class="map-hud">
           <span id="map-hint">Click a tree to inspect it.</span>
+          <span class="muted">Roads © OpenStreetMap contributors · ODbL</span>
         </div>
       </div>
 
       <div id="view-scene" class="view">
         <canvas id="scene-canvas"></canvas>
         <div class="scene-hud">
-          <span>Drag to orbit, scroll to zoom, click a crown to inspect.</span>
+          <span>Drag to orbit, scroll to zoom, click a crown to inspect · 3D shows all trees and building massing; 2D map shows full footprints.</span>
           <span id="sun-readout" class="sun-readout">Sun: --</span>
-          <button id="scene-reset" class="button tiny ghost" type="button">Reset view</button>
+          <button id="scene-reset" class="button tiny ghost" type="button">City view</button>
+          <button id="scene-downtown" class="button tiny ghost" type="button">Downtown</button>
+        </div>
+      </div>
+
+      <div id="view-city" class="view city">
+        <div class="city-hero">
+          <div>
+            <span class="eyebrow">City of Vancouver · public data</span>
+            <h2>City canopy and ecosystem services</h2>
+            <p class="muted">
+              Metrics come from the 2022 City LiDAR and all 184,152 public-tree records.
+              The 3D scene uses a representative visual sample of high and distributed trees.
+            </p>
+          </div>
+          <div id="city-source" class="city-source">loading</div>
+        </div>
+        <div id="city-kpis" class="kpi-grid city-kpis"></div>
+        <div class="city-grid">
+          <article class="chart-card">
+            <div class="panel-heading"><h2>Local areas</h2><span class="muted">ranked by canopy cover</span></div>
+            <div id="city-local-areas" class="city-table"></div>
+          </article>
+          <article class="chart-card">
+            <div class="panel-heading"><h2>Method and limits</h2><span class="muted">read this before citing</span></div>
+            <div id="city-methods" class="city-methods"></div>
+          </article>
         </div>
       </div>
 
@@ -421,6 +450,6 @@
   </aside>
 
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
-  <script type="module" src="static/app.js?v=p8b"></script>
+  <script type="module" src="static/app.js?v=p30b"></script>
 </body>
 </html>
