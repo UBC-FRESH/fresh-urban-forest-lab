@@ -135,3 +135,8 @@ def test_write_city_candidates_writes_summary_and_geojson(tmp_path: Path) -> Non
         "type": "Point",
         "coordinates": [-123.0, 49.0],
     }
+    with gzip.open(tmp_path / "off_inventory_3d.json.gz", "rt", encoding="utf-8") as handle:
+        compact = json.load(handle)
+    assert compact["count"] == 1
+    assert compact["x_m"] == [0.0]
+    assert compact["land_code"] == [0]

@@ -67,7 +67,8 @@ do not establish ownership.
 
 - Full detection: 644 s on the local host, sequential 1 km tiles.
 - Candidate build and mask exclusion from the cached detection: 158 s.
-- Detection cache: 14 MB compressed; candidate GeoJSON: 11 MB compressed.
+- Detection cache: 14 MB compressed; candidate GeoJSON: 11 MB compressed; compact
+  high-confidence 3D arrays: 852 KB compressed.
 - The build writes only under `/srv/shared-data`; free space after the build was 7.7 TB.
 - The city app serves the compressed candidate layer through
   `/api/off-inventory.geojson` and filters on confidence and land proxy in the browser.

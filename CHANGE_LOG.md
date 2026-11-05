@@ -680,6 +680,23 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Kept `classify_ground_ptd` and the point-cloud primitives as an urban ALS prototype.
 - This removes the misleading cross-repo writer; FEMIC is now canonical.
 
+### P32.6 3D candidates and orientation repair
+
+- Added a compact `/api/off-inventory-3d` payload with 130,103 high-confidence candidates
+  (score ≥ 0.6) and a Vancouver 3D point overlay toggled by the existing off-inventory
+  control. The points are coloured by land proxy: orange likely private, blue street,
+  green park, purple other, grey unknown.
+- Fixed the 3D axis convention: x remains east, z is now negative northing, and the camera
+  looks from the south. This puts north up and east right instead of the previous
+  north-at-bottom view that read as a west-east flip. The same convention now applies to
+  terrain, trees, roads, compact building boxes, non-compact UBC buildings, selection,
+  planting, and the downtown camera.
+- Added a north/east HUD marker and a 3D candidate-count readout. Browser smoke reports no
+  console or page errors for Vancouver or UBC.
+- The 3D overlay is high-confidence only; the 2D layer retains all candidates and its
+  confidence/land filters. This remains a screening layer, not a census or ownership layer.
+- Dashboard: GREEN.
+
 ### P32.1 data lock and P32.3 screening candidate layer
 
 - Locked the City parcel, parks, zoning, 2022 orthophoto index, UBC inventory, public-tree,

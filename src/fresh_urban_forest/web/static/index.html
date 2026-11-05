@@ -208,8 +208,10 @@
       <div id="view-scene" class="view">
         <canvas id="scene-canvas"></canvas>
         <div class="scene-hud">
-          <span>Drag to orbit, scroll to zoom, click a crown to inspect · 3D shows all trees and building massing; 2D map shows full footprints.</span>
+          <span>Drag to orbit, scroll to zoom, click a crown to inspect · 3D shows all trees, building massing, and optional high-confidence off-inventory candidates; 2D map shows full footprints.</span>
           <span id="sun-readout" class="sun-readout">Sun: --</span>
+          <span id="scene-candidate-status" class="muted"></span>
+          <span class="muted">N ↑ · E →</span>
           <button id="scene-reset" class="button tiny ghost" type="button">City view</button>
           <button id="scene-downtown" class="button tiny ghost" type="button">Downtown</button>
         </div>

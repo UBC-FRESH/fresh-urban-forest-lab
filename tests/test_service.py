@@ -441,6 +441,12 @@ def test_off_inventory_gzip_endpoint(tmp_path: Path) -> None:
     assert response.status_code == 200
     assert response.headers["content-encoding"] == "gzip"
     assert response.json() == {"type": "FeatureCollection", "features": []}
+    with gzip.open(root / "off_inventory_3d.json.gz", "wt", encoding="utf-8") as handle:
+        json.dump({"count": 1, "x_m": [0.0], "y_m": [0.0]}, handle)
+    compact = client.get("/api/off-inventory-3d")
+    assert compact.status_code == 200
+    assert compact.headers["content-encoding"] == "gzip"
+    assert compact.json()["count"] == 1
 
 
 def test_bird_habitat_and_demography_endpoint(tmp_path: Path) -> None:

@@ -491,4 +491,24 @@ def write_city_candidates(
             handle,
             separators=(",", ":"),
         )
+    high = [candidate for candidate in candidates if candidate.confidence >= 0.6]
+    land_codes = {
+        "likely private parcel": 0,
+        "street/lane": 1,
+        "public park": 2,
+        "other parcel": 3,
+        "unknown": 4,
+    }
+    compact = {
+        "schema_version": "fresh-urban-forest.off-inventory.3d.v1",
+        "count": len(high),
+        "confidence_floor": 0.6,
+        "x_m": [round(candidate.x_m, 2) for candidate in high],
+        "y_m": [round(candidate.y_m, 2) for candidate in high],
+        "height_m": [round(candidate.height_m, 2) for candidate in high],
+        "crown_radius_m": [round(candidate.crown_radius_m, 2) for candidate in high],
+        "land_code": [land_codes.get(candidate.land_class, 4) for candidate in high],
+    }
+    with gzip.open(out_dir / "off_inventory_3d.json.gz", "wt", encoding="utf-8") as handle:
+        json.dump(compact, handle, separators=(",", ":"))
     return summary_path

@@ -10,6 +10,8 @@ const state = {
   mapBuildings: null,
   offInventory: null,
   offInventoryValue: null,
+  offInventory3D: null,
+  offInventory3DLoading: false,
   birds: null,
   birdsLoading: false,
   treeById: new Map(),
@@ -760,7 +762,7 @@ function ensureThree() {
       const source = threeScene();
       const origin = source.origin_lonlat;
       const metres = source.meters_per_degree;
-      placeAt(origin[0] + local.x / metres[0], origin[1] + local.z / metres[1]);
+      placeAt(origin[0] + local.x / metres[0], origin[1] - local.z / metres[1]);
       return;
     }
     const targets = [...three.crownMeshes, ...three.trunkMeshes, terrain];
@@ -780,7 +782,7 @@ function ensureThree() {
       const origin = source.origin_lonlat;
       const metres = source.meters_per_degree;
       const lon = origin[0] + local.x / metres[0];
-      const lat = origin[1] + local.z / metres[1];
+      const lat = origin[1] - local.z / metres[1];
       placeAt(lon, lat);
     }
   });
@@ -819,7 +821,7 @@ function buildTerrainMesh() {
     for (let col = 0; col < width; col += 1) {
       const index = row * width + col;
       const x = left + (col / Math.max(width - 1, 1)) * spanX - originX;
-      const z = top - (row / Math.max(height - 1, 1)) * spanZ - originY;
+      const z = originY - (top - (row / Math.max(height - 1, 1)) * spanZ);
       const y = elevation[index] - originZ;
       positions.push(x, y, z);
       const canopyValue = canopy ? canopy[index] : 0;
@@ -838,7 +840,7 @@ function buildTerrainMesh() {
       const b = a + 1;
       const c = a + width;
       const d = c + 1;
-      indices.push(a, c, b, b, c, d);
+      indices.push(a, b, c, b, d, c);
     }
   }
   const geometry = new THREE.BufferGeometry();
@@ -883,7 +885,7 @@ function buildRoadLines() {
     const row = Math.round(((top - (y + originY)) / Math.max(top - bottom, 1e-9)) * (height - 1));
     if (col < 0 || row < 0 || col >= width || row >= height) return null;
     const z = elevation[row * width + col];
-    return [x, Number.isFinite(z) ? z - originZ + 1.4 : 1.4, y];
+    return [x, Number.isFinite(z) ? z - originZ + 1.4 : 1.4, -y];
   };
   const halfWidth = 10.0;
   for (const feature of features) {
@@ -929,6 +931,88 @@ function buildRoadLines() {
 }
 
 
+async function ensureOffInventory3D() {
+  if (!state.three || state.offInventory3DLoading) return;
+  if (state.three.offInventoryMesh) {
+    state.three.offInventoryMesh.visible = Boolean($("toggle-off-inventory")?.checked);
+    return;
+  }
+  if (!state.dataset?.has_off_inventory_3d) {
+    $("scene-candidate-status").textContent = "3D candidates unavailable";
+    return;
+  }
+  state.offInventory3DLoading = true;
+  $("scene-candidate-status").textContent = "loading candidates…";
+  try {
+    if (!state.offInventory3D) {
+      state.offInventory3D = await api("api/off-inventory-3d");
+    }
+    const data = state.offInventory3D;
+    const count = Number(data?.count || 0);
+    $("scene-candidate-status").textContent = `building ${formatNumber(count)} candidates…`;
+    if (!count || !state.three) {
+      $("scene-candidate-status").textContent = "no high-confidence candidates";
+      return;
+    }
+    const source = threeScene();
+    const terrain = source.terrain;
+    const [left, bottom, right, top] = source.bounds;
+    const originX = source.origin.x;
+    const originY = source.origin.y;
+    const originZ = source.origin.z;
+    const terrainBase = (x, z) => {
+      const north = -z;
+      const col = Math.round(((x + originX - left) / Math.max(right - left, 1e-9)) * (terrain.width - 1));
+      const row = Math.round(((top - (north + originY)) / Math.max(top - bottom, 1e-9)) * (terrain.height - 1));
+      if (col < 0 || row < 0 || col >= terrain.width || row >= terrain.height) return 0;
+      const value = terrain.elevation[row * terrain.width + col];
+      return Number.isFinite(value) ? value - originZ : 0;
+    };
+    const colors = ["#d9862f", "#3778bd", "#2f8b57", "#8a67c7", "#8b9489"];
+    const positions = new Float32Array(count * 3);
+    const pointColors = new Float32Array(count * 3);
+    const color = new THREE.Color();
+    for (let index = 0; index < count; index += 1) {
+      const x = Number(data.x_m[index]) - originX;
+      const z = -(Number(data.y_m[index]) - originY);
+      const height = Math.max(Number(data.height_m[index] || 2), 1.5);
+      const base = terrainBase(x, z);
+      positions[index * 3] = x;
+      positions[index * 3 + 1] = base + height * 0.6;
+      positions[index * 3 + 2] = z;
+      color.set(colors[Number(data.land_code[index])] || colors[4]);
+      pointColors[index * 3] = color.r;
+      pointColors[index * 3 + 1] = color.g;
+      pointColors[index * 3 + 2] = color.b;
+    }
+    const geometry = new THREE.BufferGeometry();
+    geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+    geometry.setAttribute("color", new THREE.BufferAttribute(pointColors, 3));
+    const material = new THREE.PointsMaterial({
+      size: 5,
+      sizeAttenuation: true,
+      vertexColors: true,
+      transparent: true,
+      opacity: 0.82,
+      depthWrite: false,
+    });
+    const mesh = new THREE.Points(geometry, material);
+    mesh.name = "off-inventory-3d";
+    mesh.userData.kind = "off-inventory";
+    mesh.frustumCulled = false;
+    mesh.visible = Boolean($("toggle-off-inventory")?.checked);
+    state.three.scene.add(mesh);
+    state.three.offInventoryMesh = mesh;
+    state.three.renderer.render(state.three.scene, state.three.camera);
+    $("scene-candidate-status").textContent = `${formatNumber(count)} 3D candidates (score ≥ 0.6)`;
+  } catch (error) {
+    $("scene-candidate-status").textContent = "candidates unavailable";
+    toast(`Could not load 3D candidates: ${error.message}`, true);
+  } finally {
+    state.offInventory3DLoading = false;
+  }
+}
+
 function buildBuildingMeshes() {
   const sceneData = threeScene();
   if (sceneData.compact && sceneData.building_boxes) {
@@ -947,7 +1031,7 @@ function buildBuildingMeshes() {
     const scale = new THREE.Vector3();
     const quaternion = new THREE.Quaternion();
     for (let index = 0; index < count; index += 1) {
-      position.set(boxes.x[index], boxes.base[index] + boxes.h[index] / 2, boxes.z[index]);
+      position.set(boxes.x[index], boxes.base[index] + boxes.h[index] / 2, -boxes.z[index]);
       scale.set(Math.max(boxes.w[index], 1), Math.max(boxes.h[index], 2), Math.max(boxes.d[index], 1));
       matrix.compose(position, quaternion, scale);
       mesh.setMatrixAt(index, matrix);
@@ -968,7 +1052,7 @@ function buildBuildingMeshes() {
     const shape = new THREE.Shape();
     ring.forEach((point, index) => {
       const x = Number(point[0]);
-      const y = -Number(point[1]);
+      const y = Number(point[1]);
       if (index === 0) shape.moveTo(x, y);
       else shape.lineTo(x, y);
     });
@@ -1061,7 +1145,7 @@ function rebuildCompactTrees(trees) {
       position.set(
         trees.x[treeIndex],
         trees.z[treeIndex] + trunkHeight + crownDepth * 0.5,
-        trees.y[treeIndex],
+        -trees.y[treeIndex],
       );
       scale.set(crownWidth, crownDepth, crownWidth);
       matrix.compose(position, quaternion, scale);
@@ -1071,7 +1155,7 @@ function rebuildCompactTrees(trees) {
       position.set(
         trees.x[treeIndex],
         trees.z[treeIndex] + trunkHeight * 0.5,
-        trees.y[treeIndex],
+        -trees.y[treeIndex],
       );
       scale.set(1, trunkHeight, 1);
       matrix.compose(position, quaternion, scale);
@@ -1141,13 +1225,13 @@ function rebuildThreeTrees(trees) {
       const crownDepth = Math.max(height * crownRatio, 1.0);
       const trunkHeight = Math.max(height - crownDepth, 0.8);
       const crownWidth = Math.max(tree.crown_width || height * 0.35, 0.8);
-      position.set(tree.x, tree.z + trunkHeight + crownDepth * 0.5, tree.y);
+      position.set(tree.x, tree.z + trunkHeight + crownDepth * 0.5, -tree.y);
       scale.set(crownWidth, crownDepth, crownWidth);
       matrix.compose(position, quaternion, scale);
       crowns.setMatrixAt(index, matrix);
       color.set(tree.color || "#68a357");
       crowns.setColorAt(index, color);
-      position.set(tree.x, tree.z + trunkHeight * 0.5, tree.y);
+      position.set(tree.x, tree.z + trunkHeight * 0.5, -tree.y);
       scale.set(1, trunkHeight, 1);
       matrix.compose(position, quaternion, scale);
       trunks.setMatrixAt(index, matrix);
@@ -1186,7 +1270,7 @@ function updateSelectedMarker() {
   });
   const marker = new THREE.Mesh(geometry, material);
   marker.rotation.x = -Math.PI / 2;
-  marker.position.set(tree.x, tree.z + 0.25, tree.y);
+  marker.position.set(tree.x, tree.z + 0.25, -tree.y);
   three.scene.add(marker);
   three.selectedMarker = marker;
 }
@@ -1336,6 +1420,10 @@ function bindControls() {
       state.map.setLayoutProperty("off-inventory", "visibility", event.target.checked ? "visible" : "none");
       applyOffInventoryFilter();
     }
+    if (state.three?.offInventoryMesh) {
+      state.three.offInventoryMesh.visible = event.target.checked;
+    }
+    if (event.target.checked) ensureOffInventory3D();
   });
   $("off-inventory-confidence").addEventListener("change", applyOffInventoryFilter);
   $("off-inventory-land").addEventListener("change", applyOffInventoryFilter);
@@ -1546,6 +1634,7 @@ function switchView(view) {
   }
   if (view === "scene") {
     ensureThree();
+    if ($("toggle-off-inventory")?.checked) ensureOffInventory3D();
     window.setTimeout(() => {
       if (state.three) {
         const width = state.three.container.clientWidth;
@@ -3185,7 +3274,7 @@ function focusDowntown() {
   const [originLon, originLat] = source.origin_lonlat;
   const [mx, my] = source.meters_per_degree;
   const targetX = (-123.1207 - originLon) * mx;
-  const targetZ = (49.2827 - originLat) * my;
+  const targetZ = (originLat - 49.2827) * my;
   const distance = Math.max(700, span * 0.22);
   state.three.camera.position.set(
     targetX + distance * 0.55,

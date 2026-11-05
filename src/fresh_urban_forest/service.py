@@ -468,6 +468,9 @@ def create_app(
         summary["has_off_inventory_value"] = (
             _dataset_file(state, "off_inventory_voi.json") is not None
         )
+        summary["has_off_inventory_3d"] = (
+            _dataset_file(state, "off_inventory_3d.json.gz") is not None
+        )
         summary["has_city_metrics"] = _dataset_file(state, "city_metrics.json") is not None
         summary["has_map_trees"] = _dataset_file(state, "map_trees.json.gz") is not None
         summary["has_map_buildings"] = _dataset_file(state, "map_buildings.geojson.gz") is not None
@@ -537,6 +540,30 @@ def create_app(
             media_type="application/geo+json",
             filename="off_inventory.geojson",
             headers=headers,
+        )
+
+    @app.get("/api/off-inventory-3d")
+    def off_inventory_3d() -> FileResponse:
+        """Return the compact high-confidence 3D candidate arrays.
+
+        Returns
+        -------
+        fastapi.responses.FileResponse
+            Compressed candidate arrays.
+
+        Raises
+        ------
+        fastapi.HTTPException
+            When the dataset has no compact candidate layer.
+        """
+        path = _dataset_file(state, "off_inventory_3d.json.gz")
+        if path is None:
+            raise HTTPException(status_code=404, detail="this dataset has no 3D candidate layer")
+        return FileResponse(
+            path,
+            media_type="application/json",
+            filename="off_inventory_3d.json",
+            headers={"Content-Encoding": "gzip", "Cache-Control": "no-store, max-age=0"},
         )
 
     @app.get("/api/off-inventory/value")
