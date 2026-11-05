@@ -26,9 +26,6 @@ in ``fresh_urban_forest.models``; the analysis functions are grouped by concern.
 .. automodule:: fresh_urban_forest.pointcloud
    :members:
 
-.. automodule:: fresh_urban_forest.ground_adapter
-   :members:
-
 .. automodule:: fresh_urban_forest.itd
    :members:
 

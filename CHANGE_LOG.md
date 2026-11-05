@@ -671,3 +671,11 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Marked P30 complete in the roadmap and project status.
 - No tag, release, Pages setting, or public deployment change.
 - Dashboard: GREEN.
+
+### P31 Move the ground writer to FEMIC
+
+- Removed `src/fresh_urban_forest/ground_adapter.py`, its CLI command, and its tests.
+- Removed the `ground_adapter` API docs entry.
+- Updated the ground-lane reference to point to FEMIC `ground-bundle-build`.
+- Kept `classify_ground_ptd` and the point-cloud primitives as an urban ALS prototype.
+- This removes the misleading cross-repo writer; FEMIC is now canonical.

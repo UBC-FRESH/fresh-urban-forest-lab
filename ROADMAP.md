@@ -28,6 +28,7 @@ This roadmap is the plan of record and the issue tracker map for FRESH Urban For
 | P20 Non-transitive crown merge and manual audit patch | #122 | `feature/p20-anchor-merge` | complete |
 | P21 Ground-adapter second-tile smoke test | #126 | `feature/p21-ground-smoke` | complete |
 | P30 Full Vancouver city canopy and ecosystem-services pilot | #105 | `feature/p30-vancouver-city` | complete |
+| P31 Move the ground writer to FEMIC | #135 | `feature/p31-move-ground-writer` | complete |
 
 ## Lifecycle Map
 
@@ -798,6 +799,22 @@ Phase 30 verification:
 - `python scripts/check_workflow.py`
 - `fresh-urban-forest serve --dataset data/processed/vancouver_2022 --port 8000`
 
+## Phase 31: Move the ground writer to FEMIC
+
+Parent issue: #135
+Branch: `feature/p31-move-ground-writer`
+Status: complete
+
+Goal: remove the legacy ground-bundle writer and CLI from this repository and make FEMIC the
+documented owner. The ground classifier prototype remains here for urban ALS experiments.
+
+- [x] P31.1 Remove `ground_adapter`, the `ground-adapter` CLI, tests, and API entry
+- [x] Update the ground-lane docs to point to FEMIC
+- [x] Record the ownership move in the roadmap and changelog
+
+Acceptance: `fresh-urban-forest ground-adapter` no longer exists; no `ground_adapter`
+module remains; the docs name FEMIC as canonical; the dashboard is green.
+
 ## Detailed Next Steps Notes
 
 1. The repository was created from `UBC-FRESH/ubc-fresh-dev-workflow` on 2026-11-03. The seed's dashboard, validator, docs, and agent contract are retained.
@@ -817,3 +834,4 @@ Phase 30 verification:
 15. P20 (#122) replaces the guarded union-find merge with a non-transitive anchor rule: only larger crowns absorb, and absorbed crowns cannot anchor. The synthetic audit patch merges a known split crown and keeps similar distinct crowns separate. The demo remains 3 local groups and 856 kept; a real orthophoto/field audit is still needed.
 16. P21 (#126) runs the optional ground adapter on the 2025 coastal tile and compares it with the Golden 2021 tile. Coastal: 415,068 points, 374,711 predicted ground, 68.8 s. Golden: 113,775 points, 82,530 predicted ground, 5.8 s. Both bundles are schema-valid with no warnings. The low-point fraction differs because the point distributions differ.
 17. P30 (#105) is the full Vancouver city pilot. It uses the City 2022 LiDAR (181 tiles, ~49 points/m²), all 184,152 public trees, the 22 local-area polygons, and building footprints. The AOI is 118.76 km² in EPSG:3157. The build produced 8.72 billion points, 99.96% LiDAR coverage, 184,151 mapped trees, 26.854% canopy cover, 350.16 million m³ canopy volume, 95,792 t above-ground carbon, and 1,979 t/yr modelled sequestration. The City's 2022 estimate is about 25%, a sanity check rather than calibration. Raw data is 165 GB under `/srv/shared-data`; processed outputs are 1.8 GB; free space remains 7.7 TB. The close-out is `notes/reports/p30-vancouver-city.md`. P30.7 adds the landing portal on port 8101 with mounted `/ubc/` and `/vancouver/` apps; the WS4 portal remains on 8790.
+18. P31 (#135) moves the ground-bundle writer to FEMIC. The `ground-adapter` CLI, `ground_adapter` module, tests, and API entry are removed here; `classify_ground_ptd` remains as an urban ALS prototype. The canonical writer is `femic lidar ground-bundle-build`.
