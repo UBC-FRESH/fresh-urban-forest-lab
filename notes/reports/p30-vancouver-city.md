@@ -5,7 +5,7 @@ Phase: P30
 Parent issue: #105
 Branch: `feature/p30-vancouver-city`
 Pull request: #131
-Status: PR queued for maintainer review
+Status: complete. PR #131 merged as `c5e01c9e403d11452986a4ce9830fe86adbb6bb8`.
 
 ## Summary
 
