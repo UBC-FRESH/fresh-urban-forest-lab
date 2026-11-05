@@ -88,7 +88,7 @@ above-surface vegetation. Patch metrics: class-2 recall 0.9507, high-confidence 
 The optional FEMIC adapter is a sidecar contract, not a core import: `ground.laz`,
 `manifest.json`, and `qa.json`, with versioned schemas and no default product change. The
 design is in `notes/design/femic-ground-adapter.md`; ADR 0007 records the decision. The
-writer and `ground-adapter` CLI are implemented in `fresh_urban_forest.ground_adapter`.
+writer and `ground-bundle-build` CLI now live in FEMIC; the earlier `fresh_urban_forest.ground_adapter` writer was removed in P31.
 
 The bundle adds `is_ground`, `hag`, `is_low`, and `ref_class` to a copy of the input LAZ.
 The manifest records input/output hashes, CRS, vertical datum, parameters, provenance, and
