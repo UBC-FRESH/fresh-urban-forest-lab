@@ -5,7 +5,7 @@ The Vancouver pilot applies the lab to the full City of Vancouver using only pub
 downloadable data. It is the first city-scale test of the same canopy, carbon, and 3D
 stack that the UBC demo uses.
 
-Status: active P30 work. The plan of record is
+Status: P30 complete. The plan of record is
 ``notes/design/vancouver-city-pilot.md``; the task state is in ``ROADMAP.md``.
 
 Data

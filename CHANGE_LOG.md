@@ -663,3 +663,11 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - The portal remains behind the existing Cloudflare/CWL gateway; the assistant is still
   opt-in at the service level and can be disabled with `FRESH_PORTAL_ALLOW_AGENT=0`.
 - Dashboard: GREEN.
+
+
+### P30 close-out
+
+- Merged PR #131 as `c5e01c9e403d11452986a4ce9830fe86adbb6bb8` and closed parent issue #105.
+- Marked P30 complete in the roadmap and project status.
+- No tag, release, Pages setting, or public deployment change.
+- Dashboard: GREEN.

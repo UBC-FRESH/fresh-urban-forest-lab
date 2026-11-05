@@ -27,7 +27,7 @@ This roadmap is the plan of record and the issue tracker map for FRESH Urban For
 | P19 Merge-reduction audit and guard | #119 | `feature/p19-merge-audit` | complete |
 | P20 Non-transitive crown merge and manual audit patch | #122 | `feature/p20-anchor-merge` | complete |
 | P21 Ground-adapter second-tile smoke test | #126 | `feature/p21-ground-smoke` | complete |
-| P30 Full Vancouver city canopy and ecosystem-services pilot | #105 | `feature/p30-vancouver-city` | pr-open |
+| P30 Full Vancouver city canopy and ecosystem-services pilot | #105 | `feature/p30-vancouver-city` | complete |
 
 ## Lifecycle Map
 
@@ -765,7 +765,7 @@ Phase 21 verification:
 
 Parent issue: #105
 Branch: `feature/p30-vancouver-city`
-Status: pr-open
+Status: complete
 
 Goal: extend the UBC-core prototype to the full City of Vancouver using public data, with a
 1 m city canopy surface, all 184k public trees, city and local-area metrics, and a 3D city
