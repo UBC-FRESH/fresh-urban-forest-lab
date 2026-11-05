@@ -679,3 +679,12 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Updated the ground-lane reference to point to FEMIC `ground-bundle-build`.
 - Kept `classify_ground_ptd` and the point-cloud primitives as an urban ALS prototype.
 - This removes the misleading cross-repo writer; FEMIC is now canonical.
+
+### P32 ALS off-inventory phase planned
+
+- Added the planned P32 phase for a full-city ALS-derived candidate inventory of likely
+  private residential canopy.
+- Added parent issue #136, tasks #137–#143, the detailed plan, and the roadmap entry.
+- The plan uses City parcels, parks, roads, 2022 orthophoto, public trees, UBC inventory,
+  and the P30 LiDAR/CHM; it treats candidates as confidence-scored, not a census or ownership.
+- Activation waits for maintainer approval.
