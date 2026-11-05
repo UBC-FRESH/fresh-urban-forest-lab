@@ -21,7 +21,8 @@ The target is a **candidate inventory**, not a census.
 
 ## Data lock
 
-Implementation lock and checksums: `notes/p32-data-lock.md`.
+Implementation lock and checksums: `notes/p32-data-lock.md`. Validation design:
+`notes/p32-validation-protocol.md`.
 
 | Need | Source | Use | Licence |
 | --- | --- | --- | --- |

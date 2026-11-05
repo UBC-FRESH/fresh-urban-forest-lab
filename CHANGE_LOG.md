@@ -685,6 +685,9 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Locked the City parcel, parks, zoning, 2022 orthophoto index, UBC inventory, public-tree,
   CHM, and OSM-road inputs with counts, retrieval dates, licences, and SHA-256 prefixes in
   `notes/p32-data-lock.md`.
+- Fixed the validation protocol in `notes/p32-validation-protocol.md`: held-out 500 m
+  spatial blocks, 1,000 public trees for recall, 300 orthophoto candidates for precision,
+  an independent UBC test, Wilson intervals, and privacy/exposure rules.
 - Added the full-city CHM screening detector in `fresh_urban_forest.city_off_inventory`:
   2 m block-max CHM, overlapping 1 km tiles, local maxima and watershed, a spatial KD-tree
   one-to-one public-tree match, building/water centre exclusion, and parcel/park/zoning/OSM

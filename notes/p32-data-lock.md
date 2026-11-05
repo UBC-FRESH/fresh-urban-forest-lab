@@ -2,8 +2,9 @@
 
 Date: 2026-11-05
 
-Status: P32.1 data lock recorded; P32.3 screening build only. This is not a P32
-close-out. No owner, address, or parcel-level ownership data was acquired.
+Status: P32.1 data lock and validation protocol recorded; P32.3 screening build only.
+This is not a P32 close-out. No owner, address, or parcel-level ownership data was
+acquired. Validation design: `notes/p32-validation-protocol.md`.
 
 ## Source lock
 
