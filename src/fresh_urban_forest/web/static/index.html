@@ -178,6 +178,22 @@
           <label><input id="toggle-roads" type="checkbox" checked> streets</label>
           <label><input id="toggle-buildings" type="checkbox" checked> buildings</label>
           <label><input id="toggle-off-inventory" type="checkbox"> off-inventory</label>
+          <label class="off-inventory-filter">conf
+            <select id="off-inventory-confidence" aria-label="Minimum off-inventory confidence">
+              <option value="0">all</option>
+              <option value="0.6" selected>0.6+</option>
+              <option value="0.8">0.8+</option>
+            </select>
+          </label>
+          <label class="off-inventory-filter">land
+            <select id="off-inventory-land" aria-label="Off-inventory land context">
+              <option value="all">all</option>
+              <option value="likely private parcel">likely private</option>
+              <option value="street/lane">street</option>
+              <option value="public park">park</option>
+              <option value="other parcel">other</option>
+            </select>
+          </label>
         </div>
       </nav>
 

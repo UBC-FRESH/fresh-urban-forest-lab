@@ -154,7 +154,10 @@ function renderOffInventory() {
     container.innerHTML = '<p class="muted">No off-inventory layer in this dataset.</p>';
     return;
   }
-  const high = (data.candidates || []).filter((candidate) => Number(candidate.confidence) >= 0.6).length;
+  const high = Number(
+    data.high_confidence_count ??
+      (data.candidates || []).filter((candidate) => Number(candidate.confidence) >= 0.6).length,
+  );
   const areaHa = Number(data.candidate_area_m2 || 0) / 10000;
   const value = state.offInventoryValue;
   const volumeDelta = value ? Number(value.augmented_canopy_volume_m3 || 0) - Number(value.official_canopy_volume_m3 || 0) : 0;
@@ -166,11 +169,11 @@ function renderOffInventory() {
     <div class="kpi-grid">
       <article class="kpi"><span>Candidates</span><strong>${formatNumber(data.candidate_count)}</strong><small>unmatched crowns</small></article>
       <article class="kpi"><span>High confidence</span><strong>${formatNumber(high)}</strong><small>score >= 0.6</small></article>
-      <article class="kpi"><span>Candidate area</span><strong>${formatNumber(areaHa, 1)} ha</strong><small>crown area</small></article>
+      <article class="kpi"><span>Crown area</span><strong>${formatNumber(areaHa, 1)} ha</strong><small>summed, not unique</small></article>
       <article class="kpi"><span>Detected</span><strong>${formatNumber(data.detected_count)}</strong><small>${formatNumber(data.matched_count)} matched</small></article>
     </div>
     ${voi}`;
-  $("off-inventory-status").textContent = "pilot";
+  $("off-inventory-status").textContent = data.evidence?.tier || "pilot";
 }
 
 function buildingFeatures() {
@@ -320,11 +323,13 @@ async function init() {
       try {
         state.offInventory = await api("api/off-inventory");
         renderOffInventory();
-        try {
-          state.offInventoryValue = await api("api/off-inventory/value");
-          renderOffInventory();
-        } catch (_error) {
-          // The value-of-information file is optional.
+        if (dataset.has_off_inventory_value) {
+          try {
+            state.offInventoryValue = await api("api/off-inventory/value");
+            renderOffInventory();
+          } catch (_error) {
+            // The value-of-information file is optional.
+          }
         }
       } catch (_error) {
         state.offInventory = null;
@@ -515,7 +520,12 @@ function initMap() {
         hillshade: { type: "image", url: "api/hillshade.png?width=1400", coordinates },
         canopy: { type: "image", url: "api/canopy.png?width=1400", coordinates },
         buildings: { type: "geojson", data: buildingFeatures() },
-        offInventory: { type: "geojson", data: offInventoryFeatures() },
+        offInventory: {
+          type: "geojson",
+          data: state.dataset?.has_off_inventory
+            ? "api/off-inventory.geojson"
+            : offInventoryFeatures(),
+        },
         boundary: { type: "geojson", data: boundaryFeatures() },
         roads: { type: "geojson", data: state.roads || { type: "FeatureCollection", features: [] } },
         trees: {
@@ -1324,8 +1334,20 @@ function bindControls() {
   $("toggle-off-inventory").addEventListener("change", (event) => {
     if (state.map && state.map.getLayer("off-inventory")) {
       state.map.setLayoutProperty("off-inventory", "visibility", event.target.checked ? "visible" : "none");
+      applyOffInventoryFilter();
     }
   });
+  $("off-inventory-confidence").addEventListener("change", applyOffInventoryFilter);
+  $("off-inventory-land").addEventListener("change", applyOffInventoryFilter);
+}
+
+function applyOffInventoryFilter() {
+  if (!state.map || !state.map.getLayer("off-inventory")) return;
+  const minimum = Number($("off-inventory-confidence").value || 0);
+  const land = $("off-inventory-land").value;
+  const filter = ["all", [">=", ["get", "confidence"], minimum]];
+  if (land !== "all") filter.push(["==", ["get", "land_class"], land]);
+  state.map.setFilter("off-inventory", filter);
 }
 
 async function loadAssistantInfo() {
@@ -1619,7 +1641,12 @@ function ensureLightView() {
         canopy: { type: "image", url: "api/canopy.png?width=1400", coordinates },
         shade: { type: "image", url: "api/shade.png?width=1400", coordinates },
         buildings: { type: "geojson", data: buildingFeatures() },
-        offInventory: { type: "geojson", data: offInventoryFeatures() },
+        offInventory: {
+          type: "geojson",
+          data: state.dataset?.has_off_inventory
+            ? "api/off-inventory.geojson"
+            : offInventoryFeatures(),
+        },
         boundary: { type: "geojson", data: boundaryFeatures() },
       },
       layers: [

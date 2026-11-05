@@ -465,6 +465,9 @@ def create_app(
         """Return the dataset manifest, baseline metrics, and optional-layer flags."""
         summary = dataset_summary(state.dataset)
         summary["has_off_inventory"] = _dataset_file(state, "off_inventory.json") is not None
+        summary["has_off_inventory_value"] = (
+            _dataset_file(state, "off_inventory_voi.json") is not None
+        )
         summary["has_city_metrics"] = _dataset_file(state, "city_metrics.json") is not None
         summary["has_map_trees"] = _dataset_file(state, "map_trees.json.gz") is not None
         summary["has_map_buildings"] = _dataset_file(state, "map_buildings.geojson.gz") is not None
@@ -522,10 +525,19 @@ def create_app(
         fastapi.HTTPException
             When the dataset has no off-inventory layer.
         """
-        path = _dataset_file(state, "off_inventory.geojson")
+        gz_path = _dataset_file(state, "off_inventory.geojson.gz")
+        path = gz_path or _dataset_file(state, "off_inventory.geojson")
         if path is None:
             raise HTTPException(status_code=404, detail="this dataset has no off-inventory layer")
-        return FileResponse(path, media_type="application/geo+json", filename=path.name)
+        headers = {"Cache-Control": "no-store, max-age=0"}
+        if path.suffix == ".gz":
+            headers["Content-Encoding"] = "gzip"
+        return FileResponse(
+            path,
+            media_type="application/geo+json",
+            filename="off_inventory.geojson",
+            headers=headers,
+        )
 
     @app.get("/api/off-inventory/value")
     def off_inventory_value() -> dict[str, object]:

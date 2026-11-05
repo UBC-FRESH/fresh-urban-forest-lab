@@ -680,6 +680,23 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Kept `classify_ground_ptd` and the point-cloud primitives as an urban ALS prototype.
 - This removes the misleading cross-repo writer; FEMIC is now canonical.
 
+### P32.1 data lock and P32.3 screening candidate layer
+
+- Locked the City parcel, parks, zoning, 2022 orthophoto index, UBC inventory, public-tree,
+  CHM, and OSM-road inputs with counts, retrieval dates, licences, and SHA-256 prefixes in
+  `notes/p32-data-lock.md`.
+- Added the full-city CHM screening detector in `fresh_urban_forest.city_off_inventory`:
+  2 m block-max CHM, overlapping 1 km tiles, local maxima and watershed, a spatial KD-tree
+  one-to-one public-tree match, building/water centre exclusion, and parcel/park/zoning/OSM
+  land-context labels.
+- Built 528,812 detected crowns, matched 130,497 public trees, and wrote 336,350 candidates.
+  The compressed candidate layer is served by the city app; the summary reports confidence,
+  crown area, volume, carbon, and land proxies with explicit screening caveats.
+- This is not a census, ownership layer, species inventory, or P32 close-out. Per-crown
+  point support, variable windows, seam merging, multi-peak splitting, held-out validation,
+  the UBC test, and the manual orthophoto audit remain open.
+- Added a confidence and land-proxy filter to the city map. Dashboard: GREEN.
+
 ### P32 ALS off-inventory phase planned
 
 - Added the planned P32 phase for a full-city ALS-derived candidate inventory of likely

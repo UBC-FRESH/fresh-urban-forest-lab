@@ -425,6 +425,24 @@ def test_off_inventory_endpoints(tmp_path: Path) -> None:
     assert value.json()["plan_jaccard"] == 1.0
 
 
+def test_off_inventory_gzip_endpoint(tmp_path: Path) -> None:
+    """A compressed candidate layer is served with Content-Encoding: gzip."""
+    import gzip
+    import json
+
+    client = _client(tmp_path)
+    root = tmp_path / "dataset"
+    (root / "off_inventory.json").write_text(
+        json.dumps({"candidate_count": 1, "candidates": []}), encoding="utf-8"
+    )
+    with gzip.open(root / "off_inventory.geojson.gz", "wt", encoding="utf-8") as handle:
+        json.dump({"type": "FeatureCollection", "features": []}, handle)
+    response = client.get("/api/off-inventory.geojson")
+    assert response.status_code == 200
+    assert response.headers["content-encoding"] == "gzip"
+    assert response.json() == {"type": "FeatureCollection", "features": []}
+
+
 def test_bird_habitat_and_demography_endpoint(tmp_path: Path) -> None:
     """The bird endpoint returns structural metrics, guilds, and prior demography."""
     client = _client(tmp_path)

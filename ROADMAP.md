@@ -29,7 +29,7 @@ This roadmap is the plan of record and the issue tracker map for FRESH Urban For
 | P21 Ground-adapter second-tile smoke test | #126 | `feature/p21-ground-smoke` | complete |
 | P30 Full Vancouver city canopy and ecosystem-services pilot | #105 | `feature/p30-vancouver-city` | complete |
 | P31 Move the ground writer to FEMIC | #135 | `feature/p31-move-ground-writer` | complete |
-| P32 ALS-derived off-inventory and private-canopy inventory | #136 | `feature/p32-off-inventory-als` | planned |
+| P32 ALS-derived off-inventory and private-canopy inventory | #136 | `feature/p32-off-inventory-als` | active |
 | P33 Remove the ground-classifier prototype | #146 | `feature/p33-remove-ground-classifier` | complete |
 
 ## Lifecycle Map
@@ -821,7 +821,7 @@ module remains; the docs name FEMIC as canonical; the dashboard is green.
 
 Parent issue: #136
 Branch: `feature/p32-off-inventory-als`
-Status: planned
+Status: active
 
 Goal: turn the P9 off-inventory pilot into a full-city, confidence-scored ALS-derived
 candidate inventory that can represent likely private residential canopy without claiming a
@@ -829,7 +829,7 @@ census, ownership, or species.
 
 Plan: `notes/design/als-offinventory-inventory.md`.
 
-- [ ] P32.1 Evidence, target definition, data lock, and validation protocol (#137)
+- [x] P32.1 Evidence, target definition, data lock, and validation protocol (#137)
 - [ ] P32.2 Full-city ALS point and CHM tile preparation (#138)
 - [ ] P32.3 Individual-tree segmentation and candidate detection (#139)
 - [ ] P32.4 Inventory reconciliation and public/private land proxy (#140)
