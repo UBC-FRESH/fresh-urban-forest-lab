@@ -30,6 +30,7 @@ This roadmap is the plan of record and the issue tracker map for FRESH Urban For
 | P30 Full Vancouver city canopy and ecosystem-services pilot | #105 | `feature/p30-vancouver-city` | complete |
 | P31 Move the ground writer to FEMIC | #135 | `feature/p31-move-ground-writer` | complete |
 | P32 ALS-derived off-inventory and private-canopy inventory | #136 | `feature/p32-off-inventory-als` | planned |
+| P33 Remove the ground-classifier prototype | #146 | `feature/p33-remove-ground-classifier` | complete |
 
 ## Lifecycle Map
 
@@ -853,6 +854,24 @@ Phase 32 verification:
 - `python scripts/dashboard.py`
 - `python scripts/check_workflow.py`
 
+## Phase 33: Remove the ground-classifier prototype
+
+Parent issue: #146
+Branch: `feature/p33-remove-ground-classifier`
+Status: complete
+
+Goal: finish the ownership cleanup by removing the ground-classifier prototype that FEMIC
+now owns canonically.
+
+- [x] P33.1 Remove the PTD classifier, low-point mask, TIN helpers, and tests
+- [x] Keep the generic point-cloud conditioning primitives
+- [x] Update the Arbor guide and provenance note to point to FEMIC
+- [x] Record the removal in the roadmap and changelog
+
+Acceptance: no ground-classification or low-point function remains; the generic primitives
+still pass their tests; Sphinx docs build without broken ground-function references; the
+dashboard is green.
+
 ## Detailed Next Steps Notes
 
 1. The repository was created from `UBC-FRESH/ubc-fresh-dev-workflow` on 2026-11-03. The seed's dashboard, validator, docs, and agent contract are retained.
@@ -875,3 +894,4 @@ Phase 32 verification:
 
 18. P31 (#135) moves the ground-bundle writer to FEMIC. The `ground-adapter` CLI, `ground_adapter` module, tests, and API entry are removed here; `classify_ground_ptd` remains as an urban ALS prototype. The canonical writer is `femic lidar ground-bundle-build`.
 19. P32 (#136) is planned, not active. It will turn the P9 off-inventory pilot into a full-city ALS candidate inventory for likely private residential canopy, with held-out public-tree and UBC validation, an orthophoto audit, parcel/parks/street land proxies, and a city app layer. The plan is `notes/design/als-offinventory-inventory.md`; activation waits for maintainer approval.
+20. P33 (#146) removes the remaining ground-classifier prototype (`classify_ground_ptd`, `GroundClassification`, `low_point_mask`, and their TIN helpers) from this repository. FEMIC is the sole owner; the generic conditioning primitives remain here.

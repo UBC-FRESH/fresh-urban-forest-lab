@@ -688,3 +688,12 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - The plan uses City parcels, parks, roads, 2022 orthophoto, public trees, UBC inventory,
   and the P30 LiDAR/CHM; it treats candidates as confidence-scored, not a census or ownership.
 - Activation waits for maintainer approval.
+
+### P33 Remove the ground-classifier prototype
+
+- Removed `GroundClassification`, `classify_ground_ptd`, `low_point_mask`, the TIN helpers, and
+  their tests from `fresh_urban_forest.pointcloud`.
+- Kept `hybrid_homogenize`, `statistical_outlier_mask`, `voxel_connected_components`, and
+  `local_anisotropy` as generic conditioning primitives.
+- Updated the Arbor guide and provenance note: FEMIC owns the ground lane.
+- No default detector or product changed.

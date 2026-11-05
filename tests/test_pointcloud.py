@@ -8,10 +8,8 @@ import numpy as np
 import pytest
 
 from fresh_urban_forest.pointcloud import (
-    classify_ground_ptd,
     hybrid_homogenize,
     local_anisotropy,
-    low_point_mask,
     statistical_outlier_mask,
     voxel_connected_components,
 )
@@ -187,105 +185,3 @@ def test_invalid_parameters_raise(
     points = np.zeros((5, 3), dtype=np.float64)
     with pytest.raises(ValueError, match=match):
         function(points, **kwargs)
-
-
-def test_classify_ground_ptd_flat_plane_with_outlier() -> None:
-    """A flat plane is ground and a high building-like point is not."""
-    axis = np.linspace(0.0, 9.0, 10)
-    xx, yy = np.meshgrid(axis, axis)
-    plane = np.column_stack([xx.ravel(), yy.ravel(), np.zeros(xx.size)])
-    points = np.vstack([plane, np.array([[5.0, 5.0, 5.0]])])
-    result = classify_ground_ptd(
-        points,
-        cell_size_m=1.0,
-        max_distance_m=0.5,
-    )
-    assert result.is_ground.shape == (points.shape[0],)
-    assert bool(np.all(result.is_ground[:-1]))
-    assert not bool(result.is_ground[-1])
-    assert float(np.max(result.height_above_ground[:-1])) < 1e-6
-    assert float(result.height_above_ground[-1]) == pytest.approx(5.0)
-    assert result.seed_count > 0
-
-
-def test_classify_ground_ptd_sloped_plane() -> None:
-    """A gentle slope is ground with near-zero HAG."""
-    axis = np.linspace(0.0, 9.0, 10)
-    xx, yy = np.meshgrid(axis, axis)
-    z = 0.1 * xx + 0.05 * yy
-    points = np.column_stack([xx.ravel(), yy.ravel(), z.ravel()])
-    result = classify_ground_ptd(
-        points,
-        cell_size_m=1.0,
-        max_angle_deg=30.0,
-        max_distance_m=0.5,
-    )
-    assert bool(np.all(result.is_ground))
-    assert float(np.max(result.height_above_ground)) < 1e-6
-
-
-def test_classify_ground_ptd_high_vegetation_stays_above_ground() -> None:
-    """High points above a flat plane are not ground and keep positive HAG."""
-    axis = np.linspace(0.0, 4.0, 5)
-    xx, yy = np.meshgrid(axis, axis)
-    plane = np.column_stack([xx.ravel(), yy.ravel(), np.zeros(xx.size)])
-    tall = np.array([[2.0, 2.0, 3.0], [2.0, 2.0, 4.0]])
-    points = np.vstack([plane, tall])
-    result = classify_ground_ptd(points, cell_size_m=1.0, max_distance_m=0.5)
-    assert not bool(np.any(result.is_ground[-2:]))
-    assert float(result.height_above_ground[-2]) == pytest.approx(3.0)
-    assert float(result.height_above_ground[-1]) == pytest.approx(4.0)
-
-
-def test_classify_ground_ptd_degenerate_tin_returns_warning() -> None:
-    """A collinear seed set does not crash and reports a warning."""
-    points = np.array(
-        [[0.0, 0.0, 0.0], [1.0, 0.0, 0.0], [2.0, 0.0, 0.0]],
-        dtype=np.float64,
-    )
-    result = classify_ground_ptd(points, cell_size_m=0.5)
-    assert result.warning is not None
-    assert bool(np.all(result.is_ground))
-    assert float(np.max(result.height_above_ground)) == pytest.approx(0.0)
-
-
-def test_classify_ground_ptd_empty_cloud() -> None:
-    """An empty cloud returns empty arrays and zero counters."""
-    result = classify_ground_ptd(np.zeros((0, 3)), cell_size_m=1.0)
-    assert result.is_ground.shape == (0,)
-    assert result.height_above_ground.shape == (0,)
-    assert result.ground_elevation.shape == (0,)
-    assert result.iterations == 0
-    assert result.seed_count == 0
-    assert result.warning is None
-
-
-def test_classify_ground_ptd_invalid_parameters() -> None:
-    """Invalid PTD parameters fail with a clear error."""
-    points = np.zeros((5, 3), dtype=np.float64)
-    with pytest.raises(ValueError, match="cell_size_m"):
-        classify_ground_ptd(points, cell_size_m=0.0)
-    with pytest.raises(ValueError, match="max_angle_deg"):
-        classify_ground_ptd(points, max_angle_deg=0.0)
-    with pytest.raises(ValueError, match="max_angle_deg"):
-        classify_ground_ptd(points, max_angle_deg=90.0)
-    with pytest.raises(ValueError, match="max_distance_m"):
-        classify_ground_ptd(points, max_distance_m=0.0)
-    with pytest.raises(ValueError, match="max_iterations"):
-        classify_ground_ptd(points, max_iterations=0)
-
-
-def test_low_point_mask_flags_points_below_the_cut() -> None:
-    """The low-point flag uses a strict HAG cut."""
-    hag = np.array([0.0, 0.1, 0.15, 0.2], dtype=np.float64)
-    mask = low_point_mask(hag, cut_m=0.15)
-    assert mask.dtype == np.bool_
-    assert np.array_equal(mask, np.array([True, True, False, False]))
-
-
-def test_low_point_mask_validates_inputs() -> None:
-    """Negative cuts and non-vector HAG arrays fail."""
-    with pytest.raises(ValueError, match="one-dimensional"):
-        low_point_mask(np.zeros((2, 2)), cut_m=0.15)
-    with pytest.raises(ValueError, match="non-negative"):
-        low_point_mask(np.zeros(3), cut_m=-0.1)
