@@ -679,3 +679,12 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Updated the ground-lane reference to point to FEMIC `ground-bundle-build`.
 - Kept `classify_ground_ptd` and the point-cloud primitives as an urban ALS prototype.
 - This removes the misleading cross-repo writer; FEMIC is now canonical.
+
+### P33 Remove the ground-classifier prototype
+
+- Removed `GroundClassification`, `classify_ground_ptd`, `low_point_mask`, the TIN helpers, and
+  their tests from `fresh_urban_forest.pointcloud`.
+- Kept `hybrid_homogenize`, `statistical_outlier_mask`, `voxel_connected_components`, and
+  `local_anisotropy` as generic conditioning primitives.
+- Updated the Arbor guide and provenance note: FEMIC owns the ground lane.
+- No default detector or product changed.
