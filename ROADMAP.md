@@ -29,6 +29,7 @@ This roadmap is the plan of record and the issue tracker map for FRESH Urban For
 | P21 Ground-adapter second-tile smoke test | #126 | `feature/p21-ground-smoke` | complete |
 | P30 Full Vancouver city canopy and ecosystem-services pilot | #105 | `feature/p30-vancouver-city` | complete |
 | P31 Move the ground writer to FEMIC | #135 | `feature/p31-move-ground-writer` | complete |
+| P32 ALS-derived off-inventory and private-canopy inventory | #136 | `feature/p32-off-inventory-als` | planned |
 | P33 Remove the ground-classifier prototype | #146 | `feature/p33-remove-ground-classifier` | complete |
 
 ## Lifecycle Map
@@ -816,6 +817,43 @@ documented owner. The ground classifier prototype remains here for urban ALS exp
 Acceptance: `fresh-urban-forest ground-adapter` no longer exists; no `ground_adapter`
 module remains; the docs name FEMIC as canonical; the dashboard is green.
 
+## Phase 32: ALS-derived off-inventory and private-canopy inventory
+
+Parent issue: #136
+Branch: `feature/p32-off-inventory-als`
+Status: planned
+
+Goal: turn the P9 off-inventory pilot into a full-city, confidence-scored ALS-derived
+candidate inventory that can represent likely private residential canopy without claiming a
+census, ownership, or species.
+
+Plan: `notes/design/als-offinventory-inventory.md`.
+
+- [ ] P32.1 Evidence, target definition, data lock, and validation protocol (#137)
+- [ ] P32.2 Full-city ALS point and CHM tile preparation (#138)
+- [ ] P32.3 Individual-tree segmentation and candidate detection (#139)
+- [ ] P32.4 Inventory reconciliation and public/private land proxy (#140)
+- [ ] P32.5 Candidate attributes and uncertainty (#141)
+- [ ] P32.6 City app off-inventory layer and private-canopy metrics (#142)
+- [ ] P32.7 Validation, manual audit, docs, and close-out (#143)
+
+Acceptance criteria:
+
+- A full-city candidate layer, not a 500-crown pilot cap.
+- Candidates are separate from the public inventory and carry confidence, height, crown,
+  volume, carbon, and public/private land-proxy labels.
+- No owner, address, or parcel-level ownership claim is stored or exposed.
+- Detection is evaluated on held-out public trees, the UBC inventory, and a manual
+  orthophoto audit; precision/recall and count uncertainty are reported.
+- The city app shows the candidate layer, confidence filters, counts, and explicit caveats.
+- Performance and storage are measured; no dataset is written outside `/srv/shared-data`.
+- The dashboard is green.
+
+Phase 32 verification:
+
+- `python scripts/dashboard.py`
+- `python scripts/check_workflow.py`
+
 ## Phase 33: Remove the ground-classifier prototype
 
 Parent issue: #146
@@ -853,5 +891,7 @@ dashboard is green.
 15. P20 (#122) replaces the guarded union-find merge with a non-transitive anchor rule: only larger crowns absorb, and absorbed crowns cannot anchor. The synthetic audit patch merges a known split crown and keeps similar distinct crowns separate. The demo remains 3 local groups and 856 kept; a real orthophoto/field audit is still needed.
 16. P21 (#126) runs the optional ground adapter on the 2025 coastal tile and compares it with the Golden 2021 tile. Coastal: 415,068 points, 374,711 predicted ground, 68.8 s. Golden: 113,775 points, 82,530 predicted ground, 5.8 s. Both bundles are schema-valid with no warnings. The low-point fraction differs because the point distributions differ.
 17. P30 (#105) is the full Vancouver city pilot. It uses the City 2022 LiDAR (181 tiles, ~49 points/m²), all 184,152 public trees, the 22 local-area polygons, and building footprints. The AOI is 118.76 km² in EPSG:3157. The build produced 8.72 billion points, 99.96% LiDAR coverage, 184,151 mapped trees, 26.854% canopy cover, 350.16 million m³ canopy volume, 95,792 t above-ground carbon, and 1,979 t/yr modelled sequestration. The City's 2022 estimate is about 25%, a sanity check rather than calibration. Raw data is 165 GB under `/srv/shared-data`; processed outputs are 1.8 GB; free space remains 7.7 TB. The close-out is `notes/reports/p30-vancouver-city.md`. P30.7 adds the landing portal on port 8101 with mounted `/ubc/` and `/vancouver/` apps; the WS4 portal remains on 8790.
+
 18. P31 (#135) moves the ground-bundle writer to FEMIC. The `ground-adapter` CLI, `ground_adapter` module, tests, and API entry are removed here; `classify_ground_ptd` remains as an urban ALS prototype. The canonical writer is `femic lidar ground-bundle-build`.
-19. P33 (#146) removes the remaining ground-classifier prototype (`classify_ground_ptd`, `GroundClassification`, `low_point_mask`, and their TIN helpers) from this repository. FEMIC is the sole owner; the generic conditioning primitives remain here.
+19. P32 (#136) is planned, not active. It will turn the P9 off-inventory pilot into a full-city ALS candidate inventory for likely private residential canopy, with held-out public-tree and UBC validation, an orthophoto audit, parcel/parks/street land proxies, and a city app layer. The plan is `notes/design/als-offinventory-inventory.md`; activation waits for maintainer approval.
+20. P33 (#146) removes the remaining ground-classifier prototype (`classify_ground_ptd`, `GroundClassification`, `low_point_mask`, and their TIN helpers) from this repository. FEMIC is the sole owner; the generic conditioning primitives remain here.
