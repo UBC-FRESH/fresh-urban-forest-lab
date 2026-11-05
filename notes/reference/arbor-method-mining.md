@@ -2,6 +2,11 @@
 
 Status: reference note, 2026-11-03. Phase P12.
 
+> **Ownership update (2026-11-05, P136/P32):** the ground classifier and low-point mask
+> moved to FEMIC (`femic.lidar.ground_classification`; CLI `femic lidar ground-bundle-build`).
+> The ground sections below describe the removed prototype and are historical. The generic
+> conditioning primitives remain in this repository.
+
 This note records the first audit of [`r-lidar/arbor`](https://github.com/r-lidar/arbor)
 for methods, algorithms, and design patterns that this MIT-licensed project can
 reimplement. It is a **method-mining** note, not a code-copying plan.
@@ -73,9 +78,9 @@ on Arbor's code.
 
 | ID | Candidate | Arbor source | What it does | Why it matters here | Complexity | Status |
 | --- | --- | --- | --- | --- | --- | --- |
-| G1 | Progressive TIN densification (PTD) | `src/segment/segment_ground_api.cpp`, `src/vendor/ptd/PTD.cpp`, book ch. 4 | Sparse ground seed, iterative TIN densification under angle/distance thresholds, ground class and HAG | Directly relevant to unclassified or inconsistently classified LidarBC/ALS tiles | Medium-high | Implemented as simplified `classify_ground_ptd` in P13.1 |
-| G2 | TIN interpolation and 1-NN fallback | `src/segment/segment_ground_api.cpp` | Interpolate ground elevation on the TIN; nearest ground point outside the TIN | Robust HAG at tile edges and sparse coverage | Medium | Implemented as part of P13.1; real-tile edge validation pending |
-| G3 | Ground QA and low-outlier handling | Book ch. 4 | Record low-point cut, ground class, and HAG assumptions | Makes ground classification auditable | Low | Seed/iteration counters and `low_point_mask(0.15)` implemented |
+| G1 | Progressive TIN densification (PTD) | `src/segment/segment_ground_api.cpp`, `src/vendor/ptd/PTD.cpp`, book ch. 4 | Sparse ground seed, iterative TIN densification under angle/distance thresholds, ground class and HAG | Directly relevant to unclassified or inconsistently classified LidarBC/ALS tiles | Medium-high | Moved to FEMIC in P136/P32 (was the simplified `classify_ground_ptd`) |
+| G2 | TIN interpolation and 1-NN fallback | `src/segment/segment_ground_api.cpp` | Interpolate ground elevation on the TIN; nearest ground point outside the TIN | Robust HAG at tile edges and sparse coverage | Medium | Moved to FEMIC in P136/P32; real-tile edge validation still pending |
+| G3 | Ground QA and low-outlier handling | Book ch. 4 | Record low-point cut, ground class, and HAG assumptions | Makes ground classification auditable | Low | Moved to FEMIC in P136/P32 (was `low_point_mask(0.15)`) |
 
 Underlying method to cite for PTD: Axelsson (2000), adaptive TIN models. Arbor's vendored
 PTD implementation is MIT, but the planned implementation is a new Python version.
@@ -157,9 +162,12 @@ They are opt-in utilities. They are not wired into the default CHM/ITD pipeline.
 Each function carries a `Method provenance` docstring section naming Arbor 1.1.5, the
 source file or book chapter, the GPL-3.0 source licence, and the clean-room statement.
 
-## ALS ground classification (P13.1-P13.2)
+## ALS ground classification (historical; moved to FEMIC)
 
-`classify_ground_ptd` is the first ALS-specific function. It seeds a TIN from the lowest
+The classifier below was removed in P32. FEMIC now owns it as
+`femic.lidar.ground_classification`; the CLI is `femic lidar ground-bundle-build`.
+
+`classify_ground_ptd` was the first ALS-specific function. It seeds a TIN from the lowest
 point in each grid cell, then progressively adds points whose vertical residual from the
 TIN is within `max_distance_m` and whose point-to-triangle-vertex angle is within
 `max_angle_deg`. The final TIN provides `ground_elevation` and `height_above_ground`.
@@ -212,8 +220,8 @@ tile.
 
 ## Next slices
 
-1. **Manual reference patch and FEMIC adapter design**: label a small patch, then design an
-   optional versioned adapter. No default pipeline change.
+1. **Manual reference patch**: FEMIC owns the adapter now; manual labels remain the
+   evidence gap.
 2. **CHM/ITD post-processing**: buffer flags, small-tree flags, and over-segmentation
    merging.
 3. **MLS/TLS semantic and instance segmentation**: a future `fresh-pointcloud` package,

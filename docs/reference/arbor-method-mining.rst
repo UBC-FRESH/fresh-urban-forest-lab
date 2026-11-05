@@ -23,9 +23,12 @@ The first slice adds four opt-in functions in ``fresh_urban_forest.pointcloud``:
   26-connected voxel labelling, from ``src/utils/Grid3D.cpp``.
 - :func:`fresh_urban_forest.pointcloud.local_anisotropy` — kNN covariance anisotropy as a
   wood-likelihood proxy, from ``src/utils/anisotopy.cpp`` and book chapter 5.
-- :func:`fresh_urban_forest.pointcloud.classify_ground_ptd` — a simplified, PTD-inspired
-  ALS ground classifier with TIN densification and HAG, from book chapter 4 and
-  Axelsson (2000).
+
+A fifth prototype, the PTD-inspired ALS ground classifier and low-point mask, was developed
+here during P13-P21. It moved to FEMIC in P136/P32. The canonical API is
+``femic.lidar.ground_classification`` and the canonical CLI is
+``femic lidar ground-bundle-build``; this repository no longer ships the classifier, the
+low-point mask, or the bundle writer.
 
 Each function carries a ``Method provenance`` docstring section. The note records the
 source file or book chapter, the licence, and the clean-room statement.
@@ -48,16 +51,13 @@ the licence of the combined work. If a future change wants to copy a specific co
 rather than reimplement it, the change stops for a licence review. The default is always a
 new implementation with a named method source.
 
-ALS ground classification
--------------------------
+ALS ground classification (historical, now in FEMIC)
+----------------------------------------------------
 
-``classify_ground_ptd`` is a simplified, PTD-inspired implementation. It seeds a TIN from
-the lowest point per grid cell, progressively adds points within a vertical residual and
-point-to-vertex angle threshold, and interpolates height above ground from the final surface.
-
-It is **not** a line-by-line port of Arbor, lidR, or the original PTD code. The angle test
-uses a point-to-triangle-vertex angle measured from the triangle plane, the default vertical
-residual is permissive, and points outside the TIN hull are not classified as ground.
+The PTD-inspired classifier and low-point mask were prototyped here and moved to FEMIC in
+P136/P32. The canonical API is ``femic.lidar.ground_classification``; the canonical CLI is
+``femic lidar ground-bundle-build``. The evidence below describes the removed prototype and
+is retained as provenance, not as a description of this package's current surface.
 
 P13.2 validates a 415,068-point LidarBC 2025 tile (EPSG:3157, OGL-BC). Class-2 recall is
 0.9998 and class-2 HAG p99 is 0.021 m. The tile's class 1 is unclassified and class 7 is
@@ -78,7 +78,7 @@ recall is 0.9999, false-ground is 3.35%, and HAG p99 is 0.0217 m.
 
 P14.3 approves an optional FEMIC adapter prototype, not a default pipeline change. The
 conditions are a manually labelled reference patch, a versioned optional FEMIC-side design,
-and a stable contract. The classifier stays opt-in in this repository.
+and a stable contract. The classifier is now opt-in in FEMIC.
 
 P15 adds a manually checked 20 m x 20 m Golden-area patch (6,393 points). The side view
 confirms class 2 is the lowest continuous surface; class 1 mixes unclassified ground with
@@ -88,7 +88,9 @@ above-surface vegetation. Patch metrics: class-2 recall 0.9507, high-confidence 
 The optional FEMIC adapter is a sidecar contract, not a core import: `ground.laz`,
 `manifest.json`, and `qa.json`, with versioned schemas and no default product change. The
 design is in `notes/design/femic-ground-adapter.md`; ADR 0007 records the decision. The
-writer and `ground-bundle-build` CLI now live in FEMIC; the earlier `fresh_urban_forest.ground_adapter` writer was removed in P31.
+writer and ``ground-bundle-build`` CLI now live in FEMIC; the earlier
+``fresh_urban_forest.ground_adapter`` writer was removed in P31, and the classifier was
+removed in P32.
 
 The bundle adds `is_ground`, `hag`, `is_low`, and `ref_class` to a copy of the input LAZ.
 The manifest records input/output hashes, CRS, vertical datum, parameters, provenance, and
