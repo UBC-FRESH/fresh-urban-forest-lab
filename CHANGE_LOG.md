@@ -680,6 +680,29 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Kept `classify_ground_ptd` and the point-cloud primitives as an urban ALS prototype.
 - This removes the misleading cross-repo writer; FEMIC is now canonical.
 
+### P35 off-inventory classifier and QA plan
+
+- Added the P35 phase for off-inventory conifer/deciduous classification and interface QA.
+- Known-good labels are available from Vancouver and Surrey public inventories; Burnaby
+  and Coquitlam have no public species inventory and will be marked unlabelled.
+- The plan requires spatial holdout, confusion matrices, Wilson/bootstrap intervals,
+  Brier/calibration reporting, and a transparent logistic-regression baseline.
+
+### P35 off-inventory classifier and QA
+
+- Added a standardized structural logistic-regression baseline for conifer/deciduous
+  screening, with 500 m spatial holdout and 2x2 confusion matrices.
+- Known-good labels come from the Vancouver and Surrey public inventories. Burnaby and
+  Coquitlam have no public species inventory and are explicitly marked unlabelled.
+- Pooled held-out accuracy is 84.09% (95% Wilson 83.81-84.37%); conifer recall is 79.90%
+  but conifer precision is only 37.71%, so the model is a screening flag, not a species ID.
+- Added off-inventory layers: Surrey 243,267 candidates; Burnaby 215,811; Coquitlam
+  287,374, each with predicted group, probability, confidence, and inventory status.
+- Added `/api/classifier` and an off-inventory QA panel with matrix, intervals, sample
+  sizes, label sources, and the unlabelled-city caveat.
+- Model card and limits: `notes/reports/p35-off-inventory-classifier.md`.
+- Dashboard: GREEN; browser smoke for the three instances and QA panel is clean.
+
 ### P34 provisional Lower Mainland city instances
 
 - Added the P34 phase and source lock for Surrey, Burnaby, and Coquitlam.

@@ -449,6 +449,19 @@ def test_off_inventory_gzip_endpoint(tmp_path: Path) -> None:
     assert compact.json()["count"] == 1
 
 
+def test_classifier_endpoint(tmp_path: Path) -> None:
+    """The classifier report is served only when present."""
+    import json
+
+    client = _client(tmp_path)
+    root = tmp_path / "dataset"
+    report = {"model_family": "test", "evaluation": {"accuracy": 0.8}}
+    (root / "classifier_report.json").write_text(json.dumps(report), encoding="utf-8")
+    response = client.get("/api/classifier")
+    assert response.status_code == 200
+    assert response.json()["evaluation"]["accuracy"] == 0.8
+
+
 def test_bird_habitat_and_demography_endpoint(tmp_path: Path) -> None:
     """The bird endpoint returns structural metrics, guilds, and prior demography."""
     client = _client(tmp_path)

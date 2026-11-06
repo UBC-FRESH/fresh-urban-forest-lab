@@ -32,6 +32,7 @@ This roadmap is the plan of record and the issue tracker map for FRESH Urban For
 | P32 ALS-derived off-inventory and private-canopy inventory | #136 | `feature/p32-off-inventory-als` | active |
 | P33 Remove the ground-classifier prototype | #146 | `feature/p33-remove-ground-classifier` | complete |
 | P34 Surrey, Burnaby, and Coquitlam portal instances | #149 | `feature/p34-lower-mainland-instances` | active |
+| P35 Off-inventory conifer/deciduous classifier and QA | #156 | `feature/p35-off-inventory-classifier` | active |
 
 ## Lifecycle Map
 
@@ -901,6 +902,35 @@ Acceptance criteria:
 - The dashboard is green.
 
 Phase 34 verification:
+
+- `python scripts/dashboard.py`
+- `python scripts/check_workflow.py`
+
+## Phase 35: Off-inventory conifer/deciduous classifier and QA
+
+Parent issue: #156
+Branch: `feature/p35-off-inventory-classifier`
+Status: active
+
+Goal: compile off-inventory layers for the three P34 instances and add a documented
+conifer/deciduous classifier with confusion-matrix and confidence-interval QA.
+
+Plan: `notes/design/off-inventory-classifier.md`.
+
+- [x] P35.1 Labels, features, classifier, and QA metrics (#157)
+- [x] P35.2 Compile off-inventory layers for three cities (#158)
+- [x] P35.3 Classifier API and QA interface (#159)
+- [x] P35.4 Validation, documentation, dashboard, and close-out (#160)
+
+Acceptance:
+
+- All three new instances expose an off-inventory candidate layer.
+- Every candidate has predicted group, probability, and confidence.
+- QA panel shows a confusion matrix and 95% intervals for known-good labels.
+- Burnaby/Coquitlam are marked unlabelled; weak-label agreement is separate.
+- Dashboard is green and browser smoke is clean.
+
+Phase 35 verification:
 
 - `python scripts/dashboard.py`
 - `python scripts/check_workflow.py`

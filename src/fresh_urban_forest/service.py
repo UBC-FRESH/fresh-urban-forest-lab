@@ -471,6 +471,7 @@ def create_app(
         summary["has_off_inventory_3d"] = (
             _dataset_file(state, "off_inventory_3d.json.gz") is not None
         )
+        summary["has_classifier"] = _dataset_file(state, "classifier_report.json") is not None
         summary["has_city_metrics"] = _dataset_file(state, "city_metrics.json") is not None
         summary["has_map_trees"] = _dataset_file(state, "map_trees.json.gz") is not None
         summary["has_map_buildings"] = _dataset_file(state, "map_buildings.geojson.gz") is not None
@@ -564,6 +565,28 @@ def create_app(
             media_type="application/json",
             filename="off_inventory_3d.json",
             headers={"Content-Encoding": "gzip", "Cache-Control": "no-store, max-age=0"},
+        )
+
+    @app.get("/api/classifier")
+    def classifier() -> JSONResponse:
+        """Return the conifer/deciduous classifier QA report.
+
+        Returns
+        -------
+        JSONResponse
+            Classifier report, or a 404 when this dataset has no classifier.
+
+        Raises
+        ------
+        HTTPException
+            When the dataset has no classifier report.
+        """
+        path = _dataset_file(state, "classifier_report.json")
+        if path is None:
+            raise HTTPException(status_code=404, detail="this dataset has no classifier report")
+        return JSONResponse(
+            json.loads(path.read_text(encoding="utf-8")),
+            headers={"Cache-Control": "no-store, max-age=0"},
         )
 
     @app.get("/api/off-inventory/value")

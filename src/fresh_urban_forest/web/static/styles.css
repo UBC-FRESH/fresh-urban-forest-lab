@@ -634,3 +634,11 @@ select:focus, input:focus { outline: 2px solid #b8d3ae; outline-offset: 1px; }
 
 .city-head { background: transparent; border-color: transparent; padding-top: 0; padding-bottom: 0; color: var(--ink-soft); font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.08em; }
 .city-head .num { font-family: var(--body); }
+.classifier-qa { margin-top: 12px; border-top: 1px solid var(--line); padding-top: 10px; }
+.classifier-heading { display: flex; justify-content: space-between; gap: 8px; align-items: baseline; }
+.classifier-heading span { color: var(--soft); font-size: .72rem; }
+.qa-matrix, .qa-table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: .74rem; }
+.qa-matrix th, .qa-matrix td, .qa-table th, .qa-table td { border-bottom: 1px solid #e4ece2; padding: 4px 3px; text-align: left; }
+.qa-matrix thead th, .qa-table thead th { color: var(--soft); font-weight: 600; }
+.qa-stats { display: grid; gap: 4px; margin-top: 8px; font-size: .74rem; color: var(--soft); }
+.qa-stats b { color: var(--ink); }

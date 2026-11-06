@@ -12,6 +12,7 @@ const state = {
   offInventoryValue: null,
   offInventory3D: null,
   offInventory3DLoading: false,
+  classifier: null,
   birds: null,
   birdsLoading: false,
   treeById: new Map(),
@@ -176,6 +177,65 @@ function renderOffInventory() {
     </div>
     ${voi}`;
   $("off-inventory-status").textContent = data.evidence?.tier || "pilot";
+  renderClassifierQA();
+}
+
+function renderClassifierQA() {
+  const container = $("classifier-qa");
+  if (!container) return;
+  const report = state.classifier;
+  if (!report) {
+    container.innerHTML = "";
+    return;
+  }
+  const evaluation = report.evaluation || {};
+  const matrix = Array.isArray(evaluation.matrix) ? evaluation.matrix : [];
+  const conifer = evaluation.conifer || {};
+  const deciduous = evaluation.deciduous || {};
+  const labels = report.known_good_labels || {};
+  const weak = report.weak_label_agreement || {};
+  const weakRows = Object.entries(weak)
+    .map(
+      ([slug, value]) =>
+        `<tr><td>${escapeHtml(slug)}</td><td>${formatNumber(value.n)}</td><td>${formatNumber(Number(value.accuracy) * 100, 1)}%</td><td>LCC weak label only</td></tr>`,
+    )
+    .join("");
+  const cityRows = Object.entries(report.by_city || {})
+    .map(
+      ([city, value]) =>
+        `<tr><td>${escapeHtml(city)}</td><td>${formatNumber(value.n)}</td><td>${formatNumber(Number(value.accuracy) * 100, 1)}%</td><td>${formatNumber(Number(value.conifer?.recall) * 100, 1)}%</td></tr>`,
+    )
+    .join("");
+  const ci = Array.isArray(evaluation.accuracy_ci95)
+    ? evaluation.accuracy_ci95.map((value) => `${formatNumber(Number(value) * 100, 1)}%`).join("–")
+    : "n/a";
+  container.innerHTML = `
+    <div class="classifier-heading"><strong>Conifer vs deciduous QA</strong><span>${escapeHtml(report.model_family || "")}</span></div>
+    <p class="hint">${escapeHtml(labels.note || "")}</p>
+    <table class="qa-matrix">
+      <thead><tr><th></th><th>pred conifer</th><th>pred deciduous</th></tr></thead>
+      <tbody>
+        <tr><th>true conifer</th><td>${formatNumber(matrix[0]?.[0] || 0)}</td><td>${formatNumber(matrix[0]?.[1] || 0)}</td></tr>
+        <tr><th>true deciduous</th><td>${formatNumber(matrix[1]?.[0] || 0)}</td><td>${formatNumber(matrix[1]?.[1] || 0)}</td></tr>
+      </tbody>
+    </table>
+    <div class="qa-stats">
+      <span><b>${formatNumber(Number(evaluation.accuracy) * 100, 1)}%</b> accuracy (95% ${ci})</span>
+      <span><b>${formatNumber(Number(conifer.precision) * 100, 1)}%</b> conifer precision</span>
+      <span><b>${formatNumber(Number(conifer.recall) * 100, 1)}%</b> conifer recall</span>
+      <span><b>${formatNumber(Number(deciduous.precision) * 100, 1)}%</b> deciduous precision</span>
+    </div>
+    <p class="hint">Known-good labels: ${escapeHtml((labels.available_cities || []).join(", "))}; unavailable: ${escapeHtml((labels.unavailable_cities || []).join(", "))}. Spatial holdout: ${formatNumber(report.training?.spatial_block_m || 0)} m blocks; test n=${formatNumber(report.training?.test_rows || 0)}.</p>
+    <table class="qa-table">
+      <thead><tr><th>known-good city</th><th>n</th><th>accuracy</th><th>conifer recall</th></tr></thead>
+      <tbody>${cityRows || '<tr><td colspan="4" class="muted">No city table.</td></tr>'}</tbody>
+    </table>
+    <table class="qa-table">
+      <thead><tr><th>city</th><th>n</th><th>weak-label agreement</th><th>status</th></tr></thead>
+      <tbody>${weakRows || '<tr><td colspan="4" class="muted">No weak-label table.</td></tr>'}</tbody>
+    </table>
+    <p class="hint">Weak-label agreement against Metro LCC is not accuracy and is not a known-good species test.</p>
+  `;
 }
 
 function buildingFeatures() {
@@ -340,6 +400,14 @@ async function init() {
     } else {
       state.offInventory = null;
       renderOffInventory();
+    }
+    if (dataset.has_classifier) {
+      try {
+        state.classifier = await api("api/classifier");
+        renderClassifierQA();
+      } catch (_error) {
+        state.classifier = null;
+      }
     }
     if (dataset.has_city_metrics) {
       try {
@@ -588,7 +656,14 @@ function initMap() {
           source: "offInventory",
           layout: { visibility: "none" },
           paint: {
-            "circle-color": "#d98a2b",
+            "circle-color": [
+              "case",
+              ["==", ["get", "predicted_group"], "conifer"],
+              "#14563a",
+              ["==", ["get", "predicted_group"], "deciduous"],
+              "#91a948",
+              "#d98a2b",
+            ],
             "circle-radius": ["interpolate", ["linear"], ["get", "height_m"], 3, 2, 30, 5, 70, 8],
             "circle-opacity": ["interpolate", ["linear"], ["get", "confidence"], 0.3, 0.35, 0.9, 0.9],
             "circle-stroke-color": "#7b4a12",
@@ -980,7 +1055,11 @@ async function ensureOffInventory3D() {
       positions[index * 3] = x;
       positions[index * 3 + 1] = base + height * 0.6;
       positions[index * 3 + 2] = z;
-      color.set(colors[Number(data.land_code[index])] || colors[4]);
+      if (Array.isArray(data.group_code)) {
+        color.set(Number(data.group_code[index]) === 0 ? "#14563a" : "#91a948");
+      } else {
+        color.set(colors[Number(data.land_code[index])] || colors[4]);
+      }
       pointColors[index * 3] = color.r;
       pointColors[index * 3 + 1] = color.g;
       pointColors[index * 3 + 2] = color.b;
