@@ -620,7 +620,7 @@ function initMap() {
           layout: { visibility: "none" },
           paint: {
             "fill-color": "#e59a32",
-            "fill-opacity": 0.12,
+            "fill-opacity": ["interpolate", ["linear"], ["zoom"], 12, 0.0, 15, 0.05, 18, 0.14],
           },
         },
         {
@@ -630,8 +630,8 @@ function initMap() {
           layout: { visibility: "none" },
           paint: {
             "line-color": "#c46f1e",
-            "line-width": ["interpolate", ["linear"], ["zoom"], 13, 0.25, 17, 0.8, 20, 1.4],
-            "line-opacity": 0.75,
+            "line-width": ["interpolate", ["linear"], ["zoom"], 12, 0.15, 16, 0.55, 20, 1.2],
+            "line-opacity": ["interpolate", ["linear"], ["zoom"], 12, 0.15, 15, 0.45, 18, 0.8],
           },
         },
         {
