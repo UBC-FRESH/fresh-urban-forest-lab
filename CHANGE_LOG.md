@@ -680,6 +680,110 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Kept `classify_ground_ptd` and the point-cloud primitives as an urban ALS prototype.
 - This removes the misleading cross-repo writer; FEMIC is now canonical.
 
+### P35 off-inventory classifier and QA plan
+
+- Added the P35 phase for off-inventory conifer/deciduous classification and interface QA.
+- Known-good labels are available from Vancouver and Surrey public inventories; Burnaby
+  and Coquitlam have no public species inventory and will be marked unlabelled.
+- The plan requires spatial holdout, confusion matrices, Wilson/bootstrap intervals,
+  Brier/calibration reporting, and a transparent logistic-regression baseline.
+
+### P36 GPU imagery classifier planned
+
+- Added P36 for a GPU-trained orthophoto + LiDAR conifer/deciduous classifier.
+- Public Vancouver 2022 tiled orthophoto imagery is accessible; Burnaby/Surrey/Coquitlam
+  have public imagery sources, but Burnaby/Coquitlam still lack species labels.
+- The phase will compare image-only, structural-only, and fused models with spatial
+  holdout, PR-AUC, balanced accuracy, and calibrated confusion matrices.
+
+### P36 GPU imagery classifier pilot
+
+- Confirmed the local RTX PRO 6000 Blackwell (96 GB) and PyTorch CUDA path.
+- Added a public ArcGIS orthophoto tile source and cached 12,621 Vancouver 2022 tiles.
+- Built a balanced 12,000-chip conifer/deciduous dataset (6,000 each) with 96 px RGB chips.
+- Trained a four-block CNN on GPU: 80.04% held-out accuracy, 84.41% conifer precision,
+  75.18% conifer recall, 0.1438 Brier, 500 m spatial-block holdout.
+- Compared with P35 structural model: conifer precision improved from 37.71% to 84.41%,
+  while conifer recall moved from 79.90% to 75.18%.
+- Added `/api/imagery-classifier` and a compact image-CNN QA section on Vancouver.
+- Added a valid CHM-only + image fusion: 81.87% held-out accuracy, 82.63% conifer
+  precision, 82.09% conifer recall; the inventory-field fusion was rejected as leakage.
+- Applied the image CNN to 331,221 high-confidence Burnaby candidates using the public
+  Burnaby 2025 orthophoto service, and to 129,312 Vancouver candidates using the 2022
+  service. Image groups and source/date fields are in the candidate GeoJSON and 3D overlay.
+  Neither is a known-good candidate-level species test.
+- Pilot limits: Vancouver training only; image test is balanced; no Burnaby/Coquitlam labels
+  yet; orthophotos are orthorectified, not stereo.
+
+### P35 off-inventory classifier and QA
+
+- Added a standardized structural logistic-regression baseline for conifer/deciduous
+  screening, with 500 m spatial holdout and 2x2 confusion matrices.
+- Known-good labels come from the Vancouver and Surrey public inventories. Burnaby and
+  Coquitlam have no public species inventory and are explicitly marked unlabelled.
+- Pooled held-out accuracy is 84.09% (95% Wilson 83.81-84.37%); conifer recall is 79.90%
+  but conifer precision is only 37.71%, so the model is a screening flag, not a species ID.
+- Added off-inventory layers: Surrey 209,353 candidates; Burnaby 355,845; Coquitlam
+  106,692, each with predicted group, probability, confidence, and inventory status.
+- Added `/api/classifier` and an off-inventory QA panel with matrix, intervals, sample
+  sizes, label sources, and the unlabelled-city caveat.
+- Model card and limits: `notes/reports/p35-off-inventory-classifier.md`.
+- Fixed Burnaby 2 m CHM tiling: the source-cell affine was previously treated as 1 m, so
+  only the western half of the city was detected. Coquitlam candidates now use canopy
+  distance maxima rather than a regular 20 m lattice; the QA panel was compacted.
+- Dashboard: GREEN; browser smoke for the three instances and QA panel is clean.
+
+### P34 provisional Lower Mainland city instances
+
+- Added the P34 phase and source lock for Surrey, Burnaby, and Coquitlam.
+- Added `fresh_urban_forest.lower_mainland` helpers for projected grids, LCC class heights,
+  deterministic canopy candidates, and provisional inventory summaries.
+- Surrey: 100,940 public tree records, 137,657 building footprints, contours, and Metro
+  2020 land-cover context. Heights and DBH are imputed and labelled.
+- Burnaby: 2022 0.5 m DEM/DSM CHM candidate build with building outlines and LCC context.
+- Coquitlam: 287,374 deterministic 20 m canopy candidates from Metro LCC tree classes,
+  with City building heights and contours; canonical LiDAR/imagery is still pending.
+- Added portal mounts for `/surrey/`, `/burnaby/`, and `/coquitlam/`.
+- These are provisional public-data models, not censuses or field-validated inventories.
+- Dashboard: GREEN; browser smoke for the three new instances is clean.
+
+### P32.6 3D candidates and orientation repair
+
+- Added a compact `/api/off-inventory-3d` payload with 130,103 high-confidence candidates
+  (score ≥ 0.6) and a Vancouver 3D point overlay toggled by the existing off-inventory
+  control. The points are coloured by land proxy: orange likely private, blue street,
+  green park, purple other, grey unknown.
+- Fixed the 3D axis convention: x remains east, z is now negative northing, and the camera
+  looks from the south. This puts north up and east right instead of the previous
+  north-at-bottom view that read as a west-east flip. The same convention now applies to
+  terrain, trees, roads, compact building boxes, non-compact UBC buildings, selection,
+  planting, and the downtown camera.
+- Added a north/east HUD marker and a 3D candidate-count readout. Browser smoke reports no
+  console or page errors for Vancouver or UBC.
+- The 3D overlay is high-confidence only; the 2D layer retains all candidates and its
+  confidence/land filters. This remains a screening layer, not a census or ownership layer.
+- Dashboard: GREEN.
+
+### P32.1 data lock and P32.3 screening candidate layer
+
+- Locked the City parcel, parks, zoning, 2022 orthophoto index, UBC inventory, public-tree,
+  CHM, and OSM-road inputs with counts, retrieval dates, licences, and SHA-256 prefixes in
+  `notes/p32-data-lock.md`.
+- Fixed the validation protocol in `notes/p32-validation-protocol.md`: held-out 500 m
+  spatial blocks, 1,000 public trees for recall, 300 orthophoto candidates for precision,
+  an independent UBC test, Wilson intervals, and privacy/exposure rules.
+- Added the full-city CHM screening detector in `fresh_urban_forest.city_off_inventory`:
+  2 m block-max CHM, overlapping 1 km tiles, local maxima and watershed, a spatial KD-tree
+  one-to-one public-tree match, building/water centre exclusion, and parcel/park/zoning/OSM
+  land-context labels.
+- Built 528,812 detected crowns, matched 130,497 public trees, and wrote 336,350 candidates.
+  The compressed candidate layer is served by the city app; the summary reports confidence,
+  crown area, volume, carbon, and land proxies with explicit screening caveats.
+- This is not a census, ownership layer, species inventory, or P32 close-out. Per-crown
+  point support, variable windows, seam merging, multi-peak splitting, held-out validation,
+  the UBC test, and the manual orthophoto audit remain open.
+- Added a confidence and land-proxy filter to the city map. Dashboard: GREEN.
+
 ### P32 ALS off-inventory phase planned
 
 - Added the planned P32 phase for a full-city ALS-derived candidate inventory of likely
@@ -697,3 +801,14 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
   `local_anisotropy` as generic conditioning primitives.
 - Updated the Arbor guide and provenance note: FEMIC owns the ground lane.
 - No default detector or product changed.
+
+### P34/P35/P36 close-out
+
+- Merged the Lower Mainland instances, off-inventory screening/QA, and GPU imagery/fusion
+  work through the P36 branch.
+- Five portal demos: UBC, Vancouver, Surrey, Burnaby, Coquitlam.
+- Final image/fusion results: image CNN 80.04% accuracy / 84.41% conifer precision;
+  valid CHM + image fusion 81.87% accuracy / 82.63% conifer precision / 82.09% recall.
+- Burnaby and Vancouver high-confidence candidates are image-scored. Surrey and Coquitlam
+  remain explicitly unscored; no candidate-level known-good species labels exist.
+- Dashboard: GREEN; browser smoke clean; portal 8101 restarted from merged code.

@@ -465,6 +465,19 @@ def create_app(
         """Return the dataset manifest, baseline metrics, and optional-layer flags."""
         summary = dataset_summary(state.dataset)
         summary["has_off_inventory"] = _dataset_file(state, "off_inventory.json") is not None
+        summary["has_off_inventory_value"] = (
+            _dataset_file(state, "off_inventory_voi.json") is not None
+        )
+        summary["has_off_inventory_3d"] = (
+            _dataset_file(state, "off_inventory_3d.json.gz") is not None
+        )
+        summary["has_classifier"] = _dataset_file(state, "classifier_report.json") is not None
+        summary["has_imagery_classifier"] = (
+            _dataset_file(state, "imagery_classifier_report.json") is not None
+        )
+        summary["has_imagery_fusion"] = (
+            _dataset_file(state, "imagery_fusion_report.json") is not None
+        )
         summary["has_city_metrics"] = _dataset_file(state, "city_metrics.json") is not None
         summary["has_map_trees"] = _dataset_file(state, "map_trees.json.gz") is not None
         summary["has_map_buildings"] = _dataset_file(state, "map_buildings.geojson.gz") is not None
@@ -522,10 +535,109 @@ def create_app(
         fastapi.HTTPException
             When the dataset has no off-inventory layer.
         """
-        path = _dataset_file(state, "off_inventory.geojson")
+        gz_path = _dataset_file(state, "off_inventory.geojson.gz")
+        path = gz_path or _dataset_file(state, "off_inventory.geojson")
         if path is None:
             raise HTTPException(status_code=404, detail="this dataset has no off-inventory layer")
-        return FileResponse(path, media_type="application/geo+json", filename=path.name)
+        headers = {"Cache-Control": "no-store, max-age=0"}
+        if path.suffix == ".gz":
+            headers["Content-Encoding"] = "gzip"
+        return FileResponse(
+            path,
+            media_type="application/geo+json",
+            filename="off_inventory.geojson",
+            headers=headers,
+        )
+
+    @app.get("/api/off-inventory-3d")
+    def off_inventory_3d() -> FileResponse:
+        """Return the compact high-confidence 3D candidate arrays.
+
+        Returns
+        -------
+        fastapi.responses.FileResponse
+            Compressed candidate arrays.
+
+        Raises
+        ------
+        fastapi.HTTPException
+            When the dataset has no compact candidate layer.
+        """
+        path = _dataset_file(state, "off_inventory_3d.json.gz")
+        if path is None:
+            raise HTTPException(status_code=404, detail="this dataset has no 3D candidate layer")
+        return FileResponse(
+            path,
+            media_type="application/json",
+            filename="off_inventory_3d.json",
+            headers={"Content-Encoding": "gzip", "Cache-Control": "no-store, max-age=0"},
+        )
+
+    @app.get("/api/classifier")
+    def classifier() -> JSONResponse:
+        """Return the conifer/deciduous classifier QA report.
+
+        Returns
+        -------
+        JSONResponse
+            Classifier report, or a 404 when this dataset has no classifier.
+
+        Raises
+        ------
+        HTTPException
+            When the dataset has no classifier report.
+        """
+        path = _dataset_file(state, "classifier_report.json")
+        if path is None:
+            raise HTTPException(status_code=404, detail="this dataset has no classifier report")
+        return JSONResponse(
+            json.loads(path.read_text(encoding="utf-8")),
+            headers={"Cache-Control": "no-store, max-age=0"},
+        )
+
+    @app.get("/api/imagery-classifier")
+    def imagery_classifier() -> JSONResponse:
+        """Return the GPU orthophoto classifier report.
+
+        Returns
+        -------
+        JSONResponse
+            Image classifier report, or a 404 when absent.
+
+        Raises
+        ------
+        HTTPException
+            When the dataset has no image classifier report.
+        """
+        path = _dataset_file(state, "imagery_classifier_report.json")
+        if path is None:
+            raise HTTPException(status_code=404, detail="this dataset has no image classifier")
+        return JSONResponse(
+            json.loads(path.read_text(encoding="utf-8")),
+            headers={"Cache-Control": "no-store, max-age=0"},
+        )
+
+    @app.get("/api/imagery-fusion")
+    def imagery_fusion() -> JSONResponse:
+        """Return the LiDAR + image fusion QA report.
+
+        Returns
+        -------
+        JSONResponse
+            Fusion report, or a 404 when absent.
+
+        Raises
+        ------
+        HTTPException
+            When the dataset has no fusion report.
+        """
+        path = _dataset_file(state, "imagery_fusion_report.json")
+        if path is None:
+            raise HTTPException(status_code=404, detail="this dataset has no imagery fusion report")
+        return JSONResponse(
+            json.loads(path.read_text(encoding="utf-8")),
+            headers={"Cache-Control": "no-store, max-age=0"},
+        )
 
     @app.get("/api/off-inventory/value")
     def off_inventory_value() -> dict[str, object]:

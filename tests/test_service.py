@@ -425,6 +425,43 @@ def test_off_inventory_endpoints(tmp_path: Path) -> None:
     assert value.json()["plan_jaccard"] == 1.0
 
 
+def test_off_inventory_gzip_endpoint(tmp_path: Path) -> None:
+    """A compressed candidate layer is served with Content-Encoding: gzip."""
+    import gzip
+    import json
+
+    client = _client(tmp_path)
+    root = tmp_path / "dataset"
+    (root / "off_inventory.json").write_text(
+        json.dumps({"candidate_count": 1, "candidates": []}), encoding="utf-8"
+    )
+    with gzip.open(root / "off_inventory.geojson.gz", "wt", encoding="utf-8") as handle:
+        json.dump({"type": "FeatureCollection", "features": []}, handle)
+    response = client.get("/api/off-inventory.geojson")
+    assert response.status_code == 200
+    assert response.headers["content-encoding"] == "gzip"
+    assert response.json() == {"type": "FeatureCollection", "features": []}
+    with gzip.open(root / "off_inventory_3d.json.gz", "wt", encoding="utf-8") as handle:
+        json.dump({"count": 1, "x_m": [0.0], "y_m": [0.0]}, handle)
+    compact = client.get("/api/off-inventory-3d")
+    assert compact.status_code == 200
+    assert compact.headers["content-encoding"] == "gzip"
+    assert compact.json()["count"] == 1
+
+
+def test_classifier_endpoint(tmp_path: Path) -> None:
+    """The classifier report is served only when present."""
+    import json
+
+    client = _client(tmp_path)
+    root = tmp_path / "dataset"
+    report = {"model_family": "test", "evaluation": {"accuracy": 0.8}}
+    (root / "classifier_report.json").write_text(json.dumps(report), encoding="utf-8")
+    response = client.get("/api/classifier")
+    assert response.status_code == 200
+    assert response.json()["evaluation"]["accuracy"] == 0.8
+
+
 def test_bird_habitat_and_demography_endpoint(tmp_path: Path) -> None:
     """The bird endpoint returns structural metrics, guilds, and prior demography."""
     client = _client(tmp_path)

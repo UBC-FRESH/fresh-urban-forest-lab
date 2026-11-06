@@ -10,6 +10,11 @@ const state = {
   mapBuildings: null,
   offInventory: null,
   offInventoryValue: null,
+  offInventory3D: null,
+  offInventory3DLoading: false,
+  classifier: null,
+  imageryClassifier: null,
+  imageryFusion: null,
   birds: null,
   birdsLoading: false,
   treeById: new Map(),
@@ -21,6 +26,7 @@ const state = {
   years: 25,
   mode: null,
   selectedId: "",
+  selectedCandidateId: "",
   recommendations: [],
   map: null,
   selectedSourceReady: false,
@@ -154,7 +160,10 @@ function renderOffInventory() {
     container.innerHTML = '<p class="muted">No off-inventory layer in this dataset.</p>';
     return;
   }
-  const high = (data.candidates || []).filter((candidate) => Number(candidate.confidence) >= 0.6).length;
+  const high = Number(
+    data.high_confidence_count ??
+      (data.candidates || []).filter((candidate) => Number(candidate.confidence) >= 0.6).length,
+  );
   const areaHa = Number(data.candidate_area_m2 || 0) / 10000;
   const value = state.offInventoryValue;
   const volumeDelta = value ? Number(value.augmented_canopy_volume_m3 || 0) - Number(value.official_canopy_volume_m3 || 0) : 0;
@@ -166,11 +175,112 @@ function renderOffInventory() {
     <div class="kpi-grid">
       <article class="kpi"><span>Candidates</span><strong>${formatNumber(data.candidate_count)}</strong><small>unmatched crowns</small></article>
       <article class="kpi"><span>High confidence</span><strong>${formatNumber(high)}</strong><small>score >= 0.6</small></article>
-      <article class="kpi"><span>Candidate area</span><strong>${formatNumber(areaHa, 1)} ha</strong><small>crown area</small></article>
+      <article class="kpi"><span>Crown area</span><strong>${formatNumber(areaHa, 1)} ha</strong><small>summed, not unique</small></article>
       <article class="kpi"><span>Detected</span><strong>${formatNumber(data.detected_count)}</strong><small>${formatNumber(data.matched_count)} matched</small></article>
     </div>
-    ${voi}`;
-  $("off-inventory-status").textContent = "pilot";
+    ${voi}
+    ${data.imagery ? `<p class="hint">Image scoring: ${formatNumber(data.imagery.scored_count)} candidates · ${escapeHtml(data.imagery.source)} · mapped groups ${formatNumber(data.imagery.groups.conifer)} conifer / ${formatNumber(data.imagery.groups.deciduous)} deciduous. ${escapeHtml(data.imagery.caveat || "")}</p>` : ""}`;
+  $("off-inventory-status").textContent = data.evidence?.tier || "pilot";
+  renderClassifierQA();
+}
+
+function renderClassifierQA() {
+  const container = $("classifier-qa");
+  if (!container) return;
+  const report = state.classifier;
+  const imagery = state.imageryClassifier;
+  if (!report && !imagery) {
+    container.innerHTML = "";
+    return;
+  }
+  const evaluation = report?.evaluation || {};
+  const matrix = Array.isArray(evaluation.matrix) ? evaluation.matrix : [];
+  const conifer = evaluation.conifer || {};
+  const deciduous = evaluation.deciduous || {};
+  const labels = report?.known_good_labels || {};
+  const weak = report?.weak_label_agreement || {};
+  const cityRows = Object.entries(report?.by_city || {})
+    .map(
+      ([city, value]) =>
+        `<tr><td>${escapeHtml(city)}</td><td>${formatNumber(value.n)}</td><td>${formatNumber(Number(value.accuracy) * 100, 1)}%</td></tr>`,
+    )
+    .join("");
+  const weakRows = Object.entries(weak)
+    .map(
+      ([slug, value]) =>
+        `<tr><td>${escapeHtml(slug.replace(/_[0-9]{4}$/, ""))}</td><td>${formatNumber(value.n)}</td><td>${formatNumber(Number(value.accuracy) * 100, 1)}%</td></tr>`,
+    )
+    .join("");
+  const ci = Array.isArray(evaluation.accuracy_ci95)
+    ? evaluation.accuracy_ci95.map((value) => `${formatNumber(Number(value) * 100, 1)}%`).join("–")
+    : "n/a";
+  const structural = `
+    <details class="qa-details" ${imagery ? "" : "open"}>
+      <summary>Structural baseline · P35</summary>
+      <p class="hint">Inventory-derived height/crown features. This is the weaker baseline and is not the image/fusion model.</p>
+      <table class="qa-matrix">
+        <thead><tr><th></th><th>pred conifer</th><th>pred deciduous</th></tr></thead>
+        <tbody>
+          <tr><th>conifer</th><td>${formatNumber(matrix[0]?.[0] || 0)}</td><td>${formatNumber(matrix[0]?.[1] || 0)}</td></tr>
+          <tr><th>deciduous</th><td>${formatNumber(matrix[1]?.[0] || 0)}</td><td>${formatNumber(matrix[1]?.[1] || 0)}</td></tr>
+        </tbody>
+      </table>
+      <div class="qa-stats">
+        <span><b>${formatNumber(Number(evaluation.accuracy) * 100, 1)}%</b><small>accuracy · 95% ${ci}</small></span>
+        <span><b>${formatNumber(Number(conifer.precision) * 100, 1)}%</b><small>conifer precision</small></span>
+        <span><b>${formatNumber(Number(conifer.recall) * 100, 1)}%</b><small>conifer recall</small></span>
+        <span><b>${formatNumber(Number(deciduous.precision) * 100, 1)}%</b><small>deciduous precision</small></span>
+      </div>
+      <table class="qa-table">
+        <thead><tr><th>held-out city</th><th>n</th><th>acc.</th></tr></thead>
+        <tbody>${cityRows || '<tr><td colspan="3" class="muted">No city table.</td></tr>'}</tbody>
+      </table>
+      <p class="hint">Known-good: ${escapeHtml((labels.available_cities || []).join(", ") || "none")}. Unavailable: ${escapeHtml((labels.unavailable_cities || []).join(", ") || "none")}. ${formatNumber(report?.training?.spatial_block_m || 0)} m blocks; test n=${formatNumber(report?.training?.test_rows || 0)}.</p>
+      <details class="qa-details">
+        <summary>Weak-label diagnostic (not accuracy)</summary>
+        <table class="qa-table">
+          <thead><tr><th>city</th><th>n</th><th>agreement</th></tr></thead>
+          <tbody>${weakRows || '<tr><td colspan="3" class="muted">No weak-label table.</td></tr>'}</tbody>
+        </table>
+        <p class="hint">Metro LCC agreement is weak-label context, not known-good species truth.</p>
+      </details>
+    </details>`;
+  container.innerHTML = imagery ? imageryPrimaryHtml() : structural;
+}
+
+function imageryPrimaryHtml() {
+  const report = state.imageryClassifier;
+  if (!report) return "";
+  const imageEvaluation = report.evaluation || {};
+  const fusion = state.imageryFusion?.fused_model?.evaluation || null;
+  const evaluation = fusion || imageEvaluation;
+  const matrix = Array.isArray(evaluation.matrix) ? evaluation.matrix : [];
+  const conifer = evaluation.conifer || {};
+  const training = report.training || {};
+  const title = fusion ? "Image + LiDAR fusion · Vancouver 2022" : "Image CNN · Vancouver 2022";
+  return `
+    <details class="qa-details" open>
+      <summary>${title}</summary>
+      <p class="hint">96 px RGB orthophoto chips; ${formatNumber(training.test_rows || 0)} spatial test chips. This is the primary model.</p>
+      <table class="qa-matrix">
+        <thead><tr><th></th><th>pred conifer</th><th>pred deciduous</th></tr></thead>
+        <tbody>
+          <tr><th>conifer</th><td>${formatNumber(matrix[0]?.[0] || 0)}</td><td>${formatNumber(matrix[0]?.[1] || 0)}</td></tr>
+          <tr><th>deciduous</th><td>${formatNumber(matrix[1]?.[0] || 0)}</td><td>${formatNumber(matrix[1]?.[1] || 0)}</td></tr>
+        </tbody>
+      </table>
+      <div class="qa-stats">
+        <span><b>${formatNumber(Number(evaluation.accuracy) * 100, 1)}%</b><small>${fusion ? "fused" : "image"} accuracy</small></span>
+        <span><b>${formatNumber(Number(conifer.precision) * 100, 1)}%</b><small>conifer precision</small></span>
+        <span><b>${formatNumber(Number(conifer.recall) * 100, 1)}%</b><small>conifer recall</small></span>
+        <span><b>${formatNumber(Number(imageEvaluation.brier_score) * 100, 1)}</b><small>image Brier ×100</small></span>
+      </div>
+      <p class="hint">${fusion ? "Fusion uses independent CHM crown-shape features plus image probability." : "Image-only result; no fusion report loaded."}</p>
+    </details>`;
+}
+
+function imageryClassifierHtml() {
+  return imageryPrimaryHtml();
 }
 
 function buildingFeatures() {
@@ -237,11 +347,11 @@ function renderCityMetrics() {
   const visualTrees = state.scene?.trees?.length || 0;
   const cards = [
     ["Canopy cover", `${formatNumber(city.canopy_cover_pct, 1)}%`, "of city area"],
-    ["Canopy volume", `${formatCompact(city.canopy_volume_m3)} m³`, "LiDAR height field"],
+    ["Canopy volume", `${formatCompact(city.canopy_volume_m3)} m³`, city.canopy_source_label || "LiDAR height field"],
     ["Carbon storage", `${formatCompact(Number(city.carbon_kg) / 1000)} t`, "above ground"],
     ["Annual sequestration", `${formatCompact(Number(city.annual_sequestration_kg) / 1000)} t/yr`, "one-year model"],
     ["Rainfall interception", `${formatCompact(city.rainfall_interception_m3_low)}–${formatCompact(city.rainfall_interception_m3_high)} m³`, "10–20% screening"],
-    ["Public trees", formatNumber(city.tree_count), "mapped records"],
+    [city.tree_record_label || "Tree records", formatNumber(city.tree_count), "compiled records"],
     ["Species", formatNumber(metrics.species_count), "distinct labels"],
     ["Native share", `${formatNumber(Number(city.native_fraction) * 100, 1)}%`, "of public trees"],
   ];
@@ -320,11 +430,13 @@ async function init() {
       try {
         state.offInventory = await api("api/off-inventory");
         renderOffInventory();
-        try {
-          state.offInventoryValue = await api("api/off-inventory/value");
-          renderOffInventory();
-        } catch (_error) {
-          // The value-of-information file is optional.
+        if (dataset.has_off_inventory_value) {
+          try {
+            state.offInventoryValue = await api("api/off-inventory/value");
+            renderOffInventory();
+          } catch (_error) {
+            // The value-of-information file is optional.
+          }
         }
       } catch (_error) {
         state.offInventory = null;
@@ -333,6 +445,30 @@ async function init() {
     } else {
       state.offInventory = null;
       renderOffInventory();
+    }
+    if (dataset.has_classifier) {
+      try {
+        state.classifier = await api("api/classifier");
+        renderClassifierQA();
+      } catch (_error) {
+        state.classifier = null;
+      }
+    }
+    if (dataset.has_imagery_classifier) {
+      try {
+        state.imageryClassifier = await api("api/imagery-classifier");
+        renderClassifierQA();
+      } catch (_error) {
+        state.imageryClassifier = null;
+      }
+    }
+    if (dataset.has_imagery_fusion) {
+      try {
+        state.imageryFusion = await api("api/imagery-fusion");
+        renderClassifierQA();
+      } catch (_error) {
+        state.imageryFusion = null;
+      }
     }
     if (dataset.has_city_metrics) {
       try {
@@ -515,7 +651,12 @@ function initMap() {
         hillshade: { type: "image", url: "api/hillshade.png?width=1400", coordinates },
         canopy: { type: "image", url: "api/canopy.png?width=1400", coordinates },
         buildings: { type: "geojson", data: buildingFeatures() },
-        offInventory: { type: "geojson", data: offInventoryFeatures() },
+        offInventory: {
+          type: "geojson",
+          data: state.dataset?.has_off_inventory
+            ? "api/off-inventory.geojson"
+            : offInventoryFeatures(),
+        },
         boundary: { type: "geojson", data: boundaryFeatures() },
         roads: { type: "geojson", data: state.roads || { type: "FeatureCollection", features: [] } },
         trees: {
@@ -576,7 +717,14 @@ function initMap() {
           source: "offInventory",
           layout: { visibility: "none" },
           paint: {
-            "circle-color": "#d98a2b",
+            "circle-color": [
+              "case",
+              ["==", ["coalesce", ["get", "imagery_group"], ["get", "predicted_group"]], "conifer"],
+              "#14563a",
+              ["==", ["coalesce", ["get", "imagery_group"], ["get", "predicted_group"]], "deciduous"],
+              "#91a948",
+              "#d98a2b",
+            ],
             "circle-radius": ["interpolate", ["linear"], ["get", "height_m"], 3, 2, 30, 5, 70, 8],
             "circle-opacity": ["interpolate", ["linear"], ["get", "confidence"], 0.3, 0.35, 0.9, 0.9],
             "circle-stroke-color": "#7b4a12",
@@ -633,6 +781,12 @@ function initMap() {
     const feature = event.features && event.features[0];
     if (!feature) return;
     selectTree(feature.properties.tree_id, feature.properties);
+  });
+  map.on("click", "off-inventory", (event) => {
+    const feature = event.features && event.features[0];
+    if (!feature) return;
+    const properties = feature.properties || {};
+    selectCandidate(properties.candidate_id, properties);
   });
   map.on("click", (event) => {
     if (state.mode === "zone") {
@@ -750,10 +904,15 @@ function ensureThree() {
       const source = threeScene();
       const origin = source.origin_lonlat;
       const metres = source.meters_per_degree;
-      placeAt(origin[0] + local.x / metres[0], origin[1] + local.z / metres[1]);
+      placeAt(origin[0] + local.x / metres[0], origin[1] - local.z / metres[1]);
       return;
     }
-    const targets = [...three.crownMeshes, ...three.trunkMeshes, terrain];
+    const targets = [
+      ...three.crownMeshes,
+      ...three.trunkMeshes,
+      ...(three.offInventoryMeshes || []),
+      terrain,
+    ];
     const hits = raycaster.intersectObjects(targets, false);
     if (!hits.length) return;
     const hit = hits[0];
@@ -764,13 +923,23 @@ function ensureThree() {
         return;
       }
     }
+    if (
+      hit.object.userData.kind === "off-crown" ||
+      hit.object.userData.kind === "off-trunk"
+    ) {
+      const candidate = hit.object.userData.candidates[hit.instanceId];
+      if (candidate) {
+        selectCandidate(candidate.candidate_id, candidate);
+        return;
+      }
+    }
     if (state.mode === "plant" || state.mode === "move") {
       const local = hit.point;
       const source = threeScene();
       const origin = source.origin_lonlat;
       const metres = source.meters_per_degree;
       const lon = origin[0] + local.x / metres[0];
-      const lat = origin[1] + local.z / metres[1];
+      const lat = origin[1] - local.z / metres[1];
       placeAt(lon, lat);
     }
   });
@@ -809,7 +978,7 @@ function buildTerrainMesh() {
     for (let col = 0; col < width; col += 1) {
       const index = row * width + col;
       const x = left + (col / Math.max(width - 1, 1)) * spanX - originX;
-      const z = top - (row / Math.max(height - 1, 1)) * spanZ - originY;
+      const z = originY - (top - (row / Math.max(height - 1, 1)) * spanZ);
       const y = elevation[index] - originZ;
       positions.push(x, y, z);
       const canopyValue = canopy ? canopy[index] : 0;
@@ -828,7 +997,7 @@ function buildTerrainMesh() {
       const b = a + 1;
       const c = a + width;
       const d = c + 1;
-      indices.push(a, c, b, b, c, d);
+      indices.push(a, b, c, b, d, c);
     }
   }
   const geometry = new THREE.BufferGeometry();
@@ -873,7 +1042,7 @@ function buildRoadLines() {
     const row = Math.round(((top - (y + originY)) / Math.max(top - bottom, 1e-9)) * (height - 1));
     if (col < 0 || row < 0 || col >= width || row >= height) return null;
     const z = elevation[row * width + col];
-    return [x, Number.isFinite(z) ? z - originZ + 1.4 : 1.4, y];
+    return [x, Number.isFinite(z) ? z - originZ + 1.4 : 1.4, -y];
   };
   const halfWidth = 10.0;
   for (const feature of features) {
@@ -919,6 +1088,151 @@ function buildRoadLines() {
 }
 
 
+async function ensureOffInventory3D() {
+  if (!state.three || state.offInventory3DLoading) return;
+  if (state.three.offInventoryGroup) {
+    state.three.offInventoryGroup.visible = Boolean($("toggle-off-inventory")?.checked);
+    return;
+  }
+  if (!state.dataset?.has_off_inventory_3d) {
+    $("scene-candidate-status").textContent = "3D candidates unavailable";
+    return;
+  }
+  state.offInventory3DLoading = true;
+  $("scene-candidate-status").textContent = "loading candidates…";
+  try {
+    if (!state.offInventory3D) {
+      state.offInventory3D = await api("api/off-inventory-3d");
+    }
+    const data = state.offInventory3D;
+    const count = Number(data?.count || 0);
+    $("scene-candidate-status").textContent = `building ${formatNumber(count)} candidate trees…`;
+    if (!count || !state.three) {
+      $("scene-candidate-status").textContent = "no high-confidence candidates";
+      return;
+    }
+    const source = threeScene();
+    const terrain = source.terrain;
+    const [left, bottom, right, top] = source.bounds;
+    const originX = source.origin.x;
+    const originY = source.origin.y;
+    const originZ = source.origin.z;
+    const terrainBase = (x, z) => {
+      const north = -z;
+      const col = Math.round(((x + originX - left) / Math.max(right - left, 1e-9)) * (terrain.width - 1));
+      const row = Math.round(((top - (north + originY)) / Math.max(top - bottom, 1e-9)) * (terrain.height - 1));
+      if (col < 0 || row < 0 || col >= terrain.width || row >= terrain.height) return 0;
+      const value = terrain.elevation[row * terrain.width + col];
+      return Number.isFinite(value) ? value - originZ : 0;
+    };
+    const landNames = ["likely private parcel", "street/lane", "public park", "other parcel", "unknown"];
+    const colorFor = (land) => (land === 0 ? "#f2a33b" : "#b8641d");
+    const opacityBins = [0.36, 0.55, 0.74, 0.92];
+    const buckets = Array.from({ length: 8 }, () => []);
+    for (let index = 0; index < count; index += 1) {
+      const confidence = Number(data.confidence[index] || 0);
+      const radius = Number(data.crown_radius_m[index] || 0);
+      if (confidence < 0.6 || radius > 25) continue;
+      const bin = confidence < 0.7 ? 0 : confidence < 0.8 ? 1 : confidence < 0.9 ? 2 : 3;
+      const land = Number(data.land_code[index]);
+      const x = Number(data.x_m[index]) - originX;
+      const z = -(Number(data.y_m[index]) - originY);
+      const height = Math.max(Number(data.height_m[index] || 2), 1.5);
+      const crownDepth = Math.max(height * 0.55, 1);
+      const trunkHeight = Math.max(height - crownDepth, 0.8);
+      const base = terrainBase(x, z);
+      buckets[bin * 2 + (land === 0 ? 0 : 1)].push({
+        x,
+        z,
+        base,
+        height,
+        crownWidth: Math.max(Number(data.crown_radius_m[index] || 0) * 2, 1),
+        crownDepth,
+        trunkHeight,
+        candidate: {
+          candidate_id: String(data.candidate_id[index]),
+          height_m: Number(data.height_m[index]),
+          crown_radius_m: Number(data.crown_radius_m[index]),
+          crown_area_m2: Number(data.crown_area_m2[index]),
+          dbh_cm: Number(data.dbh_cm[index]),
+          crown_volume_m3: Number(data.crown_volume_m3[index]),
+          carbon_kg: Number(data.carbon_kg[index]),
+          confidence,
+          point_count: Number(data.point_count[index]),
+          land_class: landNames[land] || "unknown",
+        },
+      });
+    }
+    $("scene-candidate-status").textContent = "assembling candidate tree meshes…";
+    const group = new THREE.Group();
+    group.name = "off-inventory-3d";
+    let builtCount = 0;
+    const meshes = [];
+    const crownGeometry = new THREE.SphereGeometry(0.5, 7, 6);
+    const trunkGeometry = new THREE.CylinderGeometry(0.12, 0.2, 1, 5);
+    const matrix = new THREE.Matrix4();
+    const quaternion = new THREE.Quaternion();
+    const position = new THREE.Vector3();
+    const scale = new THREE.Vector3();
+    for (let bucketIndex = 0; bucketIndex < buckets.length; bucketIndex += 1) {
+      const items = buckets[bucketIndex];
+      if (!items.length) continue;
+      builtCount += items.length;
+      const bin = Math.floor(bucketIndex / 2);
+      const light = bucketIndex % 2 === 0;
+      const opacity = opacityBins[bin];
+      const color = light ? "#f2a33b" : "#b8641d";
+      const crownMaterial = new THREE.MeshStandardMaterial({
+        color,
+        roughness: 0.9,
+        metalness: 0,
+        transparent: true,
+        opacity,
+        depthWrite: opacity > 0.8,
+      });
+      const trunkMaterial = new THREE.MeshStandardMaterial({
+        color: light ? "#a9692d" : "#7d4a1d",
+        roughness: 1,
+        transparent: true,
+        opacity,
+        depthWrite: opacity > 0.8,
+      });
+      const crowns = new THREE.InstancedMesh(crownGeometry, crownMaterial, items.length);
+      const trunks = new THREE.InstancedMesh(trunkGeometry, trunkMaterial, items.length);
+      crowns.castShadow = false;
+      crowns.receiveShadow = false;
+      trunks.castShadow = false;
+      trunks.receiveShadow = false;
+      items.forEach((item, instance) => {
+        position.set(item.x, item.base + item.trunkHeight + item.crownDepth * 0.5, item.z);
+        scale.set(item.crownWidth, item.crownDepth, item.crownWidth);
+        matrix.compose(position, quaternion, scale);
+        crowns.setMatrixAt(instance, matrix);
+        position.set(item.x, item.base + item.trunkHeight * 0.5, item.z);
+        scale.set(1, item.trunkHeight, 1);
+        matrix.compose(position, quaternion, scale);
+        trunks.setMatrixAt(instance, matrix);
+      });
+      crowns.instanceMatrix.needsUpdate = true;
+      trunks.instanceMatrix.needsUpdate = true;
+      crowns.userData = { kind: "off-crown", candidates: items.map((item) => item.candidate) };
+      trunks.userData = { kind: "off-trunk", candidates: items.map((item) => item.candidate) };
+      group.add(crowns, trunks);
+      meshes.push(crowns, trunks);
+    }
+    state.three.scene.add(group);
+    state.three.offInventoryGroup = group;
+    state.three.offInventoryMeshes = meshes;
+    group.visible = Boolean($("toggle-off-inventory")?.checked);
+    $("scene-candidate-status").textContent = `${formatNumber(builtCount)} 3D candidates (score ≥ 0.6; radius ≤ 25 m; opacity = confidence)`;
+  } catch (error) {
+    $("scene-candidate-status").textContent = "candidates unavailable";
+    toast(`Could not load 3D candidates: ${error.message}`, true);
+  } finally {
+    state.offInventory3DLoading = false;
+  }
+}
+
 function buildBuildingMeshes() {
   const sceneData = threeScene();
   if (sceneData.compact && sceneData.building_boxes) {
@@ -937,7 +1251,7 @@ function buildBuildingMeshes() {
     const scale = new THREE.Vector3();
     const quaternion = new THREE.Quaternion();
     for (let index = 0; index < count; index += 1) {
-      position.set(boxes.x[index], boxes.base[index] + boxes.h[index] / 2, boxes.z[index]);
+      position.set(boxes.x[index], boxes.base[index] + boxes.h[index] / 2, -boxes.z[index]);
       scale.set(Math.max(boxes.w[index], 1), Math.max(boxes.h[index], 2), Math.max(boxes.d[index], 1));
       matrix.compose(position, quaternion, scale);
       mesh.setMatrixAt(index, matrix);
@@ -958,7 +1272,7 @@ function buildBuildingMeshes() {
     const shape = new THREE.Shape();
     ring.forEach((point, index) => {
       const x = Number(point[0]);
-      const y = -Number(point[1]);
+      const y = Number(point[1]);
       if (index === 0) shape.moveTo(x, y);
       else shape.lineTo(x, y);
     });
@@ -1051,7 +1365,7 @@ function rebuildCompactTrees(trees) {
       position.set(
         trees.x[treeIndex],
         trees.z[treeIndex] + trunkHeight + crownDepth * 0.5,
-        trees.y[treeIndex],
+        -trees.y[treeIndex],
       );
       scale.set(crownWidth, crownDepth, crownWidth);
       matrix.compose(position, quaternion, scale);
@@ -1061,7 +1375,7 @@ function rebuildCompactTrees(trees) {
       position.set(
         trees.x[treeIndex],
         trees.z[treeIndex] + trunkHeight * 0.5,
-        trees.y[treeIndex],
+        -trees.y[treeIndex],
       );
       scale.set(1, trunkHeight, 1);
       matrix.compose(position, quaternion, scale);
@@ -1131,13 +1445,13 @@ function rebuildThreeTrees(trees) {
       const crownDepth = Math.max(height * crownRatio, 1.0);
       const trunkHeight = Math.max(height - crownDepth, 0.8);
       const crownWidth = Math.max(tree.crown_width || height * 0.35, 0.8);
-      position.set(tree.x, tree.z + trunkHeight + crownDepth * 0.5, tree.y);
+      position.set(tree.x, tree.z + trunkHeight + crownDepth * 0.5, -tree.y);
       scale.set(crownWidth, crownDepth, crownWidth);
       matrix.compose(position, quaternion, scale);
       crowns.setMatrixAt(index, matrix);
       color.set(tree.color || "#68a357");
       crowns.setColorAt(index, color);
-      position.set(tree.x, tree.z + trunkHeight * 0.5, tree.y);
+      position.set(tree.x, tree.z + trunkHeight * 0.5, -tree.y);
       scale.set(1, trunkHeight, 1);
       matrix.compose(position, quaternion, scale);
       trunks.setMatrixAt(index, matrix);
@@ -1176,7 +1490,7 @@ function updateSelectedMarker() {
   });
   const marker = new THREE.Mesh(geometry, material);
   marker.rotation.x = -Math.PI / 2;
-  marker.position.set(tree.x, tree.z + 0.25, tree.y);
+  marker.position.set(tree.x, tree.z + 0.25, -tree.y);
   three.scene.add(marker);
   three.selectedMarker = marker;
 }
@@ -1189,11 +1503,55 @@ function animateThree() {
   requestAnimationFrame(animateThree);
 }
 
+function selectCandidate(candidateId, candidateData = null) {
+  const candidate = candidateData || null;
+  if (!candidate) return;
+  state.selectedCandidateId = candidateId;
+  state.selectedId = "";
+  updateMapSelection();
+  updateSelectedMarker();
+  const height = Number(candidate.height_m || 0);
+  const radius = Number(candidate.crown_radius_m || 0);
+  const dbh = Number(candidate.dbh_cm || 0);
+  const volume = Number(candidate.crown_volume_m3 || 0);
+  const carbon = Number(candidate.carbon_kg || 0);
+  const confidence = Number(candidate.confidence || 0);
+  const crownDiameter = radius * 2;
+  const heightLow = candidate.height_low_m ?? height * 0.8;
+  const heightHigh = candidate.height_high_m ?? height * 1.2;
+  const dbhLow = candidate.dbh_low_cm ?? dbh * 0.65;
+  const dbhHigh = candidate.dbh_high_cm ?? dbh * 1.35;
+  const carbonLow = candidate.carbon_low_kg ?? carbon * 0.5;
+  const carbonHigh = candidate.carbon_high_kg ?? carbon * 1.5;
+  $("selected-label").textContent = `${candidateId} · off-inventory candidate`;
+  $("tree-detail").innerHTML = `
+    <dl>
+      <dt>ID</dt><dd>${escapeHtml(candidateId)}</dd>
+      <dt>Type</dt><dd>Off-inventory candidate</dd>
+      <dt>Species</dt><dd>Not identified</dd>
+      <dt>Height</dt><dd>${formatNumber(height, 1)} m (${formatNumber(heightLow, 1)}–${formatNumber(heightHigh, 1)} m)</dd>
+      <dt>DBH</dt><dd>${formatNumber(dbh, 1)} cm (${formatNumber(dbhLow, 1)}–${formatNumber(dbhHigh, 1)} cm)</dd>
+      <dt>Crown diameter</dt><dd>${formatNumber(crownDiameter, 1)} m</dd>
+      <dt>Crown shape</dt><dd>Ellipsoid screening / watershed segment</dd>
+      <dt>Crown volume</dt><dd>${formatCompact(volume)} m³</dd>
+      <dt>Carbon</dt><dd>${formatNumber(carbon / 1000, 2)} t (${formatNumber(carbonLow / 1000, 2)}–${formatNumber(carbonHigh / 1000, 2)} t)</dd>
+      <dt>Confidence</dt><dd>${formatNumber(confidence, 2)}</dd>
+      <dt>Land proxy</dt><dd>${escapeHtml(candidate.land_class || "unknown")}</dd>
+      <dt>Point support</dt><dd>${candidate.point_count == null ? "n/a" : formatNumber(candidate.point_count)}</dd>
+      <dt>Nearest public tree</dt><dd>${candidate.nearest_inventory_m == null ? "n/a" : `${formatNumber(candidate.nearest_inventory_m, 1)} m`}</dd>
+    </dl>
+    <p class="muted">Screening candidate, not a confirmed tree or ownership record. Species and measurements are not field-verified.</p>`;
+  $("remove-tree").disabled = true;
+  $("replace-tree").disabled = true;
+  $("move-tree").disabled = true;
+}
+
 function selectTree(treeId, treeData = null) {
   const tree = treeData || state.treeById.get(treeId);
   if (!tree) return;
   if (treeData) state.treeById.set(treeId, treeData);
   state.selectedId = treeId;
+  state.selectedCandidateId = "";
   updateMapSelection();
   updateSelectedMarker();
   $("selected-label").textContent = tree.common_name || tree.species || treeId;
@@ -1324,8 +1682,28 @@ function bindControls() {
   $("toggle-off-inventory").addEventListener("change", (event) => {
     if (state.map && state.map.getLayer("off-inventory")) {
       state.map.setLayoutProperty("off-inventory", "visibility", event.target.checked ? "visible" : "none");
+      applyOffInventoryFilter();
     }
+    if (state.three?.offInventoryGroup) {
+      state.three.offInventoryGroup.visible = event.target.checked;
+    }
+    if (event.target.checked) ensureOffInventory3D();
   });
+  $("off-inventory-confidence").addEventListener("change", applyOffInventoryFilter);
+  $("off-inventory-land").addEventListener("change", applyOffInventoryFilter);
+}
+
+function applyOffInventoryFilter() {
+  if (!state.map || !state.map.getLayer("off-inventory")) return;
+  const minimum = Number($("off-inventory-confidence").value || 0);
+  const land = $("off-inventory-land").value;
+  const filter = [
+    "all",
+    [">=", ["get", "confidence"], minimum],
+    ["<=", ["get", "crown_radius_m"], 25],
+  ];
+  if (land !== "all") filter.push(["==", ["get", "land_class"], land]);
+  state.map.setFilter("off-inventory", filter);
 }
 
 async function loadAssistantInfo() {
@@ -1524,6 +1902,7 @@ function switchView(view) {
   }
   if (view === "scene") {
     ensureThree();
+    if ($("toggle-off-inventory")?.checked) ensureOffInventory3D();
     window.setTimeout(() => {
       if (state.three) {
         const width = state.three.container.clientWidth;
@@ -1619,7 +1998,12 @@ function ensureLightView() {
         canopy: { type: "image", url: "api/canopy.png?width=1400", coordinates },
         shade: { type: "image", url: "api/shade.png?width=1400", coordinates },
         buildings: { type: "geojson", data: buildingFeatures() },
-        offInventory: { type: "geojson", data: offInventoryFeatures() },
+        offInventory: {
+          type: "geojson",
+          data: state.dataset?.has_off_inventory
+            ? "api/off-inventory.geojson"
+            : offInventoryFeatures(),
+        },
         boundary: { type: "geojson", data: boundaryFeatures() },
       },
       layers: [
@@ -3158,7 +3542,7 @@ function focusDowntown() {
   const [originLon, originLat] = source.origin_lonlat;
   const [mx, my] = source.meters_per_degree;
   const targetX = (-123.1207 - originLon) * mx;
-  const targetZ = (49.2827 - originLat) * my;
+  const targetZ = (originLat - 49.2827) * my;
   const distance = Math.max(700, span * 0.22);
   state.three.camera.position.set(
     targetX + distance * 0.55,

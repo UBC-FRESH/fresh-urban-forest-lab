@@ -1,6 +1,6 @@
 # ALS off-inventory tree inventory
 
-Status: planned P32 plan, 2026-11-05.
+Status: active P32 plan, 2026-11-05.
 
 Parent issue: #136
 Proposed branch: `feature/p32-off-inventory-als`
@@ -21,6 +21,9 @@ The target is a **candidate inventory**, not a census.
 
 ## Data lock
 
+Implementation lock and checksums: `notes/p32-data-lock.md`. Validation design:
+`notes/p32-validation-protocol.md`.
+
 | Need | Source | Use | Licence |
 | --- | --- | --- | --- |
 | City LiDAR 2022 | City of Vancouver `lidar-2022` (181 tiles) | Vegetation points, height, crown support | OGL – Vancouver |
@@ -34,6 +37,16 @@ The target is a **candidate inventory**, not a census.
 
 No owner names, private addresses, private photos, or parcel-level ownership claims are
 acquired, stored, or displayed.
+
+## Screening implementation status
+
+The first active build is deliberately narrower than this full method. It uses a 2 m
+block-max CHM, tiled local maxima and watershed, a 5 m one-to-one public-tree match, and
+parcel/park/zoning/OSM land proxies. It does not yet include per-crown point-cloud
+support, variable-height windows, P20 seam merging, multi-peak splitting, or the manual
+orthophoto audit. Those remain open P32 tasks. The screening layer is in
+`data/processed/vancouver_2022/off_inventory.geojson.gz`; its summary is
+`off_inventory.json`.
 
 ## Method
 

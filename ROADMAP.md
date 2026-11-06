@@ -29,8 +29,11 @@ This roadmap is the plan of record and the issue tracker map for FRESH Urban For
 | P21 Ground-adapter second-tile smoke test | #126 | `feature/p21-ground-smoke` | complete |
 | P30 Full Vancouver city canopy and ecosystem-services pilot | #105 | `feature/p30-vancouver-city` | complete |
 | P31 Move the ground writer to FEMIC | #135 | `feature/p31-move-ground-writer` | complete |
-| P32 ALS-derived off-inventory and private-canopy inventory | #136 | `feature/p32-off-inventory-als` | planned |
+| P32 ALS-derived off-inventory and private-canopy inventory | #136 | `feature/p32-off-inventory-als` | active |
 | P33 Remove the ground-classifier prototype | #146 | `feature/p33-remove-ground-classifier` | complete |
+| P34 Surrey, Burnaby, and Coquitlam portal instances | #149 | `feature/p34-lower-mainland-instances` | complete |
+| P35 Off-inventory conifer/deciduous classifier and QA | #156 | `feature/p35-off-inventory-classifier` | complete |
+| P36 GPU imagery-enhanced conifer/deciduous classifier | #161 | `feature/p36-imagery-classifier` | complete |
 
 ## Lifecycle Map
 
@@ -821,7 +824,7 @@ module remains; the docs name FEMIC as canonical; the dashboard is green.
 
 Parent issue: #136
 Branch: `feature/p32-off-inventory-als`
-Status: planned
+Status: active
 
 Goal: turn the P9 off-inventory pilot into a full-city, confidence-scored ALS-derived
 candidate inventory that can represent likely private residential canopy without claiming a
@@ -829,7 +832,7 @@ census, ownership, or species.
 
 Plan: `notes/design/als-offinventory-inventory.md`.
 
-- [ ] P32.1 Evidence, target definition, data lock, and validation protocol (#137)
+- [x] P32.1 Evidence, target definition, data lock, and validation protocol (#137)
 - [ ] P32.2 Full-city ALS point and CHM tile preparation (#138)
 - [ ] P32.3 Individual-tree segmentation and candidate detection (#139)
 - [ ] P32.4 Inventory reconciliation and public/private land proxy (#140)
@@ -871,6 +874,89 @@ now owns canonically.
 Acceptance: no ground-classification or low-point function remains; the generic primitives
 still pass their tests; Sphinx docs build without broken ground-function references; the
 dashboard is green.
+
+## Phase 34: Surrey, Burnaby, and Coquitlam portal instances
+
+Parent issue: #149
+Branch: `feature/p34-lower-mainland-instances`
+Status: complete
+
+Goal: add three public-data city instances to the demo portal, with separate runtime
+directories and explicit provisional-method labels.
+
+Plan: `notes/design/lower-mainland-city-instances.md`.
+
+- [x] P34.1 Generic city-instance pack contract and source lock (#150)
+- [x] P34.2 Acquire and compile Surrey (#151)
+- [x] P34.3 Acquire and compile Burnaby (#152)
+- [x] P34.4 Acquire and compile Coquitlam (#153)
+- [x] P34.5 Portal cards and browser verification (#154)
+- [x] P34.6 Method notes, changelog, dashboard, and close-out (#155)
+
+Acceptance criteria:
+
+- `/surrey/`, `/burnaby/`, and `/coquitlam/` load their own datasets and runtime dirs.
+- Each card labels the instance provisional/public-data and states the method.
+- 2D and 3D load without console or page errors.
+- No owner, address, or parcel-ownership claim is stored or displayed.
+- No dataset is written outside `/srv/shared-data`.
+- The dashboard is green.
+
+Phase 34 verification:
+
+- `python scripts/dashboard.py`
+- `python scripts/check_workflow.py`
+
+## Phase 35: Off-inventory conifer/deciduous classifier and QA
+
+Parent issue: #156
+Branch: `feature/p35-off-inventory-classifier`
+Status: complete
+
+Goal: compile off-inventory layers for the three P34 instances and add a documented
+conifer/deciduous classifier with confusion-matrix and confidence-interval QA.
+
+Plan: `notes/design/off-inventory-classifier.md`.
+
+- [x] P35.1 Labels, features, classifier, and QA metrics (#157)
+- [x] P35.2 Compile off-inventory layers for three cities (#158)
+- [x] P35.3 Classifier API and QA interface (#159)
+- [x] P35.4 Validation, documentation, dashboard, and close-out (#160)
+
+Acceptance:
+
+- All three new instances expose an off-inventory candidate layer.
+- Every candidate has predicted group, probability, and confidence.
+- QA panel shows a confusion matrix and 95% intervals for known-good labels.
+- Burnaby/Coquitlam are marked unlabelled; weak-label agreement is separate.
+- Dashboard is green and browser smoke is clean.
+
+Phase 35 verification:
+
+- `python scripts/dashboard.py`
+- `python scripts/check_workflow.py`
+
+## Phase 36: GPU imagery-enhanced conifer/deciduous classifier
+
+Parent issue: #161
+Branch: `feature/p36-imagery-classifier`
+Status: complete
+
+Goal: use the available RTX PRO 6000 and public orthophoto pixels to replace the weak
+structural-only conifer/deciduous baseline with a validated imagery + LiDAR model.
+
+Plan: `notes/design/imagery-classifier.md`.
+
+- [x] P36.1 Orthophoto source lock and chip cache (#162)
+- [x] P36.2 GPU CNN training and spatial validation (#163)
+- [x] P36.3 Fuse/compare with LiDAR structural baseline (#164)
+- [x] P36.4 Apply to off-inventory candidates and UI QA (#165)
+- [x] P36.5 Docs, dashboard, browser smoke, close-out (#166)
+
+Phase 36 verification:
+
+- `python scripts/dashboard.py`
+- `python scripts/check_workflow.py`
 
 ## Detailed Next Steps Notes
 

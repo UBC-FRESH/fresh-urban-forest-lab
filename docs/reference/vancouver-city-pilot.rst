@@ -112,7 +112,7 @@ full inventory. Road centrelines are loaded from OpenStreetMap for a pale 2D und
 Demo portal
 -----------
 
-The UBC and Vancouver demos share one landing page on the existing FRESH Urban Forest Lab
+The UBC, Vancouver, Surrey, Burnaby, and Coquitlam demos share one landing page on the existing FRESH Urban Forest Lab
 dev-server port, ``8101``. The WS4 portal stays on ``8790``.
 
 .. code-block:: bash
@@ -120,7 +120,8 @@ dev-server port, ``8101``. The WS4 portal stays on ``8790``.
    ./scripts/run_portal.sh
 
 Then open ``http://127.0.0.1:8101/``. The UBC app is at ``/ubc/`` and the Vancouver app is
-at ``/vancouver/``. Behind the lab proxy the paths are
+at ``/vancouver/``. The provisional Lower Mainland instances are at ``/surrey/``,
+``/burnaby/``, and ``/coquitlam/``. Behind the lab proxy the paths are
 ``/proxy/8101/``, ``/proxy/8101/ubc/``, and ``/proxy/8101/vancouver/``. The local
 ``+ Ask`` assistant is enabled by default inside the portal; set
 ``FRESH_PORTAL_ALLOW_AGENT=0`` to disable it.

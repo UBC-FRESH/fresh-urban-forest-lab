@@ -15,6 +15,19 @@ publishing a new derivative.
 | City of Vancouver LiDAR 2013, 2018, 2022 | City of Vancouver | Open Government Licence – Vancouver | Repeat-measures canopy change | 2013 is about 12 points/m²; 2018 about 30; 2022 about 49. |
 | City of Vancouver local-area boundary | City of Vancouver | Open Government Licence – Vancouver | City AOI and 22 local-area summaries | 22 polygons; the union is 118.76 km². |
 | City of Vancouver building footprints 2015 | City of Vancouver | Open Government Licence – Vancouver | Building mask and 3D context | 154,124 approximate footprints; heights sampled from the 2022 LiDAR. |
+| City of Vancouver property parcels | City of Vancouver | Open Government Licence – Vancouver | Land-context proxy for off-inventory candidates | 99,685 polygons; geometry only. No owner or private address is used. |
+| City of Vancouver parks | City of Vancouver | Open Government Licence – Vancouver | Public-park land-context proxy | 254 polygons. |
+| City of Vancouver zoning districts | City of Vancouver | Open Government Licence – Vancouver | Residential/commercial land-context proxy | 1,621 polygons; a proxy, not an ownership record. |
+| City of Vancouver 2022 orthophoto index | City of Vancouver | Open Government Licence – Vancouver | Manual candidate audit | 470 tile footprints; imagery is not redistributed in the repository. |
+| City of Vancouver 2022 orthophoto tiles | City of Vancouver | Open Government Licence – Vancouver | GPU image-chip classifier training | Public ArcGIS tiled service; zoom 19 is about 0.30 m/px. |
+| City of Burnaby 2025 orthophoto service | City of Burnaby | Open Government Licence – Burnaby | Future image-chip application | Public image service; not yet used in training. |
+| City of Surrey 2025 orthophoto tiles | City of Surrey | Open Government Licence – Surrey | Future image-chip application | Public tile downloader; large TIFF tiles. |
+| City of Coquitlam 2025 orthophoto | City of Coquitlam | Open Government Licence – Coquitlam | Future image-chip application | 7.5 cm MrSID; delivery/large-file handling pending. |
+| City of Surrey public trees | City of Surrey | Open Government Licence – Surrey | Surrey tree instance | 100,969 points; height/DBH are not published in the service. |
+| City of Surrey building footprints and contours | City of Surrey | Open Government Licence – Surrey | Surrey building context and provisional terrain | 137,657 footprints; 15,820 5 m contours. |
+| City of Burnaby 2022 DEM, DSM, buildings, and boundary | City of Burnaby | Open Government Licence – Burnaby | Burnaby LiDAR candidate instance | 0.5 m DEM/DSM; 54,789 building outlines. |
+| City of Coquitlam buildings, boundary, and contours | City of Coquitlam | Open Government Licence – Coquitlam | Coquitlam provisional instance | 32,487 buildings; 2023 contours. |
+| Metro Vancouver Land Cover Classification 2020 | Metro Vancouver | Open Government Licence – Metro Vancouver | Conifer/deciduous/shrub context for the three instances | 5 m hybrid land-cover raster; class labels are not species observations. |
 | Environment Canada climate normals, Vancouver Harbour CS | Environment and Climate Change Canada | Open Government Licence – Canada | Rainfall-interception screening estimate | 1981–2010 annual precipitation 1,098.8 mm. |
 | OpenStreetMap road centrelines | © OpenStreetMap contributors | Open Database License (ODbL) 1.0 | Pale 2D street underlay and 3D road overlay | Queried from the Overpass API for the demo bbox; attribution is shown in the map HUD. |
 | Metro Vancouver classified LiDAR 2022 | Metro Vancouver | Metro Vancouver open-data terms | Regional cross-check | About 16.5 GB for the Vancouver/UBC/UEL area; classified vegetation. |
@@ -33,6 +46,12 @@ publishing a new derivative.
   https://opendata.vancouver.ca/explore/dataset/lidar-2022/
 - City of Vancouver. *Public trees.* Vancouver Open Data Portal.
   https://opendata.vancouver.ca/explore/dataset/public-trees/
+- City of Vancouver. *Property parcel polygons.* Vancouver Open Data Portal.
+  https://opendata.vancouver.ca/explore/dataset/property-parcel-polygons/
+- City of Vancouver. *Parks polygon representation.* Vancouver Open Data Portal.
+  https://opendata.vancouver.ca/explore/dataset/parks-polygon-representation/
+- City of Vancouver. *Zoning districts and labels.* Vancouver Open Data Portal.
+  https://opendata.vancouver.ca/explore/dataset/zoning-districts-and-labels/
 
 ## What the demo includes
 
