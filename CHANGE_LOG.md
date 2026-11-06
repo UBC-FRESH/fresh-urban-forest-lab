@@ -796,6 +796,19 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
   evidence against pretending the envelopes are calibrated, not used to narrow them.
 - Added `scripts/attach_attribute_uncertainty.py` and tests. No app metric was added.
 
+### P32.7 independent UBC test
+
+- Ran the frozen City detector on the UBC 2021 1 m CHM and matched the UBC campus inventory
+  one-to-one within 5 m.
+- Eligible UBC records: 9,138. Matches: 4,810. Recall: 52.64%; missed nearest distance
+  p50/p95 5.32/9.81 m. This is below the City held-out recall of 76.6%.
+- Matched measured attribute residuals: height MAE 3.46 m (RMSE 6.65), crown width MAE
+  4.51 m (RMSE 6.67), DBH MAE 19.32 cm (RMSE 27.28). DBH uses the unknown-species model.
+- The UBC inventory is incomplete, so this is a recall/attribute test, not a precision
+  test. No UBC tuning was performed.
+- Added `fresh_urban_forest.ubc_validation`, `scripts/validate_ubc_off_inventory.py`, tests,
+  and `notes/reports/p32-ubc-independent.md`. P32 remains open.
+
 ### P32.7 re-score the filtered candidate layer
 
 - Re-scored the fixed audit sample against the filtered 335,471-candidate table. One of the
