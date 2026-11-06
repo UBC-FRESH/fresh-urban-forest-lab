@@ -9,13 +9,13 @@ inventory.
 
 | Metric | Value |
 | --- | ---: |
-| Candidates | 163,459 |
-| High-confidence candidates (≥0.6) | 60,977 |
-| Summed crown area | 26,318,272 m² (2,631.8 ha) |
-| Crown volume, point estimate | 146,062,931 m³ |
-| Crown volume range | 73,031,543–219,094,503 m³ |
-| Carbon, point estimate | 42,444,801 kg (42,444.8 t) |
-| Carbon range | 21,222,097–63,667,768 kg (21,222–63,668 t) |
+| Candidates | 163,158 |
+| High-confidence candidates (≥0.6) | 60,698 |
+| Summed crown area | 13,705,044 m² (1,370.5 ha) |
+| Crown volume, point estimate | 57,469,944 m³ |
+| Crown volume range | 28,735,050–86,205,024 m³ |
+| Carbon, point estimate | 42,388,900 kg (42,388.9 t) |
+| Carbon range | 21,194,147–63,583,915 kg (21,194–63,584 t) |
 
 The crown area is the sum of candidate crown areas. Crowns overlap, so it is not unique
 canopy area. The land proxy is not ownership.
@@ -24,13 +24,13 @@ canopy area. The land proxy is not ownership.
 
 | Metric | Value |
 | --- | ---: |
-| Candidates | 336,350 |
-| High-confidence candidates | 130,103 |
-| Summed crown area | 105,047,556 m² |
-| Crown volume, point estimate | 606,472,615 m³ |
-| Crown volume range | 303,236,475–909,709,127 m³ |
-| Carbon, point estimate | 103,421,246 kg (103,421 t) |
-| Carbon range | 51,710,156–155,132,762 kg (51,710–155,133 t) |
+| Candidates | 335,471 |
+| High-confidence candidates | 129,312 |
+| Summed crown area | 28,284,548 m² (2,828.5 ha) |
+| Crown volume, point estimate | 132,038,760 m³ |
+| Crown volume range | 66,019,549–198,058,343 m³ |
+| Carbon, point estimate | 103,295,300 kg (103,295 t) |
+| Carbon range | 51,647,185–154,943,843 kg (51,647–154,944 t) |
 
 ## App
 
@@ -42,8 +42,16 @@ four cards:
 - likely-private crowns;
 - likely-private carbon range.
 
+A 25 m maximum crown-radius quality filter removes 879 watershed flood segments before
+aggregation. Without it, a few hundred huge segments dominated summed area and volume.
+
 The City tab keeps the public-tree metrics separate and shows the off-inventory method and
 caveat text.
+
+The off-inventory panel also shows a support ≥1,000 QA count and links to the downloadable
+candidate GeoJSON. The panel states that no owner names, addresses, or parcel-level
+ownership claims are stored or shown. The 3D HUD names the candidate colours and says the
+3D overlay is confidence ≥0.6 only.
 
 ## Limits
 

@@ -157,7 +157,12 @@
         </div>
         <p class="hint">
           Unmatched LiDAR crowns are candidates, not confirmed trees. The land class is a
-          proxy; no owner data is stored or shown.
+          proxy, not ownership. No owner names, addresses, or parcel-level ownership claims
+          are stored or shown.
+        </p>
+        <p class="hint">
+          <a href="api/off-inventory.geojson" download="vancouver_off_inventory.geojson">Download candidate GeoJSON</a>
+          · screening layer, confidence and support fields included.
         </p>
       </section>
     </aside>
@@ -218,6 +223,7 @@
           <span>Drag to orbit, scroll to zoom, click a crown to inspect · 3D shows all trees, building massing, and optional high-confidence off-inventory candidates; 2D map shows full footprints.</span>
           <span id="sun-readout" class="sun-readout">Sun: --</span>
           <span id="scene-candidate-status" class="muted"></span>
+          <span id="scene-candidate-legend" class="muted">Candidates: light orange = likely private, dark orange = other land proxy; opacity = confidence; 3D score ≥0.6</span>
           <span class="muted">N ↑ · E →</span>
           <button id="scene-reset" class="button tiny ghost" type="button">City view</button>
           <button id="scene-downtown" class="button tiny ghost" type="button">Downtown</button>
@@ -230,8 +236,9 @@
             <span class="eyebrow">City of Vancouver · public data</span>
             <h2>City canopy and ecosystem services</h2>
             <p class="muted">
-              Metrics come from the 2022 City LiDAR and all 184,152 public-tree records.
-              The 3D scene uses a representative visual sample of high and distributed trees.
+              Metrics come from the 2022 City LiDAR and all 184,151 public-tree records.
+              3D uses all public trees and buildings; the optional candidate overlay is
+              high-confidence off-inventory screening, separate from the public inventory.
             </p>
           </div>
           <div id="city-source" class="city-source">loading</div>

@@ -28,9 +28,9 @@ stored as `height_low_m`, `height_high_m`, `crown_radius_low_m`,
 
 | Field | Low | Point estimate | High |
 | --- | ---: | ---: | ---: |
-| Height sum (m) | 3,145,113 | 3,931,391 | 4,717,667 |
-| Crown volume (m³) | 303,236,475 | 606,472,619 | 909,709,127 |
-| Carbon (kg) | 51,710,156 | 103,421,263 | 155,132,762 |
+| Height sum (m) | 3,136,419 | 3,920,524 | 4,704,628 |
+| Crown volume (m³) | 66,019,549 | 132,038,760 | 198,058,343 |
+| Carbon (kg) | 51,647,185 | 103,295,300 | 154,943,843 |
 
 The point estimates are the existing allometric screening totals. The ranges are not a
 measurement of uncertainty in a statistical sense; they show the planning envelope implied
@@ -50,5 +50,7 @@ the candidate envelopes; doing so would imply a calibration the data do not supp
 - DBH, volume, and carbon are model values, not measurements.
 - The ranges are not independent of the point estimates: low/high are fixed multipliers.
 - Totals are candidate-table totals, not a total-city carbon inventory.
+- A 25 m crown-radius quality filter removed 879 watershed flood segments before these
+  totals; the candidate table is 335,471 rows.
 - Public/UBC calibration, species-group priors, and a defensible uncertainty model remain
   open before any public claim.

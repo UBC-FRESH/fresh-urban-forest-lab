@@ -774,11 +774,15 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 ### P32.6 city-tab candidate metrics
 
 - Added `off_inventory_city_metrics.json` and merged it into `/api/city-metrics`.
-- Likely-private proxy: 163,459 candidates (60,977 at confidence ≥0.6), 2,631.8 ha summed
-  crown area, 146.1M m³ crown volume (73.0–219.1M), and 42,444.8 t carbon (21,222–63,668 t).
-- All candidates: 336,350; 130,103 high confidence; 103,421 t carbon (51,710–155,133 t).
+- Likely-private proxy: 163,158 candidates (60,698 at confidence ≥0.6), 1,370.5 ha summed
+  crown area, 57.5M m³ crown volume (28.7–86.2M), and 42,388.9 t carbon (21,194–63,584 t).
+- All candidates: 335,471; 129,312 high confidence; 103,295 t carbon (51,647–154,944 t).
+- Added a 25 m maximum crown-radius filter, removing 879 watershed flood segments that
+  dominated summed area and volume.
 - Added four City-tab cards and off-inventory method/caveat text. Public inventory metrics
   remain separate. These are candidate aggregates, not a census or ownership layer.
+- Added a support ≥1,000 QA card, a public candidate GeoJSON download link, explicit
+  privacy wording, and a 3D candidate-colour legend. Browser smoke has no console errors.
 
 ### P32.5 screening attribute uncertainty
 
