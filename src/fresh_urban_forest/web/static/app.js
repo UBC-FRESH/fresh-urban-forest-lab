@@ -619,7 +619,7 @@ function initMap() {
           source: "offInventoryCrowns",
           layout: { visibility: "none" },
           paint: {
-            "fill-color": "#e59a32",
+            "fill-color": ["match", ["get", "fusion_group"], "conifer", "#c46f1e", "deciduous", "#f2ad4a", "#8b9489"],
             "fill-opacity": ["interpolate", ["linear"], ["zoom"], 12, 0.0, 15, 0.05, 18, 0.14],
           },
         },
@@ -629,7 +629,7 @@ function initMap() {
           source: "offInventoryCrowns",
           layout: { visibility: "none" },
           paint: {
-            "line-color": "#c46f1e",
+            "line-color": ["match", ["get", "fusion_group"], "conifer", "#8d4b10", "deciduous", "#b96f1c", "#6f776e"],
             "line-width": ["interpolate", ["linear"], ["zoom"], 12, 0.15, 16, 0.55, 20, 1.2],
             "line-opacity": ["interpolate", ["linear"], ["zoom"], 12, 0.15, 15, 0.45, 18, 0.8],
           },
@@ -640,7 +640,7 @@ function initMap() {
           source: "offInventory",
           layout: { visibility: "none" },
           paint: {
-            "circle-color": "#d98a2b",
+            "circle-color": ["match", ["get", "fusion_group"], "conifer", "#c46f1e", "deciduous", "#f2ad4a", "#8b9489"],
             "circle-radius": ["interpolate", ["linear"], ["get", "height_m"], 3, 2, 30, 5, 70, 8],
             "circle-opacity": ["interpolate", ["linear"], ["get", "confidence"], 0.3, 0.35, 0.9, 0.9],
             "circle-stroke-color": "#7b4a12",
@@ -1048,22 +1048,22 @@ async function ensureOffInventory3D() {
       return Number.isFinite(value) ? value - originZ : 0;
     };
     const landNames = ["likely private parcel", "street/lane", "public park", "other parcel", "unknown"];
-    const colorFor = (land) => (land === 0 ? "#f2a33b" : "#b8641d");
+    const colorFor = (group) => (group === 0 ? "#b45f16" : group === 1 ? "#f2a33b" : "#8b9489");
     const opacityBins = [0.36, 0.55, 0.74, 0.92];
-    const buckets = Array.from({ length: 8 }, () => []);
+    const buckets = Array.from({ length: 12 }, () => []);
     for (let index = 0; index < count; index += 1) {
       const confidence = Number(data.confidence[index] || 0);
       const radius = Number(data.crown_radius_m[index] || 0);
       if (confidence < 0.6 || radius > 25) continue;
       const bin = confidence < 0.7 ? 0 : confidence < 0.8 ? 1 : confidence < 0.9 ? 2 : 3;
-      const land = Number(data.land_code[index]);
+      const group = data.group_code ? Number(data.group_code[index]) : 2;
       const x = Number(data.x_m[index]) - originX;
       const z = -(Number(data.y_m[index]) - originY);
       const height = Math.max(Number(data.height_m[index] || 2), 1.5);
       const crownDepth = Math.max(height * 0.55, 1);
       const trunkHeight = Math.max(height - crownDepth, 0.8);
       const base = terrainBase(x, z);
-      buckets[bin * 2 + (land === 0 ? 0 : 1)].push({
+      buckets[bin * 3 + group].push({
         x,
         z,
         base,
@@ -1081,7 +1081,11 @@ async function ensureOffInventory3D() {
           carbon_kg: Number(data.carbon_kg[index]),
           confidence,
           point_count: Number(data.point_count[index]),
-          land_class: landNames[land] || "unknown",
+          land_class: landNames[Number(data.land_code[index])] || "unknown",
+          fusion_group: group === 0 ? "conifer" : group === 1 ? "deciduous" : "unknown",
+          fusion_conifer_probability: data.fusion_conifer_probability
+            ? Number(data.fusion_conifer_probability[index])
+            : null,
         },
       });
     }
@@ -1100,10 +1104,10 @@ async function ensureOffInventory3D() {
       const items = buckets[bucketIndex];
       if (!items.length) continue;
       builtCount += items.length;
-      const bin = Math.floor(bucketIndex / 2);
-      const light = bucketIndex % 2 === 0;
+      const bin = Math.floor(bucketIndex / 3);
+      const group = bucketIndex % 3;
       const opacity = opacityBins[bin];
-      const color = light ? "#f2a33b" : "#b8641d";
+      const color = colorFor(group);
       const crownMaterial = new THREE.MeshStandardMaterial({
         color,
         roughness: 0.9,
@@ -1113,7 +1117,7 @@ async function ensureOffInventory3D() {
         depthWrite: opacity > 0.8,
       });
       const trunkMaterial = new THREE.MeshStandardMaterial({
-        color: light ? "#a9692d" : "#7d4a1d",
+        color: group === 0 ? "#6f471f" : group === 1 ? "#9b6a2d" : "#6e756d",
         roughness: 1,
         transparent: true,
         opacity,
@@ -1451,6 +1455,9 @@ function selectCandidate(candidateId, candidateData = null) {
       <dt>ID</dt><dd>${escapeHtml(candidateId)}</dd>
       <dt>Type</dt><dd>Off-inventory candidate</dd>
       <dt>Species</dt><dd>Not identified</dd>
+      <dt>Species group (model)</dt><dd>${escapeHtml(candidate.fusion_group || candidate.imagery_group || "unknown")} · screening, not a species ID</dd>
+      <dt>Fusion conifer probability</dt><dd>${candidate.fusion_conifer_probability == null ? "n/a" : formatNumber(candidate.fusion_conifer_probability, 3)}</dd>
+      <dt>Image conifer probability</dt><dd>${candidate.image_conifer_probability == null ? "n/a" : formatNumber(candidate.image_conifer_probability, 3)}</dd>
       <dt>Height</dt><dd>${formatNumber(height, 1)} m (${formatNumber(heightLow, 1)}–${formatNumber(heightHigh, 1)} m)</dd>
       <dt>DBH</dt><dd>${formatNumber(dbh, 1)} cm (${formatNumber(dbhLow, 1)}–${formatNumber(dbhHigh, 1)} cm)</dd>
       <dt>Crown diameter</dt><dd>${formatNumber(crownDiameter, 1)} m</dd>
