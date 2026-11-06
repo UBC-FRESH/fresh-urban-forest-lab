@@ -708,8 +708,11 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Added `/api/imagery-classifier` and a compact image-CNN QA section on Vancouver.
 - Added a valid CHM-only + image fusion: 81.87% held-out accuracy, 82.63% conifer
   precision, 82.09% conifer recall; the inventory-field fusion was rejected as leakage.
-- Pilot limits: Vancouver only; image test is balanced; no Burnaby/Coquitlam labels yet;
-  orthophotos are orthorectified, not stereo.
+- Applied the image CNN to 331,221 high-confidence Burnaby candidates using the public
+  Burnaby 2025 orthophoto service; image groups and source/date fields are in the candidate
+  GeoJSON and 3D overlay. Burnaby still has no known-good species labels.
+- Pilot limits: Vancouver training only; image test is balanced; no Burnaby/Coquitlam labels
+  yet; orthophotos are orthorectified, not stereo.
 
 ### P35 off-inventory classifier and QA
 

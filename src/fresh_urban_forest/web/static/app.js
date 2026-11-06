@@ -178,7 +178,8 @@ function renderOffInventory() {
       <article class="kpi"><span>Crown area</span><strong>${formatNumber(areaHa, 1)} ha</strong><small>summed, not unique</small></article>
       <article class="kpi"><span>Detected</span><strong>${formatNumber(data.detected_count)}</strong><small>${formatNumber(data.matched_count)} matched</small></article>
     </div>
-    ${voi}`;
+    ${voi}
+    ${data.imagery ? `<p class="hint">Image scoring: ${formatNumber(data.imagery.scored_count)} candidates · ${escapeHtml(data.imagery.source)} · mapped groups ${formatNumber(data.imagery.groups.conifer)} conifer / ${formatNumber(data.imagery.groups.deciduous)} deciduous. Burnaby has no known-good species labels.</p>` : ""}`;
   $("off-inventory-status").textContent = data.evidence?.tier || "pilot";
   renderClassifierQA();
 }
@@ -718,9 +719,9 @@ function initMap() {
           paint: {
             "circle-color": [
               "case",
-              ["==", ["get", "predicted_group"], "conifer"],
+              ["==", ["coalesce", ["get", "imagery_group"], ["get", "predicted_group"]], "conifer"],
               "#14563a",
-              ["==", ["get", "predicted_group"], "deciduous"],
+              ["==", ["coalesce", ["get", "imagery_group"], ["get", "predicted_group"]], "deciduous"],
               "#91a948",
               "#d98a2b",
             ],
