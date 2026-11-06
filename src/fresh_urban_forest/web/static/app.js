@@ -14,6 +14,7 @@ const state = {
   offInventory3DLoading: false,
   classifier: null,
   imageryClassifier: null,
+  imageryFusion: null,
   birds: null,
   birdsLoading: false,
   treeById: new Map(),
@@ -253,6 +254,11 @@ function imageryClassifierHtml() {
   const matrix = Array.isArray(evaluation.matrix) ? evaluation.matrix : [];
   const conifer = evaluation.conifer || {};
   const training = report.training || {};
+  const fusion = state.imageryFusion?.fused_model?.evaluation || null;
+  const fusionConifer = fusion?.conifer || {};
+  const fusionNote = fusion
+    ? `<div class="qa-stats"><span><b>${formatNumber(Number(fusion.accuracy) * 100, 1)}%</b><small>fused accuracy</small></span><span><b>${formatNumber(Number(fusionConifer.precision) * 100, 1)}%</b><small>fused conifer precision</small></span><span><b>${formatNumber(Number(fusionConifer.recall) * 100, 1)}%</b><small>fused conifer recall</small></span></div>`
+    : "";
   return `
     <details class="qa-details" open>
       <summary>Image CNN pilot · Vancouver 2022</summary>
@@ -265,11 +271,12 @@ function imageryClassifierHtml() {
         </tbody>
       </table>
       <div class="qa-stats">
-        <span><b>${formatNumber(Number(evaluation.accuracy) * 100, 1)}%</b><small>accuracy</small></span>
-        <span><b>${formatNumber(Number(conifer.precision) * 100, 1)}%</b><small>conifer precision</small></span>
-        <span><b>${formatNumber(Number(conifer.recall) * 100, 1)}%</b><small>conifer recall</small></span>
+        <span><b>${formatNumber(Number(evaluation.accuracy) * 100, 1)}%</b><small>image accuracy</small></span>
+        <span><b>${formatNumber(Number(conifer.precision) * 100, 1)}%</b><small>image conifer precision</small></span>
+        <span><b>${formatNumber(Number(conifer.recall) * 100, 1)}%</b><small>image conifer recall</small></span>
         <span><b>${formatNumber(Number(evaluation.brier_score) * 100, 1)}</b><small>Brier ×100</small></span>
       </div>
+      ${fusionNote}
     </details>
   `;
 }
@@ -451,6 +458,14 @@ async function init() {
         renderClassifierQA();
       } catch (_error) {
         state.imageryClassifier = null;
+      }
+    }
+    if (dataset.has_imagery_fusion) {
+      try {
+        state.imageryFusion = await api("api/imagery-fusion");
+        renderClassifierQA();
+      } catch (_error) {
+        state.imageryFusion = null;
       }
     }
     if (dataset.has_city_metrics) {

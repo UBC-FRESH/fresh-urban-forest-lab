@@ -61,6 +61,19 @@ the image model has 84.4% conifer precision at 75.2% conifer recall. The image t
 balanced (50/50), while P35 was dominated by deciduous, so compare per-class metrics rather
 than the headline accuracy alone.
 
+### Valid LiDAR + image fusion
+
+A second stack used only **independent CHM crown features** plus image probability:
+
+- CHM features: max height, centre height, canopy fraction, crown area, p90 height, height
+  std, centre/max ratio.
+- Held-out fusion: **81.87% accuracy**, **82.63% conifer precision**, **82.09% conifer
+  recall**.
+- CHM-only: 70.02% accuracy; image-only: 80.04%.
+- The earlier inventory-height/crown fusion was rejected as label leakage and is not used.
+
+This is the valid fusion result shipped in the interface.
+
 ## What this proves
 
 - Real orthophoto pixels are accessible without ArcGIS credentials.
@@ -79,7 +92,7 @@ inventory-derived attributes.
 
 ## Still open
 
-- Fuse image features with LiDAR point/CHM features (P36.3).
+- ~~Fuse image features with LiDAR point/CHM features (P36.3).~~ Completed with CHM-only + image fusion; raw point-cloud fusion remains an extension.
 - Score off-inventory candidates in the three P34 instances (P36.4).
 - Apply to Burnaby/Coquitlam imagery; both still lack known-good species labels.
 - Add image-source/date metadata to the QA panel and candidate records.

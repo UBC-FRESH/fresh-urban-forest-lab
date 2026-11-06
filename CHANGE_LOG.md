@@ -706,6 +706,8 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Compared with P35 structural model: conifer precision improved from 37.71% to 84.41%,
   while conifer recall moved from 79.90% to 75.18%.
 - Added `/api/imagery-classifier` and a compact image-CNN QA section on Vancouver.
+- Added a valid CHM-only + image fusion: 81.87% held-out accuracy, 82.63% conifer
+  precision, 82.09% conifer recall; the inventory-field fusion was rejected as leakage.
 - Pilot limits: Vancouver only; image test is balanced; no Burnaby/Coquitlam labels yet;
   orthophotos are orthorectified, not stereo.
 

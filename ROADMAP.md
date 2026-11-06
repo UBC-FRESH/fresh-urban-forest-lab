@@ -949,7 +949,7 @@ Plan: `notes/design/imagery-classifier.md`.
 
 - [x] P36.1 Orthophoto source lock and chip cache (#162)
 - [x] P36.2 GPU CNN training and spatial validation (#163)
-- [ ] P36.3 Fuse/compare with LiDAR structural baseline (#164)
+- [x] P36.3 Fuse/compare with LiDAR structural baseline (#164)
 - [ ] P36.4 Apply to off-inventory candidates and UI QA (#165)
 - [ ] P36.5 Docs, dashboard, browser smoke, close-out (#166)
 
