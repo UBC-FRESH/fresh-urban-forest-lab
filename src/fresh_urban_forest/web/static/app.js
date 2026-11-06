@@ -186,17 +186,18 @@ function renderClassifierQA() {
   const container = $("classifier-qa");
   if (!container) return;
   const report = state.classifier;
-  if (!report) {
+  const imagery = state.imageryClassifier;
+  if (!report && !imagery) {
     container.innerHTML = "";
     return;
   }
-  const evaluation = report.evaluation || {};
+  const evaluation = report?.evaluation || {};
   const matrix = Array.isArray(evaluation.matrix) ? evaluation.matrix : [];
   const conifer = evaluation.conifer || {};
   const deciduous = evaluation.deciduous || {};
-  const labels = report.known_good_labels || {};
-  const weak = report.weak_label_agreement || {};
-  const cityRows = Object.entries(report.by_city || {})
+  const labels = report?.known_good_labels || {};
+  const weak = report?.weak_label_agreement || {};
+  const cityRows = Object.entries(report?.by_city || {})
     .map(
       ([city, value]) =>
         `<tr><td>${escapeHtml(city)}</td><td>${formatNumber(value.n)}</td><td>${formatNumber(Number(value.accuracy) * 100, 1)}%</td></tr>`,
@@ -211,58 +212,10 @@ function renderClassifierQA() {
   const ci = Array.isArray(evaluation.accuracy_ci95)
     ? evaluation.accuracy_ci95.map((value) => `${formatNumber(Number(value) * 100, 1)}%`).join("–")
     : "n/a";
-  container.innerHTML = `
-    <div class="classifier-heading">
-      <strong>Conifer vs deciduous</strong>
-      <span>QA · screening classifier</span>
-    </div>
-    <p class="hint">Public-inventory labels only. Not a species census.</p>
-    <table class="qa-matrix">
-      <thead><tr><th></th><th>pred conifer</th><th>pred deciduous</th></tr></thead>
-      <tbody>
-        <tr><th>conifer</th><td>${formatNumber(matrix[0]?.[0] || 0)}</td><td>${formatNumber(matrix[0]?.[1] || 0)}</td></tr>
-        <tr><th>deciduous</th><td>${formatNumber(matrix[1]?.[0] || 0)}</td><td>${formatNumber(matrix[1]?.[1] || 0)}</td></tr>
-      </tbody>
-    </table>
-    <div class="qa-stats">
-      <span><b>${formatNumber(Number(evaluation.accuracy) * 100, 1)}%</b><small>accuracy · 95% ${ci}</small></span>
-      <span><b>${formatNumber(Number(conifer.precision) * 100, 1)}%</b><small>conifer precision</small></span>
-      <span><b>${formatNumber(Number(conifer.recall) * 100, 1)}%</b><small>conifer recall</small></span>
-      <span><b>${formatNumber(Number(deciduous.precision) * 100, 1)}%</b><small>deciduous precision</small></span>
-    </div>
-    <table class="qa-table">
-      <thead><tr><th>held-out city</th><th>n</th><th>acc.</th></tr></thead>
-      <tbody>${cityRows || '<tr><td colspan="3" class="muted">No city table.</td></tr>'}</tbody>
-    </table>
-    <p class="hint">Known-good: ${escapeHtml((labels.available_cities || []).join(", ") || "none")}. Unavailable: ${escapeHtml((labels.unavailable_cities || []).join(", ") || "none")}. ${formatNumber(report.training?.spatial_block_m || 0)} m blocks; test n=${formatNumber(report.training?.test_rows || 0)}.</p>
-    <details class="qa-details">
-      <summary>Weak-label diagnostic (not accuracy)</summary>
-      <table class="qa-table">
-        <thead><tr><th>city</th><th>n</th><th>agreement</th></tr></thead>
-        <tbody>${weakRows || '<tr><td colspan="3" class="muted">No weak-label table.</td></tr>'}</tbody>
-      </table>
-      <p class="hint">Metro LCC agreement is weak-label context, not known-good species truth.</p>
-    </details>
-    ${imageryClassifierHtml()}
-  `;
-}
-
-function imageryClassifierHtml() {
-  const report = state.imageryClassifier;
-  if (!report) return "";
-  const evaluation = report.evaluation || {};
-  const matrix = Array.isArray(evaluation.matrix) ? evaluation.matrix : [];
-  const conifer = evaluation.conifer || {};
-  const training = report.training || {};
-  const fusion = state.imageryFusion?.fused_model?.evaluation || null;
-  const fusionConifer = fusion?.conifer || {};
-  const fusionNote = fusion
-    ? `<div class="qa-stats"><span><b>${formatNumber(Number(fusion.accuracy) * 100, 1)}%</b><small>fused accuracy</small></span><span><b>${formatNumber(Number(fusionConifer.precision) * 100, 1)}%</b><small>fused conifer precision</small></span><span><b>${formatNumber(Number(fusionConifer.recall) * 100, 1)}%</b><small>fused conifer recall</small></span></div>`
-    : "";
-  return `
-    <details class="qa-details" open>
-      <summary>Image CNN pilot · Vancouver 2022</summary>
-      <p class="hint">96 px RGB chips from the public orthophoto service; ${formatNumber(training.test_rows || 0)} spatial test chips.</p>
+  const structural = `
+    <details class="qa-details" ${imagery ? "" : "open"}>
+      <summary>Structural baseline · P35</summary>
+      <p class="hint">Inventory-derived height/crown features. This is the weaker baseline and is not the image/fusion model.</p>
       <table class="qa-matrix">
         <thead><tr><th></th><th>pred conifer</th><th>pred deciduous</th></tr></thead>
         <tbody>
@@ -271,14 +224,61 @@ function imageryClassifierHtml() {
         </tbody>
       </table>
       <div class="qa-stats">
-        <span><b>${formatNumber(Number(evaluation.accuracy) * 100, 1)}%</b><small>image accuracy</small></span>
-        <span><b>${formatNumber(Number(conifer.precision) * 100, 1)}%</b><small>image conifer precision</small></span>
-        <span><b>${formatNumber(Number(conifer.recall) * 100, 1)}%</b><small>image conifer recall</small></span>
-        <span><b>${formatNumber(Number(evaluation.brier_score) * 100, 1)}</b><small>Brier ×100</small></span>
+        <span><b>${formatNumber(Number(evaluation.accuracy) * 100, 1)}%</b><small>accuracy · 95% ${ci}</small></span>
+        <span><b>${formatNumber(Number(conifer.precision) * 100, 1)}%</b><small>conifer precision</small></span>
+        <span><b>${formatNumber(Number(conifer.recall) * 100, 1)}%</b><small>conifer recall</small></span>
+        <span><b>${formatNumber(Number(deciduous.precision) * 100, 1)}%</b><small>deciduous precision</small></span>
       </div>
-      ${fusionNote}
-    </details>
-  `;
+      <table class="qa-table">
+        <thead><tr><th>held-out city</th><th>n</th><th>acc.</th></tr></thead>
+        <tbody>${cityRows || '<tr><td colspan="3" class="muted">No city table.</td></tr>'}</tbody>
+      </table>
+      <p class="hint">Known-good: ${escapeHtml((labels.available_cities || []).join(", ") || "none")}. Unavailable: ${escapeHtml((labels.unavailable_cities || []).join(", ") || "none")}. ${formatNumber(report?.training?.spatial_block_m || 0)} m blocks; test n=${formatNumber(report?.training?.test_rows || 0)}.</p>
+      <details class="qa-details">
+        <summary>Weak-label diagnostic (not accuracy)</summary>
+        <table class="qa-table">
+          <thead><tr><th>city</th><th>n</th><th>agreement</th></tr></thead>
+          <tbody>${weakRows || '<tr><td colspan="3" class="muted">No weak-label table.</td></tr>'}</tbody>
+        </table>
+        <p class="hint">Metro LCC agreement is weak-label context, not known-good species truth.</p>
+      </details>
+    </details>`;
+  container.innerHTML = `${imagery ? imageryPrimaryHtml() : ""}${structural}`;
+}
+
+function imageryPrimaryHtml() {
+  const report = state.imageryClassifier;
+  if (!report) return "";
+  const imageEvaluation = report.evaluation || {};
+  const fusion = state.imageryFusion?.fused_model?.evaluation || null;
+  const evaluation = fusion || imageEvaluation;
+  const matrix = Array.isArray(evaluation.matrix) ? evaluation.matrix : [];
+  const conifer = evaluation.conifer || {};
+  const training = report.training || {};
+  const title = fusion ? "Image + LiDAR fusion · Vancouver 2022" : "Image CNN · Vancouver 2022";
+  return `
+    <details class="qa-details" open>
+      <summary>${title}</summary>
+      <p class="hint">96 px RGB orthophoto chips; ${formatNumber(training.test_rows || 0)} spatial test chips. This is the primary model.</p>
+      <table class="qa-matrix">
+        <thead><tr><th></th><th>pred conifer</th><th>pred deciduous</th></tr></thead>
+        <tbody>
+          <tr><th>conifer</th><td>${formatNumber(matrix[0]?.[0] || 0)}</td><td>${formatNumber(matrix[0]?.[1] || 0)}</td></tr>
+          <tr><th>deciduous</th><td>${formatNumber(matrix[1]?.[0] || 0)}</td><td>${formatNumber(matrix[1]?.[1] || 0)}</td></tr>
+        </tbody>
+      </table>
+      <div class="qa-stats">
+        <span><b>${formatNumber(Number(evaluation.accuracy) * 100, 1)}%</b><small>${fusion ? "fused" : "image"} accuracy</small></span>
+        <span><b>${formatNumber(Number(conifer.precision) * 100, 1)}%</b><small>conifer precision</small></span>
+        <span><b>${formatNumber(Number(conifer.recall) * 100, 1)}%</b><small>conifer recall</small></span>
+        <span><b>${formatNumber(Number(imageEvaluation.brier_score) * 100, 1)}</b><small>image Brier ×100</small></span>
+      </div>
+      <p class="hint">${fusion ? "Fusion uses independent CHM crown-shape features plus image probability." : "Image-only result; no fusion report loaded."}</p>
+    </details>`;
+}
+
+function imageryClassifierHtml() {
+  return imageryPrimaryHtml();
 }
 
 function buildingFeatures() {
