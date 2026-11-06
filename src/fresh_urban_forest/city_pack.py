@@ -50,6 +50,7 @@ def build_city_pack(
     boundary: tuple[tuple[float, float], ...],
     sources: tuple[SourceRecord, ...],
     out_dir: Path,
+    dataset_id: str = "vancouver-city-2022",
     name: str = "City of Vancouver 2022 canopy pilot",
     max_trees: int = 30_000,
     max_buildings: int = 12_000,
@@ -80,6 +81,8 @@ def build_city_pack(
         Provenance records.
     out_dir : Path
         Destination directory.
+    dataset_id : str
+        Dataset identifier written to the manifest.
     name : str
         Dataset title.
     max_trees : int
@@ -102,7 +105,6 @@ def build_city_pack(
     buildings = _select_buildings(all_buildings, building_height, max_buildings)
     terrain = build_terrain_grid(dem, chm, max_size=terrain_max_size)
     metrics = _canopy_metrics(trees, city_metrics)
-    dataset_id = "vancouver-city-2022"
     manifest = DatasetManifest(
         schema_version=DATASET_SCHEMA_VERSION,
         dataset_id=dataset_id,

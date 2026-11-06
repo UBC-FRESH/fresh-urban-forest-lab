@@ -76,10 +76,12 @@ def test_build_city_pack_writes_dataset_and_metrics(tmp_path: Path) -> None:
         boundary=boundary,
         sources=(),
         out_dir=out,
+        dataset_id="test-city",
         max_trees=12,
         max_buildings=10,
         terrain_max_size=40,
     )
+    assert dataset.manifest.dataset_id == "test-city"
     assert dataset.manifest.tree_count == 12
     assert (out / "manifest.json").exists()
     assert (out / "trees.json").exists()

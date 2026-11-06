@@ -242,11 +242,11 @@ function renderCityMetrics() {
   const visualTrees = state.scene?.trees?.length || 0;
   const cards = [
     ["Canopy cover", `${formatNumber(city.canopy_cover_pct, 1)}%`, "of city area"],
-    ["Canopy volume", `${formatCompact(city.canopy_volume_m3)} m³`, "LiDAR height field"],
+    ["Canopy volume", `${formatCompact(city.canopy_volume_m3)} m³`, city.canopy_source_label || "LiDAR height field"],
     ["Carbon storage", `${formatCompact(Number(city.carbon_kg) / 1000)} t`, "above ground"],
     ["Annual sequestration", `${formatCompact(Number(city.annual_sequestration_kg) / 1000)} t/yr`, "one-year model"],
     ["Rainfall interception", `${formatCompact(city.rainfall_interception_m3_low)}–${formatCompact(city.rainfall_interception_m3_high)} m³`, "10–20% screening"],
-    ["Public trees", formatNumber(city.tree_count), "mapped records"],
+    [city.tree_record_label || "Tree records", formatNumber(city.tree_count), "compiled records"],
     ["Species", formatNumber(metrics.species_count), "distinct labels"],
     ["Native share", `${formatNumber(Number(city.native_fraction) * 100, 1)}%`, "of public trees"],
   ];

@@ -19,6 +19,11 @@ publishing a new derivative.
 | City of Vancouver parks | City of Vancouver | Open Government Licence – Vancouver | Public-park land-context proxy | 254 polygons. |
 | City of Vancouver zoning districts | City of Vancouver | Open Government Licence – Vancouver | Residential/commercial land-context proxy | 1,621 polygons; a proxy, not an ownership record. |
 | City of Vancouver 2022 orthophoto index | City of Vancouver | Open Government Licence – Vancouver | Manual candidate audit | 470 tile footprints; imagery is not redistributed in the repository. |
+| City of Surrey public trees | City of Surrey | Open Government Licence – Surrey | Surrey tree instance | 100,969 points; height/DBH are not published in the service. |
+| City of Surrey building footprints and contours | City of Surrey | Open Government Licence – Surrey | Surrey building context and provisional terrain | 137,657 footprints; 15,820 5 m contours. |
+| City of Burnaby 2022 DEM, DSM, buildings, and boundary | City of Burnaby | Open Government Licence – Burnaby | Burnaby LiDAR candidate instance | 0.5 m DEM/DSM; 54,789 building outlines. |
+| City of Coquitlam buildings, boundary, and contours | City of Coquitlam | Open Government Licence – Coquitlam | Coquitlam provisional instance | 32,487 buildings; 2023 contours. |
+| Metro Vancouver Land Cover Classification 2020 | Metro Vancouver | Open Government Licence – Metro Vancouver | Conifer/deciduous/shrub context for the three instances | 5 m hybrid land-cover raster; class labels are not species observations. |
 | Environment Canada climate normals, Vancouver Harbour CS | Environment and Climate Change Canada | Open Government Licence – Canada | Rainfall-interception screening estimate | 1981–2010 annual precipitation 1,098.8 mm. |
 | OpenStreetMap road centrelines | © OpenStreetMap contributors | Open Database License (ODbL) 1.0 | Pale 2D street underlay and 3D road overlay | Queried from the Overpass API for the demo bbox; attribution is shown in the map HUD. |
 | Metro Vancouver classified LiDAR 2022 | Metro Vancouver | Metro Vancouver open-data terms | Regional cross-check | About 16.5 GB for the Vancouver/UBC/UEL area; classified vegetation. |

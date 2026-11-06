@@ -1,10 +1,11 @@
-"""Public demo portal for the UBC and Vancouver urban-forest apps.
+"""Public demo portal for the UBC, Vancouver, and Lower Mainland urban-forest apps.
 
 Run with:
 
     uvicorn portal_app:app --host 0.0.0.0 --port 8790
 
-The portal mounts both demo instances under ``/ubc`` and ``/vancouver``. Each mounted app
+The portal mounts five demo instances under ``/ubc``, ``/vancouver``, ``/surrey``,
+``/burnaby``, and ``/coquitlam``. Each mounted app
 keeps its own runtime directory, so scenarios and optimization archives do not mix.
 """
 
@@ -44,6 +45,42 @@ app = create_portal_app(
                 "city-scale 3D scene."
             ),
             image="vancouver-city-metrics.png",
+        ),
+        PortalDemo(
+            slug="surrey",
+            label="Surrey",
+            subtitle="City of Surrey · provisional public data",
+            dataset_root=ROOT / "data" / "processed" / "surrey_2025",
+            runtime_dir=RUNTIME / "surrey",
+            description=(
+                "Provisional Surrey instance: 100k public tree records, City building "
+                "footprints, Surrey contours, and Metro 2020 land-cover context. Tree "
+                "height is imputed and labelled, not measured."
+            ),
+        ),
+        PortalDemo(
+            slug="burnaby",
+            label="Burnaby",
+            subtitle="City of Burnaby · 2022 LiDAR candidates",
+            dataset_root=ROOT / "data" / "processed" / "burnaby_2022",
+            runtime_dir=RUNTIME / "burnaby",
+            description=(
+                "Burnaby 2022 0.5 m DEM/DSM pilot: CHM-derived tree candidates, building "
+                "outlines, and Metro 2020 conifer/deciduous context. Candidates, not a "
+                "public-tree census."
+            ),
+        ),
+        PortalDemo(
+            slug="coquitlam",
+            label="Coquitlam",
+            subtitle="City of Coquitlam · provisional public data",
+            dataset_root=ROOT / "data" / "processed" / "coquitlam_2025",
+            runtime_dir=RUNTIME / "coquitlam",
+            description=(
+                "Provisional Coquitlam instance: Metro 2020 land-cover canopy candidates, "
+                "City building heights, contours, and OSM roads. Canonical LiDAR/imagery "
+                "is pending delivery."
+            ),
         ),
     ),
     assets_dir=ROOT / "docs" / "_static",

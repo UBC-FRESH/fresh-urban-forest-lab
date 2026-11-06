@@ -31,6 +31,7 @@ This roadmap is the plan of record and the issue tracker map for FRESH Urban For
 | P31 Move the ground writer to FEMIC | #135 | `feature/p31-move-ground-writer` | complete |
 | P32 ALS-derived off-inventory and private-canopy inventory | #136 | `feature/p32-off-inventory-als` | active |
 | P33 Remove the ground-classifier prototype | #146 | `feature/p33-remove-ground-classifier` | complete |
+| P34 Surrey, Burnaby, and Coquitlam portal instances | #149 | `feature/p34-lower-mainland-instances` | active |
 
 ## Lifecycle Map
 
@@ -871,6 +872,38 @@ now owns canonically.
 Acceptance: no ground-classification or low-point function remains; the generic primitives
 still pass their tests; Sphinx docs build without broken ground-function references; the
 dashboard is green.
+
+## Phase 34: Surrey, Burnaby, and Coquitlam portal instances
+
+Parent issue: #149
+Branch: `feature/p34-lower-mainland-instances`
+Status: active
+
+Goal: add three public-data city instances to the demo portal, with separate runtime
+directories and explicit provisional-method labels.
+
+Plan: `notes/design/lower-mainland-city-instances.md`.
+
+- [x] P34.1 Generic city-instance pack contract and source lock (#150)
+- [x] P34.2 Acquire and compile Surrey (#151)
+- [x] P34.3 Acquire and compile Burnaby (#152)
+- [x] P34.4 Acquire and compile Coquitlam (#153)
+- [x] P34.5 Portal cards and browser verification (#154)
+- [x] P34.6 Method notes, changelog, dashboard, and close-out (#155)
+
+Acceptance criteria:
+
+- `/surrey/`, `/burnaby/`, and `/coquitlam/` load their own datasets and runtime dirs.
+- Each card labels the instance provisional/public-data and states the method.
+- 2D and 3D load without console or page errors.
+- No owner, address, or parcel-ownership claim is stored or displayed.
+- No dataset is written outside `/srv/shared-data`.
+- The dashboard is green.
+
+Phase 34 verification:
+
+- `python scripts/dashboard.py`
+- `python scripts/check_workflow.py`
 
 ## Detailed Next Steps Notes
 

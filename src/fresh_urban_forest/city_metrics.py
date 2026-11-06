@@ -123,6 +123,11 @@ def compute_city_metrics(
     aoi_path: Path,
     out_dir: Path,
     aoi_crs: str | None = None,
+    city_name: str = "City of Vancouver",
+    published_canopy_cover_pct: float | None = CITY_PUBLISHED_CANOPY_COVER_PCT,
+    caveats: tuple[str, ...] | None = None,
+    tree_record_label: str = "Public trees",
+    canopy_source_label: str = "LiDAR height field",
 ) -> dict[str, object]:
     """Calculate city and local-area metrics.
 
@@ -142,6 +147,16 @@ def compute_city_metrics(
         Output directory.
     aoi_crs : str or None
         CRS for an AOI file with no CRS metadata.
+    city_name : str
+        Display name for the city summary.
+    published_canopy_cover_pct : float or None
+        Optional published canopy-cover check; ``None`` omits the check.
+    caveats : tuple of str or None
+        Optional city-specific caveats.
+    tree_record_label : str
+        UI label for the tree-count card.
+    canopy_source_label : str
+        UI note for the canopy-volume card.
 
     Returns
     -------
@@ -216,7 +231,7 @@ def compute_city_metrics(
     total_area_ha = float(area_pixels[1:].sum() * cell_area / 10_000.0)
     total_canopy_area = int(canopy_count[1:].sum()) * cell_area
     city = AreaSummary(
-        name="City of Vancouver",
+        name=city_name,
         area_ha=total_area_ha,
         tree_count=len(trees),
         canopy_cover_pct=(
@@ -238,33 +253,41 @@ def compute_city_metrics(
         * ANNUAL_PRECIPITATION_M
         * INTERCEPTION_FRACTION_HIGH,
     )
+    city_payload = city.to_dict()
+    city_payload["tree_record_label"] = tree_record_label
+    city_payload["canopy_source_label"] = canopy_source_label
     payload: dict[str, object] = {
         "schema_version": "fresh-urban-forest.city-metrics.v1",
-        "city": city.to_dict(),
+        "city": city_payload,
         "local_areas": [item.to_dict() for item in local],
         "tree_count_total": len(trees),
         "tree_count_assigned": int(sum(1 for value in tree_area if value > 0)),
-        "validation": {
-            "published_canopy_cover_pct": CITY_PUBLISHED_CANOPY_COVER_PCT,
+        "methods": _methods(),
+        "caveats": list(
+            caveats
+            if caveats is not None
+            else (
+                "Canopy cover and height-field volume come from the 2022 leaf-on CHM.",
+                "Carbon and annual sequestration use generic species-group allometry, not "
+                "local calibration.",
+                "Rainfall interception is a 10-20% screening range, not a measured flux.",
+                "Public trees exclude private trees; LiDAR includes private canopy.",
+            )
+        ),
+    }
+    if published_canopy_cover_pct is not None:
+        payload["validation"] = {
+            "published_canopy_cover_pct": published_canopy_cover_pct,
             "published_source": (
                 "City of Vancouver 2025 Urban Forest Strategy, 2022 LiDAR estimate "
                 "(about 25% of the city)"
             ),
-            "difference_pct": round(city.canopy_cover_pct - CITY_PUBLISHED_CANOPY_COVER_PCT, 3),
+            "difference_pct": round(city.canopy_cover_pct - published_canopy_cover_pct, 3),
             "note": (
                 "This is a sanity check, not a calibration: the City mask, threshold, and "
                 "land base differ from this pilot."
             ),
-        },
-        "methods": _methods(),
-        "caveats": [
-            "Canopy cover and height-field volume come from the 2022 leaf-on CHM.",
-            "Carbon and annual sequestration use generic species-group allometry, not "
-            "local calibration.",
-            "Rainfall interception is a 10-20% screening range, not a measured flux.",
-            "Public trees exclude private trees; LiDAR includes private canopy.",
-        ],
-    }
+        }
     out_dir.mkdir(parents=True, exist_ok=True)
     (out_dir / "city_metrics.json").write_text(
         json.dumps(payload, indent=2) + "\n", encoding="utf-8"

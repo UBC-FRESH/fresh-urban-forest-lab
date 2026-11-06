@@ -680,6 +680,20 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Kept `classify_ground_ptd` and the point-cloud primitives as an urban ALS prototype.
 - This removes the misleading cross-repo writer; FEMIC is now canonical.
 
+### P34 provisional Lower Mainland city instances
+
+- Added the P34 phase and source lock for Surrey, Burnaby, and Coquitlam.
+- Added `fresh_urban_forest.lower_mainland` helpers for projected grids, LCC class heights,
+  deterministic canopy candidates, and provisional inventory summaries.
+- Surrey: 100,940 public tree records, 137,657 building footprints, contours, and Metro
+  2020 land-cover context. Heights and DBH are imputed and labelled.
+- Burnaby: 2022 0.5 m DEM/DSM CHM candidate build with building outlines and LCC context.
+- Coquitlam: 287,374 deterministic 20 m canopy candidates from Metro LCC tree classes,
+  with City building heights and contours; canonical LiDAR/imagery is still pending.
+- Added portal mounts for `/surrey/`, `/burnaby/`, and `/coquitlam/`.
+- These are provisional public-data models, not censuses or field-validated inventories.
+- Dashboard: GREEN; browser smoke for the three new instances is clean.
+
 ### P32.6 3D candidates and orientation repair
 
 - Added a compact `/api/off-inventory-3d` payload with 130,103 high-confidence candidates

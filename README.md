@@ -79,7 +79,7 @@ Run both demos behind one landing page on the existing demo port:
 ./scripts/run_portal.sh
 ```
 
-Open `http://127.0.0.1:8101/`; the UBC app is at `/ubc/` and Vancouver at `/vancouver/`.
+Open `http://127.0.0.1:8101/`; the apps are at `/ubc/`, `/vancouver/`, `/surrey/`, `/burnaby/`, and `/coquitlam/`.
 
 ## Status
 
