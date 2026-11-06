@@ -750,3 +750,15 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
   `local_anisotropy` as generic conditioning primitives.
 - Updated the Arbor guide and provenance note: FEMIC owns the ground lane.
 - No default detector or product changed.
+
+### P32.3 detection-refinement experiments
+
+- Tested three alternatives to the baseline 2 m / 5 m detector on the fixed 1,000-tree
+  held-out sample: larger height-dependent windows (63.8% recall), smaller height-dependent
+  windows (71.3%), and peak-location crowns (71.3%). All were worse than the baseline
+  76.6%; none was adopted.
+- Ran a 30-candidate point-support pilot on 24 raw LAS tiles. Median vegetation points
+  inside the crown radius were 3,913 for tree labels, 444 for non-tree, and 1,209 for
+  uncertain. The pilot is promising but too small to choose a threshold.
+- The production detector and app are unchanged. Full per-candidate point support is the
+  next P32.3 step.
