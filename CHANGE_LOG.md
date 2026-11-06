@@ -770,3 +770,15 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
   city table. Summary classes: 237,982 high, 50,816 medium, 47,450 low, 102 none.
 - Added a secondary QA support selector to the 2D map (`all`, ≥500, ≥1,000); confidence
   ≥0.6 remains the default screen.
+
+### P32.5 screening attribute uncertainty
+
+- Added method-labelled height, crown-radius, DBH, volume, and carbon envelopes to every
+  candidate. Ranges are ±20% height, ±25% crown radius, ±35% DBH, and ±50% volume/carbon;
+  they are screening envelopes, not calibrated confidence intervals.
+- Candidate totals: height 3.15–4.72 million m; crown volume 303–910 million m³; carbon
+  51.7–155.1 million kg. Point estimates are 3.93 million m, 606 million m³, and 103.4
+  million kg.
+- The matched-public calibration residuals were wide and biased; they are reported as
+  evidence against pretending the envelopes are calibrated, not used to narrow them.
+- Added `scripts/attach_attribute_uncertainty.py` and tests. No app metric was added.

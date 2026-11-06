@@ -42,9 +42,10 @@ acquired, stored, or displayed.
 
 The first active build is deliberately narrower than this full method. It uses a 2 m
 block-max CHM, tiled local maxima and watershed, a 5 m one-to-one public-tree match, and
-parcel/park/zoning/OSM land proxies. It does not yet include per-crown point-cloud
-support, variable-height windows, P20 seam merging, multi-peak splitting, or the manual
-orthophoto audit. Those remain open P32 tasks. The screening layer is in
+parcel/park/zoning/OSM land proxies. Per-crown point support and screening attribute
+envelopes are now attached; variable-height windows were tested and rejected because recall
+fell. P20 seam merging, multi-peak splitting, the independent UBC test, and independent
+human audit remain open P32 tasks. The screening layer is in
 `data/processed/vancouver_2022/off_inventory.geojson.gz`; its summary is
 `off_inventory.json`.
 
