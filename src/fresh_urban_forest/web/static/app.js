@@ -243,7 +243,7 @@ function renderClassifierQA() {
         <p class="hint">Metro LCC agreement is weak-label context, not known-good species truth.</p>
       </details>
     </details>`;
-  container.innerHTML = `${imagery ? imageryPrimaryHtml() : ""}${structural}`;
+  container.innerHTML = imagery ? imageryPrimaryHtml() : structural;
 }
 
 function imageryPrimaryHtml() {
