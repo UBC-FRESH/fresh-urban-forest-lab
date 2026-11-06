@@ -765,5 +765,8 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Support thresholds improve the full population (≥500: 81.8% strict precision; ≥1,000:
   86.0%; ≥2,000: 86.4%), but the existing confidence ≥0.6 filter already reaches 88.4%.
   Support is therefore QA evidence, not a replacement for the confidence screen.
-- Added the point-support module, operator script, and tests. The production detector, app,
-  and candidate layer are unchanged.
+- Added the point-support module, operator script, and tests.
+- Attached `point_count`, `point_density`, and `support_class` to every candidate in the
+  city table. Summary classes: 237,982 high, 50,816 medium, 47,450 low, 102 none.
+- Added a secondary QA support selector to the 2D map (`all`, ≥500, ≥1,000); confidence
+  ≥0.6 remains the default screen.

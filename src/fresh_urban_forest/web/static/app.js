@@ -1427,14 +1427,17 @@ function bindControls() {
   });
   $("off-inventory-confidence").addEventListener("change", applyOffInventoryFilter);
   $("off-inventory-land").addEventListener("change", applyOffInventoryFilter);
+  $("off-inventory-support").addEventListener("change", applyOffInventoryFilter);
 }
 
 function applyOffInventoryFilter() {
   if (!state.map || !state.map.getLayer("off-inventory")) return;
   const minimum = Number($("off-inventory-confidence").value || 0);
   const land = $("off-inventory-land").value;
+  const support = $("off-inventory-support").value;
   const filter = ["all", [">=", ["get", "confidence"], minimum]];
   if (land !== "all") filter.push(["==", ["get", "land_class"], land]);
+  if (support !== "all") filter.push([">=", ["get", "point_count"], Number(support)]);
   state.map.setFilter("off-inventory", filter);
 }
 

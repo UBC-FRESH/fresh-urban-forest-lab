@@ -71,11 +71,16 @@ The 0.6 confidence filter is already the best simple screen. Support is useful e
 and a QA field, but adding it to the current default does not improve precision. It should
 not be used to justify a lower-confidence population without a separate validation.
 
-## Next
+## Candidate table integration
 
-The production candidate layer and app remain unchanged. The next useful step is to attach
-the support fields to the candidate table and use them for QA/rejection reasons, then move
-to P32.2 point-cloud preparation and P32.5 attribute uncertainty. A total-tree range still
-requires public inventory completeness and the UBC test.
+The support rows are now attached to every candidate in
+`data/processed/vancouver_2022/off_inventory.geojson.gz` as `point_count`,
+`point_density`, and `support_class` (`none`, `low`, `medium`, `high`). The city summary
+records the class counts: 237,982 high, 50,816 medium, 47,450 low, and 102 none (including
+four missing southern-edge tiles).
 
-The production candidate layer and app are unchanged.
+The 2D layer has a secondary QA support selector (`all`, ≥500, ≥1,000). It is off by
+default; confidence ≥ 0.6 remains the primary screen.
+
+The candidate count is unchanged. The next useful step is P32.5 attribute uncertainty;
+a total-tree range still requires public inventory completeness and the UBC test.
