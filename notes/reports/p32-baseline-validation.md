@@ -2,9 +2,9 @@
 
 Date: 2026-11-06
 
-Status: partial P32.7. Held-out public-tree recall and the fixed orthophoto audit packet are
-complete. Candidate precision, the candidate count range, and the independent UBC test are
-not complete.
+Status: partial P32.7. Held-out public-tree recall and a single visual pre-audit of the
+fixed candidate sample are complete. The labels are not an independent human audit and the
+independent UBC test is not complete.
 
 Protocol: `notes/p32-validation-protocol.md`
 Data lock: `notes/p32-data-lock.md`
@@ -43,7 +43,7 @@ from the sample frame.
 
 ## Fixed orthophoto audit packet
 
-The audit sample is deterministic and disjoint from the public recall sample:
+The audit sample is deterministic and drawn from the held-out frame:
 
 | Stratum | Count |
 | --- | ---: |
@@ -63,19 +63,43 @@ Files:
 - `data/processed/vancouver_2022/off_inventory_audit_sample.geojson`
 - `data/processed/vancouver_2022/off_inventory_audit_sample.json`
 
-The CSV has blank `audit_label` and `audit_notes` fields. Labels should be `tree`,
-`non-tree`, or `uncertain`. The City orthophoto tile URL is included for each row. The
-imagery host returned HTTP 403 to the build environment, so imagery inspection is pending
-and no precision number is claimed.
+The City orthophoto host returned HTTP 403 to the build environment. Imagery came from
+the public Data For Canada PMTiles mirror of the same City 2022 7.5 cm orthophoto:
+`https://data.source.coop/dataforcanada/d4c-datapkg-orthoimagery/processed/ca-bc_vancouver-2022A00055915022_d4c-datapkg-orthoimagery_2022_075mm_v0.1.0-beta.pmtiles`.
+The mirror metadata names the City open-data source and the 2022 7.5 cm acquisition.
+
+I completed one visual pass over 300 centre-cropped images. This is **one visual pre-audit**,
+not an independent human audit; any label can be wrong. Labels are in
+`data/processed/vancouver_2022/off_inventory_audit_labels.csv`. The five contact sheets and
+300 individual crops are under `data/processed/vancouver_2022/off_inventory_audit_sheet/`.
+
+| Result | Strict (uncertain excluded) | Conservative (uncertain = non-tree) |
+| --- | ---: | ---: |
+| Tree labels | 212 | 212 |
+| Non-tree labels | 69 | 69 |
+| Uncertain labels | 19 | 19 |
+| Design-weighted candidate precision | 73.6% | 66.9% |
+| Bootstrap 95% interval | 68.1%–79.3% | 61.0%–72.7% |
+| Estimated tree-like candidates | 247,572 | 224,850 |
+| Estimated candidate range | 229,010–266,731 | 205,241–244,459 |
+
+Precision by confidence band (strict, design-weighted): low 46.4%, medium 91.5%, high
+83.7%. The high band is lower than the medium band in this sample; do not treat the
+confidence score as a probability.
+
+The estimated range applies to tree-like **candidates**, not a total tree census. It does
+not include the public inventory, missed public records, or trees outside the candidate
+frame.
 
 ## Not yet done
 
-- Manual orthophoto labels and precision with Wilson interval.
-- Candidate count range from precision and missed-public rates.
+- Independent human verification of the 300 visual labels, or a second blind labeler.
 - Height, crown, and carbon error against measured public/UBC records.
 - Independent UBC test. The repository has only the coarse UBC demo terrain grid
   (38 m cells), not a 1 m/5 m UBC CHM suitable for this detector.
 - Point-cloud per-crown support, variable windows, and seam/multi-peak refinement.
+- A total-tree count range that combines public recall, candidate precision, and public
+  inventory completeness.
 
 ## Reproduction
 
@@ -83,6 +107,10 @@ and no precision number is claimed.
 python scripts/validate_vancouver_off_inventory.py
 python scripts/dashboard.py
 ```
+
+The crop sheet and label scoring were run as one-off local audit utilities; the fixed
+sample, labels, contact sheets, and score JSON are retained under
+`data/processed/vancouver_2022/`.
 
 ## Reading
 

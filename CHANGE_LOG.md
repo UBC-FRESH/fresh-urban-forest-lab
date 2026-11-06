@@ -687,10 +687,13 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
   recall (95% Wilson 73.9%–79.1%), with p50/p95 match distances of 2.05/4.50 m.
 - Added `scripts/validate_vancouver_off_inventory.py` and the deterministic
   `fresh_urban_forest.city_validation` helpers.
-- Prepared a 300-candidate orthophoto audit packet (100 per confidence band, 60 per land
-  class, 114 tiles) with blank labels. No candidate precision claim is made yet.
-- The independent UBC test is blocked on a suitable UBC CHM; the repository only has a
-  coarse demo grid.
+- Built 300 candidate centre crops and five contact sheets from the Data For Canada PMTiles
+  mirror of the City 2022 7.5 cm orthophoto.
+- Completed a single visual pre-audit: 212 tree, 69 non-tree, 19 uncertain. Design-weighted
+  strict precision is 73.6% (bootstrap 68.1%–79.3%); conservative precision is 66.9%
+  (61.0%–72.7%). Estimated tree-like candidates: 247,572, range 229,010–266,731.
+- Labels are one visual pre-audit, not independent human validation. The independent UBC
+  test is blocked on a suitable UBC CHM; the repository only has a coarse demo grid.
 - This is partial P32.7, not a close-out. Dashboard: GREEN.
 
 ### P32.6 3D candidates and orientation repair

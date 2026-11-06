@@ -19,6 +19,7 @@ publishing a new derivative.
 | City of Vancouver parks | City of Vancouver | Open Government Licence – Vancouver | Public-park land-context proxy | 254 polygons. |
 | City of Vancouver zoning districts | City of Vancouver | Open Government Licence – Vancouver | Residential/commercial land-context proxy | 1,621 polygons; a proxy, not an ownership record. |
 | City of Vancouver 2022 orthophoto index | City of Vancouver | Open Government Licence – Vancouver | Manual candidate audit | 470 tile footprints; imagery is not redistributed in the repository. |
+| Vancouver 2022 orthophoto PMTiles mirror | Data For Canada / Source Cooperative, derived from City of Vancouver | City of Vancouver OGL – Vancouver; mirror terms on Source Cooperative | Orthophoto crop audit | 7.5 cm 2022 imagery; used for 300 candidate crops, not redistributed in the repository. |
 | Environment Canada climate normals, Vancouver Harbour CS | Environment and Climate Change Canada | Open Government Licence – Canada | Rainfall-interception screening estimate | 1981–2010 annual precipitation 1,098.8 mm. |
 | OpenStreetMap road centrelines | © OpenStreetMap contributors | Open Database License (ODbL) 1.0 | Pale 2D street underlay and 3D road overlay | Queried from the Overpass API for the demo bbox; attribution is shown in the map HUD. |
 | Metro Vancouver classified LiDAR 2022 | Metro Vancouver | Metro Vancouver open-data terms | Regional cross-check | About 16.5 GB for the Vancouver/UBC/UEL area; classified vegetation. |
