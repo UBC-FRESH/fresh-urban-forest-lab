@@ -680,6 +680,19 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Kept `classify_ground_ptd` and the point-cloud primitives as an urban ALS prototype.
 - This removes the misleading cross-repo writer; FEMIC is now canonical.
 
+### P32.7 baseline validation and audit packet
+
+- Fixed the held-out validation baseline in `notes/reports/p32-baseline-validation.md`:
+  1,000 live public trees in 500 m held-out blocks give 766 nearest-crown hits, 76.6%
+  recall (95% Wilson 73.9%–79.1%), with p50/p95 match distances of 2.05/4.50 m.
+- Added `scripts/validate_vancouver_off_inventory.py` and the deterministic
+  `fresh_urban_forest.city_validation` helpers.
+- Prepared a 300-candidate orthophoto audit packet (100 per confidence band, 60 per land
+  class, 114 tiles) with blank labels. No candidate precision claim is made yet.
+- The independent UBC test is blocked on a suitable UBC CHM; the repository only has a
+  coarse demo grid.
+- This is partial P32.7, not a close-out. Dashboard: GREEN.
+
 ### P32.6 3D candidates and orientation repair
 
 - Added a compact `/api/off-inventory-3d` payload with 130,103 high-confidence candidates
