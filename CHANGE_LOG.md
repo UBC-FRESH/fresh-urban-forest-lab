@@ -771,6 +771,15 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Added a secondary QA support selector to the 2D map (`all`, ≥500, ≥1,000); confidence
   ≥0.6 remains the default screen.
 
+### P32.6 city-tab candidate metrics
+
+- Added `off_inventory_city_metrics.json` and merged it into `/api/city-metrics`.
+- Likely-private proxy: 163,459 candidates (60,977 at confidence ≥0.6), 2,631.8 ha summed
+  crown area, 146.1M m³ crown volume (73.0–219.1M), and 42,444.8 t carbon (21,222–63,668 t).
+- All candidates: 336,350; 130,103 high confidence; 103,421 t carbon (51,710–155,133 t).
+- Added four City-tab cards and off-inventory method/caveat text. Public inventory metrics
+  remain separate. These are candidate aggregates, not a census or ownership layer.
+
 ### P32.5 screening attribute uncertainty
 
 - Added method-labelled height, crown-radius, DBH, volume, and carbon envelopes to every

@@ -54,9 +54,13 @@ def test_city_metrics_endpoint_is_optional(tmp_path: Path) -> None:
     (tmp_path / "dataset" / "city_metrics.json").write_text(
         '{"city": {"tree_count": 2}, "local_areas": []}', encoding="utf-8"
     )
+    (tmp_path / "dataset" / "off_inventory_city_metrics.json").write_text(
+        '{"likely_private": {"candidate_count": 3}}', encoding="utf-8"
+    )
     response = client.get("/api/city-metrics")
     assert response.status_code == 200
     assert response.json()["city"]["tree_count"] == 2
+    assert response.json()["off_inventory"]["likely_private"]["candidate_count"] == 3
 
 
 def test_full_map_layers_are_optional(tmp_path: Path) -> None:

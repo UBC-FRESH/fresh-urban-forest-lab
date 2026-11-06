@@ -257,6 +257,20 @@ function renderCityMetrics() {
       "representative day",
     ]);
   }
+  const off = data.off_inventory;
+  if (off?.likely_private) {
+    const likely = off.likely_private;
+    cards.push(
+      ["Candidate crowns", formatNumber(off.all?.candidate_count), "screening, not public inventory"],
+      ["High-confidence candidates", formatNumber(off.all?.high_confidence_count), "score >= 0.6"],
+      ["Likely-private crowns", formatNumber(likely.candidate_count), "land proxy, not ownership"],
+      [
+        "Likely-private carbon",
+        `${formatCompact(Number(likely.carbon_low_kg) / 1000)}–${formatCompact(Number(likely.carbon_high_kg) / 1000)} t`,
+        "screening range",
+      ],
+    );
+  }
   $("city-kpis").innerHTML = cards
     .map(
       ([label, value, note]) =>
@@ -285,7 +299,16 @@ function renderCityMetrics() {
       return `<div class="city-method"><strong>${escapeHtml(key.replaceAll("_", " "))}</strong><span>${escapeHtml(method?.method || "")} · ${escapeHtml(tier)}</span></div>`;
     })
     .join("");
-  const caveats = (data.caveats || []).map((item) => `<li>${escapeHtml(item)}</li>`).join("");
+  if (off?.methods) {
+    methods += Object.entries(off.methods)
+      .map(([key, method]) => {
+        return `<div class="city-method"><strong>${escapeHtml(key.replaceAll("_", " "))}</strong><span>${escapeHtml(String(method))}</span></div>`;
+      })
+      .join("");
+  }
+  const caveats = [...(data.caveats || []), ...(off?.caveats || [])]
+    .map((item) => `<li>${escapeHtml(item)}</li>`)
+    .join("");
   const validation = data.validation
     ? `<div class="city-method"><strong>published canopy-cover check</strong><span>City estimate ${formatNumber(data.validation.published_canopy_cover_pct, 1)}% vs this pilot ${formatNumber(city.canopy_cover_pct, 1)}% · sanity check, not calibration</span></div>`
     : "";

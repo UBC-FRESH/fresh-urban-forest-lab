@@ -677,8 +677,12 @@ def create_app(
         path = _dataset_file(state, "city_metrics.json")
         if path is None:
             raise HTTPException(status_code=404, detail="this dataset has no city metrics")
+        payload = json.loads(path.read_text(encoding="utf-8"))
+        off_inventory = _dataset_file(state, "off_inventory_city_metrics.json")
+        if off_inventory is not None:
+            payload["off_inventory"] = json.loads(off_inventory.read_text(encoding="utf-8"))
         return JSONResponse(
-            json.loads(path.read_text(encoding="utf-8")),
+            payload,
             headers={"Cache-Control": "no-store, max-age=0"},
         )
 
