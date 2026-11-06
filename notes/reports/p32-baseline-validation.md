@@ -14,8 +14,9 @@ Machine-readable result: `data/processed/vancouver_2022/off_inventory_validation
 
 The screening layer has 528,812 detected crowns and 130,497 public-tree matches within 5 m.
 Of the 184,151 live public records, 53,654 have no detected match. After building/water
-centre exclusion, 336,350 crowns are candidates; 163,459 are in the likely-private land
-proxy.
+centre exclusion and a 25 m maximum crown-radius quality filter, 335,471 crowns are
+candidates; 163,158 are in the likely-private land proxy. The filter removed 879
+implausible watershed flood segments.
 
 The fixed held-out sample uses 500 m blocks, a 100 m interior buffer, and the hash seed
 `p32-2026-11-05`. One quarter of blocks are held out. The public-tree sample is stratified
@@ -76,16 +77,17 @@ not an independent human audit; any label can be wrong. Labels are in
 | Result | Strict (uncertain excluded) | Conservative (uncertain = non-tree) |
 | --- | ---: | ---: |
 | Tree labels | 212 | 212 |
-| Non-tree labels | 69 | 69 |
+| Non-tree labels | 68 | 68 |
 | Uncertain labels | 19 | 19 |
-| Design-weighted candidate precision | 73.6% | 66.9% |
-| Bootstrap 95% interval | 68.1%–79.3% | 61.0%–72.7% |
-| Estimated tree-like candidates | 247,572 | 224,850 |
-| Estimated candidate range | 229,010–266,731 | 205,241–244,459 |
+| Design-weighted candidate precision | 73.8% | 67.0% |
+| Bootstrap 95% interval | 66.9%–80.4% | 59.8%–74.0% |
+| Estimated tree-like candidates | 247,678 | 224,698 |
+| Estimated candidate range | 224,564–269,752 | 200,679–248,383 |
 
-Precision by confidence band (strict, design-weighted): low 46.4%, medium 91.5%, high
-83.7%. The high band is lower than the medium band in this sample; do not treat the
-confidence score as a probability.
+The fixed 300-candidate sample contained one candidate removed by the 25 m crown filter
+(`off-180636`), leaving 299 scored rows. Precision by confidence band (strict,
+design-weighted): low 46.2%, medium 92.0%, high 84.1%. The high band is lower than the
+medium band in this sample; do not treat the confidence score as a probability.
 
 The estimated range applies to tree-like **candidates**, not a total tree census. It does
 not include the public inventory, missed public records, or trees outside the candidate
@@ -97,7 +99,8 @@ frame.
 - Height, crown, and carbon error against measured public/UBC records.
 - Independent UBC test. The repository has only the coarse UBC demo terrain grid
   (38 m cells), not a 1 m/5 m UBC CHM suitable for this detector.
-- Point-cloud per-crown support, variable windows, and seam/multi-peak refinement.
+- Point-cloud per-crown support is built; variable windows and seam/multi-peak refinement
+  remain open.
 - A total-tree count range that combines public recall, candidate precision, and public
   inventory completeness.
 
@@ -108,9 +111,8 @@ python scripts/validate_vancouver_off_inventory.py
 python scripts/dashboard.py
 ```
 
-The crop sheet and label scoring were run as one-off local audit utilities; the fixed
-sample, labels, contact sheets, and score JSON are retained under
-`data/processed/vancouver_2022/`.
+The crop sheet and label scoring were run as one-off local audit utilities. The filtered
+score is retained as `data/processed/vancouver_2022/off_inventory_audit_scores_filtered.json`.
 
 ## Reading
 

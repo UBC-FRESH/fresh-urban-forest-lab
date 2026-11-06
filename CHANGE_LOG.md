@@ -789,9 +789,19 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Added method-labelled height, crown-radius, DBH, volume, and carbon envelopes to every
   candidate. Ranges are ±20% height, ±25% crown radius, ±35% DBH, and ±50% volume/carbon;
   they are screening envelopes, not calibrated confidence intervals.
-- Candidate totals: height 3.15–4.72 million m; crown volume 303–910 million m³; carbon
-  51.7–155.1 million kg. Point estimates are 3.93 million m, 606 million m³, and 103.4
-  million kg.
+- Filtered candidate totals: height 3.14–4.70 million m; crown volume 66.0–198.1 million m³;
+  carbon 51.6–154.9 million kg. Point estimates are 3.92 million m, 132.0 million m³, and
+  103.3 million kg.
 - The matched-public calibration residuals were wide and biased; they are reported as
   evidence against pretending the envelopes are calibrated, not used to narrow them.
 - Added `scripts/attach_attribute_uncertainty.py` and tests. No app metric was added.
+
+### P32.7 re-score the filtered candidate layer
+
+- Re-scored the fixed audit sample against the filtered 335,471-candidate table. One of the
+  300 sampled candidates was removed by the 25 m crown filter, leaving 299 rows.
+- Design-weighted strict precision is 73.8% (bootstrap 66.9%–80.4%); conservative precision
+  is 67.0% (59.8%–74.0%). Estimated tree-like candidates: 247,678, range 224,564–269,752.
+- Public-tree recall is unchanged at 76.6% (95% Wilson 73.9%–79.1%) because detection was
+  not re-run.
+- P32.7 still requires independent human verification and the UBC test before close-out.
