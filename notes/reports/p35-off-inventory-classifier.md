@@ -62,11 +62,11 @@ species-level decisions; it is a screening flag with an explicit error profile.
 
 | Instance | Candidates | High confidence | Inventory status |
 | --- | ---: | ---: | --- |
-| Surrey | 243,267 | 233,675 | outside public inventory |
-| Burnaby | 215,811 | 198,444 | no public inventory |
-| Coquitlam | 287,374 | 89,717 | no public inventory |
+| Surrey | 209,353 | 177,361 | outside public inventory |
+| Burnaby | 355,845 | 331,221 | no public inventory |
+| Coquitlam | 106,692 | 85,209 | no public inventory |
 
-Surrey candidates are LCC tree cells at 20 m spacing outside a 5 m public-tree match.
+Surrey candidates are LCC canopy-distance maxima outside a 5 m public-tree match.
 Burnaby and Coquitlam have no public inventory, so all compiled candidates are explicitly
 marked `no_public_inventory`; they are not presented as unmatched public records.
 
@@ -90,6 +90,9 @@ Every candidate carries `predicted_group`, `conifer_probability`, `group_confide
 - No known-good Burnaby or Coquitlam species labels are available yet.
 - Coquitlam LCC weak agreement is not evidence of accuracy.
 - Candidates are screening records, not a census, ownership layer, or species inventory.
+- Burnaby tree/candidate positions were repaired after the P35 review: the 2 m CHM was
+  incorrectly treated as a 1 m grid by the tiler. The detector now uses the raster cell
+  size, so the full city width is covered.
 
 ## Verification
 

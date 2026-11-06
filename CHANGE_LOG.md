@@ -696,11 +696,14 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
   Coquitlam have no public species inventory and are explicitly marked unlabelled.
 - Pooled held-out accuracy is 84.09% (95% Wilson 83.81-84.37%); conifer recall is 79.90%
   but conifer precision is only 37.71%, so the model is a screening flag, not a species ID.
-- Added off-inventory layers: Surrey 243,267 candidates; Burnaby 215,811; Coquitlam
-  287,374, each with predicted group, probability, confidence, and inventory status.
+- Added off-inventory layers: Surrey 209,353 candidates; Burnaby 355,845; Coquitlam
+  106,692, each with predicted group, probability, confidence, and inventory status.
 - Added `/api/classifier` and an off-inventory QA panel with matrix, intervals, sample
   sizes, label sources, and the unlabelled-city caveat.
 - Model card and limits: `notes/reports/p35-off-inventory-classifier.md`.
+- Fixed Burnaby 2 m CHM tiling: the source-cell affine was previously treated as 1 m, so
+  only the western half of the city was detected. Coquitlam candidates now use canopy
+  distance maxima rather than a regular 20 m lattice; the QA panel was compacted.
 - Dashboard: GREEN; browser smoke for the three instances and QA panel is clean.
 
 ### P34 provisional Lower Mainland city instances

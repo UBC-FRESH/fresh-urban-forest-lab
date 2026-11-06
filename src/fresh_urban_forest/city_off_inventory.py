@@ -79,7 +79,9 @@ def detect_city_trees(
         City crowns with unique ``city-N`` IDs.
     """
     chm = read_raster(chm_path)
-    factor = max(1, round(resolution_m))
+    source_cell_m = (chm.bounds[2] - chm.bounds[0]) / max(chm.array.shape[1], 1)
+    factor = max(1, round(resolution_m / max(source_cell_m, 1e-9)))
+    cell_m = source_cell_m * factor
     full = np.asarray(chm.array, dtype=np.float32)
     height = full.shape[0] // factor
     width = full.shape[1] // factor
@@ -91,7 +93,7 @@ def detect_city_trees(
     else:
         can = full
     left, top = chm.bounds[0], chm.bounds[3]
-    right, bottom = left + width * factor, top - height * factor
+    right, bottom = left + width * cell_m, top - height * cell_m
     cols = math.ceil((right - left) / tile_m)
     rows = math.ceil((top - bottom) / tile_m)
     collected: list[DetectedTree] = []
@@ -107,20 +109,20 @@ def detect_city_trees(
             grid_right = core_right + buffer_m
             grid_top = core_top + buffer_m
             grid_bottom = core_bottom - buffer_m
-            c0 = max(0, int((grid_left - left) / factor))
-            c1 = min(width, int((grid_right - left) / factor))
-            r0 = max(0, int((top - grid_top) / factor))
-            r1 = min(height, int((top - grid_bottom) / factor))
+            c0 = max(0, int((grid_left - left) / cell_m))
+            c1 = min(width, int((grid_right - left) / cell_m))
+            r0 = max(0, int((top - grid_top) / cell_m))
+            r1 = min(height, int((top - grid_bottom) / cell_m))
             if c1 <= c0 or r1 <= r0:
                 continue
             array = np.asarray(can[r0:r1, c0:c1], dtype=np.float32)
             grid = TerrainGrid(
                 crs=chm.crs,
                 bounds=(
-                    left + c0 * factor,
-                    top - r1 * factor,
-                    left + c1 * factor,
-                    top - r0 * factor,
+                    left + c0 * cell_m,
+                    top - r1 * cell_m,
+                    left + c1 * cell_m,
+                    top - r0 * cell_m,
                 ),
                 width=array.shape[1],
                 height=array.shape[0],

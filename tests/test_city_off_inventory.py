@@ -48,3 +48,25 @@ def test_detect_city_trees_finds_a_synthetic_peak(tmp_path: Path) -> None:
     trees = detect_city_trees(path, resolution_m=1.0, tile_m=1000.0)
     assert len(trees) >= 1
     assert trees[0].tree_id.startswith("city-")
+
+
+def test_detect_city_trees_uses_source_cell_size(tmp_path: Path) -> None:
+    """A 2 m CHM is not treated as 1 m when resolution is requested in metres."""
+    values = np.zeros((20, 20), dtype=np.float32)
+    values[5, 15] = 14.0
+    path = tmp_path / "chm_2m.tif"
+    with rasterio.open(
+        path,
+        "w",
+        driver="GTiff",
+        height=20,
+        width=20,
+        count=1,
+        dtype="float32",
+        crs="EPSG:3157",
+        transform=rasterio.transform.from_origin(0.0, 40.0, 2.0, 2.0),
+    ) as dataset:
+        dataset.write(values, 1)
+    trees = detect_city_trees(path, resolution_m=1.0, tile_m=1000.0)
+    assert trees
+    assert trees[0].x > 20.0

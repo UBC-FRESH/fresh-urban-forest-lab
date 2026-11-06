@@ -32,8 +32,8 @@ and the LCC is EPSG:26910; the build reprojects all layers to EPSG:3157.
 | Instance | Dataset directory | Tree records | Buildings | Tree method |
 | --- | --- | ---: | ---: | --- |
 | Surrey | `data/processed/surrey_2025` | 100,940 | 12,005 visual / 137,657 source | public tree inventory; LCC height imputation |
-| Burnaby | `data/processed/burnaby_2022` | 215,811 | 12,038 visual / 54,789 source | DEM/DSM CHM candidates; crowns >50 m rejected |
-| Coquitlam | `data/processed/coquitlam_2025` | 287,374 | 12,001 visual / 32,487 source | 20 m LCC canopy-candidate sample |
+| Burnaby | `data/processed/burnaby_2022` | 355,845 | 12,000 visual / 54,789 source | DEM/DSM CHM candidates; full city after source-cell fix |
+| Coquitlam | `data/processed/coquitlam_2025` | 106,692 | 12,001 visual / 32,487 source | LCC canopy-distance maxima, not a fixed grid |
 
 ## Storage and performance
 

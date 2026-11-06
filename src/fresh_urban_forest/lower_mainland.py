@@ -11,6 +11,7 @@ from dataclasses import dataclass
 
 import numpy as np
 from numpy.typing import NDArray
+from scipy.ndimage import distance_transform_edt, maximum_filter
 
 from fresh_urban_forest.allometry import is_native_species, species_group
 from fresh_urban_forest.models import TreeRecord
@@ -150,7 +151,11 @@ def canopy_records_from_classes(
     step_m: float = 20.0,
     source: str = "metro_lcc_2020",
 ) -> tuple[TreeRecord, ...]:
-    """Place a deterministic canopy-candidate sample on tree-class cells.
+    """Place canopy candidates at local canopy-distance maxima.
+
+    This deliberately avoids a fixed sampling grid. It uses the distance transform of the
+    land-cover tree mask and a deterministic non-maximum suppression pass so positions
+    follow canopy shape rather than a square lattice.
 
     Parameters
     ----------
@@ -159,7 +164,7 @@ def canopy_records_from_classes(
     grid : GridSpec
         Grid definition for ``classes``.
     step_m : float
-        Sampling spacing in metres.
+        Minimum candidate spacing in metres.
     source : str
         Source identifier written to each record.
 
@@ -170,45 +175,79 @@ def canopy_records_from_classes(
     """
     from fresh_urban_forest.terrain import unproject_xy
 
-    stride = max(1, round(step_m / grid.resolution_m))
-    rows = np.arange(stride // 2, classes.shape[0], stride)
-    cols = np.arange(stride // 2, classes.shape[1], stride)
+    tree_mask = np.isin(classes, list(TREE_CLASSES))
+    if not np.any(tree_mask):
+        return ()
+    distance = distance_transform_edt(tree_mask)
+    window = max(3, round(step_m / grid.resolution_m))
+    local_maxima = maximum_filter(distance, size=window)
+    peaks = np.argwhere(tree_mask & (distance == local_maxima) & (distance >= 1.0))
+    if len(peaks) == 0:
+        return ()
+    peak_distances = distance[peaks[:, 0], peaks[:, 1]]
+    order = np.argsort(-peak_distances, kind="stable")
+    peak_xy = np.column_stack(
+        (
+            grid.left + (peaks[:, 1] + 0.5) * grid.resolution_m,
+            grid.top - (peaks[:, 0] + 0.5) * grid.resolution_m,
+        )
+    )
+    spacing = step_m * 0.7
+    kept: list[int] = []
+    occupied: dict[tuple[int, int], list[int]] = {}
+    for index in order:
+        x = float(peak_xy[index, 0])
+        y = float(peak_xy[index, 1])
+        cell = (int(np.floor(x / spacing)), int(np.floor(y / spacing)))
+        too_close = False
+        for dx in (-1, 0, 1):
+            for dy in (-1, 0, 1):
+                for other in occupied.get((cell[0] + dx, cell[1] + dy), []):
+                    if np.hypot(x - peak_xy[other, 0], y - peak_xy[other, 1]) < spacing:
+                        too_close = True
+                        break
+                if too_close:
+                    break
+            if too_close:
+                break
+        if too_close:
+            continue
+        kept.append(int(index))
+        occupied.setdefault(cell, []).append(int(index))
     records: list[TreeRecord] = []
-    for row in rows:
-        for col in cols:
-            code = int(classes[row, col])
-            if code not in TREE_CLASSES:
-                continue
-            x = grid.left + (col + 0.5) * grid.resolution_m
-            y = grid.top - (row + 0.5) * grid.resolution_m
-            lon, lat = unproject_xy(x, y, "EPSG:3157")
-            height = class_canopy_height(code)
-            group = species_group(class_species(code))
-            records.append(
-                TreeRecord(
-                    tree_id=f"{source}:{len(records) + 1:07d}",
-                    lon=lon,
-                    lat=lat,
-                    species=class_species(code),
-                    common_name="Canopy candidate",
-                    genus="",
-                    height_m=height,
-                    crown_width_m=10.0 if group == "conifer" else 8.0,
-                    crown_ratio=0.55,
-                    status="alive",
-                    source=source,
-                    source_date="2020",
-                    native=None,
-                    x_m=x,
-                    y_m=y,
-                    attributes={
-                        "height_measured": "false",
-                        "crown_width_measured": "false",
-                        "species_measured": "false",
-                        "canopy_candidate": "true",
-                    },
-                )
+    for index in kept:
+        row, col = peaks[index]
+        code = int(classes[row, col])
+        x = float(peak_xy[index, 0])
+        y = float(peak_xy[index, 1])
+        lon, lat = unproject_xy(x, y, "EPSG:3157")
+        height = class_canopy_height(code)
+        group = species_group(class_species(code))
+        records.append(
+            TreeRecord(
+                tree_id=f"{source}:{len(records) + 1:07d}",
+                lon=lon,
+                lat=lat,
+                species=class_species(code),
+                common_name="Canopy candidate",
+                genus="",
+                height_m=height,
+                crown_width_m=10.0 if group == "conifer" else 8.0,
+                crown_ratio=0.55,
+                status="alive",
+                source=source,
+                source_date="2020",
+                native=None,
+                x_m=x,
+                y_m=y,
+                attributes={
+                    "height_measured": "false",
+                    "crown_width_measured": "false",
+                    "species_measured": "false",
+                    "canopy_candidate": "true",
+                },
             )
+        )
     return tuple(records)
 
 

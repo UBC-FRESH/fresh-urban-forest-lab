@@ -12,8 +12,8 @@ Three independently mounted portal instances:
 | Instance | Dataset | Tree table | Buildings | Method label |
 | --- | --- | ---: | ---: | --- |
 | Surrey | `data/processed/surrey_2025` | 100,940 | 12,005 visual / 137,657 source | public tree inventory; imputed height/DBH |
-| Burnaby | `data/processed/burnaby_2022` | 215,811 | 12,038 visual / 54,789 source | 2022 LiDAR CHM candidates |
-| Coquitlam | `data/processed/coquitlam_2025` | 287,374 | 12,001 visual / 32,487 source | 20 m LCC canopy candidates |
+| Burnaby | `data/processed/burnaby_2022` | 355,845 | 12,000 visual / 54,789 source | 2022 LiDAR CHM candidates |
+| Coquitlam | `data/processed/coquitlam_2025` | 106,692 | 12,001 visual / 32,487 source | LCC canopy-distance maxima |
 
 ## Sources
 
@@ -31,7 +31,8 @@ Source counts and limits: `notes/p34-sources.md`.
   values are imputed from LCC class and project allometry. Canopy cover uses the Metro LCC
   tree classes, not a Surrey 2022 CHM.
 - **Burnaby:** tree records are CHM candidates from the City 2022 DEM/DSM. They are not a
-  public-tree census. The CHM is masked by building footprints, LCC buildings, and water;
+  public-tree census. The 2 m CHM source-cell size is now carried through tiling, so the
+  full city is represented. The CHM is masked by building footprints, LCC buildings, and water;
   crowns above 50 m are rejected as implausible. Conifer/deciduous labels are LCC context.
 - **Coquitlam:** tree records are deterministic 20 m canopy candidates from Metro LCC tree
   classes, with class-height assumptions. Canonical Coquitlam LiDAR/imagery is pending.

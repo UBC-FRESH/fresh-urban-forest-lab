@@ -194,47 +194,53 @@ function renderClassifierQA() {
   const deciduous = evaluation.deciduous || {};
   const labels = report.known_good_labels || {};
   const weak = report.weak_label_agreement || {};
-  const weakRows = Object.entries(weak)
-    .map(
-      ([slug, value]) =>
-        `<tr><td>${escapeHtml(slug)}</td><td>${formatNumber(value.n)}</td><td>${formatNumber(Number(value.accuracy) * 100, 1)}%</td><td>LCC weak label only</td></tr>`,
-    )
-    .join("");
   const cityRows = Object.entries(report.by_city || {})
     .map(
       ([city, value]) =>
-        `<tr><td>${escapeHtml(city)}</td><td>${formatNumber(value.n)}</td><td>${formatNumber(Number(value.accuracy) * 100, 1)}%</td><td>${formatNumber(Number(value.conifer?.recall) * 100, 1)}%</td></tr>`,
+        `<tr><td>${escapeHtml(city)}</td><td>${formatNumber(value.n)}</td><td>${formatNumber(Number(value.accuracy) * 100, 1)}%</td></tr>`,
+    )
+    .join("");
+  const weakRows = Object.entries(weak)
+    .map(
+      ([slug, value]) =>
+        `<tr><td>${escapeHtml(slug.replace(/_[0-9]{4}$/, ""))}</td><td>${formatNumber(value.n)}</td><td>${formatNumber(Number(value.accuracy) * 100, 1)}%</td></tr>`,
     )
     .join("");
   const ci = Array.isArray(evaluation.accuracy_ci95)
     ? evaluation.accuracy_ci95.map((value) => `${formatNumber(Number(value) * 100, 1)}%`).join("–")
     : "n/a";
   container.innerHTML = `
-    <div class="classifier-heading"><strong>Conifer vs deciduous QA</strong><span>${escapeHtml(report.model_family || "")}</span></div>
-    <p class="hint">${escapeHtml(labels.note || "")}</p>
+    <div class="classifier-heading">
+      <strong>Conifer vs deciduous</strong>
+      <span>QA · screening classifier</span>
+    </div>
+    <p class="hint">Public-inventory labels only. Not a species census.</p>
     <table class="qa-matrix">
       <thead><tr><th></th><th>pred conifer</th><th>pred deciduous</th></tr></thead>
       <tbody>
-        <tr><th>true conifer</th><td>${formatNumber(matrix[0]?.[0] || 0)}</td><td>${formatNumber(matrix[0]?.[1] || 0)}</td></tr>
-        <tr><th>true deciduous</th><td>${formatNumber(matrix[1]?.[0] || 0)}</td><td>${formatNumber(matrix[1]?.[1] || 0)}</td></tr>
+        <tr><th>conifer</th><td>${formatNumber(matrix[0]?.[0] || 0)}</td><td>${formatNumber(matrix[0]?.[1] || 0)}</td></tr>
+        <tr><th>deciduous</th><td>${formatNumber(matrix[1]?.[0] || 0)}</td><td>${formatNumber(matrix[1]?.[1] || 0)}</td></tr>
       </tbody>
     </table>
     <div class="qa-stats">
-      <span><b>${formatNumber(Number(evaluation.accuracy) * 100, 1)}%</b> accuracy (95% ${ci})</span>
-      <span><b>${formatNumber(Number(conifer.precision) * 100, 1)}%</b> conifer precision</span>
-      <span><b>${formatNumber(Number(conifer.recall) * 100, 1)}%</b> conifer recall</span>
-      <span><b>${formatNumber(Number(deciduous.precision) * 100, 1)}%</b> deciduous precision</span>
+      <span><b>${formatNumber(Number(evaluation.accuracy) * 100, 1)}%</b><small>accuracy · 95% ${ci}</small></span>
+      <span><b>${formatNumber(Number(conifer.precision) * 100, 1)}%</b><small>conifer precision</small></span>
+      <span><b>${formatNumber(Number(conifer.recall) * 100, 1)}%</b><small>conifer recall</small></span>
+      <span><b>${formatNumber(Number(deciduous.precision) * 100, 1)}%</b><small>deciduous precision</small></span>
     </div>
-    <p class="hint">Known-good labels: ${escapeHtml((labels.available_cities || []).join(", "))}; unavailable: ${escapeHtml((labels.unavailable_cities || []).join(", "))}. Spatial holdout: ${formatNumber(report.training?.spatial_block_m || 0)} m blocks; test n=${formatNumber(report.training?.test_rows || 0)}.</p>
     <table class="qa-table">
-      <thead><tr><th>known-good city</th><th>n</th><th>accuracy</th><th>conifer recall</th></tr></thead>
-      <tbody>${cityRows || '<tr><td colspan="4" class="muted">No city table.</td></tr>'}</tbody>
+      <thead><tr><th>held-out city</th><th>n</th><th>acc.</th></tr></thead>
+      <tbody>${cityRows || '<tr><td colspan="3" class="muted">No city table.</td></tr>'}</tbody>
     </table>
-    <table class="qa-table">
-      <thead><tr><th>city</th><th>n</th><th>weak-label agreement</th><th>status</th></tr></thead>
-      <tbody>${weakRows || '<tr><td colspan="4" class="muted">No weak-label table.</td></tr>'}</tbody>
-    </table>
-    <p class="hint">Weak-label agreement against Metro LCC is not accuracy and is not a known-good species test.</p>
+    <p class="hint">Known-good: ${escapeHtml((labels.available_cities || []).join(", ") || "none")}. Unavailable: ${escapeHtml((labels.unavailable_cities || []).join(", ") || "none")}. ${formatNumber(report.training?.spatial_block_m || 0)} m blocks; test n=${formatNumber(report.training?.test_rows || 0)}.</p>
+    <details class="qa-details">
+      <summary>Weak-label diagnostic (not accuracy)</summary>
+      <table class="qa-table">
+        <thead><tr><th>city</th><th>n</th><th>agreement</th></tr></thead>
+        <tbody>${weakRows || '<tr><td colspan="3" class="muted">No weak-label table.</td></tr>'}</tbody>
+      </table>
+      <p class="hint">Metro LCC agreement is weak-label context, not known-good species truth.</p>
+    </details>
   `;
 }
 

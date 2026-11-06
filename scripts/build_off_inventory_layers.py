@@ -22,7 +22,7 @@ from scipy.spatial import cKDTree
 from fresh_urban_forest.classifier import LogisticModel
 from fresh_urban_forest.lower_mainland import (
     GridSpec,
-    class_canopy_height,
+    canopy_records_from_classes,
     class_species,
     grid_for_bounds,
 )
@@ -154,8 +154,8 @@ def _candidate(  # pragma: no cover - operator I/O path
 def _surrey_candidates(  # pragma: no cover - operator I/O path
     model: LogisticModel,
 ) -> list[dict[str, Any]]:
-    """Build off-inventory candidates for Surrey from LCC cells outside public trees."""
-    grid, classes = _lcc_grid(ROOT / SURREY_SLUG / "boundary.geojson", resolution_m=20.0)
+    """Build off-inventory candidates for Surrey from LCC canopy maxima."""
+    grid, classes = _lcc_grid(ROOT / SURREY_SLUG / "boundary.geojson", resolution_m=5.0)
     public = _map_trees(SURREY_SLUG)
     public_xy = np.asarray(
         [
@@ -169,44 +169,39 @@ def _surrey_candidates(  # pragma: no cover - operator I/O path
         dtype=np.float64,
     )
     tree_index = cKDTree(public_xy)
+    records = canopy_records_from_classes(classes, grid, step_m=20.0)
     candidates: list[dict[str, Any]] = []
-    for row in range(classes.shape[0]):
-        for col in range(classes.shape[1]):
-            code = int(classes[row, col])
-            if code not in TREE_CLASSES:
-                continue
-            x = grid.left + (col + 0.5) * grid.resolution_m
-            y = grid.top - (row + 0.5) * grid.resolution_m
-            nearest, _ = tree_index.query(np.asarray([x, y]), k=1)
-            if nearest < 5.0:
-                continue
-            height = class_canopy_height(code)
-            group = "conifer" if code in {6, 15} else "deciduous"
-            crown_width = 10.0 if group == "conifer" else 8.0
-            features = np.asarray([_features(height, crown_width)], dtype=np.float64)
-            probability = float(model.predict_proba(features)[0])
-            predicted = "conifer" if probability >= 0.5 else "deciduous"
-            confidence = 0.5 * abs(probability - 0.5) * 2.0 + 0.5 * min(float(nearest) / 20.0, 1.0)
-            from fresh_urban_forest.terrain import unproject_xy
+    for record in records:
+        x = float(record.x_m or 0.0)
+        y = float(record.y_m or 0.0)
+        nearest, _ = tree_index.query(np.asarray([x, y]), k=1)
+        if nearest < 5.0:
+            continue
+        height = float(record.height_m or 2.0)
+        crown_width = float(record.crown_width_m or 1.0)
+        features = np.asarray([_features(height, crown_width)], dtype=np.float64)
+        probability = float(model.predict_proba(features)[0])
+        predicted = "conifer" if probability >= 0.5 else "deciduous"
+        confidence = 0.5 * abs(probability - 0.5) * 2.0 + 0.5 * min(float(nearest) / 20.0, 1.0)
+        from fresh_urban_forest.terrain import unproject_xy
 
-            lon, lat = unproject_xy(x, y, CRS)
-            candidates.append(
-                _candidate(
-                    candidate_id=f"surrey-off-{len(candidates) + 1:07d}",
-                    lon=lon,
-                    lat=lat,
-                    x=x,
-                    y=y,
-                    height=height,
-                    crown_width=crown_width,
-                    group=predicted,
-                    probability=probability,
-                    confidence=confidence,
-                    nearest=float(nearest),
-                    inventory_status="outside_public_inventory",
-                )
+        lon, lat = unproject_xy(x, y, CRS)
+        candidates.append(
+            _candidate(
+                candidate_id=f"surrey-off-{len(candidates) + 1:07d}",
+                lon=lon,
+                lat=lat,
+                x=x,
+                y=y,
+                height=height,
+                crown_width=crown_width,
+                group=predicted,
+                probability=probability,
+                confidence=confidence,
+                nearest=float(nearest),
+                inventory_status="outside_public_inventory",
             )
-            _ = group
+        )
     return candidates
 
 
