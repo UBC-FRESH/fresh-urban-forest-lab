@@ -796,6 +796,16 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
   evidence against pretending the envelopes are calibrated, not used to narrow them.
 - Added `scripts/attach_attribute_uncertainty.py` and tests. No app metric was added.
 
+### P32.7 human verification packet
+
+- Built a blind, offline HTML packet for the 300 orthophoto crops at
+  `data/processed/vancouver_2022/human_verification_packet/`, with a 50 MB ZIP.
+- The packet hides prior AI labels, provides Tree/Non-tree/Uncertain labels, notes,
+  progress, filtering, browser-local saving, CSV import/export, and print CSS.
+- A separate `candidate_metadata.csv` contains the prior labels and should only be opened
+  after the first review pass.
+- Added `scripts/build_human_verification_packet.py` and a test. Dashboard: GREEN.
+
 ### P32.7 independent UBC test
 
 - Ran the frozen City detector on the UBC 2021 1 m CHM and matched the UBC campus inventory
