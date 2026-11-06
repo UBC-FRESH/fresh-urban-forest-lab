@@ -807,6 +807,18 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Added detection polygon support, the polygon builder, service/app layer, tests, and the
   report `notes/reports/p32-crown-polygons.md`.
 
+### P32.7 blind human verification completed
+
+- One blind human reviewer completed all 300 crops; the packet hid the prior AI labels.
+- Scored 299 of 300 because one candidate was removed by the 25 m crown filter.
+- Human labels: 248 tree, 44 non-tree, 7 uncertain.
+- Design-weighted strict precision: 78.2% (bootstrap 71.1%–84.7%); conservative: 75.9%
+  (68.8%–82.6%). Estimated tree-like candidates: 262,271, range 238,587–284,177.
+- Precision by confidence band: low 59.2%, medium 83.4%, high 98.6%.
+- Human labels supersede the prior AI pre-audit; agreement was 213/299 (71.2%).
+- Added common-comment checkboxes and server-backed label saving in the review packet.
+- Dashboard: GREEN.
+
 ### P32.7 human verification packet
 
 - Built a blind, offline HTML packet for the 300 orthophoto crops at

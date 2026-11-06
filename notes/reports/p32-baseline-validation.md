@@ -2,9 +2,9 @@
 
 Date: 2026-11-06
 
-Status: partial P32.7. Held-out public-tree recall and a single visual pre-audit of the
-fixed candidate sample are complete. The labels are not an independent human audit and the
-independent UBC test is not complete.
+Status: P32.7 validation largely complete. Held-out public-tree recall, a blind human
+review of the fixed candidate sample, and the independent UBC test are complete. The
+remaining work is close-out/second-reviewer documentation.
 
 Protocol: `notes/p32-validation-protocol.md`
 Data lock: `notes/p32-data-lock.md`
@@ -69,38 +69,48 @@ the public Data For Canada PMTiles mirror of the same City 2022 7.5 cm orthophot
 `https://data.source.coop/dataforcanada/d4c-datapkg-orthoimagery/processed/ca-bc_vancouver-2022A00055915022_d4c-datapkg-orthoimagery_2022_075mm_v0.1.0-beta.pmtiles`.
 The mirror metadata names the City open-data source and the 2022 7.5 cm acquisition.
 
-I completed one visual pass over 300 centre-cropped images. This is **one visual pre-audit**,
-not an independent human audit; any label can be wrong. Labels are in
-`data/processed/vancouver_2022/off_inventory_audit_labels.csv`. The five contact sheets and
-300 individual crops are under `data/processed/vancouver_2022/off_inventory_audit_sheet/`.
+A blind human reviewer completed the packet. The review UI hid the prior AI labels and
+saved the labels, common comments, and notes to the review server. The fixed 300-candidate
+sample contained one candidate removed by the 25 m crown filter (`off-180636`), leaving 299
+scored rows.
 
 | Result | Strict (uncertain excluded) | Conservative (uncertain = non-tree) |
 | --- | ---: | ---: |
-| Tree labels | 212 | 212 |
-| Non-tree labels | 68 | 68 |
-| Uncertain labels | 19 | 19 |
-| Design-weighted candidate precision | 73.8% | 67.0% |
-| Bootstrap 95% interval | 66.9%–80.4% | 59.8%–74.0% |
-| Estimated tree-like candidates | 247,678 | 224,698 |
-| Estimated candidate range | 224,564–269,752 | 200,679–248,383 |
+| Tree labels | 248 | 248 |
+| Non-tree labels | 44 | 44 |
+| Uncertain labels | 7 | 7 |
+| Design-weighted candidate precision | 78.2% | 75.9% |
+| Bootstrap 95% interval | 71.1%–84.7% | 68.8%–82.6% |
+| Estimated tree-like candidates | 262,271 | 254,589 |
+| Estimated candidate range | 238,587–284,177 | 230,905–277,032 |
 
-The fixed 300-candidate sample contained one candidate removed by the 25 m crown filter
-(`off-180636`), leaving 299 scored rows. Precision by confidence band (strict,
-design-weighted): low 46.2%, medium 92.0%, high 84.1%. The high band is lower than the
-medium band in this sample; do not treat the confidence score as a probability.
+Precision by confidence band (strict, design-weighted): low 59.2%, medium 83.4%, high
+98.6%. The likely-private subset remains a land proxy, not ownership.
+
+The human labels disagree with the prior AI pre-audit on 28.8% of the scored sample
+(213/299 agree; 43 prior N became human T; 17 prior T became human N; 4 prior U became
+human N; 14 prior U became human T). The human labels supersede the AI labels for
+precision.
+
+Common-comment counts: mask underreach/partial crown 88, mask overreach 79, merged crowns
+78, hedge/shrub 30, road/sidewalk/lawn 28, roof/building 17, shadow 12, tiny/ornamental
+tree 10, car/parking 8, mixed hedge/tree 4, construction/track 2, blurred image 2.
 
 The estimated range applies to tree-like **candidates**, not a total tree census. It does
 not include the public inventory, missed public records, or trees outside the candidate
 frame.
 
+The independently reviewed labels are in
+`data/processed/vancouver_2022/human_verification_packet/p32_human_labels.csv`; the score
+JSON is `data/processed/vancouver_2022/off_inventory_human_scores.json`.
+
 ## Not yet done
 
-- Independent human verification of the 300 visual labels, or a second blind labeler.
+- A second blind reviewer is optional; one human reviewer has completed the packet.
 - Height, crown, and carbon error against measured public/UBC records.
-- Independent UBC test. The repository has only the coarse UBC demo terrain grid
-  (38 m cells), not a 1 m/5 m UBC CHM suitable for this detector.
-- Point-cloud per-crown support is built; variable windows and seam/multi-peak refinement
-  remain open.
+- UBC independent test is complete and reported separately; it showed 52.64% recall.
+- Point-cloud per-crown support and polygons are built; variable windows and seam/multi-peak
+  refinement remain open.
 - A total-tree count range that combines public recall, candidate precision, and public
   inventory completeness.
 
@@ -111,8 +121,8 @@ python scripts/validate_vancouver_off_inventory.py
 python scripts/dashboard.py
 ```
 
-The crop sheet and label scoring were run as one-off local audit utilities. The filtered
-score is retained as `data/processed/vancouver_2022/off_inventory_audit_scores_filtered.json`.
+The crop sheet, review server, and label scoring are local audit utilities. The final
+human score is retained as `data/processed/vancouver_2022/off_inventory_human_scores.json`.
 
 ## Reading
 
