@@ -801,3 +801,14 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
   `local_anisotropy` as generic conditioning primitives.
 - Updated the Arbor guide and provenance note: FEMIC owns the ground lane.
 - No default detector or product changed.
+
+### P34/P35/P36 close-out
+
+- Merged the Lower Mainland instances, off-inventory screening/QA, and GPU imagery/fusion
+  work through the P36 branch.
+- Five portal demos: UBC, Vancouver, Surrey, Burnaby, Coquitlam.
+- Final image/fusion results: image CNN 80.04% accuracy / 84.41% conifer precision;
+  valid CHM + image fusion 81.87% accuracy / 82.63% conifer precision / 82.09% recall.
+- Burnaby and Vancouver high-confidence candidates are image-scored. Surrey and Coquitlam
+  remain explicitly unscored; no candidate-level known-good species labels exist.
+- Dashboard: GREEN; browser smoke clean; portal 8101 restarted from merged code.

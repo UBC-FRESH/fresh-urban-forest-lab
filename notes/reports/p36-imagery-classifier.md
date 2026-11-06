@@ -2,7 +2,7 @@
 
 Date: 2026-11-06
 
-Status: P36.1–P36.3 implemented; candidate application and close-out remain open.
+Status: complete, with explicit candidate-coverage limits.
 
 Parent issue: #161
 
@@ -117,10 +117,10 @@ the same 2022 orthophoto service.
 - Surrey and Coquitlam candidate image scoring.
 - Final P36 close-out.
 
-## Still open
+## Close-out coverage
 
-- ~~Fuse image features with LiDAR point/CHM features (P36.3).~~ Completed with CHM-only + image fusion; raw point-cloud fusion remains an extension.
-- Complete image scoring for Vancouver, Surrey, and Coquitlam candidates.
-- Apply to Burnaby/Coquitlam imagery; both still lack known-good species labels.
-- Complete the final P36 close-out.
+- Vancouver and Burnaby high-confidence candidates are image-scored.
+- Surrey and Coquitlam are not image-scored; their imagery requires large tile/download
+  handling, and Burnaby/Coquitlam still lack known-good species labels.
+- The model is a screening classifier, not a census or species identification.
 - No stereo/photogrammetric claim: orthophotos alone are not a stereo pair.

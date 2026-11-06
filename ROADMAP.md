@@ -31,9 +31,9 @@ This roadmap is the plan of record and the issue tracker map for FRESH Urban For
 | P31 Move the ground writer to FEMIC | #135 | `feature/p31-move-ground-writer` | complete |
 | P32 ALS-derived off-inventory and private-canopy inventory | #136 | `feature/p32-off-inventory-als` | active |
 | P33 Remove the ground-classifier prototype | #146 | `feature/p33-remove-ground-classifier` | complete |
-| P34 Surrey, Burnaby, and Coquitlam portal instances | #149 | `feature/p34-lower-mainland-instances` | active |
-| P35 Off-inventory conifer/deciduous classifier and QA | #156 | `feature/p35-off-inventory-classifier` | active |
-| P36 GPU imagery-enhanced conifer/deciduous classifier | #161 | `feature/p36-imagery-classifier` | active |
+| P34 Surrey, Burnaby, and Coquitlam portal instances | #149 | `feature/p34-lower-mainland-instances` | complete |
+| P35 Off-inventory conifer/deciduous classifier and QA | #156 | `feature/p35-off-inventory-classifier` | complete |
+| P36 GPU imagery-enhanced conifer/deciduous classifier | #161 | `feature/p36-imagery-classifier` | complete |
 
 ## Lifecycle Map
 
@@ -879,7 +879,7 @@ dashboard is green.
 
 Parent issue: #149
 Branch: `feature/p34-lower-mainland-instances`
-Status: active
+Status: complete
 
 Goal: add three public-data city instances to the demo portal, with separate runtime
 directories and explicit provisional-method labels.
@@ -911,7 +911,7 @@ Phase 34 verification:
 
 Parent issue: #156
 Branch: `feature/p35-off-inventory-classifier`
-Status: active
+Status: complete
 
 Goal: compile off-inventory layers for the three P34 instances and add a documented
 conifer/deciduous classifier with confusion-matrix and confidence-interval QA.
@@ -940,7 +940,7 @@ Phase 35 verification:
 
 Parent issue: #161
 Branch: `feature/p36-imagery-classifier`
-Status: active
+Status: complete
 
 Goal: use the available RTX PRO 6000 and public orthophoto pixels to replace the weak
 structural-only conifer/deciduous baseline with a validated imagery + LiDAR model.
@@ -950,8 +950,8 @@ Plan: `notes/design/imagery-classifier.md`.
 - [x] P36.1 Orthophoto source lock and chip cache (#162)
 - [x] P36.2 GPU CNN training and spatial validation (#163)
 - [x] P36.3 Fuse/compare with LiDAR structural baseline (#164)
-- [ ] P36.4 Apply to off-inventory candidates and UI QA (#165)
-- [ ] P36.5 Docs, dashboard, browser smoke, close-out (#166)
+- [x] P36.4 Apply to off-inventory candidates and UI QA (#165)
+- [x] P36.5 Docs, dashboard, browser smoke, close-out (#166)
 
 Phase 36 verification:
 
