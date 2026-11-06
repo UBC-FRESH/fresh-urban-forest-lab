@@ -471,6 +471,9 @@ def create_app(
         summary["has_off_inventory_3d"] = (
             _dataset_file(state, "off_inventory_3d.json.gz") is not None
         )
+        summary["has_off_inventory_crowns"] = (
+            _dataset_file(state, "off_inventory_crown_polygons.geojson.gz") is not None
+        )
         summary["has_city_metrics"] = _dataset_file(state, "city_metrics.json") is not None
         summary["has_map_trees"] = _dataset_file(state, "map_trees.json.gz") is not None
         summary["has_map_buildings"] = _dataset_file(state, "map_buildings.geojson.gz") is not None
@@ -540,6 +543,30 @@ def create_app(
             media_type="application/geo+json",
             filename="off_inventory.geojson",
             headers=headers,
+        )
+
+    @app.get("/api/off-inventory-crowns")
+    def off_inventory_crowns() -> FileResponse:
+        """Return the candidate crown polygon layer.
+
+        Returns
+        -------
+        fastapi.responses.FileResponse
+            Compressed candidate crown polygons.
+
+        Raises
+        ------
+        fastapi.HTTPException
+            When the dataset has no crown polygon layer.
+        """
+        path = _dataset_file(state, "off_inventory_crown_polygons.geojson.gz")
+        if path is None:
+            raise HTTPException(status_code=404, detail="this dataset has no crown polygon layer")
+        return FileResponse(
+            path,
+            media_type="application/geo+json",
+            filename="off_inventory_crown_polygons.geojson",
+            headers={"Content-Encoding": "gzip", "Cache-Control": "no-store, max-age=0"},
         )
 
     @app.get("/api/off-inventory-3d")

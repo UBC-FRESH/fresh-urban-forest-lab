@@ -796,6 +796,17 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
   evidence against pretending the envelopes are calibrated, not used to narrow them.
 - Added `scripts/attach_attribute_uncertainty.py` and tests. No app metric was added.
 
+### P32.3 persist candidate crown polygons
+
+- Added simplified watershed crown exterior polygons for 333,752 of 335,471 candidates:
+  `off_inventory_crown_polygons.geojson.gz`, 31 MB compressed.
+- Added the `/api/off-inventory-crowns` endpoint and a filtered 2D orange fill/outline layer.
+- The human-verification crops now overlay the orange segment outline around the red
+  candidate X. The red X remains the centroid.
+- The 3D candidate trees still use ellipsoid approximations, not polygon extrusion.
+- Added detection polygon support, the polygon builder, service/app layer, tests, and the
+  report `notes/reports/p32-crown-polygons.md`.
+
 ### P32.7 human verification packet
 
 - Built a blind, offline HTML packet for the 300 orthophoto crops at

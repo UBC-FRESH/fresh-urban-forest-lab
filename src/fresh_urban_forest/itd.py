@@ -12,7 +12,10 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 import numpy as np
+import rasterio.features
+import rasterio.transform
 from scipy import ndimage
+from shapely.geometry import shape
 
 from fresh_urban_forest.models import TerrainGrid
 from fresh_urban_forest.terrain import unproject_xy
@@ -44,6 +47,8 @@ class DetectedTree:
         Longitude of the centroid.
     lat : float
         Latitude of the centroid.
+    crown_ring : tuple of tuple of float or None
+        Optional simplified exterior ring in WGS84 ``(lon, lat)`` order.
     """
 
     tree_id: str
@@ -56,6 +61,7 @@ class DetectedTree:
     y: float
     lon: float
     lat: float
+    crown_ring: tuple[tuple[float, float], ...] | None = None
 
 
 def detect_trees(
@@ -63,6 +69,7 @@ def detect_trees(
     *,
     min_height_m: float = 3.0,
     window_m: float = 3.0,
+    include_polygons: bool = False,
     max_trees: int = 100_000,
 ) -> tuple[DetectedTree, ...]:
     """Detect individual tree crowns with local maxima and watershed segmentation.
@@ -75,6 +82,8 @@ def detect_trees(
         Minimum canopy height for a candidate tree top.
     window_m : float
         Moving-window diameter for local maxima, in metres.
+    include_polygons : bool
+        Store simplified segment exterior rings as WGS84 coordinate tuples.
     max_trees : int
         Safety limit on the number of detected crowns.
 
@@ -113,6 +122,30 @@ def detect_trees(
     except (RuntimeError, ValueError):
         segments = markers
     segment_labels = np.unique(segments)
+    polygons: dict[int, tuple[tuple[float, float], ...]] = {}
+    if include_polygons:
+        transform = rasterio.transform.from_origin(grid.bounds[0], grid.bounds[3], cell_x, cell_y)
+        simplify = max(cell_x, cell_y) * 0.35
+        for geometry, value in rasterio.features.shapes(
+            segments.astype(np.int32), transform=transform, connectivity=4
+        ):
+            label = int(value)
+            if label <= 0:
+                continue
+            polygon = shape(geometry).simplify(simplify, preserve_topology=True)
+            if polygon.is_empty:
+                continue
+            rings = polygon.exterior.coords if polygon.geom_type == "Polygon" else []
+            if not rings:
+                continue
+            ring: list[tuple[float, float]] = []
+            for x_value, y_value in rings:
+                lon_value, lat_value = unproject_xy(float(x_value), float(y_value), grid.crs)
+                ring.append((round(lon_value, 8), round(lat_value, 8)))
+            if ring and ring[0] != ring[-1]:
+                ring.append(ring[0])
+            if len(ring) >= 4:
+                polygons[label] = tuple(ring)
     trees: list[DetectedTree] = []
     for label in segment_labels:
         if label <= 0:
@@ -143,6 +176,7 @@ def detect_trees(
                 y=round(float(y), 2),
                 lon=round(lon, 8),
                 lat=round(lat, 8),
+                crown_ring=polygons.get(int(label)),
             )
         )
         if len(trees) >= max_trees:

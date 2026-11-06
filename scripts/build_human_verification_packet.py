@@ -6,10 +6,14 @@ from __future__ import annotations
 
 import argparse
 import csv
+import gzip
 import json
+import math
 import shutil
 import zipfile
 from pathlib import Path
+
+from PIL import Image, ImageDraw
 
 TEMPLATE = r"""<!doctype html>
 <html lang="en">
@@ -85,7 +89,7 @@ button { cursor:pointer; }
       <li><b>Non-tree:</b> roof, road, sidewalk, lawn, bare soil, water, car, or a hedge/shrub mass that is not a distinguishable tree.</li>
       <li><b>Uncertain:</b> the crop is too ambiguous, the crosshair is on an edge, or you cannot tell tree from building/vegetation. Do not guess.</li>
     </ul>
-    <p class="muted">Click the image to open the full crop. Labels save automatically in this browser. Export often. This is a visual pre-audit, not a field measurement.</p>
+    <p class="muted">The red X is the candidate point, not a claim that a tree is there. If the X falls on the edge of a clearly identifiable tree crown, label <b>Tree</b> and note “edge”. If it falls outside the crown, label <b>Non-tree</b> or <b>Uncertain</b>. Click the image to open the full crop. Labels save automatically in this browser. Export often. This is a visual pre-audit, not a field measurement.</p>
   </section>
   <div class="grid" id="grid"></div>
 </div>
@@ -219,6 +223,11 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         type=Path,
         default=Path("data/processed/vancouver_2022/human_verification_packet"),
     )
+    parser.add_argument(
+        "--crowns",
+        type=Path,
+        default=Path("data/processed/vancouver_2022/off_inventory_crown_polygons.geojson.gz"),
+    )
     parser.add_argument("--no-zip", action="store_true")
     return parser.parse_args(argv)
 
@@ -252,6 +261,14 @@ def main(argv: list[str] | None = None) -> int:
     out.mkdir(parents=True, exist_ok=True)
     images = out / "images"
     images.mkdir(exist_ok=True)
+    crowns: dict[str, list[list[float]]] = {}
+    if args.crowns.exists():
+        with gzip.open(args.crowns, "rt", encoding="utf-8") as handle:
+            for feature in json.load(handle)["features"]:
+                rings = feature.get("geometry", {}).get("coordinates", [])
+                properties = feature.get("properties", {})
+                if rings and properties.get("candidate_id"):
+                    crowns[str(properties["candidate_id"])] = rings[0]
     candidates = []
     template_rows = []
     metadata_rows = []
@@ -260,7 +277,34 @@ def main(argv: list[str] | None = None) -> int:
         source = args.crops / f"{candidate_id}.png"
         if not source.exists():
             raise SystemExit(f"missing crop: {source}")
-        shutil.copy2(source, images / source.name)
+        destination = images / source.name
+        shutil.copy2(source, destination)
+        if candidate_id in crowns:
+            zoom = 19
+            count = 2**zoom
+            center_lon = float(row["lon"])
+            center_lat = float(row["lat"])
+            center_x = (center_lon + 180.0) / 360.0 * count * 512
+            center_y = (
+                (1.0 - math.asinh(math.tan(math.radians(center_lat))) / math.pi) / 2.0 * count * 512
+            )
+            image = Image.open(destination).convert("RGB")
+            draw = ImageDraw.Draw(image)
+            points = []
+            for lon, lat in crowns[candidate_id]:
+                px = (float(lon) + 180.0) / 360.0 * count * 512 - center_x + 160
+                py = (
+                    (1.0 - math.asinh(math.tan(math.radians(float(lat)))) / math.pi)
+                    / 2.0
+                    * count
+                    * 512
+                    - center_y
+                    + 160
+                )
+                points.append((px, py))
+            if len(points) >= 3:
+                draw.line([*points, points[0]], fill="#df7b1e", width=2)
+            image.save(destination)
         candidates.append(
             {
                 "id": candidate_id,
@@ -296,7 +340,8 @@ def main(argv: list[str] | None = None) -> int:
     (out / "README.md").write_text(
         "# P32 human verification packet\n\n"
         "Open `index.html` in a browser. Review the 300 centre-cropped orthophoto images.\n\n"
-        "- The crosshair marks the candidate.\n"
+        "- The red X is the candidate point. The orange outline, when present, is the watershed crown segment.\n"
+        "- A point on the edge of a clearly identifiable crown is still Tree; note it as edge. A point just outside the crown is Non-tree or Uncertain.\n"
         "- Label each crop Tree, Non-tree, or Uncertain using the definitions on the page.\n"
         "- Labels save in browser local storage. Export `p32_human_labels.csv` when finished.\n"
         "- Do not open `candidate_metadata.csv` until after the first pass; it contains the prior AI labels.\n"

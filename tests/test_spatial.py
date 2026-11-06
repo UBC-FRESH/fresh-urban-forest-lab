@@ -247,6 +247,11 @@ def test_detect_trees_and_change(tmp_path: Path) -> None:
     features = payload["features"]
     assert isinstance(features, list)
     assert len(features) == len(detected)
+    with_polygon = detect_trees(grid, min_height_m=3.0, window_m=4.0, include_polygons=True)
+    assert with_polygon
+    assert with_polygon[0].crown_ring is not None
+    assert len(with_polygon[0].crown_ring or ()) >= 4
+    assert with_polygon[0].crown_ring[0] == with_polygon[0].crown_ring[-1]
     with pytest.raises(ValueError, match="canopy_height"):
         detect_trees(build_terrain_grid(raster, None), min_height_m=3.0)
     change = canopy_change(chm, chm, threshold_m=2.0)

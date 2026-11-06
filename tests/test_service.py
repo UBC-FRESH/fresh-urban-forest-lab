@@ -451,6 +451,14 @@ def test_off_inventory_gzip_endpoint(tmp_path: Path) -> None:
     assert compact.status_code == 200
     assert compact.headers["content-encoding"] == "gzip"
     assert compact.json()["count"] == 1
+    with gzip.open(
+        root / "off_inventory_crown_polygons.geojson.gz", "wt", encoding="utf-8"
+    ) as handle:
+        json.dump({"type": "FeatureCollection", "features": []}, handle)
+    crowns = client.get("/api/off-inventory-crowns")
+    assert crowns.status_code == 200
+    assert crowns.headers["content-encoding"] == "gzip"
+    assert crowns.json()["type"] == "FeatureCollection"
 
 
 def test_bird_habitat_and_demography_endpoint(tmp_path: Path) -> None:

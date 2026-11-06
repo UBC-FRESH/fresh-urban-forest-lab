@@ -553,6 +553,12 @@ function initMap() {
             ? "api/off-inventory.geojson"
             : offInventoryFeatures(),
         },
+        offInventoryCrowns: {
+          type: "geojson",
+          data: state.dataset?.has_off_inventory_crowns
+            ? "api/off-inventory-crowns"
+            : { type: "FeatureCollection", features: [] },
+        },
         boundary: { type: "geojson", data: boundaryFeatures() },
         roads: { type: "geojson", data: state.roads || { type: "FeatureCollection", features: [] } },
         trees: {
@@ -606,6 +612,27 @@ function initMap() {
           type: "line",
           source: "buildings",
           paint: { "line-color": "#7d887c", "line-width": 0.7 },
+        },
+        {
+          id: "off-inventory-crowns-fill",
+          type: "fill",
+          source: "offInventoryCrowns",
+          layout: { visibility: "none" },
+          paint: {
+            "fill-color": "#e59a32",
+            "fill-opacity": 0.12,
+          },
+        },
+        {
+          id: "off-inventory-crowns-line",
+          type: "line",
+          source: "offInventoryCrowns",
+          layout: { visibility: "none" },
+          paint: {
+            "line-color": "#c46f1e",
+            "line-width": ["interpolate", ["linear"], ["zoom"], 13, 0.25, 17, 0.8, 20, 1.4],
+            "line-opacity": 0.75,
+          },
         },
         {
           id: "off-inventory",
@@ -672,6 +699,12 @@ function initMap() {
     selectTree(feature.properties.tree_id, feature.properties);
   });
   map.on("click", "off-inventory", (event) => {
+    const feature = event.features && event.features[0];
+    if (!feature) return;
+    const properties = feature.properties || {};
+    selectCandidate(properties.candidate_id, properties);
+  });
+  map.on("click", "off-inventory-crowns-fill", (event) => {
     const feature = event.features && event.features[0];
     if (!feature) return;
     const properties = feature.properties || {};
@@ -1569,8 +1602,12 @@ function bindControls() {
     }
   });
   $("toggle-off-inventory").addEventListener("change", (event) => {
-    if (state.map && state.map.getLayer("off-inventory")) {
-      state.map.setLayoutProperty("off-inventory", "visibility", event.target.checked ? "visible" : "none");
+    if (state.map) {
+      for (const layer of ["off-inventory", "off-inventory-crowns-fill", "off-inventory-crowns-line"]) {
+        if (state.map.getLayer(layer)) {
+          state.map.setLayoutProperty(layer, "visibility", event.target.checked ? "visible" : "none");
+        }
+      }
       applyOffInventoryFilter();
     }
     if (state.three?.offInventoryGroup) {
@@ -1596,7 +1633,9 @@ function applyOffInventoryFilter() {
   ];
   if (land !== "all") filter.push(["==", ["get", "land_class"], land]);
   if (support !== "all") filter.push([">=", ["get", "point_count"], Number(support)]);
-  state.map.setFilter("off-inventory", filter);
+  for (const layer of ["off-inventory", "off-inventory-crowns-fill", "off-inventory-crowns-line"]) {
+    if (state.map.getLayer(layer)) state.map.setFilter(layer, filter);
+  }
 }
 
 async function loadAssistantInfo() {
@@ -1896,6 +1935,12 @@ function ensureLightView() {
           data: state.dataset?.has_off_inventory
             ? "api/off-inventory.geojson"
             : offInventoryFeatures(),
+        },
+        offInventoryCrowns: {
+          type: "geojson",
+          data: state.dataset?.has_off_inventory_crowns
+            ? "api/off-inventory-crowns"
+            : { type: "FeatureCollection", features: [] },
         },
         boundary: { type: "geojson", data: boundaryFeatures() },
       },

@@ -55,6 +55,7 @@ def detect_city_trees(
     buffer_m: float = CITY_DETECTION_BUFFER_M,
     window_m: float = 5.0,
     min_height_m: float = 3.0,
+    include_polygons: bool = False,
 ) -> tuple[DetectedTree, ...]:
     """Detect crowns on the full city CHM with overlapping tiles.
 
@@ -72,6 +73,8 @@ def detect_city_trees(
         Local-maxima window in metres.
     min_height_m : float
         Minimum canopy height.
+    include_polygons : bool
+        Store simplified crown exterior rings with each detected crown.
 
     Returns
     -------
@@ -127,7 +130,12 @@ def detect_city_trees(
                 elevation=np.zeros_like(array),
                 canopy_height=array,
             )
-            for tree in detect_trees(grid, min_height_m=min_height_m, window_m=window_m):
+            for tree in detect_trees(
+                grid,
+                min_height_m=min_height_m,
+                window_m=window_m,
+                include_polygons=include_polygons,
+            ):
                 if core_left <= tree.x < core_right and core_bottom <= tree.y < core_top:
                     collected.append(tree)
     return tuple(
