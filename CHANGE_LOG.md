@@ -812,3 +812,14 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Burnaby and Vancouver high-confidence candidates are image-scored. Surrey and Coquitlam
   remain explicitly unscored; no candidate-level known-good species labels exist.
 - Dashboard: GREEN; browser smoke clean; portal 8101 restarted from merged code.
+
+### P36 Vancouver candidate image and fusion scoring
+
+- Scored 129,312 Vancouver high-confidence candidates with the 2022 image CNN:
+  54,151 conifer / 75,161 deciduous.
+- Applied the independent CHM + image fusion model: 62,121 conifer / 67,191 deciduous.
+- Added image and fusion group/probability fields to the candidate GeoJSON and made the
+  3D group code follow the fused prediction.
+- Fixed the fusion artifact to persist standardization means/scales for inference.
+- No known-good species labels exist for off-inventory candidates; these are screening
+  predictions.

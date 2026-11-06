@@ -88,6 +88,8 @@ def main() -> int:  # pragma: no cover - operator path
         },
         "fused_model": {
             "features": list(fused_model.feature_names),
+            "means": [float(value) for value in fused_model.means],
+            "scales": [float(value) for value in fused_model.scales],
             "coefficients": [float(value) for value in fused_model.coefficients],
             "intercept": float(fused_model.intercept),
             "evaluation": fused_metrics,

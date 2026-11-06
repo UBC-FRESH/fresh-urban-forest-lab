@@ -107,9 +107,13 @@ The image CNN was applied to Vancouver's high-confidence off-inventory candidate
 the same 2022 orthophoto service.
 
 - **129,312** candidates scored.
-- Image groups: **54,145 conifer / 75,167 deciduous**.
-- Candidate GeoJSON carries the same `imagery_*` fields.
-- The Vancouver 3D overlay uses image groups.
+- Image-only groups: **54,151 conifer / 75,161 deciduous**.
+- CHM + image fusion groups: **62,121 conifer / 67,191 deciduous**.
+- Candidate GeoJSON carries `image_group`, `image_conifer_probability`, `imagery_group`,
+  `imagery_conifer_probability`, `fusion_group`, and `fusion_conifer_probability`.
+- The Vancouver 3D `group_code` follows the fused group.
+- The fusion model artifact now persists its standardization means/scales, so candidate
+  inference uses the same preprocessing as training.
 - No known-good candidate labels exist; this is still screening.
 
 ### Remaining
