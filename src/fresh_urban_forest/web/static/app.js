@@ -293,7 +293,7 @@ function renderCityMetrics() {
     .join("");
   const head = `<div class="city-row city-head"><span>Local area</span><span class="num">Cover</span><span></span><span class="num hide-small">Carbon</span><span class="num">Trees</span></div>`;
   $("city-local-areas").innerHTML = rows ? head + rows : '<p class="muted">No local-area metrics.</p>';
-  const methods = Object.entries(data.methods || {})
+  let methods = Object.entries(data.methods || {})
     .map(([key, method]) => {
       const tier = method?.tier || "method";
       return `<div class="city-method"><strong>${escapeHtml(key.replaceAll("_", " "))}</strong><span>${escapeHtml(method?.method || "")} · ${escapeHtml(tier)}</span></div>`;
