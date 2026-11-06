@@ -26,6 +26,7 @@ const state = {
   years: 25,
   mode: null,
   selectedId: "",
+  selectedCandidateId: "",
   recommendations: [],
   map: null,
   selectedSourceReady: false,
@@ -780,6 +781,12 @@ function initMap() {
     if (!feature) return;
     selectTree(feature.properties.tree_id, feature.properties);
   });
+  map.on("click", "off-inventory", (event) => {
+    const feature = event.features && event.features[0];
+    if (!feature) return;
+    const properties = feature.properties || {};
+    selectCandidate(properties.candidate_id, properties);
+  });
   map.on("click", (event) => {
     if (state.mode === "zone") {
       placeAt(event.lngLat.lng, event.lngLat.lat);
@@ -899,7 +906,12 @@ function ensureThree() {
       placeAt(origin[0] + local.x / metres[0], origin[1] - local.z / metres[1]);
       return;
     }
-    const targets = [...three.crownMeshes, ...three.trunkMeshes, terrain];
+    const targets = [
+      ...three.crownMeshes,
+      ...three.trunkMeshes,
+      ...(three.offInventoryMeshes || []),
+      terrain,
+    ];
     const hits = raycaster.intersectObjects(targets, false);
     if (!hits.length) return;
     const hit = hits[0];
@@ -907,6 +919,16 @@ function ensureThree() {
       const tree = hit.object.userData.trees[hit.instanceId];
       if (tree) {
         selectTree(tree.id);
+        return;
+      }
+    }
+    if (
+      hit.object.userData.kind === "off-crown" ||
+      hit.object.userData.kind === "off-trunk"
+    ) {
+      const candidate = hit.object.userData.candidates[hit.instanceId];
+      if (candidate) {
+        selectCandidate(candidate.candidate_id, candidate);
         return;
       }
     }
@@ -1067,8 +1089,8 @@ function buildRoadLines() {
 
 async function ensureOffInventory3D() {
   if (!state.three || state.offInventory3DLoading) return;
-  if (state.three.offInventoryMesh) {
-    state.three.offInventoryMesh.visible = Boolean($("toggle-off-inventory")?.checked);
+  if (state.three.offInventoryGroup) {
+    state.three.offInventoryGroup.visible = Boolean($("toggle-off-inventory")?.checked);
     return;
   }
   if (!state.dataset?.has_off_inventory_3d) {
@@ -1083,7 +1105,7 @@ async function ensureOffInventory3D() {
     }
     const data = state.offInventory3D;
     const count = Number(data?.count || 0);
-    $("scene-candidate-status").textContent = `building ${formatNumber(count)} candidates…`;
+    $("scene-candidate-status").textContent = `building ${formatNumber(count)} candidate trees…`;
     if (!count || !state.three) {
       $("scene-candidate-status").textContent = "no high-confidence candidates";
       return;
@@ -1102,47 +1124,106 @@ async function ensureOffInventory3D() {
       const value = terrain.elevation[row * terrain.width + col];
       return Number.isFinite(value) ? value - originZ : 0;
     };
-    const colors = ["#d9862f", "#3778bd", "#2f8b57", "#8a67c7", "#8b9489"];
-    const positions = new Float32Array(count * 3);
-    const pointColors = new Float32Array(count * 3);
-    const color = new THREE.Color();
+    const landNames = ["likely private parcel", "street/lane", "public park", "other parcel", "unknown"];
+    const colorFor = (land) => (land === 0 ? "#f2a33b" : "#b8641d");
+    const opacityBins = [0.36, 0.55, 0.74, 0.92];
+    const buckets = Array.from({ length: 8 }, () => []);
     for (let index = 0; index < count; index += 1) {
+      const confidence = Number(data.confidence[index] || 0);
+      const radius = Number(data.crown_radius_m[index] || 0);
+      if (confidence < 0.6 || radius > 25) continue;
+      const bin = confidence < 0.7 ? 0 : confidence < 0.8 ? 1 : confidence < 0.9 ? 2 : 3;
+      const land = Number(data.land_code[index]);
       const x = Number(data.x_m[index]) - originX;
       const z = -(Number(data.y_m[index]) - originY);
       const height = Math.max(Number(data.height_m[index] || 2), 1.5);
+      const crownDepth = Math.max(height * 0.55, 1);
+      const trunkHeight = Math.max(height - crownDepth, 0.8);
       const base = terrainBase(x, z);
-      positions[index * 3] = x;
-      positions[index * 3 + 1] = base + height * 0.6;
-      positions[index * 3 + 2] = z;
-      if (Array.isArray(data.group_code)) {
-        color.set(Number(data.group_code[index]) === 0 ? "#14563a" : "#91a948");
-      } else {
-        color.set(colors[Number(data.land_code[index])] || colors[4]);
-      }
-      pointColors[index * 3] = color.r;
-      pointColors[index * 3 + 1] = color.g;
-      pointColors[index * 3 + 2] = color.b;
+      buckets[bin * 2 + (land === 0 ? 0 : 1)].push({
+        x,
+        z,
+        base,
+        height,
+        crownWidth: Math.max(Number(data.crown_radius_m[index] || 0) * 2, 1),
+        crownDepth,
+        trunkHeight,
+        candidate: {
+          candidate_id: String(data.candidate_id[index]),
+          height_m: Number(data.height_m[index]),
+          crown_radius_m: Number(data.crown_radius_m[index]),
+          crown_area_m2: Number(data.crown_area_m2[index]),
+          dbh_cm: Number(data.dbh_cm[index]),
+          crown_volume_m3: Number(data.crown_volume_m3[index]),
+          carbon_kg: Number(data.carbon_kg[index]),
+          confidence,
+          point_count: Number(data.point_count[index]),
+          land_class: landNames[land] || "unknown",
+        },
+      });
     }
-    const geometry = new THREE.BufferGeometry();
-    geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
-    geometry.setAttribute("color", new THREE.BufferAttribute(pointColors, 3));
-    const material = new THREE.PointsMaterial({
-      size: 5,
-      sizeAttenuation: true,
-      vertexColors: true,
-      transparent: true,
-      opacity: 0.82,
-      depthWrite: false,
-    });
-    const mesh = new THREE.Points(geometry, material);
-    mesh.name = "off-inventory-3d";
-    mesh.userData.kind = "off-inventory";
-    mesh.frustumCulled = false;
-    mesh.visible = Boolean($("toggle-off-inventory")?.checked);
-    state.three.scene.add(mesh);
-    state.three.offInventoryMesh = mesh;
-    state.three.renderer.render(state.three.scene, state.three.camera);
-    $("scene-candidate-status").textContent = `${formatNumber(count)} 3D candidates (score ≥ 0.6)`;
+    $("scene-candidate-status").textContent = "assembling candidate tree meshes…";
+    const group = new THREE.Group();
+    group.name = "off-inventory-3d";
+    let builtCount = 0;
+    const meshes = [];
+    const crownGeometry = new THREE.SphereGeometry(0.5, 7, 6);
+    const trunkGeometry = new THREE.CylinderGeometry(0.12, 0.2, 1, 5);
+    const matrix = new THREE.Matrix4();
+    const quaternion = new THREE.Quaternion();
+    const position = new THREE.Vector3();
+    const scale = new THREE.Vector3();
+    for (let bucketIndex = 0; bucketIndex < buckets.length; bucketIndex += 1) {
+      const items = buckets[bucketIndex];
+      if (!items.length) continue;
+      builtCount += items.length;
+      const bin = Math.floor(bucketIndex / 2);
+      const light = bucketIndex % 2 === 0;
+      const opacity = opacityBins[bin];
+      const color = light ? "#f2a33b" : "#b8641d";
+      const crownMaterial = new THREE.MeshStandardMaterial({
+        color,
+        roughness: 0.9,
+        metalness: 0,
+        transparent: true,
+        opacity,
+        depthWrite: opacity > 0.8,
+      });
+      const trunkMaterial = new THREE.MeshStandardMaterial({
+        color: light ? "#a9692d" : "#7d4a1d",
+        roughness: 1,
+        transparent: true,
+        opacity,
+        depthWrite: opacity > 0.8,
+      });
+      const crowns = new THREE.InstancedMesh(crownGeometry, crownMaterial, items.length);
+      const trunks = new THREE.InstancedMesh(trunkGeometry, trunkMaterial, items.length);
+      crowns.castShadow = false;
+      crowns.receiveShadow = false;
+      trunks.castShadow = false;
+      trunks.receiveShadow = false;
+      items.forEach((item, instance) => {
+        position.set(item.x, item.base + item.trunkHeight + item.crownDepth * 0.5, item.z);
+        scale.set(item.crownWidth, item.crownDepth, item.crownWidth);
+        matrix.compose(position, quaternion, scale);
+        crowns.setMatrixAt(instance, matrix);
+        position.set(item.x, item.base + item.trunkHeight * 0.5, item.z);
+        scale.set(1, item.trunkHeight, 1);
+        matrix.compose(position, quaternion, scale);
+        trunks.setMatrixAt(instance, matrix);
+      });
+      crowns.instanceMatrix.needsUpdate = true;
+      trunks.instanceMatrix.needsUpdate = true;
+      crowns.userData = { kind: "off-crown", candidates: items.map((item) => item.candidate) };
+      trunks.userData = { kind: "off-trunk", candidates: items.map((item) => item.candidate) };
+      group.add(crowns, trunks);
+      meshes.push(crowns, trunks);
+    }
+    state.three.scene.add(group);
+    state.three.offInventoryGroup = group;
+    state.three.offInventoryMeshes = meshes;
+    group.visible = Boolean($("toggle-off-inventory")?.checked);
+    $("scene-candidate-status").textContent = `${formatNumber(builtCount)} 3D candidates (score ≥ 0.6; radius ≤ 25 m; opacity = confidence)`;
   } catch (error) {
     $("scene-candidate-status").textContent = "candidates unavailable";
     toast(`Could not load 3D candidates: ${error.message}`, true);
@@ -1421,11 +1502,55 @@ function animateThree() {
   requestAnimationFrame(animateThree);
 }
 
+function selectCandidate(candidateId, candidateData = null) {
+  const candidate = candidateData || null;
+  if (!candidate) return;
+  state.selectedCandidateId = candidateId;
+  state.selectedId = "";
+  updateMapSelection();
+  updateSelectedMarker();
+  const height = Number(candidate.height_m || 0);
+  const radius = Number(candidate.crown_radius_m || 0);
+  const dbh = Number(candidate.dbh_cm || 0);
+  const volume = Number(candidate.crown_volume_m3 || 0);
+  const carbon = Number(candidate.carbon_kg || 0);
+  const confidence = Number(candidate.confidence || 0);
+  const crownDiameter = radius * 2;
+  const heightLow = candidate.height_low_m ?? height * 0.8;
+  const heightHigh = candidate.height_high_m ?? height * 1.2;
+  const dbhLow = candidate.dbh_low_cm ?? dbh * 0.65;
+  const dbhHigh = candidate.dbh_high_cm ?? dbh * 1.35;
+  const carbonLow = candidate.carbon_low_kg ?? carbon * 0.5;
+  const carbonHigh = candidate.carbon_high_kg ?? carbon * 1.5;
+  $("selected-label").textContent = `${candidateId} · off-inventory candidate`;
+  $("tree-detail").innerHTML = `
+    <dl>
+      <dt>ID</dt><dd>${escapeHtml(candidateId)}</dd>
+      <dt>Type</dt><dd>Off-inventory candidate</dd>
+      <dt>Species</dt><dd>Not identified</dd>
+      <dt>Height</dt><dd>${formatNumber(height, 1)} m (${formatNumber(heightLow, 1)}–${formatNumber(heightHigh, 1)} m)</dd>
+      <dt>DBH</dt><dd>${formatNumber(dbh, 1)} cm (${formatNumber(dbhLow, 1)}–${formatNumber(dbhHigh, 1)} cm)</dd>
+      <dt>Crown diameter</dt><dd>${formatNumber(crownDiameter, 1)} m</dd>
+      <dt>Crown shape</dt><dd>Ellipsoid screening / watershed segment</dd>
+      <dt>Crown volume</dt><dd>${formatCompact(volume)} m³</dd>
+      <dt>Carbon</dt><dd>${formatNumber(carbon / 1000, 2)} t (${formatNumber(carbonLow / 1000, 2)}–${formatNumber(carbonHigh / 1000, 2)} t)</dd>
+      <dt>Confidence</dt><dd>${formatNumber(confidence, 2)}</dd>
+      <dt>Land proxy</dt><dd>${escapeHtml(candidate.land_class || "unknown")}</dd>
+      <dt>Point support</dt><dd>${candidate.point_count == null ? "n/a" : formatNumber(candidate.point_count)}</dd>
+      <dt>Nearest public tree</dt><dd>${candidate.nearest_inventory_m == null ? "n/a" : `${formatNumber(candidate.nearest_inventory_m, 1)} m`}</dd>
+    </dl>
+    <p class="muted">Screening candidate, not a confirmed tree or ownership record. Species and measurements are not field-verified.</p>`;
+  $("remove-tree").disabled = true;
+  $("replace-tree").disabled = true;
+  $("move-tree").disabled = true;
+}
+
 function selectTree(treeId, treeData = null) {
   const tree = treeData || state.treeById.get(treeId);
   if (!tree) return;
   if (treeData) state.treeById.set(treeId, treeData);
   state.selectedId = treeId;
+  state.selectedCandidateId = "";
   updateMapSelection();
   updateSelectedMarker();
   $("selected-label").textContent = tree.common_name || tree.species || treeId;
@@ -1558,8 +1683,8 @@ function bindControls() {
       state.map.setLayoutProperty("off-inventory", "visibility", event.target.checked ? "visible" : "none");
       applyOffInventoryFilter();
     }
-    if (state.three?.offInventoryMesh) {
-      state.three.offInventoryMesh.visible = event.target.checked;
+    if (state.three?.offInventoryGroup) {
+      state.three.offInventoryGroup.visible = event.target.checked;
     }
     if (event.target.checked) ensureOffInventory3D();
   });
@@ -1571,7 +1696,11 @@ function applyOffInventoryFilter() {
   if (!state.map || !state.map.getLayer("off-inventory")) return;
   const minimum = Number($("off-inventory-confidence").value || 0);
   const land = $("off-inventory-land").value;
-  const filter = ["all", [">=", ["get", "confidence"], minimum]];
+  const filter = [
+    "all",
+    [">=", ["get", "confidence"], minimum],
+    ["<=", ["get", "crown_radius_m"], 25],
+  ];
   if (land !== "all") filter.push(["==", ["get", "land_class"], land]);
   state.map.setFilter("off-inventory", filter);
 }
