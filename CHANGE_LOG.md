@@ -709,8 +709,9 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Added a valid CHM-only + image fusion: 81.87% held-out accuracy, 82.63% conifer
   precision, 82.09% conifer recall; the inventory-field fusion was rejected as leakage.
 - Applied the image CNN to 331,221 high-confidence Burnaby candidates using the public
-  Burnaby 2025 orthophoto service; image groups and source/date fields are in the candidate
-  GeoJSON and 3D overlay. Burnaby still has no known-good species labels.
+  Burnaby 2025 orthophoto service, and to 129,312 Vancouver candidates using the 2022
+  service. Image groups and source/date fields are in the candidate GeoJSON and 3D overlay.
+  Neither is a known-good candidate-level species test.
 - Pilot limits: Vancouver training only; image test is balanced; no Burnaby/Coquitlam labels
   yet; orthophotos are orthorectified, not stereo.
 

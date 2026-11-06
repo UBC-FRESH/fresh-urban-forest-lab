@@ -90,7 +90,7 @@ implausible 100% held-out result. Those structural fields encode species-group a
 was removed rather than shipped. P36.3 needs LiDAR-derived crown/point features, not
 inventory-derived attributes.
 
-## Candidate image scoring (Burnaby pilot)
+## Candidate image scoring
 
 The image CNN was applied to Burnaby's high-confidence off-inventory candidates using the
 public Burnaby 2025 orthophoto image service.
@@ -101,7 +101,21 @@ public Burnaby 2025 orthophoto image service.
   `imagery_source`, and `imagery_date`.
 - The 3D candidate overlay uses the image group when present.
 - No known-good accuracy is reported: Burnaby has no public species inventory.
-- Vancouver candidate scoring and Surrey/Coquitlam imagery transfer remain open.
+### Vancouver
+
+The image CNN was applied to Vancouver's high-confidence off-inventory candidates using
+the same 2022 orthophoto service.
+
+- **129,312** candidates scored.
+- Image groups: **54,145 conifer / 75,167 deciduous**.
+- Candidate GeoJSON carries the same `imagery_*` fields.
+- The Vancouver 3D overlay uses image groups.
+- No known-good candidate labels exist; this is still screening.
+
+### Remaining
+
+- Surrey and Coquitlam candidate image scoring.
+- Final P36 close-out.
 
 ## Still open
 
