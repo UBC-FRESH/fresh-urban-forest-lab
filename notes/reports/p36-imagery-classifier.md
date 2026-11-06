@@ -69,6 +69,14 @@ than the headline accuracy alone.
 - More data, fusion with LiDAR shape features, and transfer to Burnaby/Surrey/Coquitlam are
   now concrete next steps.
 
+## Fusion diagnostic (not used)
+
+A trial stack combining image probability with inventory height/crown fields produced an
+implausible 100% held-out result. Those structural fields encode species-group assumptions
+(crown ratio/height/crown allometry), so the fusion is invalid as an independent test. It
+was removed rather than shipped. P36.3 needs LiDAR-derived crown/point features, not
+inventory-derived attributes.
+
 ## Still open
 
 - Fuse image features with LiDAR point/CHM features (P36.3).

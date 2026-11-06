@@ -39,8 +39,8 @@ Imagery dates must be recorded against the LiDAR/tree inventory dates.
    ~89/11 class imbalance.
 3. Train a small CNN on GPU (RTX PRO 6000) with spatial block holdout, class-weighted loss,
    augmentation, and early stopping.
-4. Fuse image features with LiDAR structural features (height, crown width, CHM shape) in a
-   second head or a gradient-boosted stack.
+4. Fuse image features with **LiDAR-derived** structural features (CHM crown shape, point
+   density/vertical profile), not inventory-derived fields that encode species group.
 5. Report confusion matrix, balanced accuracy, macro-F1, per-class precision/recall,
    PR-AUC, Brier/calibration, and Wilson/bootstrap intervals.
 6. Apply the model to off-inventory candidates in the three P34 instances; keep the P35
