@@ -760,5 +760,10 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Ran a 30-candidate point-support pilot on 24 raw LAS tiles. Median vegetation points
   inside the crown radius were 3,913 for tree labels, 444 for non-tree, and 1,209 for
   uncertain. The pilot is promising but too small to choose a threshold.
-- The production detector and app are unchanged. Full per-candidate point support is the
-  next P32.3 step.
+- Built full 1 m vegetation point support from all 181 raw tiles for 336,346 of 336,350
+  candidates. Median support is 5,018 points for tree audit labels and 1,100 for non-tree.
+- Support thresholds improve the full population (≥500: 81.8% strict precision; ≥1,000:
+  86.0%; ≥2,000: 86.4%), but the existing confidence ≥0.6 filter already reaches 88.4%.
+  Support is therefore QA evidence, not a replacement for the confidence screen.
+- Added the point-support module, operator script, and tests. The production detector, app,
+  and candidate layer are unchanged.
