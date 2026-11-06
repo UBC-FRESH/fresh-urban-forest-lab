@@ -2,7 +2,7 @@
 
 Date: 2026-11-06
 
-Status: P36.1 and P36.2 implemented; fusion/application/UI completion remains open.
+Status: P36.1–P36.3 implemented; candidate application and close-out remain open.
 
 Parent issue: #161
 
