@@ -688,6 +688,27 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - The plan requires spatial holdout, confusion matrices, Wilson/bootstrap intervals,
   Brier/calibration reporting, and a transparent logistic-regression baseline.
 
+### P36 GPU imagery classifier planned
+
+- Added P36 for a GPU-trained orthophoto + LiDAR conifer/deciduous classifier.
+- Public Vancouver 2022 tiled orthophoto imagery is accessible; Burnaby/Surrey/Coquitlam
+  have public imagery sources, but Burnaby/Coquitlam still lack species labels.
+- The phase will compare image-only, structural-only, and fused models with spatial
+  holdout, PR-AUC, balanced accuracy, and calibrated confusion matrices.
+
+### P36 GPU imagery classifier pilot
+
+- Confirmed the local RTX PRO 6000 Blackwell (96 GB) and PyTorch CUDA path.
+- Added a public ArcGIS orthophoto tile source and cached 12,621 Vancouver 2022 tiles.
+- Built a balanced 12,000-chip conifer/deciduous dataset (6,000 each) with 96 px RGB chips.
+- Trained a four-block CNN on GPU: 80.04% held-out accuracy, 84.41% conifer precision,
+  75.18% conifer recall, 0.1438 Brier, 500 m spatial-block holdout.
+- Compared with P35 structural model: conifer precision improved from 37.71% to 84.41%,
+  while conifer recall moved from 79.90% to 75.18%.
+- Added `/api/imagery-classifier` and a compact image-CNN QA section on Vancouver.
+- Pilot limits: Vancouver only; image test is balanced; no Burnaby/Coquitlam labels yet;
+  orthophotos are orthorectified, not stereo.
+
 ### P35 off-inventory classifier and QA
 
 - Added a standardized structural logistic-regression baseline for conifer/deciduous

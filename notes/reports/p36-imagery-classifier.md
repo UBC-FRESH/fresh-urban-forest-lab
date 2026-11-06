@@ -1,0 +1,78 @@
+# P36 GPU imagery classifier pilot
+
+Date: 2026-11-06
+
+Status: P36.1 and P36.2 implemented; fusion/application/UI completion remains open.
+
+Parent issue: #161
+
+## Hardware
+
+- NVIDIA RTX PRO 6000 Blackwell Max-Q Workstation Edition
+- 97,887 MiB visible VRAM
+- CUDA 13.2, PyTorch 2.14.1+cu130
+- 72 CPU cores, 256 GiB RAM
+
+## Imagery
+
+- Source: City of Vancouver **Orthophotos 2022** ArcGIS tiled service
+  `https://tiles.arcgis.com/tiles/qrcTTRTwUoS8N47o/arcgis/rest/services/Orthophotos_2022/MapServer`
+- Zoom 19, approximately 0.30 m/pixel
+- 96 × 96 RGB chips, balanced 6,000 conifer + 6,000 deciduous samples drawn from the
+  Vancouver public inventory
+- 12,621 orthophoto tiles cached; 249 MB chip cache; model 1.5 MB
+- Orthophotos are orthorectified: no stereo claim.
+
+Other public imagery:
+- Burnaby 2025 orthophoto image service
+- Surrey 2025 orthophoto tiles
+- Coquitlam 2025 7.5 cm MrSID
+Burnaby and Coquitlam still have no public species inventory.
+
+## Model
+
+- Four-block CNN with batch normalisation and adaptive pooling
+- 96 × 96 RGB input; class-weighted cross-entropy
+- 500 m spatial-block holdout
+- 8,718 train chips / 3,282 held-out chips
+- 20 epochs, batch 64, AdamW; ~49 s wall clock on the GPU
+
+## Held-out results
+
+| Metric | Value |
+| --- | ---: |
+| Accuracy | 80.04% (95% Wilson 78.64–81.37%) |
+| Conifer precision | 84.41% (82.49–86.15%) |
+| Conifer recall | 75.18% (73.06–77.18%) |
+| Deciduous precision | 76.34% (74.31–78.26%) |
+| Deciduous recall | 85.22% (83.39–86.88%) |
+| Brier score | 0.1438 |
+
+Confusion matrix:
+
+|  | Predicted conifer | Predicted deciduous |
+| --- | ---: | ---: |
+| True conifer | 1,272 | 420 |
+| True deciduous | 235 | 1,355 |
+
+Compared with the P35 structural baseline, the image model trades some overall accuracy for
+a large gain in conifer precision: P35 had 37.7% conifer precision at 79.9% conifer recall;
+the image model has 84.4% conifer precision at 75.2% conifer recall. The image test is
+balanced (50/50), while P35 was dominated by deciduous, so compare per-class metrics rather
+than the headline accuracy alone.
+
+## What this proves
+
+- Real orthophoto pixels are accessible without ArcGIS credentials.
+- The GPU path is fast: a 12k-chip balanced pilot trains in under a minute after caching.
+- The image signal is materially better for conifer precision than height/crown width alone.
+- More data, fusion with LiDAR shape features, and transfer to Burnaby/Surrey/Coquitlam are
+  now concrete next steps.
+
+## Still open
+
+- Fuse image features with LiDAR point/CHM features (P36.3).
+- Score off-inventory candidates in the three P34 instances (P36.4).
+- Apply to Burnaby/Coquitlam imagery; both still lack known-good species labels.
+- Add image-source/date metadata to the QA panel and candidate records.
+- No stereo/photogrammetric claim: orthophotos alone are not a stereo pair.

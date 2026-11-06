@@ -13,6 +13,7 @@ const state = {
   offInventory3D: null,
   offInventory3DLoading: false,
   classifier: null,
+  imageryClassifier: null,
   birds: null,
   birdsLoading: false,
   treeById: new Map(),
@@ -241,6 +242,35 @@ function renderClassifierQA() {
       </table>
       <p class="hint">Metro LCC agreement is weak-label context, not known-good species truth.</p>
     </details>
+    ${imageryClassifierHtml()}
+  `;
+}
+
+function imageryClassifierHtml() {
+  const report = state.imageryClassifier;
+  if (!report) return "";
+  const evaluation = report.evaluation || {};
+  const matrix = Array.isArray(evaluation.matrix) ? evaluation.matrix : [];
+  const conifer = evaluation.conifer || {};
+  const training = report.training || {};
+  return `
+    <details class="qa-details" open>
+      <summary>Image CNN pilot · Vancouver 2022</summary>
+      <p class="hint">96 px RGB chips from the public orthophoto service; ${formatNumber(training.test_rows || 0)} spatial test chips.</p>
+      <table class="qa-matrix">
+        <thead><tr><th></th><th>pred conifer</th><th>pred deciduous</th></tr></thead>
+        <tbody>
+          <tr><th>conifer</th><td>${formatNumber(matrix[0]?.[0] || 0)}</td><td>${formatNumber(matrix[0]?.[1] || 0)}</td></tr>
+          <tr><th>deciduous</th><td>${formatNumber(matrix[1]?.[0] || 0)}</td><td>${formatNumber(matrix[1]?.[1] || 0)}</td></tr>
+        </tbody>
+      </table>
+      <div class="qa-stats">
+        <span><b>${formatNumber(Number(evaluation.accuracy) * 100, 1)}%</b><small>accuracy</small></span>
+        <span><b>${formatNumber(Number(conifer.precision) * 100, 1)}%</b><small>conifer precision</small></span>
+        <span><b>${formatNumber(Number(conifer.recall) * 100, 1)}%</b><small>conifer recall</small></span>
+        <span><b>${formatNumber(Number(evaluation.brier_score) * 100, 1)}</b><small>Brier ×100</small></span>
+      </div>
+    </details>
   `;
 }
 
@@ -413,6 +443,14 @@ async function init() {
         renderClassifierQA();
       } catch (_error) {
         state.classifier = null;
+      }
+    }
+    if (dataset.has_imagery_classifier) {
+      try {
+        state.imageryClassifier = await api("api/imagery-classifier");
+        renderClassifierQA();
+      } catch (_error) {
+        state.imageryClassifier = null;
       }
     }
     if (dataset.has_city_metrics) {

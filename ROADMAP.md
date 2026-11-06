@@ -33,6 +33,7 @@ This roadmap is the plan of record and the issue tracker map for FRESH Urban For
 | P33 Remove the ground-classifier prototype | #146 | `feature/p33-remove-ground-classifier` | complete |
 | P34 Surrey, Burnaby, and Coquitlam portal instances | #149 | `feature/p34-lower-mainland-instances` | active |
 | P35 Off-inventory conifer/deciduous classifier and QA | #156 | `feature/p35-off-inventory-classifier` | active |
+| P36 GPU imagery-enhanced conifer/deciduous classifier | #161 | `feature/p36-imagery-classifier` | active |
 
 ## Lifecycle Map
 
@@ -931,6 +932,28 @@ Acceptance:
 - Dashboard is green and browser smoke is clean.
 
 Phase 35 verification:
+
+- `python scripts/dashboard.py`
+- `python scripts/check_workflow.py`
+
+## Phase 36: GPU imagery-enhanced conifer/deciduous classifier
+
+Parent issue: #161
+Branch: `feature/p36-imagery-classifier`
+Status: active
+
+Goal: use the available RTX PRO 6000 and public orthophoto pixels to replace the weak
+structural-only conifer/deciduous baseline with a validated imagery + LiDAR model.
+
+Plan: `notes/design/imagery-classifier.md`.
+
+- [x] P36.1 Orthophoto source lock and chip cache (#162)
+- [x] P36.2 GPU CNN training and spatial validation (#163)
+- [ ] P36.3 Fuse/compare with LiDAR structural baseline (#164)
+- [ ] P36.4 Apply to off-inventory candidates and UI QA (#165)
+- [ ] P36.5 Docs, dashboard, browser smoke, close-out (#166)
+
+Phase 36 verification:
 
 - `python scripts/dashboard.py`
 - `python scripts/check_workflow.py`

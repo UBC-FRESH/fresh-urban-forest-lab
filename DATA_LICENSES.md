@@ -19,6 +19,10 @@ publishing a new derivative.
 | City of Vancouver parks | City of Vancouver | Open Government Licence – Vancouver | Public-park land-context proxy | 254 polygons. |
 | City of Vancouver zoning districts | City of Vancouver | Open Government Licence – Vancouver | Residential/commercial land-context proxy | 1,621 polygons; a proxy, not an ownership record. |
 | City of Vancouver 2022 orthophoto index | City of Vancouver | Open Government Licence – Vancouver | Manual candidate audit | 470 tile footprints; imagery is not redistributed in the repository. |
+| City of Vancouver 2022 orthophoto tiles | City of Vancouver | Open Government Licence – Vancouver | GPU image-chip classifier training | Public ArcGIS tiled service; zoom 19 is about 0.30 m/px. |
+| City of Burnaby 2025 orthophoto service | City of Burnaby | Open Government Licence – Burnaby | Future image-chip application | Public image service; not yet used in training. |
+| City of Surrey 2025 orthophoto tiles | City of Surrey | Open Government Licence – Surrey | Future image-chip application | Public tile downloader; large TIFF tiles. |
+| City of Coquitlam 2025 orthophoto | City of Coquitlam | Open Government Licence – Coquitlam | Future image-chip application | 7.5 cm MrSID; delivery/large-file handling pending. |
 | City of Surrey public trees | City of Surrey | Open Government Licence – Surrey | Surrey tree instance | 100,969 points; height/DBH are not published in the service. |
 | City of Surrey building footprints and contours | City of Surrey | Open Government Licence – Surrey | Surrey building context and provisional terrain | 137,657 footprints; 15,820 5 m contours. |
 | City of Burnaby 2022 DEM, DSM, buildings, and boundary | City of Burnaby | Open Government Licence – Burnaby | Burnaby LiDAR candidate instance | 0.5 m DEM/DSM; 54,789 building outlines. |
