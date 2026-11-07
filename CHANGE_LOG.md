@@ -802,6 +802,16 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Updated the Arbor guide and provenance note: FEMIC owns the ground lane.
 - No default detector or product changed.
 
+### P37.5 full-resolution candidate audit result
+
+- Pulled 200 blind review labels from the local review server: 44 conifer, 54 deciduous,
+  102 uncertain.
+- Excluding uncertain: conifer precision 49.1% (28/57, 95% CI 36.6–61.7%); deciduous
+  precision 61.0% (25/41, 95% CI 45.7–74.3%).
+- 29 crops were effectively black at the VRT edge and were marked uncertain.
+- The full-resolution candidate model does not pass the audit; do not merge it as a
+  validated product. Keep the P36 0.30 m display until the model and VRT coverage are fixed.
+
 ### P37 full-resolution Surrey and Coquitlam rescore
 
 - Decoded the 383 municipal 0.075 m MrSID tiles into tiled lossless GeoTIFFs and VRTs;

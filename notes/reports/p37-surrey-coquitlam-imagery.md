@@ -129,3 +129,39 @@ precision claim is made yet.
 - Human review of the 200-candidate audit packet.
 - Candidate-level precision summary and decision on merge/retrain.
 - Final P37 close-out.
+
+## Human review result
+
+Review data pulled from the local review server on 2026-11-07:
+
+- 200 / 200 candidates reviewed.
+- Human labels: **44 conifer, 54 deciduous, 102 uncertain**.
+- **29 / 200 crops were effectively black** and were marked `Uncertain`; these are not
+  valid visual evidence. The black crops cluster at the edge of the available VRT mosaic.
+- Excluding black crops: 73 of 171 candidates remain uncertain.
+
+### Precision from the blind audit
+
+Uncertain labels are excluded from the valid denominator; Wilson 95% intervals are
+reported. Weighted values use the stratified population counts by model probability bin.
+
+| Model prediction | Valid n | Correct | Precision | 95% CI | Weighted precision |
+|---|---:|---:|---:|---:|---:|
+| Conifer | 57 | 28 | **49.1%** | 36.6–61.7% | 48.9% |
+| Deciduous | 41 | 25 | **61.0%** | 45.7–74.3% | 65.3% |
+
+The high-probability conifer bins do not recover acceptable precision. The
+low-probability bins also contain more human conifers than human deciduous labels. The
+full-resolution candidate model does **not** pass this audit.
+
+### Decision
+
+- Do **not** merge the full-resolution candidate scores as a validated product.
+- Keep P37.5 closed as a completed negative audit, not as approval.
+- Retain or restore the P36 0.30 m display until the model and the VRT edge coverage are
+  fixed.
+- The 29 black crops must be regenerated from a source that covers the full candidate
+  footprint before any follow-up audit.
+
+The labels are saved in
+`data/processed/surrey_2025/fullres_audit/p37_human_labels.csv`.
