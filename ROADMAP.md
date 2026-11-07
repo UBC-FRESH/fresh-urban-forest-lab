@@ -34,7 +34,7 @@ This roadmap is the plan of record and the issue tracker map for FRESH Urban For
 | P34 Surrey, Burnaby, and Coquitlam portal instances | #149 | `feature/p34-lower-mainland-instances` | complete |
 | P35 Off-inventory conifer/deciduous classifier and QA | #156 | `feature/p35-off-inventory-classifier` | complete |
 | P36 GPU imagery-enhanced conifer/deciduous classifier | #161 | `feature/p36-imagery-classifier` | complete |
-| P37 Surrey and Coquitlam imagery candidate scoring | #168 | `feature/p37-surrey-coquitlam-imagery` | active |
+| P37 Surrey and Coquitlam imagery candidate scoring | #168 | `feature/p37-surrey-coquitlam-imagery` | complete |
 
 ## Lifecycle Map
 
@@ -963,7 +963,9 @@ Phase 36 verification:
 
 Parent issue: #168
 Branch: `feature/p37-surrey-coquitlam-imagery`
-Status: active
+Status: complete
+
+Outcome: closed negative — full-resolution candidate model failed the blind audit; P36 display restored.
 
 Goal: complete image candidate scoring for Surrey and Coquitlam with 2025 orthophotos.
 
@@ -973,7 +975,7 @@ Plan: `notes/design/surrey-coquitlam-imagery.md`.
 - [x] P37.2 Train/validate Surrey 2025 imagery model (#170)
 - [x] P37.3 Score Surrey and Coquitlam candidates (#171)
 - [x] P37.4 UI, docs, dashboard, browser smoke, close-out (#172)
-- [ ] P37.5 Audit the full-resolution candidate shift (#175)
+- [x] P37.5 Audit the full-resolution candidate shift (#175) — closed negative
 
 Phase 37 verification:
 

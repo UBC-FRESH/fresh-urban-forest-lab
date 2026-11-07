@@ -2,8 +2,7 @@
 
 Date: 2026-11-07
 
-Status: corrected full-resolution scoring complete; 200-candidate audit packet ready for
-human review.
+Status: closed negative. The full-resolution candidate model failed the blind audit; the P36 0.30 m display has been restored.
 
 Parent issue: #168
 

@@ -802,6 +802,18 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Updated the Arbor guide and provenance note: FEMIC owns the ground lane.
 - No default detector or product changed.
 
+### P37 closeout: full-resolution model rejected
+
+- Pulled the completed 200-candidate blind review: 44 conifer, 54 deciduous, 102 uncertain.
+- Excluding uncertain: conifer precision 49.1% (28/57, 95% CI 36.6–61.7%);
+  deciduous precision 61.0% (25/41, 95% CI 45.7–74.3%).
+- 29 crops were black at the VRT edge and were marked uncertain; this is a packet/coverage
+  defect and those labels are not valid evidence.
+- Rejected the full-resolution candidate model. No merge.
+- Restored the P36 display: Surrey 27,831 fused conifer / 149,530 deciduous;
+  Coquitlam 18,764 / 66,445.
+- Dashboard GREEN; portal browser smoke clean.
+
 ### P37.5 full-resolution candidate audit result
 
 - Pulled 200 blind review labels from the local review server: 44 conifer, 54 deciduous,
