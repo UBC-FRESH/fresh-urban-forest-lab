@@ -860,3 +860,23 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
   reported 1.8k ha of canopy gap, 69,861 contiguous sites, and no console or page
   errors appeared.
 - Dashboard: GREEN (lint, format, types, tests, validator, docs).
+
+### P40 open land-surface temperature and heat equity
+
+- Added `fresh_urban_forest.heat_equity` for public Landsat Collection 2 Level-2
+  `ST_B10`/`QA_PIXEL`, cloud/water/building masking, median compositing, 400 m
+  aggregation, and a five-part heat-equity index.
+- Added `scripts/build_vancouver_heat_equity.py` and a Vancouver product from five
+  public summer 2022 Landsat scenes via the Microsoft Planetary Computer.
+- Added optional `/api/heat-equity` and `/api/heat-equity.geojson` endpoints, a
+  **heat equity** map toggle, and a sidebar summary.
+- Vancouver screening result: 797 cells, mean LST 37.67 °C, median 38.51 °C, range
+  23.32–45.12 °C, and 305 high-tier cells. LST is surface temperature, not air
+  temperature or thermal comfort; the index is relative, not a validated vulnerability
+  model.
+- Recorded the method, scenes, results, and limits in
+  `notes/reports/p40-heat-equity.md`.
+- Browser smoke: **heat equity**, **shade equity**, and **canopy gaps** layers loaded;
+  the sidebar showed 37.7 °C mean LST, 305 high-tier cells, and no console or page
+  errors.
+- Dashboard: GREEN (lint, format, types, tests, validator, docs).

@@ -206,6 +206,26 @@
           conditions are not modelled. Capacity is a gross upper bound, not a tree count.
         </p>
       </section>
+
+      <section class="panel">
+        <div class="panel-heading">
+          <h2>Heat equity</h2>
+          <span id="heat-equity-status" class="muted">checking</span>
+        </div>
+        <div id="heat-equity-summary">
+          <p class="muted">No Landsat heat-equity product in this dataset.</p>
+        </div>
+        <div class="heat-legend" aria-label="Heat-equity tiers">
+          <span><i class="heat-swatch heat-equity-high"></i>high</span>
+          <span><i class="heat-swatch heat-equity-medium"></i>medium</span>
+          <span><i class="heat-swatch heat-equity-low"></i>low</span>
+        </div>
+        <p class="hint">
+          Landsat surface temperature plus the four P38 Census indicators. LST is not air
+          temperature or pedestrian thermal comfort; the index is a relative screen, not a
+          validated vulnerability model or a planting plan.
+        </p>
+      </section>
     </aside>
 
     <section class="stage">
@@ -226,6 +246,7 @@
           <label><input id="toggle-off-inventory" type="checkbox"> off-inventory</label>
           <label><input id="toggle-heat-priority" type="checkbox"> shade equity</label>
           <label><input id="toggle-planting-opportunity" type="checkbox"> canopy gaps</label>
+          <label><input id="toggle-heat-equity" type="checkbox"> heat equity</label>
           <label class="off-inventory-filter">conf
             <select id="off-inventory-confidence" aria-label="Minimum off-inventory confidence">
               <option value="0">all</option>

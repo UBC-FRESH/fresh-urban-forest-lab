@@ -483,6 +483,7 @@ def create_app(
         summary["has_planting_opportunity"] = (
             _dataset_file(state, "planting_opportunity.json") is not None
         )
+        summary["has_heat_equity"] = _dataset_file(state, "heat_equity.json") is not None
         summary["has_map_trees"] = _dataset_file(state, "map_trees.json.gz") is not None
         summary["has_map_buildings"] = _dataset_file(state, "map_buildings.geojson.gz") is not None
         summary["has_full_scene"] = _dataset_file(state, "full_scene.json.gz") is not None
@@ -756,6 +757,47 @@ def create_app(
             raise HTTPException(status_code=404, detail="this dataset has no city metrics")
         return JSONResponse(
             json.loads(path.read_text(encoding="utf-8")),
+            headers={"Cache-Control": "no-store, max-age=0"},
+        )
+
+    @app.get("/api/heat-equity")
+    def heat_equity() -> JSONResponse:
+        """Return the optional Landsat LST and heat-equity screen.
+
+        Returns
+        -------
+        JSONResponse
+            The heat-equity JSON, or a 404 when the dataset has no product.
+        """
+        path = _dataset_file(state, "heat_equity.json")
+        if path is None:
+            raise HTTPException(
+                status_code=404,
+                detail="this dataset has no heat-equity product",
+            )
+        return JSONResponse(
+            json.loads(path.read_text(encoding="utf-8")),
+            headers={"Cache-Control": "no-store, max-age=0"},
+        )
+
+    @app.get("/api/heat-equity.geojson")
+    def heat_equity_geojson() -> FileResponse:
+        """Return the 400 m heat-equity cells as GeoJSON.
+
+        Returns
+        -------
+        FileResponse
+            GeoJSON, or a 404 when the dataset has no product.
+        """
+        path = _dataset_file(state, "heat_equity.geojson")
+        if path is None:
+            raise HTTPException(
+                status_code=404,
+                detail="this dataset has no heat-equity product",
+            )
+        return FileResponse(
+            path,
+            media_type="application/geo+json",
             headers={"Cache-Control": "no-store, max-age=0"},
         )
 
