@@ -889,3 +889,14 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Plan: `notes/design/p41-canopy-change.md`.
 - First dependency: full 2018 City LiDAR coverage; the current manifest covers a UBC subset.
 - No implementation or data claim yet.
+
+### P41.1 2018 LiDAR index and coverage audit
+
+- Added `scripts/audit_vancouver_2018_lidar.py` and tests.
+- Recorded the full 181-tile City of Vancouver 2018 LiDAR index.
+- Tile union covers 118.717 of 118.763 km² inside the P30 city boundary (99.96%).
+- Only 2 tiles are present, both from the earlier UBC pilot; city-boundary coverage is 0.0 km².
+- 179 tiles are missing. Full acquisition is blocked by the webtransfer Cloudflare 403
+  and the expected tens-of-gigabytes download.
+- Report: `notes/reports/p41-2018-lidar-coverage.md`.
+- No 2018→2022 change product has been computed yet.
