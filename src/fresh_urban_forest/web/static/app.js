@@ -427,7 +427,8 @@ function renderHeatPriority() {
       scored += 1;
     }
   }
-  const shade = scored ? shadeSum / scored : 0;
+  const reportedShade = Number(data.metadata?.shade?.metrics?.combined_shade_fraction);
+  const shade = Number.isFinite(reportedShade) ? reportedShade : scored ? shadeSum / scored : 0;
   const equity = scored ? equitySum / scored : 0;
   const classRows = Object.entries(counts)
     .sort(([a], [b]) => a.localeCompare(b))

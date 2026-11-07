@@ -17,6 +17,9 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Recorded the data sources in `notes/reference/data-sources.md`, the software landscape
   in `notes/reference/software-landscape.md`, the architecture in
   `notes/design/architecture.md`, and ADRs 0001 to 0004.
+- Browser smoke: the map loaded the 797-cell layer, the **shade equity** toggle
+  worked, the sidebar reported the pixel-weighted 24.9% mean shade, and no console or
+  page errors appeared.
 - Dashboard: GREEN (lint, format, types, tests, validator, docs).
 
 ### Collaborator source review
