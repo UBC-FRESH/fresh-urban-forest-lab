@@ -970,11 +970,11 @@ independent, public-data screening layer. The product uses City of Vancouver LiD
 surfaces and 2021 Census dissemination-area profiles. It is not a CanopyFit
 replication, a planting permit, or a private-tree census.
 
-- [x] P38.1 Open Census equity table and LiDAR raster inputs
-- [x] P38.2 Raster shade and 400 m median-split screen
-- [x] P38.3 API, GeoJSON layer, and map toggle
-- [x] P38.4 Vancouver product and method note
-- [ ] P38.5 Dashboard, browser smoke, and close-out
+- [x] P38.1 Open Census equity table and LiDAR raster inputs (#177)
+- [x] P38.2 Raster shade and 400 m median-split screen (#178)
+- [x] P38.3 API, GeoJSON layer, and map toggle (#179)
+- [x] P38.4 Vancouver product and method note (#180)
+- [ ] P38.5 Dashboard, browser smoke, and close-out (#181)
 
 Acceptance criteria:
 
