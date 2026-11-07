@@ -647,3 +647,14 @@ select:focus, input:focus { outline: 2px solid #b8d3ae; outline-offset: 1px; }
 .qa-stats small { line-height: 1.25; }
 .qa-details { margin-top: 7px; font-size: .7rem; }
 .qa-details summary { cursor: pointer; color: var(--soft); }
+.heat-legend { display: flex; flex-wrap: wrap; gap: 6px 9px; margin-top: 10px; font-size: .68rem; color: var(--ink-soft); }
+.heat-legend span { display: inline-flex; align-items: center; gap: 4px; }
+.heat-swatch { width: 10px; height: 10px; border-radius: 2px; border: 1px solid rgba(0,0,0,.12); }
+.heat-1a { background: #b22222; }
+.heat-1b { background: #dc642d; }
+.heat-2a { background: #d65db1; }
+.heat-2b { background: #e8aaca; }
+.heat-3a { background: #2f5597; }
+.heat-3b { background: #5d91cc; }
+.heat-4a { background: #626262; }
+.heat-4b { background: #aaaaaa; }

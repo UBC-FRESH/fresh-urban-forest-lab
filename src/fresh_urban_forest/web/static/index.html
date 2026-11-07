@@ -161,6 +161,31 @@
           proxy; no owner data is stored or shown.
         </p>
       </section>
+
+      <section class="panel">
+        <div class="panel-heading">
+          <h2>Shade &amp; equity</h2>
+          <span id="heat-priority-status" class="muted">checking</span>
+        </div>
+        <div id="heat-priority-summary">
+          <p class="muted">No shade-equity product in this dataset.</p>
+        </div>
+        <div class="heat-legend" aria-label="Shade-equity priority classes">
+          <span><i class="heat-swatch heat-1a"></i>1A win-win</span>
+          <span><i class="heat-swatch heat-1b"></i>1B</span>
+          <span><i class="heat-swatch heat-2a"></i>2A</span>
+          <span><i class="heat-swatch heat-2b"></i>2B</span>
+          <span><i class="heat-swatch heat-3a"></i>3A</span>
+          <span><i class="heat-swatch heat-3b"></i>3B</span>
+          <span><i class="heat-swatch heat-4a"></i>4A</span>
+          <span><i class="heat-swatch heat-4b"></i>4B</span>
+        </div>
+        <p class="hint">
+          A screening surface from public LiDAR and 2021 Census dissemination areas.
+          Shade deficit is not plantable area; utilities, ownership, and field conditions
+          are not modelled.
+        </p>
+      </section>
     </aside>
 
     <section class="stage">
@@ -179,6 +204,7 @@
           <label><input id="toggle-roads" type="checkbox" checked> streets</label>
           <label><input id="toggle-buildings" type="checkbox" checked> buildings</label>
           <label><input id="toggle-off-inventory" type="checkbox"> off-inventory</label>
+          <label><input id="toggle-heat-priority" type="checkbox"> shade equity</label>
           <label class="off-inventory-filter">conf
             <select id="off-inventory-confidence" aria-label="Minimum off-inventory confidence">
               <option value="0">all</option>

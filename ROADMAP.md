@@ -34,6 +34,7 @@ This roadmap is the plan of record and the issue tracker map for FRESH Urban For
 | P34 Surrey, Burnaby, and Coquitlam portal instances | #149 | `feature/p34-lower-mainland-instances` | complete |
 | P35 Off-inventory conifer/deciduous classifier and QA | #156 | `feature/p35-off-inventory-classifier` | complete |
 | P36 GPU imagery-enhanced conifer/deciduous classifier | #161 | `feature/p36-imagery-classifier` | complete |
+| P38 Shade and social-equity screening | #173 | `feature/p38-heat-canopy-priority` | active |
 
 ## Lifecycle Map
 
@@ -958,6 +959,38 @@ Phase 36 verification:
 - `python scripts/dashboard.py`
 - `python scripts/check_workflow.py`
 
+## Phase 38: Shade and social-equity screening
+
+Parent issue: #173
+Branch: `feature/p38-heat-canopy-priority`
+Status: active
+
+Goal: turn the transferable parts of published shade-priority methods into an
+independent, public-data screening layer. The product uses City of Vancouver LiDAR
+surfaces and 2021 Census dissemination-area profiles. It is not a CanopyFit
+replication, a planting permit, or a private-tree census.
+
+- [x] P38.1 Open Census equity table and LiDAR raster inputs
+- [x] P38.2 Raster shade and 400 m median-split screen
+- [x] P38.3 API, GeoJSON layer, and map toggle
+- [x] P38.4 Vancouver product and method note
+- [ ] P38.5 Dashboard, browser smoke, and close-out
+
+Acceptance criteria:
+
+- The shade raster is computed from a public canopy surface and building heights,
+  not from a private DSM or a proprietary solar-radiation tool.
+- Every 400 m cell carries shade deficit, canopy cover, shade efficiency, and a
+  population-weighted Census equity score.
+- The API and map layer are optional when a dataset has no product.
+- The method note states what is measured, modelled, and unavailable.
+- The dashboard is green.
+
+Phase 38 verification:
+
+- `python scripts/dashboard.py`
+- `python scripts/check_workflow.py`
+
 ## Detailed Next Steps Notes
 
 1. The repository was created from `UBC-FRESH/ubc-fresh-dev-workflow` on 2026-11-03. The seed's dashboard, validator, docs, and agent contract are retained.
@@ -981,3 +1014,11 @@ Phase 36 verification:
 18. P31 (#135) moves the ground-bundle writer to FEMIC. The `ground-adapter` CLI, `ground_adapter` module, tests, and API entry are removed here; `classify_ground_ptd` remains as an urban ALS prototype. The canonical writer is `femic lidar ground-bundle-build`.
 19. P32 (#136) is planned, not active. It will turn the P9 off-inventory pilot into a full-city ALS candidate inventory for likely private residential canopy, with held-out public-tree and UBC validation, an orthophoto audit, parcel/parks/street land proxies, and a city app layer. The plan is `notes/design/als-offinventory-inventory.md`; activation waits for maintainer approval.
 20. P33 (#146) removes the remaining ground-classifier prototype (`classify_ground_ptd`, `GroundClassification`, `low_point_mask`, and their TIN helpers) from this repository. FEMIC is the sole owner; the generic conditioning primitives remain here.
+21. P38 (#173) adds an independent public-data shade and social-equity screen. It uses
+    City of Vancouver LiDAR canopy/building surfaces and 2021 Census dissemination-area
+    profiles, not CanopyFit code or proprietary constraints. The Vancouver run produced
+    797 400 m cells, 24.9% mean combined shade, 16.8% tree shade, 9.4% building shade,
+    662,731 people represented, and 255 high-deficit/high-equity cells. The product is a
+    screening layer: it does not model utilities, ownership, planting permits, land-surface
+    temperature, or field-validated thermal comfort. Method note:
+    `notes/reports/p38-shade-equity.md`.

@@ -479,6 +479,7 @@ def create_app(
             _dataset_file(state, "imagery_fusion_report.json") is not None
         )
         summary["has_city_metrics"] = _dataset_file(state, "city_metrics.json") is not None
+        summary["has_heat_priority"] = _dataset_file(state, "heat_priority.json") is not None
         summary["has_map_trees"] = _dataset_file(state, "map_trees.json.gz") is not None
         summary["has_map_buildings"] = _dataset_file(state, "map_buildings.geojson.gz") is not None
         summary["has_full_scene"] = _dataset_file(state, "full_scene.json.gz") is not None
@@ -752,6 +753,41 @@ def create_app(
             raise HTTPException(status_code=404, detail="this dataset has no city metrics")
         return JSONResponse(
             json.loads(path.read_text(encoding="utf-8")),
+            headers={"Cache-Control": "no-store, max-age=0"},
+        )
+
+    @app.get("/api/heat-priority")
+    def heat_priority() -> JSONResponse:
+        """Return the optional shade and social-equity screening product.
+
+        Returns
+        -------
+        JSONResponse
+            The heat-priority JSON, or a 404 when the dataset has no product.
+        """
+        path = _dataset_file(state, "heat_priority.json")
+        if path is None:
+            raise HTTPException(status_code=404, detail="this dataset has no heat-priority product")
+        return JSONResponse(
+            json.loads(path.read_text(encoding="utf-8")),
+            headers={"Cache-Control": "no-store, max-age=0"},
+        )
+
+    @app.get("/api/heat-priority.geojson")
+    def heat_priority_geojson() -> FileResponse:
+        """Return the 400 m shade-equity cells as GeoJSON.
+
+        Returns
+        -------
+        FileResponse
+            GeoJSON, or a 404 when the dataset has no product.
+        """
+        path = _dataset_file(state, "heat_priority.geojson")
+        if path is None:
+            raise HTTPException(status_code=404, detail="this dataset has no heat-priority product")
+        return FileResponse(
+            path,
+            media_type="application/geo+json",
             headers={"Cache-Control": "no-store, max-age=0"},
         )
 

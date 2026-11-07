@@ -36,6 +36,7 @@ const state = {
   changeMap: null,
   changeData: null,
   cityMetrics: null,
+  heatPriority: null,
   changeProduct: "change.json",
   changeProductsLoaded: false,
   lightMap: null,
@@ -401,6 +402,56 @@ function renderCityMetrics() {
   $("city-source").textContent = `${formatNumber(city.tree_count)} public trees · ${local.length} local areas · 2022 LiDAR · ${formatNumber(visualTrees)} visual trees`;
 }
 
+function renderHeatPriority() {
+  const data = state.heatPriority;
+  const status = $("heat-priority-status");
+  if (!data) {
+    status.textContent = "none";
+    $("heat-priority-summary").innerHTML =
+      '<p class="muted">No shade-equity product in this dataset.</p>';
+    return;
+  }
+  const cells = data.cells || [];
+  const counts = {};
+  let winWin = 0;
+  let shadeSum = 0;
+  let equitySum = 0;
+  let scored = 0;
+  for (const cell of cells) {
+    const key = cell.priority_class || "NA";
+    counts[key] = (counts[key] || 0) + 1;
+    if (key === "1A" || key === "1B") winWin += 1;
+    if (Number.isFinite(Number(cell.shade_fraction))) {
+      shadeSum += Number(cell.shade_fraction);
+      equitySum += Number(cell.equity_score || 0);
+      scored += 1;
+    }
+  }
+  const shade = scored ? shadeSum / scored : 0;
+  const equity = scored ? equitySum / scored : 0;
+  const classRows = Object.entries(counts)
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(
+      ([key, count]) =>
+        `<div class="city-row"><span class="name">class ${escapeHtml(key)}</span><span class="num">${formatNumber(count)}</span><span class="num">${formatNumber((100 * count) / Math.max(cells.length, 1), 1)}%</span></div>`,
+    )
+    .join("");
+  const methods = data.metadata?.methods || {};
+  const shadeMethod = methods.shade?.method || "raster-dsm-solar-shadow";
+  const priorityMethod = methods.priority?.method || "median-split-screen";
+  $("heat-priority-summary").innerHTML = `
+    <div class="city-kpis" style="grid-template-columns:repeat(2,minmax(0,1fr));margin:0 0 10px">
+      <div class="kpi"><span>mean shade</span><strong>${formatNumber(shade * 100, 1)}%</strong><small>${formatNumber(cells.length)} cells</small></div>
+      <div class="kpi"><span>win-win cells</span><strong>${formatNumber(winWin)}</strong><small>high deficit + high equity</small></div>
+    </div>
+    <div class="city-table">${classRows}</div>
+    <div class="city-method"><strong>shade</strong><span>${escapeHtml(shadeMethod)} · screening</span></div>
+    <div class="city-method"><strong>priority</strong><span>${escapeHtml(priorityMethod)} · relative within city</span></div>
+    <p class="muted" style="font-size:.68rem;margin-top:8px">Mean equity score ${formatNumber(equity, 2)} · 2021 Census DA screen</p>
+  `;
+  status.textContent = "screening";
+}
+
 async function init() {
   try {
     const [dataset, scene, scenarios] = await Promise.all([
@@ -476,6 +527,15 @@ async function init() {
         renderCityMetrics();
       } catch (_error) {
         state.cityMetrics = null;
+      }
+    }
+    if (dataset.has_heat_priority) {
+      try {
+        state.heatPriority = await api("api/heat-priority");
+        renderHeatPriority();
+      } catch (_error) {
+        state.heatPriority = null;
+        renderHeatPriority();
       }
     }
     $("dataset-name").textContent = `${dataset.name} · ${dataset.tree_count.toLocaleString("en-CA")} tree records · ${dataset.sources.length} sources`;
@@ -651,6 +711,12 @@ function initMap() {
         hillshade: { type: "image", url: "api/hillshade.png?width=1400", coordinates },
         canopy: { type: "image", url: "api/canopy.png?width=1400", coordinates },
         buildings: { type: "geojson", data: buildingFeatures() },
+        heatPriority: {
+          type: "geojson",
+          data: state.dataset?.has_heat_priority
+            ? "api/heat-priority.geojson"
+            : { type: "FeatureCollection", features: [] },
+        },
         offInventory: {
           type: "geojson",
           data: state.dataset?.has_off_inventory
@@ -710,6 +776,29 @@ function initMap() {
           type: "line",
           source: "buildings",
           paint: { "line-color": "#7d887c", "line-width": 0.7 },
+        },
+        {
+          id: "heat-priority",
+          type: "fill",
+          source: "heatPriority",
+          layout: { visibility: "none" },
+          paint: {
+            "fill-color": [
+              "match",
+              ["get", "priority_class"],
+              "1A", "#b22222",
+              "1B", "#dc642d",
+              "2A", "#d65db1",
+              "2B", "#e8aaca",
+              "3A", "#2f5597",
+              "3B", "#5d91cc",
+              "4A", "#626262",
+              "4B", "#aaaaaa",
+              "#000000",
+            ],
+            "fill-opacity": 0.52,
+            "fill-outline-color": "rgba(255,255,255,0.45)",
+          },
         },
         {
           id: "off-inventory",
@@ -1688,6 +1777,15 @@ function bindControls() {
       state.three.offInventoryGroup.visible = event.target.checked;
     }
     if (event.target.checked) ensureOffInventory3D();
+  });
+  $("toggle-heat-priority").addEventListener("change", (event) => {
+    if (state.map && state.map.getLayer("heat-priority")) {
+      state.map.setLayoutProperty(
+        "heat-priority",
+        "visibility",
+        event.target.checked ? "visible" : "none",
+      );
+    }
   });
   $("off-inventory-confidence").addEventListener("change", applyOffInventoryFilter);
   $("off-inventory-land").addEventListener("change", applyOffInventoryFilter);
