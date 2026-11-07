@@ -36,6 +36,7 @@ This roadmap is the plan of record and the issue tracker map for FRESH Urban For
 | P36 GPU imagery-enhanced conifer/deciduous classifier | #161 | `feature/p36-imagery-classifier` | complete |
 | P38 Shade and social-equity screening | #173 | `feature/p38-heat-canopy-priority` | complete |
 | P39 Canopy gaps and above-ground planting opportunity | #174 | `feature/p39-canopy-gaps` | complete |
+| P40 Open land-surface temperature and heat equity | #176 | `feature/p40-heat-equity` | pr-open |
 
 ## Lifecycle Map
 
@@ -1026,6 +1027,37 @@ Phase 39 verification:
 - `python scripts/dashboard.py`
 - `python scripts/check_workflow.py`
 
+## Phase 40: Open land-surface temperature and heat equity
+
+Parent issue: #176
+Branch: `feature/p40-heat-equity`
+Status: pr-open
+
+Goal: add public Landsat land-surface temperature to the P38 400 m grid and build
+a relative heat-equity screen. The output is not air temperature, pedestrian thermal
+comfort, a validated vulnerability model, or a planting plan.
+
+- [x] P40.1 Landsat scene search, download, and QA masking (#189)
+- [x] P40.2 Median LST composite and 400 m aggregation (#190)
+- [x] P40.3 Five-part heat-equity index and product (#191)
+- [x] P40.4 API, GeoJSON layer, and map toggle (#192)
+- [ ] P40.5 Dashboard, browser smoke, and close-out (#193)
+
+Acceptance criteria:
+
+- LST uses public Landsat Collection 2 Level-2 data and documented scale/offset.
+- Clouds, cloud shadow, water, and building rooftops are excluded.
+- Every cell reports mean and p90 LST, valid-pixel coverage, heat percentile,
+  P38 social equity, and a five-part relative index.
+- The API and map layer are optional when a dataset has no product.
+- The method note states the overpass, surface-temperature, and index limitations.
+- The dashboard is green.
+
+Phase 40 verification:
+
+- `python scripts/dashboard.py`
+- `python scripts/check_workflow.py`
+
 ## Detailed Next Steps Notes
 
 1. The repository was created from `UBC-FRESH/ubc-fresh-dev-workflow` on 2026-11-03. The seed's dashboard, validator, docs, and agent contract are retained.
@@ -1066,3 +1098,12 @@ Phase 39 verification:
     bound of 1,397,060. The capacity values are upper bounds, not tree counts. Utilities,
     ownership, access, soil, irrigation, cost, and field validation are not modelled.
     Method note: `notes/reports/p39-canopy-gaps.md`.
+
+23. P40 (#176) adds public Landsat 8/9 Collection 2 Level-2 land-surface temperature
+    to the P38 400 m grid. Five summer 2022 scenes were cloud-masked, composited by
+    pixel median, and aggregated to 797 cells. Mean cell LST is 37.67 °C, median 38.51 °C,
+    and the cell-mean range is 23.32–45.12 °C. The five-part heat-equity index gives LST
+    one fifth and the four P38 Census indicators four fifths; 305 cells are high tier.
+    The product is a relative surface-temperature screen, not air temperature, thermal
+    comfort, a health model, or a planting plan. Method note:
+    `notes/reports/p40-heat-equity.md`.

@@ -80,6 +80,27 @@ def test_heat_priority_endpoints_are_optional(tmp_path: Path) -> None:
     assert geojson.headers["content-type"].startswith("application/geo+json")
 
 
+def test_heat_equity_endpoints_are_optional(tmp_path: Path) -> None:
+    """A dataset without the product returns 404; adding it serves JSON and GeoJSON."""
+    client = _client(tmp_path)
+    assert client.get("/api/heat-equity").status_code == 404
+    assert client.get("/api/heat-equity.geojson").status_code == 404
+    (tmp_path / "dataset" / "heat_equity.json").write_text(
+        '{"schema_version": "test", "metadata": {}, "cells": []}', encoding="utf-8"
+    )
+    (tmp_path / "dataset" / "heat_equity.geojson").write_text(
+        '{"type": "FeatureCollection", "features": []}', encoding="utf-8"
+    )
+    dataset = client.get("/api/dataset").json()
+    assert dataset["has_heat_equity"] is True
+    response = client.get("/api/heat-equity")
+    assert response.status_code == 200
+    assert response.json()["schema_version"] == "test"
+    geojson = client.get("/api/heat-equity.geojson")
+    assert geojson.status_code == 200
+    assert geojson.headers["content-type"].startswith("application/geo+json")
+
+
 def test_planting_opportunity_endpoints_are_optional(tmp_path: Path) -> None:
     """A dataset without the product returns 404; adding it serves JSON and GeoJSON."""
     client = _client(tmp_path)

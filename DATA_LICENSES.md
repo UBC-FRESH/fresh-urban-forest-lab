@@ -31,6 +31,7 @@ publishing a new derivative.
 | Environment Canada climate normals, Vancouver Harbour CS | Environment and Climate Change Canada | Open Government Licence – Canada | Rainfall-interception screening estimate | 1981–2010 annual precipitation 1,098.8 mm. |
 | 2021 Census Profile, dissemination areas | Statistics Canada | Open Government Licence – Canada | Social-equity indicators for the P38 shade screen | Public SDMX Census Profile API; small-area suppression is retained. |
 | 2021 Census dissemination-area boundaries | Statistics Canada / public ArcGIS feature service | Statistics Canada terms; verify current terms | Population-weighted areal interpolation | Public feature service; geometry only. |
+| Landsat 8/9 Collection 2 Level-2 surface temperature | USGS / NASA, distributed by Microsoft Planetary Computer | Public domain / open data; verify Planetary Computer terms | Land-surface temperature and heat-equity screen | `ST_B10` and `QA_PIXEL`; retrieved for five summer 2022 scenes. |
 | OpenStreetMap road centrelines | © OpenStreetMap contributors | Open Database License (ODbL) 1.0 | Pale 2D street underlay and 3D road overlay | Queried from the Overpass API for the demo bbox; attribution is shown in the map HUD. |
 | Metro Vancouver classified LiDAR 2022 | Metro Vancouver | Metro Vancouver open-data terms | Regional cross-check | About 16.5 GB for the Vancouver/UBC/UEL area; classified vegetation. |
 | LidarBC open LiDAR data | Government of British Columbia / GeoBC | Open Government Licence – British Columbia | Provincial point clouds, DEM/DSM, CHM, and some tree metrics | Tile metadata carries acquisition year, CRS, and quality level. |
@@ -59,6 +60,8 @@ publishing a new derivative.
 - Nixon, B., Benson, A., Fillo, M., Shea, E., Caughie, N., & McHale, M. R. (2026).
   *Putting shade where it counts.* Urban Forestry & Urban Greening, 125, 129668.
   https://doi.org/10.1016/j.ufug.2026.129668
+- U.S. Geological Survey. *Landsat Collection 2 Level-2.*
+  https://www.usgs.gov/landsat-missions/landsat-collection-2-level-2-science-products
 
 ## What the demo includes
 

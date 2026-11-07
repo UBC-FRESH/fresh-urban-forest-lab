@@ -38,6 +38,7 @@ const state = {
   cityMetrics: null,
   heatPriority: null,
   plantingOpportunity: null,
+  heatEquity: null,
   changeProduct: "change.json",
   changeProductsLoaded: false,
   lightMap: null,
@@ -403,6 +404,47 @@ function renderCityMetrics() {
   $("city-source").textContent = `${formatNumber(city.tree_count)} public trees · ${local.length} local areas · 2022 LiDAR · ${formatNumber(visualTrees)} visual trees`;
 }
 
+function renderHeatEquity() {
+  const data = state.heatEquity;
+  const status = $("heat-equity-status");
+  if (!data) {
+    status.textContent = "none";
+    $("heat-equity-summary").innerHTML =
+      '<p class="muted">No Landsat heat-equity product in this dataset.</p>';
+    return;
+  }
+  const cells = data.cells || [];
+  const counts = {};
+  let lstSum = 0;
+  let lstCount = 0;
+  let hottest = null;
+  let high = 0;
+  for (const cell of cells) {
+    const tier = cell.heat_equity_tier || "none";
+    counts[tier] = (counts[tier] || 0) + 1;
+    if (tier === "high") high += 1;
+    if (Number.isFinite(Number(cell.lst_mean_c))) {
+      lstSum += Number(cell.lst_mean_c);
+      lstCount += 1;
+      if (!hottest || Number(cell.lst_mean_c) > Number(hottest.lst_mean_c)) hottest = cell;
+    }
+  }
+  const mean = lstCount ? lstSum / lstCount : 0;
+  const hottestText = hottest
+    ? `${formatNumber(hottest.lst_mean_c, 1)} °C at ${escapeHtml(hottest.cell_id)}`
+    : "no valid LST";
+  $("heat-equity-summary").innerHTML = `
+    <div class="city-kpis" style="grid-template-columns:repeat(2,minmax(0,1fr));margin:0 0 10px">
+      <div class="kpi"><span>mean surface temperature</span><strong>${formatNumber(mean, 1)} °C</strong><small>Landsat summer composite</small></div>
+      <div class="kpi"><span>high heat-equity cells</span><strong>${formatNumber(high)}</strong><small>of ${formatNumber(cells.length)} cells</small></div>
+    </div>
+    <div class="city-method"><strong>hottest cell</strong><span>${hottestText} · LST, not air temperature</span></div>
+    <div class="city-method"><strong>index</strong><span>1/5 Landsat LST + 4/5 P38 Census equity · relative screen</span></div>
+    <p class="muted" style="font-size:.68rem;margin-top:8px">${formatNumber(data.metadata?.scene_dates?.length || 0)} Landsat scenes · ${escapeHtml(data.metadata?.lst_resolution_m || 30)} m LST</p>
+  `;
+  status.textContent = "screening";
+}
+
 function renderPlantingOpportunity() {
   const data = state.plantingOpportunity;
   const status = $("planting-opportunity-status");
@@ -583,6 +625,15 @@ async function init() {
       } catch (_error) {
         state.plantingOpportunity = null;
         renderPlantingOpportunity();
+      }
+    }
+    if (dataset.has_heat_equity) {
+      try {
+        state.heatEquity = await api("api/heat-equity");
+        renderHeatEquity();
+      } catch (_error) {
+        state.heatEquity = null;
+        renderHeatEquity();
       }
     }
     $("dataset-name").textContent = `${dataset.name} · ${dataset.tree_count.toLocaleString("en-CA")} tree records · ${dataset.sources.length} sources`;
@@ -770,6 +821,12 @@ function initMap() {
             ? "api/planting-opportunity.geojson"
             : { type: "FeatureCollection", features: [] },
         },
+        heatEquity: {
+          type: "geojson",
+          data: state.dataset?.has_heat_equity
+            ? "api/heat-equity.geojson"
+            : { type: "FeatureCollection", features: [] },
+        },
         offInventory: {
           type: "geojson",
           data: state.dataset?.has_off_inventory
@@ -868,6 +925,24 @@ function initMap() {
               "#000000",
             ],
             "fill-opacity": 0.48,
+            "fill-outline-color": "rgba(255,255,255,0.35)",
+          },
+        },
+        {
+          id: "heat-equity",
+          type: "fill",
+          source: "heatEquity",
+          layout: { visibility: "none" },
+          paint: {
+            "fill-color": [
+              "match",
+              ["get", "heat_equity_tier"],
+              "high", "#b2182b",
+              "medium", "#ef8a34",
+              "low", "#4575b4",
+              "#000000",
+            ],
+            "fill-opacity": 0.5,
             "fill-outline-color": "rgba(255,255,255,0.35)",
           },
         },
@@ -1853,6 +1928,15 @@ function bindControls() {
     if (state.map && state.map.getLayer("heat-priority")) {
       state.map.setLayoutProperty(
         "heat-priority",
+        "visibility",
+        event.target.checked ? "visible" : "none",
+      );
+    }
+  });
+  $("toggle-heat-equity").addEventListener("change", (event) => {
+    if (state.map && state.map.getLayer("heat-equity")) {
+      state.map.setLayoutProperty(
+        "heat-equity",
         "visibility",
         event.target.checked ? "visible" : "none",
       );
