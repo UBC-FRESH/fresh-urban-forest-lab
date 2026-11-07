@@ -22,6 +22,7 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
   page errors appeared.
 - Dashboard: GREEN (lint, format, types, tests, validator, docs).
 - Opened PR #188 for maintainer review; the phase remains open until merge and parent-issue close-out.
+- Merged P39 as `92bf849` via PR #188; child issues #183–#187 and parent #174 are closed. Phase status: complete.
 - Opened PR #182 for maintainer review; the phase remains open until merge and parent-issue close-out.
 - Merged P38 as `9555d4e` via PR #182; child issues #177–#181 and parent #173 are closed. Phase status: complete.
 
