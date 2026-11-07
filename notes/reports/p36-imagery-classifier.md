@@ -112,9 +112,20 @@ the same 2022 orthophoto service.
 - The Vancouver 3D overlay uses image groups.
 - No known-good candidate labels exist; this is still screening.
 
+### Surrey
+
+Surrey's high-confidence candidates were scored with the April 2025 AerialImages service.
+
+- **177,361** high-confidence candidates scored.
+- Image-only groups: **47,222 conifer / 130,139 deciduous**.
+- CHM + image fusion groups: **27,831 conifer / 149,530 deciduous**.
+- Candidate fields carry image and fusion group/probabilities.
+- No known-good off-inventory species labels; Surrey public-tree labels are inventory
+  labels, not field validation of candidates.
+
 ### Remaining
 
-- Surrey and Coquitlam candidate image scoring.
+- Coquitlam candidate image scoring.
 - Final P36 close-out.
 
 ## Close-out coverage

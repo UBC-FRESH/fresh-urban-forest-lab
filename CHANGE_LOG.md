@@ -802,6 +802,14 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Updated the Arbor guide and provenance note: FEMIC owns the ground lane.
 - No default detector or product changed.
 
+### P37 Surrey and Coquitlam imagery scoring planned
+
+- Added P37 to complete image candidate scoring for the two remaining P34 cities.
+- Surrey has 2025 imagery and a public tree inventory for validation; Coquitlam has 2025
+  imagery but no public species inventory, so it will be manual-audit-only.
+- No Vancouver 2022 model transfer will be presented as validated without domain-shift
+  testing.
+
 ### P34/P35/P36 close-out
 
 - Merged the Lower Mainland instances, off-inventory screening/QA, and GPU imagery/fusion
@@ -812,3 +820,15 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Burnaby and Vancouver high-confidence candidates are image-scored. Surrey and Coquitlam
   remain explicitly unscored; no candidate-level known-good species labels exist.
 - Dashboard: GREEN; browser smoke clean; portal 8101 restarted from merged code.
+
+### P36 Surrey candidate image and fusion scoring
+
+- Scored 177,361 high-confidence Surrey candidates using the City of Surrey April 2025
+  AerialImages service and the P36 image CNN.
+- Image-only groups: 47,222 conifer / 130,139 deciduous. Fused groups: 27,831 conifer /
+  149,530 deciduous.
+- Added image and fusion group/probability fields to Surrey candidates and the 3D group
+  code.
+- No known-good off-inventory species labels exist for Surrey; these are screening
+  predictions.
+- Dashboard: GREEN.
