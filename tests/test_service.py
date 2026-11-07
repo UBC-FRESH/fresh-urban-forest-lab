@@ -80,6 +80,27 @@ def test_heat_priority_endpoints_are_optional(tmp_path: Path) -> None:
     assert geojson.headers["content-type"].startswith("application/geo+json")
 
 
+def test_planting_opportunity_endpoints_are_optional(tmp_path: Path) -> None:
+    """A dataset without the product returns 404; adding it serves JSON and GeoJSON."""
+    client = _client(tmp_path)
+    assert client.get("/api/planting-opportunity").status_code == 404
+    assert client.get("/api/planting-opportunity.geojson").status_code == 404
+    (tmp_path / "dataset" / "planting_opportunity.json").write_text(
+        '{"schema_version": "test", "metadata": {}, "cells": []}', encoding="utf-8"
+    )
+    (tmp_path / "dataset" / "planting_opportunity.geojson").write_text(
+        '{"type": "FeatureCollection", "features": []}', encoding="utf-8"
+    )
+    dataset = client.get("/api/dataset").json()
+    assert dataset["has_planting_opportunity"] is True
+    response = client.get("/api/planting-opportunity")
+    assert response.status_code == 200
+    assert response.json()["schema_version"] == "test"
+    geojson = client.get("/api/planting-opportunity.geojson")
+    assert geojson.status_code == 200
+    assert geojson.headers["content-type"].startswith("application/geo+json")
+
+
 def test_full_map_layers_are_optional(tmp_path: Path) -> None:
     """The compressed full map layers are served when present."""
     import gzip

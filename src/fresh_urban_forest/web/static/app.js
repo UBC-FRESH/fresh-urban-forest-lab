@@ -37,6 +37,7 @@ const state = {
   changeData: null,
   cityMetrics: null,
   heatPriority: null,
+  plantingOpportunity: null,
   changeProduct: "change.json",
   changeProductsLoaded: false,
   lightMap: null,
@@ -402,6 +403,42 @@ function renderCityMetrics() {
   $("city-source").textContent = `${formatNumber(city.tree_count)} public trees · ${local.length} local areas · 2022 LiDAR · ${formatNumber(visualTrees)} visual trees`;
 }
 
+function renderPlantingOpportunity() {
+  const data = state.plantingOpportunity;
+  const status = $("planting-opportunity-status");
+  if (!data) {
+    status.textContent = "none";
+    $("planting-opportunity-summary").innerHTML =
+      '<p class="muted">No canopy-gap product in this dataset.</p>';
+    return;
+  }
+  const cells = data.cells || [];
+  const counts = {};
+  let gap = 0;
+  let street = 0;
+  let sites = 0;
+  let streetSites = 0;
+  let capacity = 0;
+  for (const cell of cells) {
+    counts[cell.opportunity_tier] = (counts[cell.opportunity_tier] || 0) + 1;
+    gap += Number(cell.gap_m2 || 0);
+    street += Number(cell.street_gap_m2 || 0);
+    sites += Number(cell.gap_sites || 0);
+    streetSites += Number(cell.street_gap_sites || 0);
+    capacity += Number(cell.capacity_small_upper || 0);
+  }
+  $("planting-opportunity-summary").innerHTML = `
+    <div class="city-kpis" style="grid-template-columns:repeat(2,minmax(0,1fr));margin:0 0 10px">
+      <div class="kpi"><span>canopy-gap area</span><strong>${formatCompact(gap / 10000, " ha")}</strong><small>${formatCompact(street / 10000, " ha")} street-adjacent</small></div>
+      <div class="kpi"><span>contiguous sites</span><strong>${formatNumber(sites)}</strong><small>${formatNumber(streetSites)} street-adjacent</small></div>
+    </div>
+    <div class="city-method"><strong>gross small-crown slots</strong><span>${formatCompact(capacity)} upper bound if every square metre were available · not a tree count</span></div>
+    <div class="city-method"><strong>high tier cells</strong><span>${formatNumber(counts.high || 0)} of ${formatNumber(cells.length)} cells</span></div>
+    <p class="muted" style="font-size:.68rem;margin-top:8px">P38 shade deficit and Census equity are used in the relative score.</p>
+  `;
+  status.textContent = "screening";
+}
+
 function renderHeatPriority() {
   const data = state.heatPriority;
   const status = $("heat-priority-status");
@@ -537,6 +574,15 @@ async function init() {
       } catch (_error) {
         state.heatPriority = null;
         renderHeatPriority();
+      }
+    }
+    if (dataset.has_planting_opportunity) {
+      try {
+        state.plantingOpportunity = await api("api/planting-opportunity");
+        renderPlantingOpportunity();
+      } catch (_error) {
+        state.plantingOpportunity = null;
+        renderPlantingOpportunity();
       }
     }
     $("dataset-name").textContent = `${dataset.name} · ${dataset.tree_count.toLocaleString("en-CA")} tree records · ${dataset.sources.length} sources`;
@@ -718,6 +764,12 @@ function initMap() {
             ? "api/heat-priority.geojson"
             : { type: "FeatureCollection", features: [] },
         },
+        plantingOpportunity: {
+          type: "geojson",
+          data: state.dataset?.has_planting_opportunity
+            ? "api/planting-opportunity.geojson"
+            : { type: "FeatureCollection", features: [] },
+        },
         offInventory: {
           type: "geojson",
           data: state.dataset?.has_off_inventory
@@ -799,6 +851,24 @@ function initMap() {
             ],
             "fill-opacity": 0.52,
             "fill-outline-color": "rgba(255,255,255,0.45)",
+          },
+        },
+        {
+          id: "planting-opportunity",
+          type: "fill",
+          source: "plantingOpportunity",
+          layout: { visibility: "none" },
+          paint: {
+            "fill-color": [
+              "match",
+              ["get", "opportunity_tier"],
+              "high", "#ca4c18",
+              "medium", "#f4a538",
+              "low", "#9bbe78",
+              "#000000",
+            ],
+            "fill-opacity": 0.48,
+            "fill-outline-color": "rgba(255,255,255,0.35)",
           },
         },
         {
@@ -1783,6 +1853,15 @@ function bindControls() {
     if (state.map && state.map.getLayer("heat-priority")) {
       state.map.setLayoutProperty(
         "heat-priority",
+        "visibility",
+        event.target.checked ? "visible" : "none",
+      );
+    }
+  });
+  $("toggle-planting-opportunity").addEventListener("change", (event) => {
+    if (state.map && state.map.getLayer("planting-opportunity")) {
+      state.map.setLayoutProperty(
+        "planting-opportunity",
         "visibility",
         event.target.checked ? "visible" : "none",
       );

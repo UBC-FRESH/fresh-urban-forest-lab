@@ -186,6 +186,26 @@
           are not modelled.
         </p>
       </section>
+
+      <section class="panel">
+        <div class="panel-heading">
+          <h2>Canopy opportunity</h2>
+          <span id="planting-opportunity-status" class="muted">checking</span>
+        </div>
+        <div id="planting-opportunity-summary">
+          <p class="muted">No canopy-gap product in this dataset.</p>
+        </div>
+        <div class="heat-legend" aria-label="Canopy opportunity tiers">
+          <span><i class="heat-swatch opportunity-high"></i>high</span>
+          <span><i class="heat-swatch opportunity-medium"></i>medium</span>
+          <span><i class="heat-swatch opportunity-low"></i>low</span>
+        </div>
+        <p class="hint">
+          Open, uncanopied ground after buildings, water, road surfaces, and slopes over
+          15° are removed. Utilities, ownership, access, soil, irrigation, and field
+          conditions are not modelled. Capacity is a gross upper bound, not a tree count.
+        </p>
+      </section>
     </aside>
 
     <section class="stage">
@@ -205,6 +225,7 @@
           <label><input id="toggle-buildings" type="checkbox" checked> buildings</label>
           <label><input id="toggle-off-inventory" type="checkbox"> off-inventory</label>
           <label><input id="toggle-heat-priority" type="checkbox"> shade equity</label>
+          <label><input id="toggle-planting-opportunity" type="checkbox"> canopy gaps</label>
           <label class="off-inventory-filter">conf
             <select id="off-inventory-confidence" aria-label="Minimum off-inventory confidence">
               <option value="0">all</option>
