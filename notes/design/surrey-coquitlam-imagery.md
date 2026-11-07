@@ -1,6 +1,6 @@
 # Surrey and Coquitlam imagery classifier
 
-Status: active P37 plan, 2026-11-06.
+Status: active P37, full-resolution scoring complete 2026-11-07; candidate audit open.
 
 Parent issue: #168
 
@@ -22,23 +22,26 @@ Vancouver 2022 model transfers cleanly to 2024–25 imagery.
 
 ### Surrey
 
-- Extract/convert imagery to a local raster.
-- Build labelled chips from Surrey inventory trees.
-- Fine-tune or train a Surrey 2025 image CNN with spatial-block validation.
-- Apply the selected model to Surrey high-confidence candidates.
+- Decode the 199 Surrey SID tiles to tiled DEFLATE GeoTIFFs and index them with a VRT.
+- Build labelled 128 px chips at native 0.075 m from Surrey inventory trees.
+- Train a Surrey 2025 image CNN with 500 m spatial-block validation.
+- Apply the selected 128 px model to Surrey high-confidence candidates.
 - Report confusion matrix, per-class precision/recall, Wilson/bootstrap intervals.
+- Compare the full-resolution candidate distribution with the P36 0.30 m service scores;
+  an unexplained scale shift must be treated as a model-audit issue, not an improvement.
 
 ### Coquitlam
 
-- Apply the selected image model to Coquitlam high-confidence candidates.
-- Carry source/date/confidence.
+- Decode the 184 Coquitlam SID tiles to the same VRT/GeoTIFF form.
+- Apply the selected Surrey full-resolution image model to Coquitlam candidates.
+- Carry source/date/resolution/confidence.
 - Run a manual orthophoto audit sample, not a known-good inventory QA.
 - No confusion-matrix claim without labels.
 
 ## Outputs
 
-- `imagery_*` and fusion fields in Surrey/Coquitlam candidate GeoJSON and 3D data.
-- UI source/date and coverage labels.
+- Full-resolution `image_*`/`imagery_*` fields in Surrey/Coquitlam candidate GeoJSON and 3D data.
+- UI source/date/resolution and coverage labels.
 - Model/report artifact with domain-shift caveats.
 
 ## Acceptance

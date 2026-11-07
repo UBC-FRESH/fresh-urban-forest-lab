@@ -970,9 +970,9 @@ Goal: complete image candidate scoring for Surrey and Coquitlam with 2025 orthop
 Plan: `notes/design/surrey-coquitlam-imagery.md`.
 
 - [x] P37.1 Acquire and convert Surrey/Coquitlam imagery (#169)
-- [ ] P37.2 Train/validate Surrey 2025 imagery model (#170)
+- [x] P37.2 Train/validate Surrey 2025 imagery model (#170)
 - [x] P37.3 Score Surrey and Coquitlam candidates (#171)
-- [ ] P37.4 UI, docs, dashboard, browser smoke, close-out (#172)
+- [x] P37.4 UI, docs, dashboard, browser smoke, close-out (#172)
 
 Phase 37 verification:
 

@@ -179,7 +179,7 @@ function renderOffInventory() {
       <article class="kpi"><span>Detected</span><strong>${formatNumber(data.detected_count)}</strong><small>${formatNumber(data.matched_count)} matched</small></article>
     </div>
     ${voi}
-    ${data.imagery ? `<p class="hint">Image scoring: ${formatNumber(data.imagery.scored_count)} candidates · ${escapeHtml(data.imagery.source)} · mapped groups ${formatNumber(data.imagery.groups.conifer)} conifer / ${formatNumber(data.imagery.groups.deciduous)} deciduous. ${escapeHtml(data.imagery.caveat || "")}</p>` : ""}`;
+    ${data.imagery ? `<p class="hint">Image scoring: ${formatNumber(data.imagery.scored_count)} candidates · ${escapeHtml(data.imagery.source)}${data.imagery.resolution_m ? ` · ${escapeHtml(String(data.imagery.resolution_m))} m/px` : ""} · mapped groups ${formatNumber(data.imagery.groups.conifer)} conifer / ${formatNumber(data.imagery.groups.deciduous)} deciduous. ${escapeHtml(data.imagery.caveat || "")}</p>` : ""}`;
   $("off-inventory-status").textContent = data.evidence?.tier || "pilot";
   renderClassifierQA();
 }
