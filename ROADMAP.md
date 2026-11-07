@@ -34,6 +34,7 @@ This roadmap is the plan of record and the issue tracker map for FRESH Urban For
 | P34 Surrey, Burnaby, and Coquitlam portal instances | #149 | `feature/p34-lower-mainland-instances` | complete |
 | P35 Off-inventory conifer/deciduous classifier and QA | #156 | `feature/p35-off-inventory-classifier` | complete |
 | P36 GPU imagery-enhanced conifer/deciduous classifier | #161 | `feature/p36-imagery-classifier` | complete |
+| P37 Surrey and Coquitlam imagery candidate scoring | #168 | `feature/p37-surrey-coquitlam-imagery` | active |
 
 ## Lifecycle Map
 
@@ -954,6 +955,26 @@ Plan: `notes/design/imagery-classifier.md`.
 - [x] P36.5 Docs, dashboard, browser smoke, close-out (#166)
 
 Phase 36 verification:
+
+- `python scripts/dashboard.py`
+- `python scripts/check_workflow.py`
+
+## Phase 37: Surrey and Coquitlam imagery candidate scoring
+
+Parent issue: #168
+Branch: `feature/p37-surrey-coquitlam-imagery`
+Status: active
+
+Goal: complete image candidate scoring for Surrey and Coquitlam with 2025 orthophotos.
+
+Plan: `notes/design/surrey-coquitlam-imagery.md`.
+
+- [x] P37.1 Acquire and convert Surrey/Coquitlam imagery (#169)
+- [ ] P37.2 Train/validate Surrey 2025 imagery model (#170)
+- [x] P37.3 Score Surrey and Coquitlam candidates (#171)
+- [ ] P37.4 UI, docs, dashboard, browser smoke, close-out (#172)
+
+Phase 37 verification:
 
 - `python scripts/dashboard.py`
 - `python scripts/check_workflow.py`

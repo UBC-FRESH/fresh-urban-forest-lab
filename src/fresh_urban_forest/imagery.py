@@ -222,3 +222,51 @@ def chips_for_points(
         ``(N, size, size, 3)`` uint8 array.
     """
     return np.stack([source.chip(lon, lat, size=size) for lon, lat in points], axis=0)
+
+
+def metro_2025_source(cache_dir: Path) -> TileSource:
+    """Return the Metro Vancouver 2025 orthophoto source.
+
+    Parameters
+    ----------
+    cache_dir : Path
+        Tile cache root.
+
+    Returns
+    -------
+    TileSource
+        Source at zoom 19 (about 0.30 m/pixel).
+    """
+    return TileSource(
+        name="metro_vancouver_2025_orthophoto",
+        service_url=(
+            "https://tiles.arcgis.com/tiles/qrcTTRTwUoS8N47o/arcgis/rest/services/"
+            "Orthophotos_2025/MapServer"
+        ),
+        zoom=19,
+        cache_dir=cache_dir,
+    )
+
+
+def coquitlam_2025_source(cache_dir: Path) -> TileSource:
+    """Return the Coquitlam 2025 orthophoto source.
+
+    Parameters
+    ----------
+    cache_dir : Path
+        Tile cache root.
+
+    Returns
+    -------
+    TileSource
+        Source at zoom 19 (about 0.30 m/pixel).
+    """
+    return TileSource(
+        name="coquitlam_2025_orthophoto",
+        service_url=(
+            "https://tiles.arcgis.com/tiles/Q6Lq3evZUGfPrN7o/arcgis/rest/services/"
+            "Imagery_2025_MaxLOD/MapServer"
+        ),
+        zoom=19,
+        cache_dir=cache_dir,
+    )

@@ -802,6 +802,16 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Updated the Arbor guide and provenance note: FEMIC owns the ground lane.
 - No default detector or product changed.
 
+### P37 Surrey and Coquitlam image candidate scoring
+
+- Scored 177,361 Surrey high-confidence candidates with the April 2025 City imagery and
+  CHM + image fusion: 27,831 conifer / 149,530 deciduous.
+- Scored 85,209 Coquitlam high-confidence candidates with the 2025 City tile service:
+  18,764 conifer / 66,445 deciduous.
+- Added image/fusion/source/date fields to candidate GeoJSON and 3D group codes.
+- Coquitlam remains manual-audit-only; no public species inventory exists.
+- Surrey-specific fine-tune/validation remains open.
+
 ### P37 Surrey and Coquitlam imagery scoring planned
 
 - Added P37 to complete image candidate scoring for the two remaining P34 cities.
