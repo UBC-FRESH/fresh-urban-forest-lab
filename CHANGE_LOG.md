@@ -882,3 +882,10 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
   the sidebar showed 37.7 °C mean LST, 305 high-tier cells, and no console or page
   errors.
 - Dashboard: GREEN (lint, format, types, tests, validator, docs).
+
+### P41 observed canopy change 2018–2022 start
+
+- Created parent issue #195, child issues #196–#200, plan, and branch.
+- Plan: `notes/design/p41-canopy-change.md`.
+- First dependency: full 2018 City LiDAR coverage; the current manifest covers a UBC subset.
+- No implementation or data claim yet.

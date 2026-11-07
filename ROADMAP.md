@@ -37,6 +37,7 @@ This roadmap is the plan of record and the issue tracker map for FRESH Urban For
 | P38 Shade and social-equity screening | #173 | `feature/p38-heat-canopy-priority` | complete |
 | P39 Canopy gaps and above-ground planting opportunity | #174 | `feature/p39-canopy-gaps` | complete |
 | P40 Open land-surface temperature and heat equity | #176 | `feature/p40-heat-equity` | complete |
+| P41 Observed canopy change 2018-2022 | #195 | `feature/p41-canopy-change` | active |
 
 ## Lifecycle Map
 
@@ -1058,6 +1059,36 @@ Phase 40 verification:
 - `python scripts/dashboard.py`
 - `python scripts/check_workflow.py`
 
+## Phase 41: Observed canopy change 2018-2022
+
+Parent issue: #195
+Branch: `feature/p41-canopy-change`
+Status: active
+
+Goal: extend the existing observed-change prototype to a city-scale 2018→2022
+canopy-change screen and join it to P38 shade, P39 gap, and P40 heat-equity cells.
+
+Plan: `notes/design/p41-canopy-change.md`.
+
+- [ ] P41.1 Acquire and checksum 2018 city LiDAR and verify coverage (#196)
+- [ ] P41.2 Build aligned 2018/2022 canopy-height grids (#197)
+- [ ] P41.3 Build 400 m change cells and join P38–P40 fields (#198)
+- [ ] P41.4 Add API, GeoJSON layer, map toggle, and method note (#199)
+- [ ] P41.5 Dashboard, browser smoke, and close-out (#200)
+
+Acceptance criteria:
+
+- The product states both acquisition dates, CRS, vertical handling, threshold, and overlap.
+- Cells report earlier/later canopy, gain, loss, stable, net, and height change.
+- The API and map layer are optional when a dataset has no product.
+- No ownership, causal, or field-validation claim is made.
+- Dashboard is green.
+
+Phase 41 verification:
+
+- `python scripts/dashboard.py`
+- `python scripts/check_workflow.py`
+
 ## Detailed Next Steps Notes
 
 1. The repository was created from `UBC-FRESH/ubc-fresh-dev-workflow` on 2026-11-03. The seed's dashboard, validator, docs, and agent contract are retained.
@@ -1107,3 +1138,10 @@ Phase 40 verification:
     The product is a relative surface-temperature screen, not air temperature, thermal
     comfort, a health model, or a planting plan. Method note:
     `notes/reports/p40-heat-equity.md`.
+
+24. P41 (#195) extends observed canopy change from the existing 2 km² downtown product
+    to a city-scale 2018→2022 LiDAR comparison. The first dependency is the full 2018
+    City LiDAR coverage; the current manifest covers a UBC subset. The phase will join
+    400 m change cells to P38 shade, P39 gap, and P40 heat-equity fields. It will not
+    claim tree survival, species change, ownership, or causal attribution.
+    Plan: `notes/design/p41-canopy-change.md`.
