@@ -1003,11 +1003,11 @@ street-adjacent gaps from other open ground, and report a gross crown-slot
 envelope. The product does not model utilities, ownership, access, soil,
 irrigation, cost, or field conditions.
 
-- [x] P39.1 Gap masks, slope, road, and open-ground screen
-- [x] P39.2 400 m opportunity cells, gap sites, and capacity envelope
-- [x] P39.3 API, GeoJSON layer, and map toggle
-- [x] P39.4 Vancouver product and method note
-- [ ] P39.5 Dashboard, browser smoke, and close-out
+- [x] P39.1 Gap masks, slope, road, and open-ground screen (#183)
+- [x] P39.2 400 m opportunity cells, gap sites, and capacity envelope (#184)
+- [x] P39.3 API, GeoJSON layer, and map toggle (#185)
+- [x] P39.4 Vancouver product and method note (#186)
+- [ ] P39.5 Dashboard, browser smoke, and close-out (#187)
 
 Acceptance criteria:
 
