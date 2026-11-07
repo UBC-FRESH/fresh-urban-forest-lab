@@ -15,6 +15,8 @@ import numpy as np
 from numpy.typing import NDArray
 from osgeo import gdal  # type: ignore[import-untyped]
 
+from fresh_urban_forest.imagery import band_sequential_rgb
+
 gdal.UseExceptions()
 
 
@@ -101,7 +103,7 @@ class FullResolutionSource:
             buf_ysize=y1 - y0,
             band_list=[1, 2, 3],
         )
-        values = np.frombuffer(payload, dtype=np.uint8).reshape(y1 - y0, x1 - x0, 3)
+        values = band_sequential_rgb(payload, y1 - y0, x1 - x0)
         canvas[y0 - top : y1 - top, x0 - left : x1 - left] = values
         return canvas
 

@@ -270,3 +270,35 @@ def coquitlam_2025_source(cache_dir: Path) -> TileSource:
         zoom=19,
         cache_dir=cache_dir,
     )
+
+
+def band_sequential_rgb(
+    payload: bytes,
+    height: int,
+    width: int,
+) -> NDArray[np.uint8]:
+    """Convert a band-sequential RGB buffer to an HWC image.
+
+    Parameters
+    ----------
+    payload : bytes
+        Buffer returned by GDAL ``ReadRaster`` with three bands. GDAL may return
+        band-sequential rather than pixel-interleaved data.
+    height, width : int
+        Raster window dimensions.
+
+    Returns
+    -------
+    numpy.ndarray
+        ``(height, width, 3)`` uint8 RGB array.
+
+    Raises
+    ------
+    ValueError
+        If the payload length does not match three bands.
+    """
+    values = np.frombuffer(payload, dtype=np.uint8)
+    expected = height * width * 3
+    if values.size != expected:
+        raise ValueError(f"expected {expected} bytes, received {values.size}")
+    return np.ascontiguousarray(values.reshape(3, height, width).transpose(1, 2, 0))

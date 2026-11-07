@@ -806,14 +806,17 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 
 - Decoded the 383 municipal 0.075 m MrSID tiles into tiled lossless GeoTIFFs and VRTs;
   removed the City image-service dependency from the candidate scoring path.
+- Corrected GDAL `ReadRaster` band order from band-sequential to RGB before retraining;
+  the first full-resolution figures were invalid and are superseded.
 - Trained a 128 px full-resolution Surrey CNN on 12,000 inventory chips with a 500 m
-  spatial holdout: 79.13% accuracy, 77.86% conifer precision, 81.81% conifer recall.
-- Rescored 177,361 Surrey candidates at 0.075 m: 121,817 conifer / 55,544 deciduous.
-- Rescored 85,209 Coquitlam candidates at 0.075 m: 46,169 conifer / 39,040 deciduous.
-- Full-resolution candidate groups shift sharply toward conifer relative to the P36
-  0.30 m service scores; the shift is documented as an unresolved model/scale issue,
-  not an accuracy improvement.
+  spatial holdout: 81.68% accuracy, 82.65% conifer precision, 80.51% conifer recall.
+- Rescored 177,361 Surrey candidates at 0.075 m: 104,255 conifer / 73,106 deciduous.
+- Rescored 85,209 Coquitlam candidates at 0.075 m: 43,111 conifer / 42,098 deciduous.
+- Added a 1,000-point same-source 0.30 m vs 0.075 m comparison and a 200-candidate
+  full-resolution audit packet. Full-resolution and 0.30 m scores agree at 73.2%;
+  candidate-level human audit remains open.
 - Coquitlam remains manual-audit-only; no public species inventory exists.
+- Dashboard GREEN; browser smoke clean.
 
 ### P37 Surrey and Coquitlam image candidate scoring
 

@@ -2,8 +2,8 @@
 
 Date: 2026-11-07
 
-Status: full-resolution candidate scoring and Surrey spatial validation complete; manual
-candidate audit remains open.
+Status: corrected full-resolution scoring complete; 200-candidate audit packet ready for
+human review.
 
 Parent issue: #168
 
@@ -14,8 +14,18 @@ Parent issue: #168
 - The SID files are decoded through GDAL 3.8.4 with the Hexagon MrSID 10.0.1 decoder,
   installed under `/opt/gdal-mrsid`.
 - Each tile was decoded to a tiled, lossless DEFLATE GeoTIFF and indexed by a VRT.
-- The scoring path reads native 0.075 m windows; it does not use the City image-service
-  renderings that were used for the earlier P36 scores.
+- Scoring reads native 0.075 m windows; it does not use the City image-service renderings
+  used for the earlier P36 scores.
+
+## Correction
+
+The first full-resolution run incorrectly treated GDAL `ReadRaster` output as RGB
+pixel-interleaved data; this GDAL build returns band-sequential bytes for a three-band
+read. The channel order was corrected in `fresh_urban_forest.fullres_imagery`.
+
+The earlier full-resolution figures (79.13% validation, 121,817 Surrey conifer, 46,169
+Coquitlam conifer) are therefore **superseded and invalid**. The corrected results below
+are the ones to use.
 
 ## Model
 
@@ -25,17 +35,18 @@ Parent issue: #168
 - Spatial block holdout: 500 m.
 - Small four-block CNN trained for 10 epochs; best held-out epoch selected.
 - Validation rows: 2,904 (1,462 conifer / 1,442 deciduous).
+- A 192 px / 14.4 m trial scored 77.51% accuracy and was rejected.
 
 ### Held-out Surrey inventory validation
 
 | Metric | Value | 95% interval |
 |---|---:|---:|
-| Accuracy | 79.13% | 77.62–80.57% |
-| Conifer precision | 77.86% | 75.72–79.87% |
-| Conifer recall | 81.81% | 79.75–83.70% |
-| Deciduous precision | 80.56% | 78.37–82.57% |
-| Deciduous recall | 76.42% | 74.16–78.54% |
-| Brier score | 0.1514 | — |
+| Accuracy | 81.68% | 80.23–83.05% |
+| Conifer precision | 82.65% | 80.60–84.53% |
+| Conifer recall | 80.51% | 78.40–82.46% |
+| Deciduous precision | 80.74% | 78.66–82.67% |
+| Deciduous recall | 82.87% | 80.84–84.73% |
+| Brier score | 0.1462 | — |
 
 This is a Surrey inventory spatial holdout, not a field audit.
 
@@ -45,32 +56,50 @@ This is a Surrey inventory spatial holdout, not a field audit.
 
 - **177,361** high-confidence candidates scored.
 - Full-resolution image-only groups:
-  **121,817 conifer / 55,544 deciduous**.
+  **104,255 conifer / 73,106 deciduous**.
 - Source/date/resolution: April 2025, 0.075 m.
 
 ### Coquitlam
 
 - **85,209** high-confidence candidates scored.
 - Full-resolution image-only transfer groups:
-  **46,169 conifer / 39,040 deciduous**.
+  **43,111 conifer / 42,098 deciduous**.
 - Coquitlam has **no public species inventory**. This is not a confusion matrix, and the
   values are not known-good species labels.
 
-## Scale-shift warning
+## Scale comparison
 
-The full-resolution scores are much more conifer-heavy than the P36 0.30 m service scores:
+A 1,000-candidate stratified sample was scored on the same points with:
 
-| City | P36 0.30 m image-only | P37 0.075 m image-only |
-|---|---:|---:|
-| Surrey | 47,222 conifer / 130,139 deciduous | 121,817 / 55,544 |
-| Coquitlam | 18,764 / 66,445 | 46,169 / 39,040 |
+- the P37 0.075 m model on its native 9.6 m chip; and
+- the P36 0.30 m model on a 96 px bilinear downsample of the same 28.8 m crop.
 
-The full-resolution model has a valid Surrey inventory holdout, but its candidate
-distribution shifts sharply. The likely causes include the smaller 9.6 m chip footprint,
-local illumination and shadow structure at 7.5 cm, and the fact that off-inventory
-candidates are not inventory trees. This shift is **not evidence that the full-resolution
-model is more accurate on candidates**. Candidate-level manual audit is required before
-using these groups operationally.
+The comparison uses the same raw SID imagery, not the City image service.
+
+| Measure | Result |
+|---|---:|
+| Full-resolution conifer share | 50.0% |
+| 0.30 m conifer share | 56.4% |
+| Agreement at 0.5 | 73.2% |
+| Probability correlation | 0.457 |
+| Mean probability difference | −0.032 |
+| Saved vs recomputed full-resolution MAD | 0.000024 |
+
+The corrected models are broadly comparable in aggregate. They still disagree on a
+meaningful minority of points, so candidate-level audit is required.
+
+## Audit packet
+
+`data/processed/surrey_2025/fullres_audit/` contains:
+
+- `audit_page_01.jpg` … `audit_page_10.jpg`: 200 stratified candidate chips at 28.8 m
+  context, with a red centre crosshair. Model probabilities are hidden on the pages.
+- `audit_key.csv`: candidate indices, page numbers, full-resolution and 0.30 m
+  probabilities, and blank `human_group`, `confidence`, and `notes` columns.
+- `comparison.csv` and `comparison.json`: same-point comparison records.
+
+No human labels have been entered. The packet is ready for review; no candidate-level
+precision claim is made yet.
 
 ## Limits
 
@@ -83,6 +112,6 @@ using these groups operationally.
 
 ## Remaining
 
-- Candidate-level manual orthophoto audit, especially the conifer-heavy shift.
-- Calibration or model adjustment before operational use.
-- Final P37 close-out and merge decision.
+- Human review of the 200-candidate audit packet.
+- Candidate-level precision summary and decision on merge/retrain.
+- Final P37 close-out.

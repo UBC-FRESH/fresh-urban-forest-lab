@@ -973,6 +973,7 @@ Plan: `notes/design/surrey-coquitlam-imagery.md`.
 - [x] P37.2 Train/validate Surrey 2025 imagery model (#170)
 - [x] P37.3 Score Surrey and Coquitlam candidates (#171)
 - [x] P37.4 UI, docs, dashboard, browser smoke, close-out (#172)
+- [ ] P37.5 Audit the full-resolution candidate shift (#175)
 
 Phase 37 verification:
 
