@@ -15,6 +15,8 @@ Vancouver 2022 model transfers cleanly to 2024–25 imagery.
 - Coquitlam 2025 Metro Vancouver ortho area ZIP, about 11 GB.
 - Surrey public tree inventory: 100,940 labelled records.
 - Coquitlam has no public species inventory.
+- The downloaded SID archives are valid MrSID. A local GDAL 3.8.4 + Hexagon MrSID 10.0.1
+  build is installed under `/opt/gdal-mrsid`, so `gdalinfo`/`gdal_translate` can read them.
 
 ## Method
 
