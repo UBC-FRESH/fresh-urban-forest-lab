@@ -36,7 +36,7 @@ This roadmap is the plan of record and the issue tracker map for FRESH Urban For
 | P36 GPU imagery-enhanced conifer/deciduous classifier | #161 | `feature/p36-imagery-classifier` | complete |
 | P38 Shade and social-equity screening | #173 | `feature/p38-heat-canopy-priority` | complete |
 | P39 Canopy gaps and above-ground planting opportunity | #174 | `feature/p39-canopy-gaps` | complete |
-| P40 Open land-surface temperature and heat equity | #176 | `feature/p40-heat-equity` | pr-open |
+| P40 Open land-surface temperature and heat equity | #176 | `feature/p40-heat-equity` | complete |
 
 ## Lifecycle Map
 
@@ -1031,7 +1031,7 @@ Phase 39 verification:
 
 Parent issue: #176
 Branch: `feature/p40-heat-equity`
-Status: pr-open
+Status: complete
 
 Goal: add public Landsat land-surface temperature to the P38 400 m grid and build
 a relative heat-equity screen. The output is not air temperature, pedestrian thermal
@@ -1041,7 +1041,7 @@ comfort, a validated vulnerability model, or a planting plan.
 - [x] P40.2 Median LST composite and 400 m aggregation (#190)
 - [x] P40.3 Five-part heat-equity index and product (#191)
 - [x] P40.4 API, GeoJSON layer, and map toggle (#192)
-- [ ] P40.5 Dashboard, browser smoke, and close-out (#193)
+- [x] P40.5 Dashboard, browser smoke, and close-out (#193)
 
 Acceptance criteria:
 
