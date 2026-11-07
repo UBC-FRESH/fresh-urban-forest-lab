@@ -34,7 +34,7 @@ This roadmap is the plan of record and the issue tracker map for FRESH Urban For
 | P34 Surrey, Burnaby, and Coquitlam portal instances | #149 | `feature/p34-lower-mainland-instances` | complete |
 | P35 Off-inventory conifer/deciduous classifier and QA | #156 | `feature/p35-off-inventory-classifier` | complete |
 | P36 GPU imagery-enhanced conifer/deciduous classifier | #161 | `feature/p36-imagery-classifier` | complete |
-| P38 Shade and social-equity screening | #173 | `feature/p38-heat-canopy-priority` | pr-open |
+| P38 Shade and social-equity screening | #173 | `feature/p38-heat-canopy-priority` | complete |
 
 ## Lifecycle Map
 
@@ -963,7 +963,7 @@ Phase 36 verification:
 
 Parent issue: #173
 Branch: `feature/p38-heat-canopy-priority`
-Status: pr-open
+Status: complete
 
 Goal: turn the transferable parts of published shade-priority methods into an
 independent, public-data screening layer. The product uses City of Vancouver LiDAR
@@ -974,7 +974,7 @@ replication, a planting permit, or a private-tree census.
 - [x] P38.2 Raster shade and 400 m median-split screen (#178)
 - [x] P38.3 API, GeoJSON layer, and map toggle (#179)
 - [x] P38.4 Vancouver product and method note (#180)
-- [ ] P38.5 Dashboard, browser smoke, and close-out (#181)
+- [x] P38.5 Dashboard, browser smoke, and close-out (#181)
 
 Acceptance criteria:
 
