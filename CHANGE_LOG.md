@@ -17,7 +17,11 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Recorded the data sources in `notes/reference/data-sources.md`, the software landscape
   in `notes/reference/software-landscape.md`, the architecture in
   `notes/design/architecture.md`, and ADRs 0001 to 0004.
+- Browser smoke: the map loaded the 797-cell layer, the **shade equity** toggle
+  worked, the sidebar reported the pixel-weighted 24.9% mean shade, and no console or
+  page errors appeared.
 - Dashboard: GREEN (lint, format, types, tests, validator, docs).
+- Opened PR #182 for maintainer review; the phase remains open until merge and parent-issue close-out.
 
 ### Collaborator source review
 
@@ -812,3 +816,24 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Burnaby and Vancouver high-confidence candidates are image-scored. Surrey and Coquitlam
   remain explicitly unscored; no candidate-level known-good species labels exist.
 - Dashboard: GREEN; browser smoke clean; portal 8101 restarted from merged code.
+
+## 2026-11-07
+
+### P38 shade and social-equity screening
+
+- Added `fresh_urban_forest.census` for public 2021 Census Profile indicators and a
+  population-weighted, relative social-equity score. The score uses four indicators
+  only; it does not claim to reproduce a proprietary tree-equity index.
+- Added `fresh_urban_forest.heat_priority` with a public-data raster solar-shadow
+  kernel, 400 m aggregation, shade efficiency, and median-split `1A`–`4B` classes.
+- Added `scripts/build_vancouver_heat_priority.py` and a Vancouver product built from
+  the P30 2022 LiDAR surfaces and 1,018 public dissemination areas.
+- Added optional `/api/heat-priority` and `/api/heat-priority.geojson` endpoints, a
+  **shade equity** map toggle, and a sidebar summary. Datasets without the product
+  continue to return 404 and show no layer.
+- Recorded the method, open-data endpoints, result, and limits in
+  `notes/reports/p38-shade-equity.md`.
+- Vancouver screening result: 797 cells, 24.9% mean combined shade, 16.8% tree shade,
+  9.4% building shade, 662,731 people represented, and 255 high-deficit/high-equity
+  cells. These are screening values, not planting feasibility or measured cooling.
+- Dashboard: GREEN (lint, format, types, tests, validator, docs).

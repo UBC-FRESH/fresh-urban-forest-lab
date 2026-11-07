@@ -29,6 +29,8 @@ publishing a new derivative.
 | City of Coquitlam buildings, boundary, and contours | City of Coquitlam | Open Government Licence – Coquitlam | Coquitlam provisional instance | 32,487 buildings; 2023 contours. |
 | Metro Vancouver Land Cover Classification 2020 | Metro Vancouver | Open Government Licence – Metro Vancouver | Conifer/deciduous/shrub context for the three instances | 5 m hybrid land-cover raster; class labels are not species observations. |
 | Environment Canada climate normals, Vancouver Harbour CS | Environment and Climate Change Canada | Open Government Licence – Canada | Rainfall-interception screening estimate | 1981–2010 annual precipitation 1,098.8 mm. |
+| 2021 Census Profile, dissemination areas | Statistics Canada | Open Government Licence – Canada | Social-equity indicators for the P38 shade screen | Public SDMX Census Profile API; small-area suppression is retained. |
+| 2021 Census dissemination-area boundaries | Statistics Canada / public ArcGIS feature service | Statistics Canada terms; verify current terms | Population-weighted areal interpolation | Public feature service; geometry only. |
 | OpenStreetMap road centrelines | © OpenStreetMap contributors | Open Database License (ODbL) 1.0 | Pale 2D street underlay and 3D road overlay | Queried from the Overpass API for the demo bbox; attribution is shown in the map HUD. |
 | Metro Vancouver classified LiDAR 2022 | Metro Vancouver | Metro Vancouver open-data terms | Regional cross-check | About 16.5 GB for the Vancouver/UBC/UEL area; classified vegetation. |
 | LidarBC open LiDAR data | Government of British Columbia / GeoBC | Open Government Licence – British Columbia | Provincial point clouds, DEM/DSM, CHM, and some tree metrics | Tile metadata carries acquisition year, CRS, and quality level. |
@@ -52,6 +54,11 @@ publishing a new derivative.
   https://opendata.vancouver.ca/explore/dataset/parks-polygon-representation/
 - City of Vancouver. *Zoning districts and labels.* Vancouver Open Data Portal.
   https://opendata.vancouver.ca/explore/dataset/zoning-districts-and-labels/
+- Statistics Canada. (2023). *Census Profile, 2021 Census of Population.*
+  https://www12.statcan.gc.ca/census-recensement/2021/dp-pd/prof/
+- Nixon, B., Benson, A., Fillo, M., Shea, E., Caughie, N., & McHale, M. R. (2026).
+  *Putting shade where it counts.* Urban Forestry & Urban Greening, 125, 129668.
+  https://doi.org/10.1016/j.ufug.2026.129668
 
 ## What the demo includes
 

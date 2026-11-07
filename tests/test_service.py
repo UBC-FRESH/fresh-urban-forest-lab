@@ -59,6 +59,27 @@ def test_city_metrics_endpoint_is_optional(tmp_path: Path) -> None:
     assert response.json()["city"]["tree_count"] == 2
 
 
+def test_heat_priority_endpoints_are_optional(tmp_path: Path) -> None:
+    """A dataset without the product returns 404; adding it serves JSON and GeoJSON."""
+    client = _client(tmp_path)
+    assert client.get("/api/heat-priority").status_code == 404
+    assert client.get("/api/heat-priority.geojson").status_code == 404
+    (tmp_path / "dataset" / "heat_priority.json").write_text(
+        '{"schema_version": "test", "metadata": {}, "cells": []}', encoding="utf-8"
+    )
+    (tmp_path / "dataset" / "heat_priority.geojson").write_text(
+        '{"type": "FeatureCollection", "features": []}', encoding="utf-8"
+    )
+    dataset = client.get("/api/dataset").json()
+    assert dataset["has_heat_priority"] is True
+    response = client.get("/api/heat-priority")
+    assert response.status_code == 200
+    assert response.json()["schema_version"] == "test"
+    geojson = client.get("/api/heat-priority.geojson")
+    assert geojson.status_code == 200
+    assert geojson.headers["content-type"].startswith("application/geo+json")
+
+
 def test_full_map_layers_are_optional(tmp_path: Path) -> None:
     """The compressed full map layers are served when present."""
     import gzip
