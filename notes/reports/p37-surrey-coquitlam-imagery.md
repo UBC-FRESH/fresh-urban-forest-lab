@@ -90,13 +90,22 @@ meaningful minority of points, so candidate-level audit is required.
 
 ## Audit packet
 
-`data/processed/surrey_2025/fullres_audit/` contains:
+The review uses the existing P32 blind, offline human-verification UI pattern rather than
+a separate review protocol.
 
-- `audit_page_01.jpg` … `audit_page_10.jpg`: 200 stratified candidate chips at 28.8 m
-  context, with a red centre crosshair. Model probabilities are hidden on the pages.
-- `audit_key.csv`: candidate indices, page numbers, full-resolution and 0.30 m
-  probabilities, and blank `human_group`, `confidence`, and `notes` columns.
-- `comparison.csv` and `comparison.json`: same-point comparison records.
+Directory: `data/processed/surrey_2025/fullres_verification_packet/`
+
+- `index.html`: blind 200-candidate review UI with Conifer / Deciduous / Uncertain
+  buttons, notes, progress, filters, local-storage autosave, CSV import/export, and a
+  print stylesheet.
+- `images/`: 200 full-resolution 28.8 m crops with a red centre crosshair.
+- `review_template.csv`: blank candidate IDs and labels.
+- `candidate_metadata.csv`: model probabilities and source indices; not for use during
+  the first blind pass.
+- `README.md`: reviewer instructions.
+- `fullres_verification_packet.zip`: distributable packet.
+
+The same-point comparison records remain in `data/processed/surrey_2025/fullres_audit/`.
 
 No human labels have been entered. The packet is ready for review; no candidate-level
 precision claim is made yet.

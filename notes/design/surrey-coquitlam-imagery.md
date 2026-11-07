@@ -35,7 +35,7 @@ Vancouver 2022 model transfers cleanly to 2024–25 imagery.
 - Decode the 184 Coquitlam SID tiles to the same VRT/GeoTIFF form.
 - Apply the selected Surrey full-resolution image model to Coquitlam candidates.
 - Carry source/date/resolution/confidence.
-- Run a manual orthophoto audit sample, not a known-good inventory QA.
+- Run a blind manual orthophoto audit using the existing P32 human-verification packet UI.
 - No confusion-matrix claim without labels.
 
 ## Outputs

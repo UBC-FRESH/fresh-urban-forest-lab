@@ -816,6 +816,9 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
   full-resolution audit packet. Full-resolution and 0.30 m scores agree at 73.2%;
   candidate-level human audit remains open.
 - Coquitlam remains manual-audit-only; no public species inventory exists.
+- Replaced the separate contact-sheet review with the existing P32 blind offline human-verification
+  UI pattern: 200 crops, Conifer/Deciduous/Uncertain buttons, local-storage autosave, CSV
+  import/export, and hidden model metadata.
 - Dashboard GREEN; browser smoke clean.
 
 ### P37 Surrey and Coquitlam image candidate scoring
