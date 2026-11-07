@@ -1037,11 +1037,11 @@ Goal: add public Landsat land-surface temperature to the P38 400 m grid and buil
 a relative heat-equity screen. The output is not air temperature, pedestrian thermal
 comfort, a validated vulnerability model, or a planting plan.
 
-- [x] P40.1 Landsat scene search, download, and QA masking
-- [x] P40.2 Median LST composite and 400 m aggregation
-- [x] P40.3 Five-part heat-equity index and product
-- [x] P40.4 API, GeoJSON layer, and map toggle
-- [ ] P40.5 Dashboard, browser smoke, and close-out
+- [x] P40.1 Landsat scene search, download, and QA masking (#189)
+- [x] P40.2 Median LST composite and 400 m aggregation (#190)
+- [x] P40.3 Five-part heat-equity index and product (#191)
+- [x] P40.4 API, GeoJSON layer, and map toggle (#192)
+- [ ] P40.5 Dashboard, browser smoke, and close-out (#193)
 
 Acceptance criteria:
 
