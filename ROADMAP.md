@@ -35,7 +35,7 @@ This roadmap is the plan of record and the issue tracker map for FRESH Urban For
 | P35 Off-inventory conifer/deciduous classifier and QA | #156 | `feature/p35-off-inventory-classifier` | complete |
 | P36 GPU imagery-enhanced conifer/deciduous classifier | #161 | `feature/p36-imagery-classifier` | complete |
 | P38 Shade and social-equity screening | #173 | `feature/p38-heat-canopy-priority` | complete |
-| P39 Canopy gaps and above-ground planting opportunity | #174 | `feature/p39-canopy-gaps` | active |
+| P39 Canopy gaps and above-ground planting opportunity | #174 | `feature/p39-canopy-gaps` | pr-open |
 
 ## Lifecycle Map
 
@@ -996,7 +996,7 @@ Phase 38 verification:
 
 Parent issue: #174
 Branch: `feature/p39-canopy-gaps`
-Status: active
+Status: pr-open
 
 Goal: identify open, uncanopied ground from public LiDAR surfaces, separate
 street-adjacent gaps from other open ground, and report a gross crown-slot
