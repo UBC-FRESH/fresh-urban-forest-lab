@@ -838,3 +838,23 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
   9.4% building shade, 662,731 people represented, and 255 high-deficit/high-equity
   cells. These are screening values, not planting feasibility or measured cooling.
 - Dashboard: GREEN (lint, format, types, tests, validator, docs).
+
+### P39 canopy gaps and above-ground planting opportunity
+
+- Added `fresh_urban_forest.planting_opportunity` with slope, road-surface, water,
+  building, and canopy masks; edge gaps, street-adjacent gaps, interior open ground,
+  contiguous gap sites, and a gross crown-slot envelope.
+- Added `scripts/build_vancouver_planting_opportunity.py` and a Vancouver product
+  from the P30 2022 LiDAR surfaces, public OSM road centrelines, and P38 cells.
+- Added optional `/api/planting-opportunity` and
+  `/api/planting-opportunity.geojson` endpoints, a **canopy gaps** map toggle, and a
+  sidebar summary.
+- Vancouver screening result: 797 cells, 1,845.99 ha edge gap, 859.37 ha
+  street-adjacent gap, 69,861 contiguous gap sites, and 264 high-tier cells. The
+  crown-slot counts are gross upper bounds, not planting targets.
+- Recorded the method, thresholds, products, and limits in
+  `notes/reports/p39-canopy-gaps.md`.
+- Browser smoke: both **canopy gaps** and **shade equity** layers loaded, the sidebar
+  reported 1.8k ha of canopy gap, 69,861 contiguous sites, and no console or page
+  errors appeared.
+- Dashboard: GREEN (lint, format, types, tests, validator, docs).

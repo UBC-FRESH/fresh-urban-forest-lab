@@ -658,3 +658,7 @@ select:focus, input:focus { outline: 2px solid #b8d3ae; outline-offset: 1px; }
 .heat-3b { background: #5d91cc; }
 .heat-4a { background: #626262; }
 .heat-4b { background: #aaaaaa; }
+
+.opportunity-high { background: #ca4c18; }
+.opportunity-medium { background: #f4a538; }
+.opportunity-low { background: #9bbe78; }

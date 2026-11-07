@@ -35,6 +35,7 @@ This roadmap is the plan of record and the issue tracker map for FRESH Urban For
 | P35 Off-inventory conifer/deciduous classifier and QA | #156 | `feature/p35-off-inventory-classifier` | complete |
 | P36 GPU imagery-enhanced conifer/deciduous classifier | #161 | `feature/p36-imagery-classifier` | complete |
 | P38 Shade and social-equity screening | #173 | `feature/p38-heat-canopy-priority` | complete |
+| P39 Canopy gaps and above-ground planting opportunity | #174 | `feature/p39-canopy-gaps` | active |
 
 ## Lifecycle Map
 
@@ -991,6 +992,40 @@ Phase 38 verification:
 - `python scripts/dashboard.py`
 - `python scripts/check_workflow.py`
 
+## Phase 39: Canopy gaps and above-ground planting opportunity
+
+Parent issue: #174
+Branch: `feature/p39-canopy-gaps`
+Status: active
+
+Goal: identify open, uncanopied ground from public LiDAR surfaces, separate
+street-adjacent gaps from other open ground, and report a gross crown-slot
+envelope. The product does not model utilities, ownership, access, soil,
+irrigation, cost, or field conditions.
+
+- [x] P39.1 Gap masks, slope, road, and open-ground screen
+- [x] P39.2 400 m opportunity cells, gap sites, and capacity envelope
+- [x] P39.3 API, GeoJSON layer, and map toggle
+- [x] P39.4 Vancouver product and method note
+- [ ] P39.5 Dashboard, browser smoke, and close-out
+
+Acceptance criteria:
+
+- Buildings, water, road surfaces, and slopes over the configured threshold are
+  excluded from the opportunity mask.
+- Every cell reports open-ground area, edge-gap area, street-adjacent gap area,
+  contiguous site counts, and a gross crown-slot envelope.
+- P38 shade deficit and equity are joined when available; the product still builds
+  without them.
+- The API and map layer are optional when a dataset has no product.
+- The method note states what is measured, modelled, and unavailable.
+- The dashboard is green.
+
+Phase 39 verification:
+
+- `python scripts/dashboard.py`
+- `python scripts/check_workflow.py`
+
 ## Detailed Next Steps Notes
 
 1. The repository was created from `UBC-FRESH/ubc-fresh-dev-workflow` on 2026-11-03. The seed's dashboard, validator, docs, and agent contract are retained.
@@ -1022,3 +1057,12 @@ Phase 38 verification:
     screening layer: it does not model utilities, ownership, planting permits, land-surface
     temperature, or field-validated thermal comfort. Method note:
     `notes/reports/p38-shade-equity.md`.
+
+22. P39 (#174) adds a public-data canopy-gap and above-ground opportunity screen.
+    It removes existing canopy, buildings, water, road surfaces, and slopes over 15°,
+    then separates edge gaps from interior open ground and counts contiguous sites at
+    least 45 m². The Vancouver run produced 797 cells, 1,845.99 ha of edge gap,
+    859.37 ha of street-adjacent gap, 69,861 gap sites, and a gross small-crown upper
+    bound of 1,397,060. The capacity values are upper bounds, not tree counts. Utilities,
+    ownership, access, soil, irrigation, cost, and field validation are not modelled.
+    Method note: `notes/reports/p39-canopy-gaps.md`.
