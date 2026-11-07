@@ -12,8 +12,9 @@ Parent issue: #168
   `AerialImages/MapServer` export endpoint.
 - Coquitlam 2025: City of Coquitlam `Imagery_2025_MaxLOD` tiled service.
 - Metro 2025 orthophoto source is recorded in `fresh_urban_forest.imagery` for future use.
-- Large downloaded SID archives were not usable directly because the local GDAL build has no
-  MrSID driver; tile/export services were used instead.
+- The downloaded SID archives are valid MrSID. A local GDAL build with the Hexagon MrSID
+  decoder is installed under `/opt/gdal-mrsid`; the candidate scores were produced through
+  the City services before that driver was installed.
 
 ## Results
 
