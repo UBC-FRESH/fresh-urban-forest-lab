@@ -8,14 +8,26 @@ import argparse
 import csv
 import gzip
 import json
+import math
+import shutil
 import zipfile
 from pathlib import Path
 from typing import Any
 
+import numpy as np
+import rasterio
 from PIL import Image, ImageDraw
+from rasterio.features import shapes
+from rasterio.windows import Window
+from scipy import ndimage
+from shapely.geometry import shape
 
+from build_off_inventory_layers import _lcc_grid
 from fresh_urban_forest.fullres_imagery import FullResolutionSource
-from fresh_urban_forest.terrain import project_lonlat
+from fresh_urban_forest.terrain import project_lonlat, unproject_xy
+
+TEMPLATE_PATH = Path(__file__).with_name("p37_verification_template.html")
+SERVER_PATH = Path(__file__).with_name("p37_review_server.py")
 
 TEMPLATE = r"""<!doctype html>
 <html lang="en">
@@ -196,6 +208,166 @@ render();
 """
 
 
+def _circle_ring(x: float, y: float, radius_m: float) -> list[list[float]]:
+    """Return a WGS84 circle as a last-resort crown footprint.
+
+    Parameters
+    ----------
+    x, y : float
+        Centre in EPSG:3157.
+    radius_m : float
+        Circle radius in metres.
+
+    Returns
+    -------
+    list of list of float
+        Closed WGS84 ring.
+    """
+    points: list[list[float]] = []
+    for index in range(24):
+        angle = index / 24.0 * 2.0 * math.pi
+        px = x + math.cos(angle) * radius_m
+        py = y + math.sin(angle) * radius_m
+        lon, lat = unproject_xy(px, py, "EPSG:3157")
+        points.append([lon, lat])
+    points.append(points[0])
+    return points
+
+
+def _lcc_ring(
+    x: float,
+    y: float,
+    crown_radius_m: float,
+    classes: np.ndarray,
+    left: float,
+    top: float,
+    resolution_m: float,
+) -> list[list[float]] | None:
+    """Return a local LCC canopy patch ring around a candidate.
+
+    Parameters
+    ----------
+    x, y : float
+        Candidate centre in EPSG:3157.
+    crown_radius_m : float
+        Candidate crown radius.
+    classes : numpy.ndarray
+        LCC class grid clipped to the city.
+    left, top : float
+        Grid upper-left coordinates.
+    resolution_m : float
+        Grid cell side in metres.
+
+    Returns
+    -------
+    list of list of float or None
+        Closed WGS84 ring, or ``None`` when no tree class is present.
+    """
+    col = round((x - left) / resolution_m)
+    row = round((top - y) / resolution_m)
+    half = max(3, math.ceil(max(20.0, crown_radius_m * 3.0) / resolution_m))
+    c0 = max(0, col - half)
+    c1 = min(classes.shape[1], col + half + 1)
+    r0 = max(0, row - half)
+    r1 = min(classes.shape[0], row + half + 1)
+    if c1 <= c0 or r1 <= r0:
+        return None
+    window = np.isin(classes[r0:r1, c0:c1], (6, 7, 15, 16)).astype(np.uint8)
+    labels, _count = ndimage.label(window, structure=np.ones((3, 3)))
+    centre_col = min(max(col - c0, 0), labels.shape[1] - 1)
+    centre_row = min(max(row - r0, 0), labels.shape[0] - 1)
+    label = int(labels[centre_row, centre_col])
+    if label == 0:
+        tree_labels = np.unique(labels[window > 0])
+        if len(tree_labels) == 0:
+            return None
+        label = int(tree_labels[0])
+    component = labels == label
+    transform = rasterio.transform.from_origin(
+        left + c0 * resolution_m,
+        top - r0 * resolution_m,
+        resolution_m,
+        resolution_m,
+    )
+    polygons = [
+        shape(geometry)
+        for geometry, value in shapes(
+            component.astype("uint8"), mask=component, transform=transform
+        )
+        if int(value) == 1
+    ]
+    if not polygons:
+        return None
+    polygon = max(polygons, key=lambda item: item.area).simplify(resolution_m * 0.35)
+    ring = []
+    for px, py in polygon.exterior.coords:
+        lon, lat = unproject_xy(float(px), float(py), "EPSG:3157")
+        ring.append([lon, lat])
+    return ring if len(ring) >= 4 else None
+
+
+def _fallback_ring(
+    x: float,
+    y: float,
+    crown_radius_m: float,
+    chm_path: Path,
+) -> list[list[float]]:
+    """Return a local CHM canopy ring, or a radius ring as last resort.
+
+    Parameters
+    ----------
+    x, y : float
+        Candidate centre in EPSG:3157.
+    crown_radius_m : float
+        Candidate crown radius.
+    chm_path : pathlib.Path
+        Local CHM raster.
+
+    Returns
+    -------
+    list of list of float
+        Exterior ring in WGS84 coordinate order.
+    """
+    try:
+        with rasterio.open(chm_path) as dataset:
+            radius_m = max(20.0, crown_radius_m * 3.0)
+            col, row = (~dataset.transform) @ (x, y)
+            half = max(4, math.ceil(radius_m / dataset.res[0]))
+            window = Window(col - half, row - half, half * 2, half * 2)
+            array = dataset.read(1, window=window)
+            mask = np.asarray(array >= 2.0, dtype=np.uint8)
+            labels, _count = ndimage.label(mask, structure=np.ones((3, 3)))
+            centre_col = round(half)
+            centre_row = round(half)
+            if 0 <= centre_row < labels.shape[0] and 0 <= centre_col < labels.shape[1]:
+                label = int(labels[centre_row, centre_col])
+            else:
+                label = 0
+            if label > 0:
+                component = labels == label
+                transform = dataset.window_transform(window)
+                polygons = [
+                    shape(geometry)
+                    for geometry, value in shapes(
+                        component.astype("uint8"), mask=component, transform=transform
+                    )
+                    if int(value) == 1
+                ]
+                if polygons:
+                    polygon = max(polygons, key=lambda item: item.area).simplify(5.0)
+                    ring = list(polygon.exterior.coords)
+                    return [
+                        [
+                            float(unproject_xy(float(px), float(py), "EPSG:3157")[0]),
+                            float(unproject_xy(float(px), float(py), "EPSG:3157")[1]),
+                        ]
+                        for px, py in ring
+                    ]
+    except Exception:
+        pass
+    return _circle_ring(x, y, crown_radius_m)
+
+
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     """Parse command-line arguments.
 
@@ -230,6 +402,26 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         type=Path,
         default=Path("data/processed/surrey_2025/fullres_verification_packet"),
     )
+    parser.add_argument(
+        "--crowns",
+        type=Path,
+        default=Path("data/processed/surrey_2025/off_inventory_crown_polygons.geojson.gz"),
+    )
+    parser.add_argument(
+        "--chm",
+        type=Path,
+        default=Path("data/processed/surrey_2025/_chm.tif"),
+    )
+    parser.add_argument(
+        "--lcc",
+        type=Path,
+        default=Path("data/tmp/lcc_tif/LCC2020/LCC2020.tif"),
+    )
+    parser.add_argument(
+        "--boundary",
+        type=Path,
+        default=Path("data/processed/surrey_2025/boundary.geojson"),
+    )
     parser.add_argument("--size", type=int, default=384)
     parser.add_argument("--no-zip", action="store_true")
     return parser.parse_args(argv)
@@ -256,6 +448,26 @@ def main(argv: list[str] | None = None) -> int:
     with gzip.open(args.features, "rt", encoding="utf-8") as handle:
         collection: dict[str, Any] = json.load(handle)
     features: list[dict[str, Any]] = collection["features"]
+    crowns: dict[str, list[list[float]]] = {}
+    if args.crowns.exists():
+        with gzip.open(args.crowns, "rt", encoding="utf-8") as handle:
+            for feature in json.load(handle).get("features", []):
+                rings = feature.get("geometry", {}).get("coordinates", [])
+                candidate_id = str(feature.get("properties", {}).get("candidate_id", ""))
+                if candidate_id and rings:
+                    crowns[candidate_id] = rings[0]
+    lcc_classes = None
+    lcc_left = 0.0
+    lcc_top = 0.0
+    lcc_res = 5.0
+    if args.lcc.exists() and args.boundary.exists():
+        try:
+            lcc_grid, lcc_classes = _lcc_grid(args.boundary, resolution_m=5.0)
+            lcc_left = lcc_grid.left
+            lcc_top = lcc_grid.top
+            lcc_res = lcc_grid.resolution_m
+        except Exception:
+            lcc_classes = None
     source = FullResolutionSource(args.vrt, chip_px=args.size)
     out = args.out_dir
     out.mkdir(parents=True, exist_ok=True)
@@ -266,6 +478,7 @@ def main(argv: list[str] | None = None) -> int:
     metadata_rows: list[dict[str, str]] = []
     for row in rows:
         index = int(row["candidate_index"])
+        candidate_id = row["candidate_id"]
         feature = features[index]
         lon, lat = feature["geometry"]["coordinates"]
         x, y = project_lonlat(float(lon), float(lat), "EPSG:3157")
@@ -275,11 +488,97 @@ def main(argv: list[str] | None = None) -> int:
         half = args.size // 2
         draw.line((half - 14, half, half + 14, half), fill=(220, 20, 20), width=2)
         draw.line((half, half - 14, half, half + 14), fill=(220, 20, 20), width=2)
+        properties = feature.get("properties", {})
+        if candidate_id in crowns:
+            ring = crowns[candidate_id]
+        else:
+            radius = float(properties.get("crown_radius_m", 3.0))
+            ring = _fallback_ring(float(x), float(y), radius, args.chm)
+            if lcc_classes is not None:
+                lcc_ring = _lcc_ring(
+                    float(x),
+                    float(y),
+                    radius,
+                    lcc_classes,
+                    lcc_left,
+                    lcc_top,
+                    lcc_res,
+                )
+                if lcc_ring is not None and any(
+                    0
+                    <= half
+                    + (project_lonlat(float(lo), float(la), "EPSG:3157")[0] - float(x))
+                    / source.resolution_m
+                    <= args.size
+                    and 0
+                    <= half
+                    - (project_lonlat(float(lo), float(la), "EPSG:3157")[1] - float(y))
+                    / source.resolution_m
+                    <= args.size
+                    for lo, la in lcc_ring
+                ):
+                    ring = lcc_ring
+        if ring:
+            points = []
+            for ring_lon, ring_lat in ring:
+                rx, ry = project_lonlat(float(ring_lon), float(ring_lat), "EPSG:3157")
+                points.append(
+                    (
+                        half + (rx - float(x)) / source.resolution_m,
+                        half - (ry - float(y)) / source.resolution_m,
+                    )
+                )
+            visible = any(0 <= px <= args.size and 0 <= py <= args.size for px, py in points)
+            if len(points) >= 3 and visible:
+                draw.line([*points, points[0]], fill=(223, 123, 30), width=3)
+            else:
+                circle = _circle_ring(
+                    float(x),
+                    float(y),
+                    float(properties.get("crown_radius_m", 3.0)),
+                )
+                circle_points = [
+                    (
+                        half
+                        + (
+                            project_lonlat(float(lon_value), float(lat_value), "EPSG:3157")[0]
+                            - float(x)
+                        )
+                        / source.resolution_m,
+                        half
+                        - (
+                            project_lonlat(float(lon_value), float(lat_value), "EPSG:3157")[1]
+                            - float(y)
+                        )
+                        / source.resolution_m,
+                    )
+                    for lon_value, lat_value in circle
+                ]
+                draw.line(
+                    [*circle_points, circle_points[0]],
+                    fill=(223, 123, 30),
+                    width=3,
+                )
         name = f"{index:06d}.png"
         image.save(images / name)
-        candidate_id = row["candidate_id"]
-        candidates.append({"id": candidate_id, "image": f"images/{name}"})
-        template_rows.append({"candidate_id": candidate_id, "human_label": "", "notes": ""})
+        candidates.append(
+            {
+                "id": candidate_id,
+                "image": f"images/{name}",
+                "confidence": "",
+                "height_m": properties.get("height_m", ""),
+                "crown_diameter_m": str(round(float(properties.get("crown_radius_m", 0)) * 2, 1)),
+                "land_class": properties.get("land_class", ""),
+            }
+        )
+        template_rows.append(
+            {
+                "candidate_id": candidate_id,
+                "human_label": "",
+                "common_comments": "",
+                "notes": "",
+            }
+        )
         metadata_rows.append(
             {
                 "candidate_index": row["candidate_index"],
@@ -290,12 +589,18 @@ def main(argv: list[str] | None = None) -> int:
             }
         )
     source.close()
-    html = TEMPLATE.replace("__CANDIDATES__", json.dumps(candidates, ensure_ascii=False))
+    html = TEMPLATE_PATH.read_text(encoding="utf-8").replace(
+        "__CANDIDATES__", json.dumps(candidates, ensure_ascii=False)
+    )
     (out / "index.html").write_text(html, encoding="utf-8")
     with (out / "review_template.csv").open("w", newline="", encoding="utf-8") as handle:
-        writer = csv.DictWriter(handle, fieldnames=["candidate_id", "human_label", "notes"])
+        writer = csv.DictWriter(
+            handle,
+            fieldnames=["candidate_id", "human_label", "common_comments", "notes"],
+        )
         writer.writeheader()
         writer.writerows(template_rows)
+    shutil.copy2(SERVER_PATH, out / "review_server.py")
     with (out / "candidate_metadata.csv").open("w", newline="", encoding="utf-8") as handle:
         writer = csv.DictWriter(handle, fieldnames=list(metadata_rows[0]))
         writer.writeheader()
@@ -307,6 +612,7 @@ def main(argv: list[str] | None = None) -> int:
         "- Label each crop Conifer, Deciduous, or Uncertain using the definitions on the page.\n"
         "- Labels save in browser local storage. Export `p37_human_labels.csv` when finished.\n"
         "- Do not open `candidate_metadata.csv` until after the first pass; it contains model probabilities.\n"
+        "- Run `python review_server.py` from this directory and open the printed URL for server-backed review; otherwise open `index.html` locally.\n"
         "- This is a blind visual audit, not a field measurement or ownership record.\n\n"
         "Source imagery: City of Surrey Aerial Photo April 2025, 0.075 m SID, decoded locally.\n"
         "The packet contains candidate IDs and crop images only; no owner or address data.\n",

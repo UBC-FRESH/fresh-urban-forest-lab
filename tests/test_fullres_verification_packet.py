@@ -17,6 +17,8 @@ import build_fullres_verification_packet as packet
 class _FakeSource:
     """Minimal full-resolution source stand-in."""
 
+    resolution_m = 0.075
+
     def __init__(self, *_args: object, **_kwargs: object) -> None:
         self.closed = False
 

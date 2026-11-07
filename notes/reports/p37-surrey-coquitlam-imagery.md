@@ -90,18 +90,23 @@ meaningful minority of points, so candidate-level audit is required.
 
 ## Audit packet
 
-The review uses the existing P32 blind, offline human-verification UI pattern rather than
-a separate review protocol.
+The review uses the existing P32 blind human-verification UI pattern rather than a
+separate review protocol.
 
 Directory: `data/processed/surrey_2025/fullres_verification_packet/`
 
 - `index.html`: blind 200-candidate review UI with Conifer / Deciduous / Uncertain
-  buttons, notes, progress, filters, local-storage autosave, CSV import/export, and a
-  print stylesheet.
-- `images/`: 200 full-resolution 28.8 m crops with a red centre crosshair.
-- `review_template.csv`: blank candidate IDs and labels.
+  buttons, common-comment **checkboxes**, notes, progress, filters, local-storage autosave,
+  CSV import/export, a print stylesheet, and **Sync to server**.
+- `images/`: 200 full-resolution 28.8 m crops with a red centre crosshair and an orange
+  crown outline. CHM watershed rings are used where available; a local LCC 2020 canopy
+  patch is used next; a radius footprint is the final fallback only when neither mask
+  exists. The mask source is screening context, not a field crown boundary.
+- `review_template.csv`: blank candidate IDs, labels, flags, and notes.
 - `candidate_metadata.csv`: model probabilities and source indices; not for use during
   the first blind pass.
+- `review_server.py`: server-backed label persistence; run `python review_server.py` from
+  the packet directory (port 8104 by default).
 - `README.md`: reviewer instructions.
 - `fullres_verification_packet.zip`: distributable packet.
 
