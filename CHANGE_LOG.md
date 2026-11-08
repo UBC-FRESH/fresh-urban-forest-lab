@@ -1111,6 +1111,7 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Created child issues #248–#251 and activated `feature/p48-site-scenarios`.
 - Created child issues #260–#262 and activated `feature/p49-scenario-comparison`.
 - Created child issues #267–#270 and activated `feature/p50-vertical-control`.
+- Created child issues #273–#276 and activated `feature/p51-citywide-control`.
 - No implementation yet.
 
 ### P48.1 candidate-site and scenario data contract
@@ -1176,6 +1177,7 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
   or citywide-change claim.
 - Created child issues #260–#262 and activated `feature/p49-scenario-comparison`.
 - Created child issues #267–#270 and activated `feature/p50-vertical-control`.
+- Created child issues #273–#276 and activated `feature/p51-citywide-control`.
 - No implementation yet.
 
 ### P49.1 local scenario library and assumption presets
@@ -1218,6 +1220,7 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Scope: feasibility-first inventory and stable-surface control estimate for P43/P45.
 - No field work, survey-grade accuracy claim, or citywide direction claim yet.
 - Created child issues #267–#270 and activated `feature/p50-vertical-control`.
+- Created child issues #273–#276 and activated `feature/p51-citywide-control`.
 - No implementation yet.
 
 ### P50.1 vertical-reference inventory and feasibility gate
@@ -1257,3 +1260,12 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Opened PR #271 for review; phase remains open until merge and close-out.
 
 - Merged P50 as `41d1a02` via PR #271; parent #266 and child issues #267–#270 are closed. Phase status: complete.
+
+### P51 citywide vertical control start
+
+- Created parent issue #272 and plan `notes/design/p51-citywide-control.md`.
+- Scope: 30–50 spatially distributed 2018 tiles, spatial control stability, and versioned
+  corrected P43/P44/P46 products only if the gate passes.
+- No field-validation, final citywide direction, survival, ownership, or causal claim.
+- Created child issues #273–#276 and activated `feature/p51-citywide-control`.
+- No implementation yet.

@@ -47,6 +47,7 @@ This roadmap is the plan of record and the issue tracker map for FRESH Urban For
 | P48 Site-level planting scenarios | #247 | `feature/p48-site-scenarios` | complete |
 | P49 Site scenario comparison | #259 | `feature/p49-scenario-comparison` | complete |
 | P50 Canopy-change vertical control | #266 | `feature/p50-vertical-control` | complete |
+| P51 Citywide vertical control and corrected products | #272 | `feature/p51-citywide-control` | active |
 
 ## Lifecycle Map
 
@@ -1364,6 +1365,37 @@ Acceptance criteria:
 - Dashboard green.
 
 Phase 50 verification:
+
+- `python scripts/dashboard.py`
+- `python scripts/check_workflow.py`
+
+## Phase 51: Citywide vertical control and corrected products
+
+Parent issue: #272
+Branch: `feature/p51-citywide-control`
+Status: active
+
+Goal: expand the P50 control sample, test spatial stability, and produce versioned corrected
+change products only if the control is representative enough.
+
+Plan: `notes/design/p51-citywide-control.md`.
+
+- [ ] P51.1 Citywide control sample and spatial estimate (#273)
+- [ ] P51.2 Versioned corrected P43 screen (#274)
+- [ ] P51.3 P44/P46 refresh and API/doc integration (#275)
+- [ ] P51.4 Browser/dashboard verification and close-out (#276)
+
+Acceptance criteria:
+
+- 30–50 tiles selected and checked with explicit spatial coverage.
+- Per-tile offsets and spatial uncertainty are reported.
+- Constant versus per-tile correction decision is explicit.
+- Original P43 product is preserved; corrected product is versioned.
+- Downstream labels no longer silently inherit the unsupported +1.0 m assumption.
+- No final citywide gain/loss or field-validation claim without support.
+- Dashboard green.
+
+Phase 51 verification:
 
 - `python scripts/dashboard.py`
 - `python scripts/check_workflow.py`
