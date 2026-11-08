@@ -13,7 +13,6 @@ import numpy as np
 import torch
 from PIL import Image
 
-from fresh_urban_forest.fullres_imagery import FullResolutionSource
 from fresh_urban_forest.terrain import project_lonlat
 from train_imagery_classifier import SmallCNN
 
@@ -32,6 +31,8 @@ def main() -> int:
     int
         Process status.
     """
+    from fresh_urban_forest.fullres_imagery import FullResolutionSource
+
     OUT.mkdir(parents=True, exist_ok=True)
     with gzip.open(ROOT / "off_inventory.geojson.gz", "rt", encoding="utf-8") as handle:
         collection = json.load(handle)

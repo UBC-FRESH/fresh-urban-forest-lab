@@ -23,7 +23,6 @@ from scipy import ndimage
 from shapely.geometry import shape
 
 from build_off_inventory_layers import _lcc_grid
-from fresh_urban_forest.fullres_imagery import FullResolutionSource
 from fresh_urban_forest.terrain import project_lonlat, unproject_xy
 
 TEMPLATE_PATH = Path(__file__).with_name("p37_verification_template.html")
@@ -440,6 +439,8 @@ def main(argv: list[str] | None = None) -> int:
     int
         Process status.
     """
+    from fresh_urban_forest.fullres_imagery import FullResolutionSource
+
     args = parse_args(argv)
     with args.audit_csv.open(newline="", encoding="utf-8") as handle:
         rows: list[dict[str, str]] = list(csv.DictReader(handle))
