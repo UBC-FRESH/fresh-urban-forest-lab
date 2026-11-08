@@ -47,7 +47,7 @@ This roadmap is the plan of record and the issue tracker map for FRESH Urban For
 | P48 Site-level planting scenarios | #247 | `feature/p48-site-scenarios` | complete |
 | P49 Site scenario comparison | #259 | `feature/p49-scenario-comparison` | complete |
 | P50 Canopy-change vertical control | #266 | `feature/p50-vertical-control` | complete |
-| P51 Citywide vertical control and corrected products | #272 | `feature/p51-citywide-control` | pr-open |
+| P51 Citywide vertical control and corrected products | #272 | `feature/p51-citywide-control` | complete |
 | P52 Lower Mainland candidate-data honesty | #278 | `feature/p51-candidate-honesty` | complete |
 
 ## Lifecycle Map
@@ -1374,7 +1374,7 @@ Phase 50 verification:
 
 Parent issue: #272
 Branch: `feature/p51-citywide-control`
-Status: pr-open
+Status: complete
 
 Goal: expand the P50 control sample, test spatial stability, and produce versioned corrected
 change products only if the control is representative enough.
@@ -1404,7 +1404,7 @@ Phase 51 verification:
 ## Phase 52: Lower Mainland candidate-data honesty
 
 Parent issue: #278
-Branch: `feature/p51-candidate-honesty` (historical branch name)
+Branch: `feature/p51-candidate-honesty`
 Status: complete
 
 Goal: stop presenting unvalidated candidate species groups as species colors or mapped

@@ -1339,3 +1339,5 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 
 - Merged P52 as `762a929` via PR #281; parent #278 and child #280 are closed. Phase status: complete.
 - Phase renumbered to P52 to avoid collision with P51 citywide vertical-control work (#272).
+
+- Merged P51 as `4b15a16` via PR #279; parent #272 and child issues #273–#276 are closed. Phase status: complete.

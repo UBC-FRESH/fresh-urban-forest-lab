@@ -2,7 +2,7 @@
 
 Parent issue: #272
 Planned branch: `feature/p51-citywide-control`
-Status: pr-open
+Status: complete
 
 ## Why
 
