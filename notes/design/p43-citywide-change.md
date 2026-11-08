@@ -22,11 +22,11 @@ species change, ownership, or causal attribution.
 ## Method
 
 1. Checksum and audit all 181 2018 ZIP tiles.
-2. Process each tile to a common 5 m EPSG:3157 grid:
+2. Process each tile to a common **2 m** EPSG:3157 grid:
    - ground surface from class-2 minimum z;
    - canopy surface from class-3/5 maximum z;
    - extract one tile at a time and remove the temporary LAS.
-3. Build the 2018 CHM and align it with the P30 2022 CHM at 5 m.
+3. Build the 2018 CHM and align it with the P30 2022 CHM at 2 m.
 4. Compare at a 2 m canopy threshold: stable, gain, loss, no canopy.
 5. Aggregate to the global P38 400 m cells.
 6. Join P38 shade/equity, P39 gaps, P40 heat equity, and P42 action labels.
@@ -36,7 +36,7 @@ species change, ownership, or causal attribution.
 
 - 2018 points may be subsampled per tile for tractability; the sampling stride must be
   recorded and held constant.
-- 5 m cells are used because the decision grid is 400 m.
+- 2 m cells are used because a 5 m maximum aggregation inflated 2018 edge canopy. The 2 m result is still a screen.
 - 2018 class-1 unclassified points are excluded from canopy.
 - Acquisition date, density, classification, vertical handling, and co-registration
   remain sources of error.

@@ -937,4 +937,10 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 
 - Created parent issue #209, plan, and branch.
 - All 181 2018 ZIP tiles are present under `/srv/shared-data` (about 76 GB).
-- No citywide product or coverage claim yet.
+- 2018 checksum audit: 181 tiles, 78.0 GB, 0 corrupt archives.
+- 2 m citywide run: earlier 2,965.25 ha, later 3,188.65 ha, net +223.40 ha,
+  17.68% gain, 10.14% loss, +1.475 m on stable canopy. 797 cells.
+- The 5 m maximum aggregation was rejected as scale-biased; 2 m is the released screen.
+- API/UI reuse the P41 canopy-change layer; no new endpoint code needed.
+
+- Corrected the P43 product to the 2 m scale-sensitive rerun: 5 m max aggregation was rejected; 2018 canopy area 2,965.25 ha, 2022 3,188.65 ha, net +223.40 ha. Browser smoke showed +223 ha net with no console/page errors.

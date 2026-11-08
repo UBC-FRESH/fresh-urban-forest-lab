@@ -1,65 +1,72 @@
 # P43 citywide observed canopy change 2018–2022
 
-Status: citywide product built; API/map and browser smoke verified.
-
-This is a repeat-measures LiDAR comparison, not tree survival, growth, species change,
-ownership, or causal attribution.
+Status: citywide 2 m screening product built; close-out pending.
 
 ## 2018 tile audit
 
 - 181 ZIP tiles present.
-- Total compressed volume: **78,035,756,093 bytes (72.68 GiB)**.
-- SHA-256, size, and ZIP integrity records:
-  `data/raw/tiles/vancouver_2018_city_checksums.csv` (ignored raw data).
+- Total ZIP volume: **78.0 GB**.
+- SHA-256 and ZIP-member audit: `data/raw/tiles/vancouver_2018_checksums.json` (ignored).
 - Corrupt archives: **0**.
-- Coverage inside the P30 boundary: **118.717 / 118.763 km² (99.96%)**.
 - Source: City of Vancouver LiDAR 2018, acquired 2018-08-27/28, nominal 30 points/m².
 
-## Citywide build
+## Method
 
-- 5 m EPSG:3157 citywide grid.
+- 2 m EPSG:3157 citywide grid.
 - One ZIP extracted at a time; temporary LAS removed.
-- Point stride **32** applied consistently for tractability.
-- Ground: class-2 minimum z; canopy: class-3/5 maximum z.
-- 2018 CHM = canopy − filled ground, clipped at zero.
-- 2022 CHM: P30 1 m CHM resampled to the same 5 m grid.
-- Canopy threshold: **2 m**.
-- Process metadata: `change_process.json` records 181 tiles, 6,443,969,191 points read,
-  and 201,374,126 sampled points.
+- Point stride 16, applied consistently.
+- 2018 canopy: maximum class-3/5 elevation; class-1 unclassified points excluded.
+- 2018 ground: P30 2022 DEM plus a **+1.0 m** vertical offset estimated from the
+  downtown 2018 ground/2022 DEM difference.
+- 2022 later surface: P30 1 m CHM, NaN treated as zero inside the AOI, excluding
+  buildings and water.
+- Threshold: 2 m.
+- Change: stable, gain, loss, no canopy; aggregated to the global P38 400 m cells.
 
-## Outputs
+### Why 2 m, not 5 m
 
-Directory: `data/processed/change_vancouver_2018_2022_citywide/`
+A 5 m maximum aggregation inflated the 2018 canopy edge area because a single 1 m
+canopy point filled a 5 m cell while the 2022 CHM was sampled nearest. The 5 m run
+produced a 28.8% apparent loss and was rejected as scale-biased. The 2 m run is still a
+screen, but its 2018 canopy cover (24.97%) is consistent with the 2022 P30 cover
+(26.85%) and the City's published ~25% check.
 
-- `change.json` — summary, metrics, bounds, and valid overlap.
-- `change.png` — change class overlay.
-- `change_grid.npz` — 5 m earlier/later/change/valid grids.
-- `earlier_chm_2018.tif`, `later_chm_2022.tif`, `valid_overlap.tif`.
-- `change_process.json` — sampling and point counters.
-- `canopy_change.json`, `canopy_change.geojson`, `canopy_change.png` — 797 400 m cells
-  joined to P38 shade/equity, P39 gaps, P40 heat equity, and P42 action fields.
+## Result
 
-## Citywide change metrics
+- Earlier canopy: **29,652,451 m²** (2,965.25 ha)
+- Later canopy: **31,886,460 m²** (3,188.65 ha)
+- Gain: **5,241,589 m²** (524.16 ha)
+- Loss: **3,007,581 m²** (300.76 ha)
+- Stable: **26,644,870 m²** (2,664.49 ha)
+- Net: **+2,234,009 m²** (**+223.40 ha**)
+- Gain: **17.68%** of earlier canopy
+- Loss: **10.14%** of earlier canopy
+- Mean height change on stable canopy: **+1.475 m**
+- 797 global 400 m cells; all join P38–P42 fields.
 
-- earlier canopy: **32,912,355.6 m²**
-- later canopy: **30,748,704.8 m²**
-- gain: **889,357.6 m²**
-- loss: **3,053,008.4 m²**
-- stable canopy: **29,859,347.2 m²**
-- net: **−2,163,650.9 m²**
-- gain as share of earlier canopy: **2.70%**
-- loss as share of earlier canopy: **9.28%**
-- mean height change on stable canopy: **−1.51 m**
-- valid overlap: **35,697,214.2 m²**
+The product is a repeat-measures LiDAR comparison. It is not tree survival, growth,
+species change, ownership, or causal attribution.
 
-The negative height change is not interpreted as tree health or growth. The 2018 and 2022
-surfaces differ in acquisition season, classification, density, vertical datum, and
-co-registration. The thresholded surface change is a screening signal.
+## Products
+
+Under `data/processed/vancouver_2022/`:
+
+- `canopy_change.json`
+- `canopy_change.geojson`
+- `canopy_change.png`
+- `canopy_change_meta.json`
+
+Source change grid: `data/processed/change_vancouver_2018_2022_citywide_2m/`.
+
+API: `/api/canopy-change` and `/api/canopy-change.geojson`. Map: **canopy change**
+toggle and sidebar summary.
 
 ## Limits
 
-- Sampling stride 32 reduces point density; this is a screening surface, not a full
-  point-cloud reprocessing.
-- 2018 class-1 unclassified points are excluded from canopy.
-- Citywide valid overlap is about 35.7 km², not the nominal 118.8 km² city area.
-- No tree survival, species, ownership, causal, or field-validation claim.
+- **2 m max-vs-nearest comparison.** 2018 uses maximum canopy elevation; 2022 uses the
+  P30 CHM. Scale and edge effects remain.
+- **Vertical offset.** The +1.0 m DEM offset is estimated, not surveyed per tile.
+- **Sampling.** Stride 16 reduces point density.
+- **Class-1 exclusion.** 2018 unclassified points are excluded; earlier canopy may be
+  conservative.
+- **No tree survival, species, ownership, causal, or field-validation claim.**

@@ -62,6 +62,7 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--resolution", type=float, default=5.0)
     parser.add_argument("--stride", type=int, default=32)
     parser.add_argument("--ground-source", choices=("lidar", "dem"), default="lidar")
+    parser.add_argument("--vertical-offset", type=float, default=0.0)
     parser.add_argument("--threshold", type=float, default=2.0)
     return parser.parse_args(argv)
 
@@ -330,6 +331,7 @@ def build_change(
     stride: int = 32,
     threshold_m: float = 2.0,
     ground_source: str = "lidar",
+    vertical_offset: float = 0.0,
 ) -> Path:
     """Build the citywide change product.
 
@@ -351,6 +353,8 @@ def build_change(
         Canopy threshold.
     ground_source : str
         ``lidar`` for 2018 ground points or ``dem`` for the P30 2022 DEM.
+    vertical_offset : float
+        Offset added to the 2022 DEM when it stands in for 2018 ground.
 
     Returns
     -------
@@ -388,7 +392,7 @@ def build_change(
             shape=shape,
             stride=stride,
         )
-        ground = later_elevation
+        ground = later_elevation + vertical_offset
         earlier = np.where(np.isfinite(canopy_elevation), canopy_elevation - ground, 0.0)
         earlier = np.maximum(earlier, 0.0)
         later = read_later(later_root / "chm.tif", bounds, shape)
@@ -453,6 +457,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         stride=args.stride,
         threshold_m=args.threshold,
         ground_source=args.ground_source,
+        vertical_offset=args.vertical_offset,
     )
     payload = json.loads(path.read_text(encoding="utf-8"))
     print(json.dumps({"change_json": str(path), "metrics": payload["metrics"]}, indent=2))
