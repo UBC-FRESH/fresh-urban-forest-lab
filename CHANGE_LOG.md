@@ -1,3 +1,14 @@
+### P47 AI-assisted candidate pre-audit
+
+- Rebuilt the sample with exactly 20 candidates per probability bin after the first
+  sample was found to be effectively single-bin.
+- AI-assisted contact-sheet pre-audit: 97 tree-like / 103 non-tree; weighted tree-like
+  share 29.1%.
+- Low/mid probability strata are dominated by roofs, roads, driveways, and lawns; high
+  bins are mostly tree crowns.
+- No human labels; no candidate promotion. Species review should be restricted to the
+  tree-like subset.
+
 ### P47 tree/non-tree pre-audit packet
 
 - Visual check of the first species-audit sheet showed many candidates on buildings,
