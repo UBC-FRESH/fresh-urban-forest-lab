@@ -1159,3 +1159,16 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
   or citywide-change claim.
 - Created child issues #260–#262 and activated `feature/p49-scenario-comparison`.
 - No implementation yet.
+
+### P49.1 local scenario library and assumption presets
+
+- Added a capped browser-local scenario library with save/load/delete.
+- Records store selected candidate ids, assumptions, evaluation settings, dataset/schema ids,
+  and an optional cached shade summary.
+- Added strict validation for names, selected ids, numeric ranges, duplicate ids, dataset
+  compatibility, candidate-schema compatibility, and cached summaries.
+- Added small/medium/large **assumption presets** (height, crown radius, cost, water),
+  explicitly labelled as hypothetical assumptions rather than recommendations.
+- Browser smoke: preset values applied; six-site scenario saved; selection/assumptions
+  restored on load; delete removed the record; no page errors.
+- No comparison table or JSON export/import yet.

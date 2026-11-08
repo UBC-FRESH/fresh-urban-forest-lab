@@ -776,3 +776,6 @@ select:focus, input:focus { outline: 2px solid #b8d3ae; outline-offset: 1px; }
 .site-results .site-bad { color: var(--red); font-family: var(--mono); }
 .site-legend { left: auto; right: 14px; }
 @media (max-width: 900px) { .site-legend { left: 14px; right: auto; } }
+
+#site-preset { width: 100%; }
+.pareto-views-body .button-row { margin-top: 2px; }

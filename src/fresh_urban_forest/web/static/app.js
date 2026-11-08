@@ -2,6 +2,9 @@ import * as THREE from "three";
 import { OrbitControls } from "three/addons/OrbitControls.js";
 
 const PARETO_VIEW_STORAGE_KEY = "fresh.pareto.views.v1";
+const SITE_SCENARIO_STORAGE_KEY = "fresh.site-scenarios.v1";
+const SITE_SCENARIO_LIBRARY_VERSION = 1;
+const SITE_SCENARIO_LIMIT = 20;
 const PARETO_VIEW_VERSION = 1;
 const PARETO_VIEW_LIMIT = 50;
 const PARETO_VIEW_IMPORT_LIMIT = 250_000;
@@ -66,6 +69,8 @@ const state = {
     scenario: null,
     loading: false,
     busy: false,
+    candidatesSchema: "",
+    savedName: null,
   },
   optimize: {
     jobId: null,
@@ -2557,19 +2562,361 @@ function initSiteControls() {
     "site-time",
     "site-target-height",
   ];
+  const assumptionIds = new Set([
+    "site-species",
+    "site-height",
+    "site-crown",
+    "site-count",
+    "site-cost",
+    "site-water",
+    "site-maintenance",
+  ]);
   for (const id of inputIds) {
     $(id).addEventListener("input", () => {
+      if (assumptionIds.has(id)) $("site-preset").value = "custom";
       renderSiteSelection();
       invalidateSiteEvaluation();
     });
   }
   $("site-sensitivity").addEventListener("change", invalidateSiteEvaluation);
+  $("site-preset").addEventListener("change", applySitePreset);
+  $("site-save").addEventListener("click", saveSiteScenario);
+  $("site-load").addEventListener("click", loadSiteScenario);
+  $("site-delete").addEventListener("click", deleteSiteScenario);
+  $("site-saved-select").addEventListener("change", () => {
+    $("site-saved-name").value = $("site-saved-select").value;
+    updateSiteSavedButtons();
+  });
+  refreshSiteScenarioSelect();
   $("site-action-filter").addEventListener("change", applySiteFilter);
   $("site-select-six").addEventListener("click", selectSixSiteCandidates);
   $("site-clear").addEventListener("click", clearSiteSelection);
   $("site-evaluate").addEventListener("click", evaluateSiteScenario);
   $("site-open-3d").addEventListener("click", openSiteScenario3D);
   renderSiteSelection();
+}
+
+const SITE_ASSUMPTION_PRESETS = {
+  small: { height_m: 6, crown_radius_m: 2.0, cost_cad: 650, water_l_per_year: 800 },
+  medium: { height_m: 8, crown_radius_m: 3.0, cost_cad: 850, water_l_per_year: 1200 },
+  large: { height_m: 12, crown_radius_m: 5.0, cost_cad: 1400, water_l_per_year: 2000 },
+};
+
+function applySitePreset() {
+  const preset = SITE_ASSUMPTION_PRESETS[$("site-preset").value];
+  if (!preset) return;
+  $("site-height").value = String(preset.height_m);
+  $("site-crown").value = String(preset.crown_radius_m);
+  $("site-cost").value = String(preset.cost_cad);
+  $("site-water").value = String(preset.water_l_per_year);
+  renderSiteSelection();
+  invalidateSiteEvaluation();
+}
+
+function siteEvaluationSummary() {
+  const evaluation = state.siteScenario.evaluation;
+  if (!evaluation) return null;
+  return {
+    method: String(evaluation.method || ""),
+    baseline_shade_m2h: Number(evaluation.baseline_shade_m2h || 0),
+    scenario_shade_m2h: Number(evaluation.scenario_shade_m2h || 0),
+    delta_shade_m2h: Number(evaluation.delta_shade_m2h || 0),
+    delta_shade_pct:
+      evaluation.delta_shade_pct == null ? null : Number(evaluation.delta_shade_pct),
+    baseline_shade_fraction: Number(evaluation.baseline_shade_fraction || 0),
+    scenario_shade_fraction: Number(evaluation.scenario_shade_fraction || 0),
+  };
+}
+
+function normalizeSiteScenarioEvaluation(raw) {
+  if (!raw || typeof raw !== "object") return null;
+  const values = [
+    "baseline_shade_m2h",
+    "scenario_shade_m2h",
+    "delta_shade_m2h",
+    "baseline_shade_fraction",
+    "scenario_shade_fraction",
+  ];
+  for (const key of values) {
+    if (!Number.isFinite(Number(raw[key]))) return null;
+  }
+  const percent = raw.delta_shade_pct;
+  return {
+    method: String(raw.method || ""),
+    baseline_shade_m2h: Number(raw.baseline_shade_m2h),
+    scenario_shade_m2h: Number(raw.scenario_shade_m2h),
+    delta_shade_m2h: Number(raw.delta_shade_m2h),
+    delta_shade_pct: percent == null ? null : Number(percent),
+    baseline_shade_fraction: Number(raw.baseline_shade_fraction),
+    scenario_shade_fraction: Number(raw.scenario_shade_fraction),
+  };
+}
+
+function normalizeSiteScenarioRecord(raw) {
+  if (!raw || typeof raw !== "object" || raw.version !== SITE_SCENARIO_LIBRARY_VERSION) {
+    return null;
+  }
+  const name = String(raw.name || "").trim().slice(0, 80);
+  const datasetId = String(raw.dataset_id || "").trim().slice(0, 120);
+  const candidatesSchema = String(raw.candidates_schema || "").trim().slice(0, 120);
+  if (!name || !datasetId || !candidatesSchema) return null;
+  if (!Array.isArray(raw.selected) || raw.selected.length < 1 || raw.selected.length > 200) {
+    return null;
+  }
+  const selected = [...new Set(raw.selected.map((value) => String(value).slice(0, 120)))];
+  if (selected.length !== raw.selected.length) return null;
+  const assumptions = raw.assumptions;
+  const settings = raw.settings;
+  if (!assumptions || typeof assumptions !== "object" || !settings || typeof settings !== "object") {
+    return null;
+  }
+  const species = String(assumptions.species || "").trim().slice(0, 80);
+  const maintenance = String(assumptions.maintenance || "").trim().slice(0, 120);
+  const height = Number(assumptions.height_m);
+  const crown = Number(assumptions.crown_radius_m);
+  const count = Number(assumptions.count);
+  const cost = Number(assumptions.cost_cad);
+  const water = Number(assumptions.water_l_per_year);
+  if (
+    !species ||
+    !maintenance ||
+    !Number.isFinite(height) ||
+    height < 0.5 ||
+    height > 40 ||
+    !Number.isFinite(crown) ||
+    crown < 0.25 ||
+    crown > 20 ||
+    !Number.isInteger(count) ||
+    count < 1 ||
+    count > 50 ||
+    !Number.isFinite(cost) ||
+    cost < 0 ||
+    cost > 1_000_000 ||
+    !Number.isFinite(water) ||
+    water < 0 ||
+    water > 1_000_000
+  ) {
+    return null;
+  }
+  const targetHeight = Number(settings.target_height_m);
+  if (!Number.isFinite(targetHeight) || targetHeight < 0.5 || targetHeight > 10) return null;
+  const evaluation =
+    raw.evaluation == null ? null : normalizeSiteScenarioEvaluation(raw.evaluation);
+  if (raw.evaluation != null && evaluation == null) return null;
+  return {
+    version: SITE_SCENARIO_LIBRARY_VERSION,
+    name,
+    dataset_id: datasetId,
+    candidates_schema: candidatesSchema,
+    created_at: String(raw.created_at || new Date().toISOString()).slice(0, 40),
+    selected,
+    assumptions: {
+      species,
+      height_m: height,
+      crown_radius_m: crown,
+      count,
+      cost_cad: cost,
+      water_l_per_year: water,
+      maintenance,
+    },
+    settings: {
+      date: String(settings.date || "2026-06-21").slice(0, 20),
+      time: String(settings.time || "12:00").slice(0, 10),
+      target_height_m: targetHeight,
+      sensitivity: Boolean(settings.sensitivity),
+    },
+    evaluation,
+  };
+}
+
+function readSiteScenarioLibrary() {
+  try {
+    const raw = localStorage.getItem(SITE_SCENARIO_STORAGE_KEY);
+    if (!raw) return [];
+    const payload = JSON.parse(raw);
+    if (!payload || payload.version !== SITE_SCENARIO_LIBRARY_VERSION) return [];
+    if (!Array.isArray(payload.scenarios) || payload.scenarios.length > SITE_SCENARIO_LIMIT) {
+      return [];
+    }
+    const records = [];
+    for (const entry of payload.scenarios) {
+      const record = normalizeSiteScenarioRecord(entry);
+      if (!record) return [];
+      const existing = records.findIndex((item) => item.name === record.name);
+      if (existing >= 0) records[existing] = record;
+      else records.push(record);
+    }
+    return records;
+  } catch (_error) {
+    return [];
+  }
+}
+
+function writeSiteScenarioLibrary(records) {
+  try {
+    localStorage.setItem(
+      SITE_SCENARIO_STORAGE_KEY,
+      JSON.stringify({
+        version: SITE_SCENARIO_LIBRARY_VERSION,
+        scenarios: records.slice(0, SITE_SCENARIO_LIMIT),
+      })
+    );
+    return true;
+  } catch (error) {
+    toast(`Could not save site scenarios: ${error.message}`, true);
+    return false;
+  }
+}
+
+function updateSiteSavedButtons() {
+  const selected = $("site-saved-select").value;
+  $("site-load").disabled = !selected;
+  $("site-delete").disabled = !selected;
+}
+
+function refreshSiteScenarioSelect(selectedName = null) {
+  const select = $("site-saved-select");
+  if (!select) return;
+  const records = readSiteScenarioLibrary();
+  const current = selectedName || "";
+  select.innerHTML =
+    `<option value="">${records.length ? "— choose a saved scenario —" : "— no saved scenarios —"}</option>` +
+    records
+      .map((record) => `<option value="${escapeHtml(record.name)}">${escapeHtml(record.name)}</option>`)
+      .join("");
+  if (current && records.some((record) => record.name === current)) {
+    select.value = current;
+    $("site-saved-name").value = current;
+  }
+  updateSiteSavedButtons();
+  $("site-saved-meta").textContent = `${records.length} saved scenario${records.length === 1 ? "" : "s"} in this browser.`;
+}
+
+function currentSiteScenarioRecord(name) {
+  const scenario = state.siteScenario;
+  const count = Math.max(1, Math.round(Number($("site-count").value || 1)));
+  return normalizeSiteScenarioRecord({
+    version: SITE_SCENARIO_LIBRARY_VERSION,
+    name,
+    dataset_id: state.dataset?.dataset_id || "",
+    candidates_schema: scenario.candidatesSchema,
+    created_at: new Date().toISOString(),
+    selected: [...scenario.selected],
+    assumptions: {
+      species: $("site-species").value,
+      height_m: Number($("site-height").value || 8),
+      crown_radius_m: Number($("site-crown").value || 3),
+      count,
+      cost_cad: Number($("site-cost").value || 0),
+      water_l_per_year: Number($("site-water").value || 0),
+      maintenance: $("site-maintenance").value,
+    },
+    settings: {
+      date: $("site-date").value,
+      time: $("site-time").value,
+      target_height_m: Number($("site-target-height").value || 1.5),
+      sensitivity: $("site-sensitivity").checked,
+    },
+    evaluation: siteEvaluationSummary(),
+  });
+}
+
+function saveSiteScenario() {
+  if (!state.siteScenario.selected.size) {
+    toast("Select at least one candidate site first.", true);
+    return;
+  }
+  const name = $("site-saved-name").value.trim();
+  if (!name) {
+    toast("Name the scenario before saving.", true);
+    return;
+  }
+  const record = currentSiteScenarioRecord(name);
+  if (!record) {
+    toast("Could not validate the current scenario.", true);
+    return;
+  }
+  const records = [
+    record,
+    ...readSiteScenarioLibrary().filter((item) => item.name !== record.name),
+  ].slice(0, SITE_SCENARIO_LIMIT);
+  if (!writeSiteScenarioLibrary(records)) return;
+  state.siteScenario.savedName = record.name;
+  refreshSiteScenarioSelect(record.name);
+  toast(`Saved scenario “${record.name}”`);
+}
+
+function loadSiteScenario() {
+  const name = $("site-saved-select").value;
+  if (!name) {
+    toast("Choose a saved scenario first.", true);
+    return;
+  }
+  const record = readSiteScenarioLibrary().find((item) => item.name === name);
+  if (!record) {
+    toast("That saved scenario is no longer available.", true);
+    refreshSiteScenarioSelect();
+    return;
+  }
+  if (record.dataset_id !== (state.dataset?.dataset_id || "")) {
+    toast("This scenario belongs to a different dataset.", true);
+    return;
+  }
+  if (
+    record.candidates_schema &&
+    state.siteScenario.candidatesSchema &&
+    record.candidates_schema !== state.siteScenario.candidatesSchema
+  ) {
+    toast("This scenario belongs to a different candidate schema.", true);
+    return;
+  }
+  if (record.selected.some((siteId) => !state.siteScenario.candidates.has(siteId))) {
+    toast("This scenario contains candidate sites that are not available.", true);
+    return;
+  }
+  state.siteScenario.selected = new Set(record.selected);
+  $("site-species").value = record.assumptions.species;
+  $("site-height").value = String(record.assumptions.height_m);
+  $("site-crown").value = String(record.assumptions.crown_radius_m);
+  $("site-count").value = String(record.assumptions.count);
+  $("site-cost").value = String(record.assumptions.cost_cad);
+  $("site-water").value = String(record.assumptions.water_l_per_year);
+  $("site-maintenance").value = record.assumptions.maintenance;
+  $("site-date").value = record.settings.date;
+  $("site-time").value = record.settings.time;
+  $("site-target-height").value = String(record.settings.target_height_m);
+  $("site-sensitivity").checked = record.settings.sensitivity;
+  $("site-preset").value = "custom";
+  state.siteScenario.savedName = record.name;
+  state.siteScenario.evaluation = record.evaluation ? { ...record.evaluation, per_site: [] } : null;
+  updateSiteSelectedSource();
+  renderSiteSelection();
+  refreshSiteScenarioSelect(record.name);
+  if (record.evaluation) {
+    renderSiteEvaluation({ evaluation: record.evaluation });
+    $("site-status").textContent = "saved scenario";
+    $("site-results").insertAdjacentHTML(
+      "beforeend",
+      '<p class="hint">Cached summary from the saved scenario. Evaluate again to refresh per-site and sensitivity results.</p>'
+    );
+  } else {
+    $("site-scenario-summary").innerHTML = "";
+    $("site-results").innerHTML = "";
+    $("site-status").textContent = "ready";
+  }
+}
+
+function deleteSiteScenario() {
+  const name = $("site-saved-select").value;
+  if (!name) {
+    toast("Choose a saved scenario first.", true);
+    return;
+  }
+  const records = readSiteScenarioLibrary().filter((record) => record.name !== name);
+  if (!writeSiteScenarioLibrary(records)) return;
+  if (state.siteScenario.savedName === name) state.siteScenario.savedName = null;
+  refreshSiteScenarioSelect();
+  toast(`Deleted scenario “${name}”`);
 }
 
 function siteFeatureCollection() {
@@ -2620,6 +2967,7 @@ async function ensureSitesView() {
     scenario.candidates = new Map(
       (payload.sites || []).map((record) => [String(record.site_id), record])
     );
+    scenario.candidatesSchema = String(payload.schema_version || "");
     const [west, south, east, north] = state.scene.bounds_wgs84;
     const coordinates = state.scene.corners_wgs84 || [
       [west, north],
