@@ -43,6 +43,7 @@ This roadmap is the plan of record and the issue tracker map for FRESH Urban For
 | P44 Citywide canopy-action refresh | #216 | `feature/p44-citywide-action` | complete |
 | P45 Citywide canopy-change sensitivity | #224 | `feature/p45-change-sensitivity` | complete |
 | P46 Canopy turnover hotspots | #231 | `feature/p46-turnover-hotspots` | complete |
+| P47 Optimization UI parity | #237 | `feature/p47-optimization-ui-parity` | planned |
 
 ## Lifecycle Map
 
@@ -1239,6 +1240,37 @@ Acceptance criteria:
 - Dashboard green.
 
 Phase 46 verification:
+
+- `python scripts/dashboard.py`
+- `python scripts/check_workflow.py`
+
+## Phase 47: Optimization UI parity
+
+Parent issue: #237
+Branch: `feature/p47-optimization-ui-parity`
+Status: planned
+
+Goal: port the high-value Optimization-page interaction and review patterns developed in
+`fable-pyculator`, adapted to the FRESH Pareto archive.
+
+Plan: `notes/design/p47-optimization-ui-parity.md`.
+
+- [ ] P47.1 Hover, ranges, legend, robustness floor, URL, copy link, CSV
+- [ ] P47.2 Synchronized parallel coordinates and brushes
+- [ ] P47.3 Local saved views, import/export, preset links
+- [ ] P47.4 Optional shared review library
+- [ ] P47.5 Docs, dashboard, browser smoke, and close-out
+
+Acceptance criteria:
+
+- A copied URL restores axes, floor, point, reference, brushes, and preset.
+- Parallel coordinates select the same solution as the 3D view.
+- Brushes combine with AND and round-trip through the URL.
+- Local views validate on import and carry the archive/job id.
+- No FABLE-specific controls or quality/warning semantics are claimed.
+- Dashboard green.
+
+Phase 47 verification:
 
 - `python scripts/dashboard.py`
 - `python scripts/check_workflow.py`

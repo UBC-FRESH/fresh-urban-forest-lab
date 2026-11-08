@@ -1014,3 +1014,11 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Dashboard: GREEN (lint, format, types, tests, validator, docs).
 - Opened PR #236 for maintainer review; phase remains open until merge and parent-issue close-out.
 - Merged P46 as `b63977e` via PR #236; parent #231 and child issues #232–#235 are closed. Phase status: complete.
+
+### P47 optimization UI parity plan
+
+- Created parent issue #237 and a detailed plan for porting the fable-pyculator
+  Optimization-page patterns into the FRESH 3D Pareto panel.
+- Plan: `notes/design/p47-optimization-ui-parity.md`.
+- P48 site-level planting scenarios are queued after P47.
+- No implementation or branch yet.
