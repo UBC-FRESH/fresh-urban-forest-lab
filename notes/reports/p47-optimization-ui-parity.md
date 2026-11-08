@@ -1,6 +1,6 @@
 # P47 optimization UI parity
 
-Status: implementation complete; close-out pending.
+Status: complete. Merged in PR #245 as `2b24607`.
 
 ## Purpose
 

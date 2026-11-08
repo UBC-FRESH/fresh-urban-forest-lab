@@ -1065,3 +1065,5 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Deferred P47.4 shared review library; no server-backed collaboration layer is claimed.
 - Final browser smoke: 10 axes, 71 initial lines, two brushes to 4 of 71, 4-row filtered CSV, preset reload restored floor/selection/reference, no page errors.
 - Dashboard: GREEN (lint, format, types, tests, validator, docs).
+
+- Merged P47 as `2b24607` via PR #245; parent #237 and child issues #238–#240 and #242 are closed. P47.4 remains deferred. Phase status: complete.
