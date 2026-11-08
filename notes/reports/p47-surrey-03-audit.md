@@ -48,3 +48,31 @@ candidate layer without first filtering those candidates.
 
 No human labels have been entered and no candidate promotion is made. The 97 tree-like
 cases are screening candidates for a future species review, not validated trees.
+
+## Human species review of the tree-like subset
+
+The live review server returned labels for all **97** tree-like candidates:
+
+- conifer: **33**
+- deciduous: **53**
+- uncertain: **11**
+
+The P46 Surrey 0.30 m model predicts conifer for 91 of 97 candidates. Against the human
+labels, excluding uncertain:
+
+| Prediction | Valid n | Correct | Precision | Recall |
+| --- | ---: | ---: | ---: | ---: |
+| Conifer | 82 | 32 | **39.0%** | **97.0%** |
+| Deciduous | 4 | 3 | 75.0% | 5.7% |
+
+Valid-only accuracy is **35/86 = 40.7%**. The candidate model is severely conifer-biased
+and does not transfer from inventory validation to off-inventory candidates.
+
+## Decision
+
+- Stop candidate species scoring for Surrey.
+- Do not promote or display these candidate species labels as validated.
+- Keep the inventory-only 78.70% result as inventory QA, not candidate QA.
+- P47 closes negative. The AI tree-like prefilter and human labels are evidence, not a product.
+
+Labels saved at `data/processed/surrey_2025/p47_audit/p47_tree_human_labels.csv`.
