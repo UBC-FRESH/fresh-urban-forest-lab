@@ -911,3 +911,4 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Browser smoke: **canopy change** layer loaded; sidebar showed +6 ha net, 7 ha gain,
   1 ha loss, 43 ha stable; no console/page errors.
 - This is a staged downtown pilot, not a city-wide change claim.
+- Opened PR #201 for maintainer review; phase remains open until merge and parent-issue close-out.
