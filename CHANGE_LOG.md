@@ -964,3 +964,4 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Browser smoke: action layer showed 797 observed cells, 265 plant+cool, 233 monitor,
   133 expand, 127 structural, 39 protect loss; no console/page errors.
 - Dashboard: GREEN (lint, format, types, tests, validator, docs).
+- Opened PR #221 for maintainer review; phase remains open until merge and parent-issue close-out.

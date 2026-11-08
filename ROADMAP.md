@@ -40,7 +40,7 @@ This roadmap is the plan of record and the issue tracker map for FRESH Urban For
 | P41 Observed canopy change 2018-2022 | #195 | `feature/p41-canopy-change` | complete |
 | P42 Integrated canopy-action screening | #202 | `feature/p42-action-screen` | complete |
 | P43 Citywide observed canopy change 2018-2022 | #209 | `feature/p43-citywide-change` | complete |
-| P44 Citywide canopy-action refresh | #216 | `feature/p44-citywide-action` | active |
+| P44 Citywide canopy-action refresh | #216 | `feature/p44-citywide-action` | pr-open |
 
 ## Lifecycle Map
 
@@ -1158,7 +1158,7 @@ Phase 43 verification:
 
 Parent issue: #216
 Branch: `feature/p44-citywide-action`
-Status: active
+Status: pr-open
 
 Goal: refresh the P42 action screen with P43 citywide observed change.
 
