@@ -535,6 +535,11 @@
             <select id="pareto-slice-objective"></select>
             <input id="pareto-slice" type="range" min="0" max="100" value="0" step="1">
           </label>
+          <label class="field">
+            <span>Robustness floor <output id="pareto-floor-value">all</output></span>
+            <input id="pareto-floor" type="range" min="0" max="100" value="0" step="1">
+          </label>
+          <p id="pareto-ranges" class="hint pareto-ranges"></p>
           <div id="pareto-info" class="pareto-info">
             <p class="muted">Run an optimization to build a front, then orbit, slice, and select a solution.</p>
           </div>
@@ -543,6 +548,37 @@
             <button id="pareto-clear-pins" class="button ghost" type="button" disabled>Clear pins</button>
           </div>
           <div id="pareto-compare" class="pareto-compare"></div>
+          <div id="pareto-delta" class="pareto-delta"></div>
+          <div class="button-row wrap">
+            <button id="pareto-reference" class="button ghost tiny" type="button" disabled>Set as reference</button>
+            <button id="pareto-clear-reference" class="button ghost tiny" type="button" disabled>Clear reference</button>
+            <button id="pareto-copy-link" class="button ghost tiny" type="button">Copy view link</button>
+            <button id="pareto-download-csv" class="button ghost tiny" type="button">Download filtered CSV</button>
+          </div>
+          <details class="pareto-views" id="pareto-views-panel">
+            <summary>Local saved views</summary>
+            <div class="pareto-views-body">
+              <label class="field">
+                <span>Saved view</span>
+                <select id="pareto-view-select"></select>
+              </label>
+              <label class="field">
+                <span>View name</span>
+                <input id="pareto-view-name" type="text" maxlength="80" placeholder="Name this view">
+              </label>
+              <div class="button-row wrap">
+                <button id="pareto-view-save" class="button primary tiny" type="button">Save view</button>
+                <button id="pareto-view-load" class="button ghost tiny" type="button" disabled>Load view</button>
+                <button id="pareto-view-delete" class="button danger tiny" type="button" disabled>Delete view</button>
+              </div>
+              <div class="button-row wrap">
+                <button id="pareto-view-export" class="button ghost tiny" type="button">Export JSON</button>
+                <label class="button ghost tiny file-button">Import JSON<input id="pareto-view-import" type="file" accept=".json,application/json"></label>
+                <button id="pareto-view-copy" class="button ghost tiny" type="button">Copy preset link</button>
+              </div>
+              <p id="pareto-view-meta" class="hint">Saved locally in this browser.</p>
+            </div>
+          </details>
           <button id="pareto-load" class="button primary" type="button" disabled>Load selected as scenario</button>
         </aside>
         <div id="pareto-axis-labels" class="pareto-axis-labels">
@@ -551,6 +587,19 @@
           <span id="pareto-axis-z">Z: --</span>
         </div>
         <div id="pareto-legend" class="change-legend"></div>
+        <div id="pareto-tooltip" class="pareto-tooltip" hidden></div>
+        <div class="parallel-panel" id="parallel-panel">
+          <div class="panel-heading">
+            <h2>Parallel coordinates</h2>
+            <span id="parallel-count" class="muted">--</span>
+          </div>
+          <div class="parallel-toolbar">
+            <span id="parallel-brush-label" class="parallel-brush-label"></span>
+            <button id="parallel-clear-brush" class="button tiny ghost" type="button" disabled>Clear brushes</button>
+            <span class="hint">Drag an axis to filter · Shift-drag adds a brush</span>
+          </div>
+          <svg id="parallel-chart" viewBox="0 0 1000 300" role="img" aria-label="Parallel coordinates of Pareto solutions"></svg>
+        </div>
       </div>
 
       <div class="timeline-strip">

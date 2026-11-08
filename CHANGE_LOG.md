@@ -1022,3 +1022,46 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Plan: `notes/design/p47-optimization-ui-parity.md`.
 - P48 site-level planting scenarios are queued after P47.
 - No implementation or branch yet.
+
+- Activated P47 on `feature/p47-optimization-ui-parity`; created child issues #238–#242.
+
+### P47.1 optimization viewer state and inspection
+
+- Added 3D hover tooltip with objective values and solution id.
+- Added selected and reference markers, actual axis ranges, and a robustness floor.
+- Added URL round-trip state including archive job, point, reference, floor, and axes.
+- Added copy-view-link and filtered CSV export.
+- Added reference delta cards and static web-asset checks.
+- Browser smoke: archive loaded, URL reload restored floor/point, hover and CSV worked.
+- Dashboard: GREEN (lint, format, types, tests, validator, docs).
+
+### P47.2 parallel coordinates and brushes
+
+- Added an SVG parallel-coordinates panel synchronized with the 3D Pareto view.
+- Axes derive from the archive objectives plus robustness, planted sites, and habitat; cost and water fall back to metrics only when absent as objectives.
+- Added single-axis and shift-drag multi-axis brushes with removable chips and a clear action.
+- Brushes filter the 3D cloud, parallel lines, and CSV export consistently.
+- Added selected/reference line emphasis and `opt_brushes` URL round-trip.
+- Static checks cover the parallel panel hooks and brush helpers.
+- Browser smoke: 10 axes, select/reference line emphasis, two shift-drag brushes reduced 71 to 4 visible solutions, URL reload restored brushes, and clear restored all 71.
+- Dashboard: GREEN (lint, format, types, tests, validator, docs).
+
+### P47.3 local saved views, import/export, and preset links
+
+- Added named local views in `localStorage` with save/load/delete.
+- Views store axes, colour, size, robustness floor, brushes, selected point, reference, and archive job id.
+- Added versioned JSON export/import with strict schema validation, bounded libraries, and merge-by-name.
+- Views belonging to another archive are refused rather than silently applied.
+- Added `opt_preset` preset links; reloading restores the full viewer state and preset name.
+- Browser smoke: save/load restored floor and selection, export/import worked, malformed JSON was rejected, preset URL reloaded, and mismatched archive was refused.
+- Dashboard: GREEN (lint, format, types, tests, validator, docs).
+
+### P47.5 docs, verification, and close-out
+
+- Updated the Optimization/Pareto reference with hover, ranges, reference deltas,
+  robustness floor, parallel coordinates, brushes, URL state, filtered CSV, local saved
+  views, import/export, preset links, and their limits.
+- Added the P47 method report and source attribution to `fable-pyculator` phases 41–50.
+- Deferred P47.4 shared review library; no server-backed collaboration layer is claimed.
+- Final browser smoke: 10 axes, 71 initial lines, two brushes to 4 of 71, 4-row filtered CSV, preset reload restored floor/selection/reference, no page errors.
+- Dashboard: GREEN (lint, format, types, tests, validator, docs).
