@@ -993,3 +993,4 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
   resolved by this screen; P44 loss cells are investigation targets, not proof.
 - Dashboard: GREEN (lint, format, types, tests, validator, docs).
 - Opened PR #229 for maintainer review; phase remains open until merge and parent-issue close-out.
+- Merged P45 as `854afa9` via PR #229; parent #224 and child issues #225–#228 are closed. Phase status: complete.

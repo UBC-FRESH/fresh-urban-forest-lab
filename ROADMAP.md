@@ -41,7 +41,7 @@ This roadmap is the plan of record and the issue tracker map for FRESH Urban For
 | P42 Integrated canopy-action screening | #202 | `feature/p42-action-screen` | complete |
 | P43 Citywide observed canopy change 2018-2022 | #209 | `feature/p43-citywide-change` | complete |
 | P44 Citywide canopy-action refresh | #216 | `feature/p44-citywide-action` | complete |
-| P45 Citywide canopy-change sensitivity | #224 | `feature/p45-change-sensitivity` | pr-open |
+| P45 Citywide canopy-change sensitivity | #224 | `feature/p45-change-sensitivity` | complete |
 
 ## Lifecycle Map
 
@@ -1189,7 +1189,7 @@ Phase 44 verification:
 
 Parent issue: #224
 Branch: `feature/p45-change-sensitivity`
-Status: pr-open
+Status: complete
 
 Goal: quantify the P43 2 m change screen's sensitivity to the vertical offset and scale
 choice, and state what can be claimed.
@@ -1199,7 +1199,7 @@ Plan: `notes/design/p45-change-sensitivity.md`.
 - [x] P45.1 Offset sensitivity calculations and tests (#225)
 - [x] P45.2 2 m vs 5 m scale comparison (#226)
 - [x] P45.3 Vancouver sensitivity JSON and method note (#227)
-- [ ] P45.4 Dashboard and close-out (#228)
+- [x] P45.4 Dashboard and close-out (#228)
 
 Acceptance criteria:
 
