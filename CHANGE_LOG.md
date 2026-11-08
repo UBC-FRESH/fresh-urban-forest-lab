@@ -966,3 +966,9 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Dashboard: GREEN (lint, format, types, tests, validator, docs).
 - Opened PR #221 for maintainer review; phase remains open until merge and parent-issue close-out.
 - Merged P44 as `f554fa7` via PR #221; follow-up PR #222 fixed the action refresh to use the canonical P43 citywide change. Parent #216 and child issues #217–#220 are closed. Phase status: complete.
+
+### P45 citywide change sensitivity start
+
+- Created parent issue #224, plan, and branch.
+- Goal: quantify the P43 2 m vertical-offset and scale sensitivity.
+- No new feature layer or product claim yet.
