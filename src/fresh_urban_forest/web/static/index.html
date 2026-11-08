@@ -226,6 +226,26 @@
           validated vulnerability model or a planting plan.
         </p>
       </section>
+
+      <section class="panel">
+        <div class="panel-heading">
+          <h2>Canopy change</h2>
+          <span id="canopy-change-status" class="muted">checking</span>
+        </div>
+        <div id="canopy-change-summary">
+          <p class="muted">No observed-change product in this dataset.</p>
+        </div>
+        <div class="heat-legend" aria-label="Observed canopy change classes">
+          <span><i class="heat-swatch change-gain"></i>gain</span>
+          <span><i class="heat-swatch change-loss"></i>loss</span>
+          <span><i class="heat-swatch change-stable"></i>stable</span>
+          <span><i class="heat-swatch change-none"></i>no canopy</span>
+        </div>
+        <p class="hint">
+          Thresholded LiDAR surface comparison for the approved downtown pilot AOI.
+          Not tree survival, growth, species change, or causal attribution.
+        </p>
+      </section>
     </aside>
 
     <section class="stage">
@@ -247,6 +267,7 @@
           <label><input id="toggle-heat-priority" type="checkbox"> shade equity</label>
           <label><input id="toggle-planting-opportunity" type="checkbox"> canopy gaps</label>
           <label><input id="toggle-heat-equity" type="checkbox"> heat equity</label>
+          <label><input id="toggle-canopy-change" type="checkbox"> canopy change</label>
           <label class="off-inventory-filter">conf
             <select id="off-inventory-confidence" aria-label="Minimum off-inventory confidence">
               <option value="0">all</option>

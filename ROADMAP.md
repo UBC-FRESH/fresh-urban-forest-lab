@@ -1070,10 +1070,10 @@ canopy-change screen and join it to P38 shade, P39 gap, and P40 heat-equity cell
 
 Plan: `notes/design/p41-canopy-change.md`.
 
-- [ ] P41.1 Acquire and checksum 2018 city LiDAR and verify coverage (#196)
-- [ ] P41.2 Build aligned 2018/2022 canopy-height grids (#197)
-- [ ] P41.3 Build 400 m change cells and join P38–P40 fields (#198)
-- [ ] P41.4 Add API, GeoJSON layer, map toggle, and method note (#199)
+- [x] P41.1 Acquire and checksum 2018 city LiDAR and verify coverage (#196)
+- [x] P41.2 Build aligned 2018/2022 canopy-height grids (#197)
+- [x] P41.3 Build 400 m change cells and join P38–P40 fields (#198)
+- [x] P41.4 Add API, GeoJSON layer, map toggle, and method note (#199)
 - [ ] P41.5 Dashboard, browser smoke, and close-out (#200)
 
 Acceptance criteria:

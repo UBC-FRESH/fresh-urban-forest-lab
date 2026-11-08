@@ -900,3 +900,14 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
   and the expected tens-of-gigabytes download.
 - Report: `notes/reports/p41-2018-lidar-coverage.md`.
 - No 2018→2022 change product has been computed yet.
+
+### P41.2–P41.4 downtown change pilot
+
+- Downloaded the two 2018 downtown LAS tiles through headed Chromium.
+- Built 2018 ground/CHM and aligned it to the P30 2022 1 m CHM.
+- Downtown 2 km² result: 440,509 m² earlier canopy, 498,871 m² later, +68,844 m²
+  gain, −10,482 m² loss, +58,362 m² net, +0.604 m mean height on stable canopy.
+- Added 400 m change cells with P38–P40 joins, API endpoints, map toggle, and report.
+- Browser smoke: **canopy change** layer loaded; sidebar showed +6 ha net, 7 ha gain,
+  1 ha loss, 43 ha stable; no console/page errors.
+- This is a staged downtown pilot, not a city-wide change claim.

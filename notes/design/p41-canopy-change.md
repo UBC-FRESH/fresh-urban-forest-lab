@@ -25,6 +25,13 @@ estimate, ownership layer, or causal attribution.
 - The 2018 source is the City 2018 LiDAR; the current manifest covers a 26-tile UBC
   subset, so city-wide 2018 acquisition is the first dependency.
 
+## Approved staged AOI
+
+The full 2018 index is 181 tiles and covers 99.96% of the city, but only two tiles
+were present. The approved staged pilot is the **2 km² downtown AOI** at
+`E492000–E494000, N5456000–N5457000`, using 2018 tiles `4920E_54560N` and
+`4930E_54560N`. City-wide acquisition remains a later decision.
+
 ## Method
 
 1. Acquire and checksum the 2018 City LiDAR tiles for the P30 city bounds.

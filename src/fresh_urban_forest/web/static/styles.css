@@ -666,3 +666,8 @@ select:focus, input:focus { outline: 2px solid #b8d3ae; outline-offset: 1px; }
 .heat-equity-high { background: #b2182b; }
 .heat-equity-medium { background: #ef8a34; }
 .heat-equity-low { background: #4575b4; }
+
+.change-gain { background: #4d9221; }
+.change-loss { background: #c51b7d; }
+.change-stable { background: #5a5a5a; }
+.change-none { background: #b4b4b4; }
