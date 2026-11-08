@@ -1350,3 +1350,16 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Missing tiles and checksums must be explicit.
 - Created child issues #283–#286 and activated `feature/p53-full-control`.
 - No final citywide direction or field-validation claim yet.
+
+### P53 full control and publication
+
+- Downloaded and checksum-verified all 181 2018 tiles (78.04 GB).
+- 149 control tiles; 965,995 class-2 pairs; median +0.011 m (bootstrap +0.010 to +0.012).
+- Four western stability outliers documented; 145/145 inliers within ±0.15 m; easting
+  +0.013 m, northing −0.082 m.
+- Full-control corrected P43: net **−94.29 ha**, stable height **+0.519 m**.
+- Corrected P44: plant 162, monitor 195, expand 110, structural 113, protect 217.
+- Corrected P46: 260 high-tier cells, 135.65 ha turnover.
+- Published corrected change as selectable `change_control.json`; original remains default.
+- Browser smoke: original +223 ha / +1.48 m; corrected −94 ha / +0.52 m; no errors.
+- Dashboard green.

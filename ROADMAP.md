@@ -49,7 +49,7 @@ This roadmap is the plan of record and the issue tracker map for FRESH Urban For
 | P50 Canopy-change vertical control | #266 | `feature/p50-vertical-control` | complete |
 | P51 Citywide vertical control and corrected products | #272 | `feature/p51-citywide-control` | complete |
 | P52 Lower Mainland candidate-data honesty | #278 | `feature/p51-candidate-honesty` | complete |
-| P53 Full-city vertical control and corrected publication | #282 | `feature/p53-full-control` | active |
+| P53 Full-city vertical control and corrected publication | #282 | `feature/p53-full-control` | pr-open |
 
 ## Lifecycle Map
 
@@ -1434,17 +1434,17 @@ Phase 52 verification:
 
 Parent issue: #282
 Branch: `feature/p53-full-control`
-Status: active
+Status: pr-open
 
 Goal: use all 181 indexed 2018 tiles, test vertical-control stability, and publish corrected
 products as an explicit versioned layer.
 
 Plan: `notes/design/p53-full-control.md`.
 
-- [ ] P53.1 Full tile sample and control estimate (#283)
-- [ ] P53.2 Corrected P43/P44/P46 products (#284)
-- [ ] P53.3 Versioned API/UI publication and docs (#285)
-- [ ] P53.4 Browser/dashboard verification and close-out (#286)
+- [x] P53.1 Full tile sample and control estimate (#283)
+- [x] P53.2 Corrected P43/P44/P46 products (#284)
+- [x] P53.3 Versioned API/UI publication and docs (#285)
+- [x] P53.4 Browser/dashboard verification and close-out (#286)
 
 Acceptance criteria:
 

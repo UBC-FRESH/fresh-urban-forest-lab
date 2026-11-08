@@ -58,6 +58,7 @@ def test_run_writes_corrected_product_and_control_metadata(tmp_path: Path) -> No
             control=control,
             out=out,
             p43_offset=1.0,
+            earlier_label="test corrected",
         )
     )
     assert result["correction_m"] == 0.5
