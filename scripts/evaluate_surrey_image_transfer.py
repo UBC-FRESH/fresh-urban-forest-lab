@@ -4,13 +4,13 @@
 from __future__ import annotations
 
 import gzip
+import importlib
 import json
 from pathlib import Path
 from typing import Any
 
 import numpy as np
 import torch
-from osgeo import gdal  # type: ignore[import-untyped]  # GDAL bindings ship without stubs
 from PIL import Image
 
 from fresh_urban_forest.classifier import (
@@ -32,6 +32,17 @@ SOURCE_CHIP = 384
 SAMPLE_PER_CLASS = 6000
 
 
+def _gdal() -> Any:  # noqa: ANN401  # pragma: no cover - optional GDAL binding
+    """Import GDAL lazily because CI does not install the optional binding.
+
+    Returns
+    -------
+    Any
+        The imported ``osgeo.gdal`` module.
+    """
+    return importlib.import_module("osgeo.gdal")
+
+
 def _read_labels() -> list[dict[str, Any]]:  # pragma: no cover - operator path
     with gzip.open(SURREY / "map_trees.json.gz", "rt", encoding="utf-8") as handle:
         payload = json.load(handle)
@@ -44,7 +55,8 @@ def _bsq_to_rgb(payload: bytes, size: int) -> np.ndarray:  # pragma: no cover - 
 
 
 def _read_chip(  # pragma: no cover - operator path
-    dataset: gdal.Dataset,
+    gdal: Any,  # noqa: ANN401  # optional GDAL binding
+    dataset: Any,  # noqa: ANN401  # optional GDAL binding
     inverse: tuple[float, ...],
     x: float,
     y: float,
@@ -99,13 +111,14 @@ def main() -> int:  # pragma: no cover - operator path
     ]
     x = np.asarray([project_lonlat(lon, lat, "EPSG:3157")[0] for lon, lat in points])
     y = np.asarray([project_lonlat(lon, lat, "EPSG:3157")[1] for lon, lat in points])
+    gdal = _gdal()
     dataset = gdal.Open(str(VRT))
     if dataset is None:
         raise SystemExit(f"cannot open {VRT}")
     inverse = gdal.InvGeoTransform(dataset.GetGeoTransform())
     images = np.empty((len(points), CHIP, CHIP, 3), dtype=np.uint8)
     for index, (x_value, y_value) in enumerate(zip(x, y, strict=True)):
-        images[index] = _read_chip(dataset, inverse, float(x_value), float(y_value))
+        images[index] = _read_chip(gdal, dataset, inverse, float(x_value), float(y_value))
         if (index + 1) % 1000 == 0:
             print("chips", index + 1, "/", len(points), flush=True)
     blocks = block_ids(x, y)
