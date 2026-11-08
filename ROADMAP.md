@@ -1164,9 +1164,9 @@ Goal: refresh the P42 action screen with P43 citywide observed change.
 
 Plan: `notes/design/p44-citywide-action.md`.
 
-- [ ] P44.1 Rebuild the 797 action cells with P43 change (#217)
-- [ ] P44.2 Verify observed-change coverage and loss branch (#218)
-- [ ] P44.3 Update method note, dashboard, and browser smoke (#219)
+- [x] P44.1 Rebuild the 797 action cells with P43 change (#217)
+- [x] P44.2 Verify observed-change coverage and loss branch (#218)
+- [x] P44.3 Update method note, dashboard, and browser smoke (#219)
 - [ ] P44.4 Close-out (#220)
 
 Acceptance criteria:

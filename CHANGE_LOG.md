@@ -952,3 +952,15 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Created parent issue #216, plan, and branch.
 - Goal: refresh P42 with the P43 citywide change product.
 - No product claim yet.
+
+### P44.1-P44.2 citywide action refresh
+
+- Rebuilt the action screen with P43 citywide change.
+- All 797 cells now have observed change.
+- Action counts: plant+cool 265, monitor 233, expand 133, structural 127, protect loss 39.
+- The loss branch is now populated by 39 observed loss cells; largest net-loss cell
+  `r19c07` about -1.23 ha.
+- Product: `data/processed/vancouver_2022/canopy_action.json` (ignored).
+- Browser smoke: action layer showed 797 observed cells, 265 plant+cool, 233 monitor,
+  133 expand, 127 structural, 39 protect loss; no console/page errors.
+- Dashboard: GREEN (lint, format, types, tests, validator, docs).
