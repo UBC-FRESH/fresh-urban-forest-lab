@@ -994,3 +994,22 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Dashboard: GREEN (lint, format, types, tests, validator, docs).
 - Opened PR #229 for maintainer review; phase remains open until merge and parent-issue close-out.
 - Merged P45 as `854afa9` via PR #229; parent #224 and child issues #225–#228 are closed. Phase status: complete.
+
+### P46 canopy turnover-hotspots start
+
+- Created parent issue #231, plan, and branch.
+- Goal: map contiguous gain/loss patches without claiming net direction.
+- No product claim yet.
+
+### P46.1-P46.3 canopy turnover hotspots
+
+- Added `fresh_urban_forest.turnover` and the Vancouver build script.
+- 2 m patch labeling, 50 m² minimum, 400 m aggregation, P38–P42 joins.
+- Result: 797 cells; 10,430 gain and 7,516 loss patches; 181.76 ha turnover;
+  high tier 260 cells.
+- Added `/api/canopy-turnover`, GeoJSON, map toggle, and report.
+- Turnover screen only; no net gain/loss or tree-survival claim.
+- Browser smoke: turnover layer showed 260 high cells, 182 ha turnover, 10,430 gain and
+  7,516 loss patches, no console/page errors.
+- Dashboard: GREEN (lint, format, types, tests, validator, docs).
+- Opened PR #236 for maintainer review; phase remains open until merge and parent-issue close-out.

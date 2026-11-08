@@ -677,3 +677,7 @@ select:focus, input:focus { outline: 2px solid #b8d3ae; outline-offset: 1px; }
 .action-expand { background: #e6911e; }
 .action-protect { background: #c51b7d; }
 .action-monitor { background: #8c8c8c; }
+
+.turnover-high { background: #c51b7d; }
+.turnover-medium { background: #ef8a34; }
+.turnover-low { background: #9bbe78; }
