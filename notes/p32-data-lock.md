@@ -69,6 +69,12 @@ do not establish ownership.
 - Candidate build and mask exclusion from the cached detection: 158 s.
 - Detection cache: 14 MB compressed; candidate GeoJSON: 11 MB compressed; compact
   high-confidence 3D arrays: 852 KB compressed.
+- Orthophoto audit: 300 individual crops plus five contact sheets, about 65 MB, under
+  `data/processed/vancouver_2022/off_inventory_audit_sheet/`; source imagery is not
+  redistributed in the repository.
+- Point support: 336,346 candidate rows, 11 MB compressed; support fields are attached to
+  the 336,350-row candidate table. Four southern-edge candidates could not be matched to a
+  raw tile.
 - The build writes only under `/srv/shared-data`; free space after the build was 7.7 TB.
 - The city app serves the compressed candidate layer through
   `/api/off-inventory.geojson` and filters on confidence and land proxy in the browser.
