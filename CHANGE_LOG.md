@@ -1219,3 +1219,15 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - No field work, survey-grade accuracy claim, or citywide direction claim yet.
 - Created child issues #267–#270 and activated `feature/p50-vertical-control`.
 - No implementation yet.
+
+### P50.1 vertical-reference inventory and feasibility gate
+
+- Indexed 181 City 2018 LiDAR ZIPs: 78.04 GB; raw tiles are not local.
+- Automated request to the indexed 2018 URL returned HTTP 403; manual/browser or alternate
+  access is required.
+- 2022 DEM/DSM/CHM and building/road products are local at 1 m, EPSG:3157.
+- Stable control candidates identified: 2018 class-2 ground vs 2022 DEM, class-6 roofs vs
+  2022 DSM, and road/fixed infrastructure.
+- No independent external vertical reference is local or confirmed.
+- Feasibility decision: **defer P50.2**; do not substitute canopy or unverified external
+  data. P43/P45 remain turnover screens; no citywide direction claim.

@@ -2,7 +2,7 @@
 
 Parent issue: #266
 Planned branch: `feature/p50-vertical-control`
-Status: active
+Status: deferred — 2018 raw tile access blocker
 
 ## Why
 
