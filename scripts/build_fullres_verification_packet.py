@@ -420,7 +420,13 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         type=Path,
         default=Path("data/processed/surrey_2025/boundary.geojson"),
     )
+    parser.add_argument(
+        "--template",
+        type=Path,
+        default=TEMPLATE_PATH,
+    )
     parser.add_argument("--size", type=int, default=384)
+    parser.add_argument("--no-crowns", action="store_true")
     parser.add_argument("--no-zip", action="store_true")
     return parser.parse_args(argv)
 
@@ -449,7 +455,7 @@ def main(argv: list[str] | None = None) -> int:
         collection: dict[str, Any] = json.load(handle)
     features: list[dict[str, Any]] = collection["features"]
     crowns: dict[str, list[list[float]]] = {}
-    if args.crowns.exists():
+    if not args.no_crowns and args.crowns.exists():
         with gzip.open(args.crowns, "rt", encoding="utf-8") as handle:
             for feature in json.load(handle).get("features", []):
                 rings = feature.get("geometry", {}).get("coordinates", [])
@@ -491,7 +497,9 @@ def main(argv: list[str] | None = None) -> int:
         draw.line((half - 14, half, half + 14, half), fill=(220, 20, 20), width=2)
         draw.line((half, half - 14, half, half + 14), fill=(220, 20, 20), width=2)
         properties = feature.get("properties", {})
-        if candidate_id in crowns:
+        if args.no_crowns:
+            ring = []
+        elif candidate_id in crowns:
             ring = crowns[candidate_id]
         else:
             radius = float(properties.get("crown_radius_m", 3.0))
@@ -591,7 +599,7 @@ def main(argv: list[str] | None = None) -> int:
             }
         )
     source.close()
-    html = TEMPLATE_PATH.read_text(encoding="utf-8").replace(
+    html = args.template.read_text(encoding="utf-8").replace(
         "__CANDIDATES__", json.dumps(candidates, ensure_ascii=False)
     )
     (out / "index.html").write_text(html, encoding="utf-8")

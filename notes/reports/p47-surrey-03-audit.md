@@ -2,7 +2,7 @@
 
 Date: 2026-11-08
 
-Status: 200-candidate preflighted sample and blind packet ready; human labels not yet entered.
+Status: 200-candidate preflighted sample; tree/non-tree pre-audit packet ready. Species audit blocked on candidate validity.
 
 ## Sample
 
@@ -32,3 +32,17 @@ optional server persistence.
 - No candidate labels exist yet; no precision claim is made.
 - Do not promote the 0.30 m candidate layer before the sample is reviewed and scored.
 - Review server port used for smoke: 8105.
+
+## Candidate-validity pre-audit
+
+The first contact sheet showed numerous candidates centred on buildings, driveways, and
+road edges. The species packet is therefore not being sent out as a conifer/deciduous
+review.
+
+A second packet was built from the same 200 candidates with **no crown masks** and the
+existing blind UI pattern, labelled **Tree / Non-tree / Uncertain**:
+
+`data/processed/surrey_2025/p47_preaudit_packet/`
+
+This is the correct next gate: reject non-tree candidates before asking for species group.
+No validity labels have been entered.
