@@ -1089,3 +1089,19 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Vancouver build: 5,000 candidate sites (5,000 cap, 12 per cell); action context
   expand 906, plant 588, protect/investigate 3,243, structural 263.
 - Added unit and build tests; no API or UI yet.
+
+### P48.2 site-level shade simulation and scenario metrics
+
+- Added `fresh_urban_forest.site_shade` using the existing projected-shadow accumulation
+  model on baseline and hypothetical scenario trees.
+- Baseline and scenario use the same samples, target height, terrain setting, and step.
+- Reports combined shade area-hours, shade fractions, percent deltas, per-site
+  contributions, and optional height/crown ±20% sensitivity.
+- Labels the result as a scenario screen; P45's unresolved citywide direction and the
+  non-observational limits are embedded in the output.
+- Two-site Vancouver pilot at 2026-06-21 12:00 PDT: baseline 35,752,669.3 m²h;
+  scenario +1,158.34 m²h (+0.0032%); per-site +579.17 m²h.
+- Sensitivity range +868.75 to +1,737.51 m²h across height/crown ±20%; one sample only,
+  not annual shade or an observed outcome.
+- Added synthetic tests for baseline/scenario determinism, per-site deltas, sensitivity,
+  missing candidates, and empty samples.

@@ -22,3 +22,26 @@ Vancouver candidate build:
 Limits: candidate sites are open-ground components, not parcels or planting permissions.
 No ownership, access, utility, soil, irrigation, maintenance, survival, or field-validation
 claim is made. P48.2 still has to define and label the shade evaluation.
+
+## P48.2 Site-level shade simulation and scenario metrics
+
+The evaluator reuses the existing projected-shadow accumulation model. Baseline and
+scenario use the same samples, target height, step, and terrain setting. The scenario adds
+hypothetical trees at the selected candidate sites using explicit species, height, crown
+radius, and count. It reports combined shade area-hours, shade fractions, percent deltas,
+per-site contributions, and optional height/crown sensitivity cases.
+
+Vancouver two-site pilot:
+
+- Baseline dataset: 29,096 trees; 862 by 633 terrain grid.
+- Sample: 2026-06-21 12:00 PDT; target height 1.5 m; two `plant + cool` sites.
+- Assumption: 8 m height, 3 m crown radius, one tree per site.
+- Baseline: **35,752,669.3 m²h** combined shade area-hours.
+- Scenario: **35,753,827.6 m²h**; delta **+1,158.34 m²h** (**+0.0032%**).
+- Per-site deltas: **+579.17 m²h** each.
+- Height/crown ±20% sensitivity range: **+868.75 to +1,737.51 m²h**.
+- This is one time sample, not annual shade. Sensitivity is a model/geometry response,
+  not a biological growth or survival forecast.
+
+The output labels the method as `projected-shadow-accumulation-combined` and records:
+`scenario screen, not observed shade`; P45 citywide change remains unresolved.
