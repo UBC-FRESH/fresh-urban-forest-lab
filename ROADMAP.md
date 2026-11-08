@@ -39,7 +39,7 @@ This roadmap is the plan of record and the issue tracker map for FRESH Urban For
 | P40 Open land-surface temperature and heat equity | #176 | `feature/p40-heat-equity` | complete |
 | P41 Observed canopy change 2018-2022 | #195 | `feature/p41-canopy-change` | complete |
 | P42 Integrated canopy-action screening | #202 | `feature/p42-action-screen` | complete |
-| P43 Citywide observed canopy change 2018-2022 | #209 | `feature/p43-citywide-change` | pr-open |
+| P43 Citywide observed canopy change 2018-2022 | #209 | `feature/p43-citywide-change` | complete |
 
 ## Lifecycle Map
 
@@ -1126,7 +1126,7 @@ Phase 42 verification:
 
 Parent issue: #209
 Branch: `feature/p43-citywide-change`
-Status: pr-open
+Status: complete
 
 Goal: expand the P41 downtown pilot to a citywide 5 m LiDAR change screen and join
 P38–P42 cells.

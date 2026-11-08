@@ -944,3 +944,5 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - API/UI reuse the P41 canopy-change layer; no new endpoint code needed.
 
 - Corrected the P43 product to the 2 m scale-sensitive rerun: 5 m max aggregation was rejected; 2018 canopy area 2,965.25 ha, 2022 3,188.65 ha, net +223.40 ha. Browser smoke showed +223 ha net with no console/page errors.
+
+- Merged P43 as `8f93e6c` via PR #215; parent #209 and child issues #210–#214 are closed. Phase status: complete.
