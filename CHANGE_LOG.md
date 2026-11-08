@@ -1281,3 +1281,14 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Conditional gate pass for a constant +0.015 m offset; no per-tile correction.
 - P43 correction +0.985 m; corrected 2 m screen about −92.5 ha (range −93.6 to −92.2),
   not +223 ha. Still a corrected screen, not a final citywide loss.
+
+### P51.2 corrected P43 product
+
+- Added `scripts/build_corrected_vancouver_change.py`.
+- Applied +0.985 m correction to the earlier surface and wrote a versioned product under
+  `change_vancouver_2018_2022_citywide_2m_control/`.
+- Original P43 product remains unchanged.
+- Corrected 2 m result: earlier 3,281.15 ha, later 3,188.65 ha, net **−92.50 ha**,
+  stable height +0.523 m. Original: +223 ha, +1.475 m.
+- Product remains a corrected screen, not a final citywide loss.
+- P44/P46 refresh still pending.
