@@ -1,7 +1,7 @@
 # P50.1 vertical-reference inventory and feasibility gate
 
-Status: feasibility gate reached. P50.2 is blocked pending access to 2018 raw tiles or an
-independent external control. P45's warning remains in force.
+Status: feasibility gate passed after a manual/browser download. P50.2 is complete; see
+`notes/reports/p50-vertical-control.md` for the control estimate.
 
 ## Purpose
 
@@ -94,3 +94,9 @@ Use 6–12 tiles distributed across the city, including:
 
 Report sample counts, spatial coverage, robust offset, outliers, and bootstrap uncertainty.
 Do not extrapolate to the city without a representativeness check.
+
+## Addendum: gate resolved
+
+A headful browser download succeeded where an automated request returned HTTP 403. A
+13-tile sample was downloaded (878 MB); seven tiles overlapped the 2022 bounds. P50.2 then
+used class-2 ground controls. See `notes/reports/p50-vertical-control.md`.

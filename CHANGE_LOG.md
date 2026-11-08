@@ -1231,3 +1231,26 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - No independent external vertical reference is local or confirmed.
 - Feasibility decision: **defer P50.2**; do not substitute canopy or unverified external
   data. P43/P45 remain turnover screens; no citywide direction claim.
+
+### P50.2/P50.3 vertical control and re-evaluation
+
+- A headful browser downloaded a 13-tile 2018 sample (878 MB); seven tiles overlapped the
+  2022 bounds.
+- Added `fresh_urban_forest.vertical_control` and robust estimator tests.
+- 12,337 class-2 ground pairs: median 2018-minus-2022 DEM offset **+0.008 m**;
+  bootstrap **+0.004 to +0.011 m**; MAD 0.103 m.
+- Class-6 roofs were unavailable in the sampled LAS; no unclassified roof proxy was used.
+- P43 used a +1.0 m offset. Measured control implies a +0.992 m correction to the earlier
+  surface (range +0.989 to +0.996).
+- Corrected P43 2 m net: **−95.4 ha** (range −97.1 to −94.3); sign negative across the
+  control interval. This is a sampled screen, not a final citywide loss.
+- Added `scripts/estimate_vancouver_vertical_control.py` and
+  `scripts/analyze_vancouver_vertical_control.py`.
+
+### P50.4 documentation and close-out
+
+- Documented the measured ground-control offset and the corrected P43/P45 result.
+- Updated the change-products reference and P43/P45 reports.
+- Final dashboard green.
+- P50 does not claim a final citywide loss: the seven-tile control sample is not a
+  citywide probability sample and classification/co-registration/scale effects remain.

@@ -160,3 +160,11 @@ overlap is about **83.5 km²** of the nominal 118.8 km² city area after excludi
 and water. A 5 m maximum aggregation inflated the 2018 canopy edge area and was rejected
 as scale-biased. The observed surface change still includes acquisition, classification,
 vertical-datum, and co-registration effects as well as real canopy change.
+
+P50 measured a vertical control offset on 12,337 class-2 ground pairs across seven tiles:
+**+0.008 m** (bootstrap **+0.004 to +0.011 m**) for 2018 ground minus the 2022 DEM. P43 used
+an assumed **+1.0 m** offset, which this sample does not support. Correcting to the measured
+control gives a P43 screen of about **−95 ha** (range **−97 to −94 ha**) rather than the
+previous **+223 ha**. The sample is not a citywide probability sample, and classification,
+co-registration, scale, and acquisition effects remain. This is not a final citywide
+net-loss claim. See ``notes/reports/p50-vertical-control.md``.
