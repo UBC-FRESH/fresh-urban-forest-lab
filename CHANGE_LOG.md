@@ -1282,3 +1282,5 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - No model, candidate data, tree/non-tree screening, or inventory validation changed.
 - Browser smoke covered all four instances with no page errors.
 - Report: `notes/reports/p51-candidate-honesty.md`.
+
+- Merged P51 as `762a929` via PR #281; parent #278 and child #280 are closed. Phase status: complete.

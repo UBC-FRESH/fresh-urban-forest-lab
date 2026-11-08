@@ -47,7 +47,7 @@ This roadmap is the plan of record and the issue tracker map for FRESH Urban For
 | P48 Site-level planting scenarios | #247 | `feature/p48-site-scenarios` | complete |
 | P49 Site scenario comparison | #259 | `feature/p49-scenario-comparison` | complete |
 | P50 Canopy-change vertical control | #266 | `feature/p50-vertical-control` | complete |
-| P51 Lower Mainland candidate-data honesty | #278 | `feature/p51-candidate-honesty` | active |
+| P51 Lower Mainland candidate-data honesty | #278 | `feature/p51-candidate-honesty` | complete |
 
 ## Lifecycle Map
 
@@ -1373,7 +1373,7 @@ Phase 50 verification:
 
 Parent issue: #278
 Branch: `feature/p51-candidate-honesty`
-Status: active
+Status: complete
 
 Goal: stop presenting unvalidated candidate species groups as species colors or mapped
 counts for Surrey, Burnaby, and Coquitlam. Keep candidate confidence, height, crown
@@ -1381,7 +1381,7 @@ area, and tree/non-tree evidence visible.
 
 Report: `notes/reports/p51-candidate-honesty.md`.
 
-- [ ] P51.1 Conditional candidate styling, summary wording, tests, and browser smoke (#280)
+- [x] P51.1 Conditional candidate styling, summary wording, tests, and browser smoke (#280)
 
 Acceptance criteria:
 
