@@ -168,3 +168,13 @@ control gives a P43 screen of about **−95 ha** (range **−97 to −94 ha**) r
 previous **+223 ha**. The sample is not a citywide probability sample, and classification,
 co-registration, scale, and acquisition effects remain. This is not a final citywide
 net-loss claim. See ``notes/reports/p50-vertical-control.md``.
+
+P51 expanded the control sample to a deterministic 34-tile spatial sample: **196,943**
+class-2 ground pairs, median **+0.015 m** (bootstrap **+0.013 to +0.016 m**), with 30/31
+tiles within ±0.15 m of the sample median and one western −0.43 m outlier. The corrected
+2 m product is versioned separately as
+``change_vancouver_2018_2022_citywide_2m_control/``; the released P43 product is unchanged.
+The corrected screen is about **−92.5 ha** net, with stable-height change **+0.523 m**.
+Corrected P44/P46 sidecars are under ``vancouver_2022_control/`` and are not the public API
+defaults. These remain screening products, not a final citywide net-loss claim or field
+validation.

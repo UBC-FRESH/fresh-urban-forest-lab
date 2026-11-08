@@ -1303,3 +1303,11 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - P46 high-tier 259 cells; turnover area 135.58 ha (original 260 / 181.76 ha).
 - Corrected products are versioned under `vancouver_2022_control/`; public API/UI unchanged.
 - Shift is a screening result, not proof of loss.
+
+### P51.4 documentation and close-out
+
+- Documented the 34-tile control sample, corrected P43 product, and corrected P44/P46
+  sidecars.
+- Public API/UI remains on the original products; no browser UI change was made.
+- Dashboard: GREEN (lint, format, types, tests, validator, docs).
+- Open PR for review; no final citywide net-loss claim.

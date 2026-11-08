@@ -47,7 +47,7 @@ This roadmap is the plan of record and the issue tracker map for FRESH Urban For
 | P48 Site-level planting scenarios | #247 | `feature/p48-site-scenarios` | complete |
 | P49 Site scenario comparison | #259 | `feature/p49-scenario-comparison` | complete |
 | P50 Canopy-change vertical control | #266 | `feature/p50-vertical-control` | complete |
-| P51 Citywide vertical control and corrected products | #272 | `feature/p51-citywide-control` | active |
+| P51 Citywide vertical control and corrected products | #272 | `feature/p51-citywide-control` | pr-open |
 
 ## Lifecycle Map
 
@@ -1373,7 +1373,7 @@ Phase 50 verification:
 
 Parent issue: #272
 Branch: `feature/p51-citywide-control`
-Status: active
+Status: pr-open
 
 Goal: expand the P50 control sample, test spatial stability, and produce versioned corrected
 change products only if the control is representative enough.
@@ -1383,7 +1383,7 @@ Plan: `notes/design/p51-citywide-control.md`.
 - [x] P51.1 Citywide control sample and spatial estimate (#273)
 - [x] P51.2 Versioned corrected P43 screen (#274)
 - [x] P51.3 P44/P46 refresh and API/doc integration (#275) — corrected data/docs; public API unchanged
-- [ ] P51.4 Browser/dashboard verification and close-out (#276)
+- [x] P51.4 Browser/dashboard verification and close-out (#276)
 
 Acceptance criteria:
 

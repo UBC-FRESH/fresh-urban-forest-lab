@@ -45,3 +45,11 @@ toggle and sidebar summary.
   also sensitive to grid scale, threshold, and vertical offset.
 - Temporary LiDAR artifacts, classification, and co-registration can create patches.
 - No tree survival, species, ownership, causal, or field-validation claim.
+
+## P51 controlled sidecar
+
+P51 rebuilt P46 on the corrected P43 screen. The corrected sidecar has 259 high-tier
+cells and 135.58 ha of turnover, compared with 260 cells and 181.76 ha in the original
+product. These are sidecar data under `vancouver_2022_control/`, not the public API
+default. Patch turnover is still a screening result, not a net-change claim. See
+`notes/reports/p51-downstream-refresh.md`.

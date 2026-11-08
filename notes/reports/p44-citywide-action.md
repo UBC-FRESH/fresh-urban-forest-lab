@@ -39,3 +39,12 @@ above supersede that first run.
 - The action rule is a deterministic relative screen, not a planting plan, cost, utility,
   access, ownership, or field-validated recommendation.
 - No causal claim.
+
+## P51 controlled sidecar
+
+P51 rebuilt P38 from public Census inputs, applied the P51 vertical control to P43, and
+rebuilt P44 on the corrected 2 m screen. Corrected action counts are plant+cool 166,
+monitor 196, expand 110, structural 113, and protect/investigate 212. These are sidecar
+data under `vancouver_2022_control/`, not the public API default. The shift toward
+protect/investigate is a screening result, not proof of loss. See
+`notes/reports/p51-downstream-refresh.md`.

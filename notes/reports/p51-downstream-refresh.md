@@ -1,7 +1,7 @@
 # P51 downstream refresh from the corrected change screen
 
-Status: corrected data products and docs complete; public API/UI remains on the original
-P43 products pending P51.4 review.
+Status: complete; corrected data products and docs are ready. Public API/UI remains on the
+original P43 products by design. No browser UI change was made.
 
 ## P38 source recovery
 
