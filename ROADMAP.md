@@ -39,6 +39,7 @@ This roadmap is the plan of record and the issue tracker map for FRESH Urban For
 | P40 Open land-surface temperature and heat equity | #176 | `feature/p40-heat-equity` | complete |
 | P41 Observed canopy change 2018-2022 | #195 | `feature/p41-canopy-change` | complete |
 | P42 Integrated canopy-action screening | #202 | `feature/p42-action-screen` | complete |
+| P43 Citywide observed canopy change 2018-2022 | #209 | `feature/p43-citywide-change` | pr-open |
 
 ## Lifecycle Map
 
@@ -1117,6 +1118,37 @@ Acceptance criteria:
 - Dashboard is green.
 
 Phase 42 verification:
+
+- `python scripts/dashboard.py`
+- `python scripts/check_workflow.py`
+
+## Phase 43: Citywide observed canopy change 2018-2022
+
+Parent issue: #209
+Branch: `feature/p43-citywide-change`
+Status: pr-open
+
+Goal: expand the P41 downtown pilot to a citywide 5 m LiDAR change screen and join
+P38–P42 cells.
+
+Plan: `notes/design/p43-citywide-change.md`.
+
+- [x] P43.1 Checksum and audit all 181 2018 LiDAR tiles (#210)
+- [x] P43.2 Build the citywide 2018 CHM and align it to 2022 (#211)
+- [x] P43.3 Build 400 m citywide change cells and joins (#212)
+- [x] P43.4 API, GeoJSON layer, map toggle, and method note (#213)
+- [x] P43.5 Dashboard, browser smoke, and close-out (#214)
+
+Acceptance criteria:
+
+- All 181 ZIPs are checksummed or explicitly missing.
+- Citywide 2018 CHM coverage and valid overlap are recorded.
+- Cells report earlier/later canopy, gain, loss, stable, net, and height change.
+- Missing/partial coverage is explicit.
+- Joins to P38–P42 are descriptive, not causal.
+- Dashboard green.
+
+Phase 43 verification:
 
 - `python scripts/dashboard.py`
 - `python scripts/check_workflow.py`

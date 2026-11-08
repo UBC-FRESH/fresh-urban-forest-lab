@@ -145,3 +145,18 @@ Adding a product
 
 The image version in ``change.json`` is a SHA-256 prefix of the PNG, so a rebuilt raster
 gets a new URL.
+
+Citywide 2018–2022 screening
+----------------------------
+
+The P43 citywide product compares the City of Vancouver 2018 and 2022 LiDAR surfaces on a
+**2 m** EPSG:3157 grid. It uses a 2 m canopy threshold, a point stride of 16, and a
++1.0 m vertical offset when the 2022 DEM stands in for 2018 ground. The 2018 CHM is built
+from all 181 city ZIP tiles; the 2022 CHM is the P30 1 m surface resampled to the same
+grid.
+
+The citywide result is a screening surface, not tree survival or a growth rate. The valid
+overlap is about **83.5 km²** of the nominal 118.8 km² city area after excluding buildings
+and water. A 5 m maximum aggregation inflated the 2018 canopy edge area and was rejected
+as scale-biased. The observed surface change still includes acquisition, classification,
+vertical-datum, and co-registration effects as well as real canopy change.
