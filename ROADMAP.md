@@ -46,6 +46,7 @@ This roadmap is the plan of record and the issue tracker map for FRESH Urban For
 | P47 Optimization UI parity | #237 | `feature/p47-optimization-ui-parity` | complete |
 | P48 Site-level planting scenarios | #247 | `feature/p48-site-scenarios` | complete |
 | P49 Site scenario comparison | #259 | `feature/p49-scenario-comparison` | complete |
+| P50 Canopy-change vertical control | #266 | `feature/p50-vertical-control` | active |
 
 ## Lifecycle Map
 
@@ -1332,6 +1333,37 @@ Acceptance criteria:
 - Dashboard green.
 
 Phase 49 verification:
+
+- `python scripts/dashboard.py`
+- `python scripts/check_workflow.py`
+
+## Phase 50: Canopy-change vertical control and uncertainty
+
+Parent issue: #266
+Branch: `feature/p50-vertical-control`
+Status: active
+
+Goal: test whether independent vertical control resolves the P43/P45 citywide net-change
+direction. Feasibility-first: if public control data cannot support an estimate, stop and
+retain the existing warning.
+
+Plan: `notes/design/p50-vertical-control.md`.
+
+- [ ] P50.1 Vertical-reference inventory and feasibility gate (#267)
+- [ ] P50.2 Stable-surface control extraction and offset estimate (#268)
+- [ ] P50.3 P43/P45 re-evaluation with propagated uncertainty (#269)
+- [ ] P50.4 Docs, report, and close-out (#270)
+
+Acceptance criteria:
+
+- The inventory separates local, external, and missing inputs.
+- The feasibility gate is explicit: proceed or stop.
+- Stable surfaces, not canopy, provide any control estimate.
+- P45's warning remains unless the control supports a direction.
+- No survey-grade, field-validation, ownership, survival, or causal claim is added.
+- Dashboard green.
+
+Phase 50 verification:
 
 - `python scripts/dashboard.py`
 - `python scripts/check_workflow.py`

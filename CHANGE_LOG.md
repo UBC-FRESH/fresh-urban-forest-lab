@@ -1110,6 +1110,7 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
   claim. P45 remains in force.
 - Created child issues #248–#251 and activated `feature/p48-site-scenarios`.
 - Created child issues #260–#262 and activated `feature/p49-scenario-comparison`.
+- Created child issues #267–#270 and activated `feature/p50-vertical-control`.
 - No implementation yet.
 
 ### P48.1 candidate-site and scenario data contract
@@ -1174,6 +1175,7 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - No ranking, planting plan, shared server library, ownership, survival, field-validation,
   or citywide-change claim.
 - Created child issues #260–#262 and activated `feature/p49-scenario-comparison`.
+- Created child issues #267–#270 and activated `feature/p50-vertical-control`.
 - No implementation yet.
 
 ### P49.1 local scenario library and assumption presets
@@ -1209,3 +1211,11 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - P49 is a neutral local comparison tool, not a ranking or planting recommendation.
 
 - Merged P49 as `9db929f` via PR #263; parent #259 and child issues #260–#262 are closed. Phase status: complete.
+
+### P50 vertical control start
+
+- Created parent issue #266 and plan `notes/design/p50-vertical-control.md`.
+- Scope: feasibility-first inventory and stable-surface control estimate for P43/P45.
+- No field work, survey-grade accuracy claim, or citywide direction claim yet.
+- Created child issues #267–#270 and activated `feature/p50-vertical-control`.
+- No implementation yet.
