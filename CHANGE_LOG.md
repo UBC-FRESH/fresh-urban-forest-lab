@@ -1341,3 +1341,12 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Phase renumbered to P52 to avoid collision with P51 citywide vertical-control work (#272).
 
 - Merged P51 as `4b15a16` via PR #279; parent #272 and child issues #273–#276 are closed. Phase status: complete.
+
+### P53 full control start
+
+- Created parent issue #282 and plan `notes/design/p53-full-control.md`.
+- Scope: all 181 indexed 2018 tiles, full control estimate, corrected P43/P44/P46, and
+  versioned API/UI publication if stable.
+- Missing tiles and checksums must be explicit.
+- Created child issues #283–#286 and activated `feature/p53-full-control`.
+- No final citywide direction or field-validation claim yet.
