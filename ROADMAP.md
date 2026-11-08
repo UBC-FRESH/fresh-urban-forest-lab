@@ -38,6 +38,7 @@ This roadmap is the plan of record and the issue tracker map for FRESH Urban For
 | P39 Canopy gaps and above-ground planting opportunity | #174 | `feature/p39-canopy-gaps` | complete |
 | P40 Open land-surface temperature and heat equity | #176 | `feature/p40-heat-equity` | complete |
 | P41 Observed canopy change 2018-2022 | #195 | `feature/p41-canopy-change` | complete |
+| P42 Integrated canopy-action screening | #202 | `feature/p42-action-screen` | pr-open |
 
 ## Lifecycle Map
 
@@ -1085,6 +1086,37 @@ Acceptance criteria:
 - Dashboard is green.
 
 Phase 41 verification:
+
+- `python scripts/dashboard.py`
+- `python scripts/check_workflow.py`
+
+## Phase 42: Integrated canopy-action screening
+
+Parent issue: #202
+Branch: `feature/p42-action-screen`
+Status: pr-open
+
+Goal: join P38 shade/equity, P39 gaps, P40 heat equity, and P41 observed change into
+one 400 m screening layer with transparent action labels.
+
+Plan: `notes/design/p42-action-screen.md`.
+
+- [x] P42.1 Join P38–P41 cells and preserve missing-data states (#203)
+- [x] P42.2 Deterministic action classification and product (#204)
+- [x] P42.3 API, GeoJSON layer, and map toggle (#205)
+- [x] P42.4 Vancouver product and method note (#206)
+- [ ] P42.5 Dashboard, browser smoke, and close-out (#207)
+
+Acceptance criteria:
+
+- Every P38/P39/P40 cell is represented.
+- Action labels are deterministic and documented.
+- Missing P41 change is explicit, not imputed.
+- API and map layer are optional when the product is absent.
+- No ownership, cost, utility, causal, or field-validation claim.
+- Dashboard is green.
+
+Phase 42 verification:
 
 - `python scripts/dashboard.py`
 - `python scripts/check_workflow.py`

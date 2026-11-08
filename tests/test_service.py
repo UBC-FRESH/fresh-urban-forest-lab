@@ -80,6 +80,27 @@ def test_heat_priority_endpoints_are_optional(tmp_path: Path) -> None:
     assert geojson.headers["content-type"].startswith("application/geo+json")
 
 
+def test_canopy_action_endpoints_are_optional(tmp_path: Path) -> None:
+    """A dataset without the product returns 404; adding it serves JSON and GeoJSON."""
+    client = _client(tmp_path)
+    assert client.get("/api/canopy-action").status_code == 404
+    assert client.get("/api/canopy-action.geojson").status_code == 404
+    (tmp_path / "dataset" / "canopy_action.json").write_text(
+        '{"schema_version": "test", "metadata": {}, "cells": []}', encoding="utf-8"
+    )
+    (tmp_path / "dataset" / "canopy_action.geojson").write_text(
+        '{"type": "FeatureCollection", "features": []}', encoding="utf-8"
+    )
+    dataset = client.get("/api/dataset").json()
+    assert dataset["has_canopy_action"] is True
+    response = client.get("/api/canopy-action")
+    assert response.status_code == 200
+    assert response.json()["schema_version"] == "test"
+    geojson = client.get("/api/canopy-action.geojson")
+    assert geojson.status_code == 200
+    assert geojson.headers["content-type"].startswith("application/geo+json")
+
+
 def test_canopy_change_endpoints_are_optional(tmp_path: Path) -> None:
     """A dataset without the product returns 404; adding it serves JSON and GeoJSON."""
     client = _client(tmp_path)

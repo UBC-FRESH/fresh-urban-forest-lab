@@ -671,3 +671,9 @@ select:focus, input:focus { outline: 2px solid #b8d3ae; outline-offset: 1px; }
 .change-loss { background: #c51b7d; }
 .change-stable { background: #5a5a5a; }
 .change-none { background: #b4b4b4; }
+
+.action-plant { background: #377e22; }
+.action-shade { background: #3182bd; }
+.action-expand { background: #e6911e; }
+.action-protect { background: #c51b7d; }
+.action-monitor { background: #8c8c8c; }

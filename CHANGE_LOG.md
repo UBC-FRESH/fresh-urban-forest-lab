@@ -913,3 +913,21 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - This is a staged downtown pilot, not a city-wide change claim.
 - Opened PR #201 for maintainer review; phase remains open until merge and parent-issue close-out.
 - Merged P41 as `3507e94` via PR #201; child issues #196–#200 and parent #195 are closed. Phase status: complete.
+
+### P42 integrated canopy-action screening start
+
+- Created parent issue #202, plan, and branch.
+- No implementation or product claim yet.
+- Plan: `notes/design/p42-action-screen.md`.
+
+### P42.1-P42.4 integrated action screen
+
+- Added `fresh_urban_forest.action_screen`, the Vancouver build script, and tests.
+- Joined 797 P38/P39/P40 cells; P41 change is observed in 18 cells.
+- Action counts: plant + cool 270, monitor 253, expand canopy 145, structural shade 129,
+  protect loss 0. The loss branch is tested but no pilot cell is loss.
+- Added `/api/canopy-action`, GeoJSON, map toggle, summary, and report.
+- Browser smoke: **canopy action** layer loaded; sidebar showed 270 plant+cool,
+  253 monitor, 145 expand, 129 structural shade, 0 protect loss; no console/page errors.
+- Screening product only; no cost, utility, ownership, causal, or field claim.
+- Opened PR #208 for maintainer review; phase remains open until merge and parent-issue close-out.
