@@ -1,6 +1,6 @@
 # P53 full-city vertical control and corrected publication
 
-Status: full control complete; corrected products published as a selectable change layer.
+Status: complete. Merged in PR #287 as `39fd767`.
 
 ## Full sample
 

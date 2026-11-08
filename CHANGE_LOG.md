@@ -1363,3 +1363,5 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Published corrected change as selectable `change_control.json`; original remains default.
 - Browser smoke: original +223 ha / +1.48 m; corrected −94 ha / +0.52 m; no errors.
 - Dashboard green.
+
+- Merged P53 as `39fd767` via PR #287; parent #282 and child issues #283–#286 are closed. Phase status: complete.
