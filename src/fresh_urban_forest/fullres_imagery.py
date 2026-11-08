@@ -7,17 +7,21 @@ window reads. Chips remain explicitly georeferenced; no stereo interpretation is
 
 from __future__ import annotations
 
+import importlib
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
 import numpy as np
 from numpy.typing import NDArray
-from osgeo import gdal  # type: ignore[import-untyped]
 
 from fresh_urban_forest.imagery import band_sequential_rgb
 
-gdal.UseExceptions()
+try:
+    gdal: Any = importlib.import_module("osgeo.gdal")
+    gdal.UseExceptions()
+except ImportError:
+    gdal = None
 
 
 @dataclass
