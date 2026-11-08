@@ -76,3 +76,15 @@ toggle and sidebar summary.
 P45 shows the citywide net sign is not stable across a ±1.0 m offset range:
 from about −99 ha to +488 ha. Do not claim a net gain or loss from this screen
 without external vertical control. See `notes/reports/p45-change-sensitivity.md`.
+
+## P50 vertical-control update
+
+P50 sampled 12,337 class-2 ground pairs across seven 2018 tiles. The measured 2018-ground
+minus 2022-DEM offset is **+0.008 m** (bootstrap +0.004 to +0.011), not the **+1.0 m** used
+here. Correcting to the measured control gives a 2 m screen of about **−95 ha** (range
+−97 to −94 ha), not **+223 ha**.
+
+This is not a final citywide loss claim: the sample is not a citywide probability sample,
+and classification, co-registration, scale, and acquisition effects remain. The P43
+positive result is sensitive to the unsupported +1.0 m assumption. See
+`notes/reports/p50-vertical-control.md`.

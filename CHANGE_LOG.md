@@ -1110,6 +1110,7 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
   claim. P45 remains in force.
 - Created child issues #248–#251 and activated `feature/p48-site-scenarios`.
 - Created child issues #260–#262 and activated `feature/p49-scenario-comparison`.
+- Created child issues #267–#270 and activated `feature/p50-vertical-control`.
 - No implementation yet.
 
 ### P48.1 candidate-site and scenario data contract
@@ -1174,6 +1175,7 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - No ranking, planting plan, shared server library, ownership, survival, field-validation,
   or citywide-change claim.
 - Created child issues #260–#262 and activated `feature/p49-scenario-comparison`.
+- Created child issues #267–#270 and activated `feature/p50-vertical-control`.
 - No implementation yet.
 
 ### P49.1 local scenario library and assumption presets
@@ -1209,3 +1211,47 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - P49 is a neutral local comparison tool, not a ranking or planting recommendation.
 
 - Merged P49 as `9db929f` via PR #263; parent #259 and child issues #260–#262 are closed. Phase status: complete.
+
+### P50 vertical control start
+
+- Created parent issue #266 and plan `notes/design/p50-vertical-control.md`.
+- Scope: feasibility-first inventory and stable-surface control estimate for P43/P45.
+- No field work, survey-grade accuracy claim, or citywide direction claim yet.
+- Created child issues #267–#270 and activated `feature/p50-vertical-control`.
+- No implementation yet.
+
+### P50.1 vertical-reference inventory and feasibility gate
+
+- Indexed 181 City 2018 LiDAR ZIPs: 78.04 GB; raw tiles are not local.
+- Automated request to the indexed 2018 URL returned HTTP 403; manual/browser or alternate
+  access is required.
+- 2022 DEM/DSM/CHM and building/road products are local at 1 m, EPSG:3157.
+- Stable control candidates identified: 2018 class-2 ground vs 2022 DEM, class-6 roofs vs
+  2022 DSM, and road/fixed infrastructure.
+- No independent external vertical reference is local or confirmed.
+- Feasibility decision: **defer P50.2**; do not substitute canopy or unverified external
+  data. P43/P45 remain turnover screens; no citywide direction claim.
+
+### P50.2/P50.3 vertical control and re-evaluation
+
+- A headful browser downloaded a 13-tile 2018 sample (878 MB); seven tiles overlapped the
+  2022 bounds.
+- Added `fresh_urban_forest.vertical_control` and robust estimator tests.
+- 12,337 class-2 ground pairs: median 2018-minus-2022 DEM offset **+0.008 m**;
+  bootstrap **+0.004 to +0.011 m**; MAD 0.103 m.
+- Class-6 roofs were unavailable in the sampled LAS; no unclassified roof proxy was used.
+- P43 used a +1.0 m offset. Measured control implies a +0.992 m correction to the earlier
+  surface (range +0.989 to +0.996).
+- Corrected P43 2 m net: **−95.4 ha** (range −97.1 to −94.3); sign negative across the
+  control interval. This is a sampled screen, not a final citywide loss.
+- Added `scripts/estimate_vancouver_vertical_control.py` and
+  `scripts/analyze_vancouver_vertical_control.py`.
+
+### P50.4 documentation and close-out
+
+- Documented the measured ground-control offset and the corrected P43/P45 result.
+- Updated the change-products reference and P43/P45 reports.
+- Final dashboard green.
+- P50 does not claim a final citywide loss: the seven-tile control sample is not a
+  citywide probability sample and classification/co-registration/scale effects remain.
+- Opened PR #271 for review; phase remains open until merge and close-out.

@@ -54,3 +54,14 @@ inherits the same vertical-offset and scale limits.
 - Offset range is ±1.0 m, not a surveyed per-tile error.
 - Classification, co-registration, and scale effects are not captured.
 - No tree survival, species, ownership, causal, or field-validation claim.
+
+## P50 vertical-control update
+
+P50 measured a near-zero ground-control offset: **+0.008 m** (bootstrap +0.004 to +0.011)
+for 2018 ground minus the 2022 DEM. That does not support the assumed +1.0 m offset. The
+correction to the P43 earlier surface is **+0.992 m** (range +0.989 to +0.996), and the
+corrected 2 m screen is about **−95 ha** (range −97 to −94 ha). This is a sampled control
+result, not a citywide probability sample or final net-loss claim.
+
+The ±1.0 m envelope above remains useful as a sensitivity range, but it is no longer the
+best available estimate of the vertical offset. See `notes/reports/p50-vertical-control.md`.
