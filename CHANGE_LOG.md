@@ -1077,3 +1077,15 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
   claim. P45 remains in force.
 - Created child issues #248–#251 and activated `feature/p48-site-scenarios`.
 - No implementation yet.
+
+### P48.1 candidate-site and scenario data contract
+
+- Added `fresh_urban_forest.site_scenario` with deterministic contiguous-gap candidate sites,
+  P42/P44 action-context joins, and no ownership/address fields.
+- Added the versioned `fresh-urban-forest.site-scenario.v1` contract with bounded sites,
+  explicit species/height/crown/cost/water/maintenance assumptions, derived totals, and
+  candidate-id validation.
+- Added candidate JSON/GeoJSON writers and the Vancouver candidate build script.
+- Vancouver build: 5,000 candidate sites (5,000 cap, 12 per cell); action context
+  expand 906, plant 588, protect/investigate 3,243, structural 263.
+- Added unit and build tests; no API or UI yet.
