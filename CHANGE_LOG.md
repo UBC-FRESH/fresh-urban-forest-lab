@@ -1,3 +1,11 @@
+### P45 Surrey image-model transfer validation
+
+- Evaluated the Vancouver 2022 0.30 m CNN on Surrey inventory labels using 2025 imagery.
+- 72.0% accuracy; conifer precision 78.7%, recall 58.5%; deciduous precision 68.2%,
+  recall 84.9% (spatial holdout n=3,104).
+- The transfer model is biased toward deciduous and is not a validated Surrey model.
+- Report: `notes/reports/p45-surrey-image-validation.md`.
+
 ### P32 close-out: off-inventory candidate layer retained, branch archived
 
 - P32 candidate and validation data were already in the main Vancouver dataset:
