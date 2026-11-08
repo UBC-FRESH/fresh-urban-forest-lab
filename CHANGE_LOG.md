@@ -976,3 +976,20 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Dashboard: GREEN (lint, format, types, tests, validator, docs).
 - Opened PR #221 for maintainer review; phase remains open until merge and parent-issue close-out.
 - Merged P44 as `f554fa7` via PR #221; follow-up PR #222 fixed the action refresh to use the canonical P43 citywide change. Parent #216 and child issues #217–#220 are closed. Phase status: complete.
+
+### P45 citywide change sensitivity start
+
+- Created parent issue #224, plan, and branch.
+- Goal: quantify the P43 2 m vertical-offset and scale sensitivity.
+- No new feature layer or product claim yet.
+
+### P45.1-P45.3 citywide change sensitivity
+
+- Added `fresh_urban_forest.change_sensitivity` and the Vancouver sensitivity script.
+- ±1.0 m offset range: net −99 ha to +488 ha; sign unstable.
+- Stable-canopy height change range: +0.51 m to +2.45 m.
+- Rejected 5 m result: −1,156 ha net, 28.8% apparent loss.
+- Conclusion: P43 shows substantial turnover, but the citywide net direction is not
+  resolved by this screen; P44 loss cells are investigation targets, not proof.
+- Dashboard: GREEN (lint, format, types, tests, validator, docs).
+- Opened PR #229 for maintainer review; phase remains open until merge and parent-issue close-out.
