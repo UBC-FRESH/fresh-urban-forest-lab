@@ -1,3 +1,12 @@
+### P46 Surrey-specific 0.30 m image model
+
+- Fine-tuned the Vancouver P36 CNN on Surrey 2025 0.30 m chips from the public inventory.
+- Spatial holdout: 78.70% accuracy; conifer precision 75.85%, recall 82.79%.
+- Transfer baseline was 72.00% accuracy with 58.54% conifer recall; Surrey specific is
+  +6.7 points accuracy and +24.3 points conifer recall, with slightly lower precision.
+- Inventory validation only; candidate promotion remains barred.
+- Report: `notes/reports/p46-surrey-03-model.md`.
+
 ### P45 Surrey image-model transfer validation
 
 - Evaluated the Vancouver 2022 0.30 m CNN on Surrey inventory labels using 2025 imagery.
