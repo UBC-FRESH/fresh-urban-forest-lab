@@ -1,6 +1,6 @@
 # P50 vertical control and P43/P45 re-evaluation
 
-Status: complete. P50.4 close-out in the P50 pull request.
+Status: complete; PR #271 open. Not merged.
 
 ## Data access
 
