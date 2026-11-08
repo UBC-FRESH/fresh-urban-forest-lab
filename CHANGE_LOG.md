@@ -1207,3 +1207,5 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
   scenarios, comparison, export/import, and 3D handoff with no page errors.
 - Dashboard: GREEN (lint, format, types, tests, validator, docs).
 - P49 is a neutral local comparison tool, not a ranking or planting recommendation.
+
+- Merged P49 as `9db929f` via PR #263; parent #259 and child issues #260–#262 are closed. Phase status: complete.

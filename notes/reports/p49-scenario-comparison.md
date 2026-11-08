@@ -1,6 +1,6 @@
 # P49 site scenario comparison
 
-Status: implementation complete; close-out pending.
+Status: complete. Merged in PR #263 as `9db929f`.
 
 ## P49.1 Local scenario library and assumption presets
 
