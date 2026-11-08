@@ -42,6 +42,7 @@ This roadmap is the plan of record and the issue tracker map for FRESH Urban For
 | P43 Citywide observed canopy change 2018-2022 | #209 | `feature/p43-citywide-change` | complete |
 | P44 Citywide canopy-action refresh | #216 | `feature/p44-citywide-action` | complete |
 | P45 Citywide canopy-change sensitivity | #224 | `feature/p45-change-sensitivity` | complete |
+| P46 Canopy turnover hotspots | #231 | `feature/p46-turnover-hotspots` | active |
 
 ## Lifecycle Map
 
@@ -1210,6 +1211,34 @@ Acceptance criteria:
 - Dashboard green.
 
 Phase 45 verification:
+
+- `python scripts/dashboard.py`
+- `python scripts/check_workflow.py`
+
+## Phase 46: Canopy turnover hotspots
+
+Parent issue: #231
+Branch: `feature/p46-turnover-hotspots`
+Status: active
+
+Goal: map contiguous gain/loss patches from the P43 2 m screen without claiming a
+citywide net direction.
+
+Plan: `notes/design/p46-turnover-hotspots.md`.
+
+- [ ] P46.1 Patch labeling and cell aggregation (#232)
+- [ ] P46.2 Vancouver turnover product and method note (#233)
+- [ ] P46.3 API, GeoJSON layer, and map toggle (#234)
+- [ ] P46.4 Dashboard, browser smoke, and close-out (#235)
+
+Acceptance criteria:
+
+- Patch minimum and connectivity are documented.
+- Cells report gain/loss patch counts, largest patches, and turnover area.
+- No net gain/loss claim.
+- Dashboard green.
+
+Phase 46 verification:
 
 - `python scripts/dashboard.py`
 - `python scripts/check_workflow.py`

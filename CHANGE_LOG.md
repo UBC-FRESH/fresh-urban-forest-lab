@@ -994,3 +994,9 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Dashboard: GREEN (lint, format, types, tests, validator, docs).
 - Opened PR #229 for maintainer review; phase remains open until merge and parent-issue close-out.
 - Merged P45 as `854afa9` via PR #229; parent #224 and child issues #225–#228 are closed. Phase status: complete.
+
+### P46 canopy turnover-hotspots start
+
+- Created parent issue #231, plan, and branch.
+- Goal: map contiguous gain/loss patches without claiming net direction.
+- No product claim yet.
