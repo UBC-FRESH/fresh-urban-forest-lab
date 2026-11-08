@@ -246,6 +246,28 @@
           Not tree survival, growth, species change, or causal attribution.
         </p>
       </section>
+
+      <section class="panel">
+        <div class="panel-heading">
+          <h2>Canopy action</h2>
+          <span id="canopy-action-status" class="muted">checking</span>
+        </div>
+        <div id="canopy-action-summary">
+          <p class="muted">No integrated action screen in this dataset.</p>
+        </div>
+        <div class="heat-legend" aria-label="Canopy action classes">
+          <span><i class="heat-swatch action-plant"></i>plant + cool</span>
+          <span><i class="heat-swatch action-shade"></i>structural shade</span>
+          <span><i class="heat-swatch action-expand"></i>expand canopy</span>
+          <span><i class="heat-swatch action-protect"></i>protect loss</span>
+          <span><i class="heat-swatch action-monitor"></i>monitor</span>
+        </div>
+        <p class="hint">
+          Deterministic screening rule over shade, gap, heat, and observed change.
+          Not a planting plan, cost model, utility check, ownership claim, or causal
+          forecast. Change is observed only in the downtown pilot.
+        </p>
+      </section>
     </aside>
 
     <section class="stage">
@@ -268,6 +290,7 @@
           <label><input id="toggle-planting-opportunity" type="checkbox"> canopy gaps</label>
           <label><input id="toggle-heat-equity" type="checkbox"> heat equity</label>
           <label><input id="toggle-canopy-change" type="checkbox"> canopy change</label>
+          <label><input id="toggle-canopy-action" type="checkbox"> canopy action</label>
           <label class="off-inventory-filter">conf
             <select id="off-inventory-confidence" aria-label="Minimum off-inventory confidence">
               <option value="0">all</option>
