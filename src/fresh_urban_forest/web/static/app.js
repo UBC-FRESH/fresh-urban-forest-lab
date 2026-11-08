@@ -41,6 +41,7 @@ const state = {
   heatEquity: null,
   canopyChange: null,
   canopyAction: null,
+  canopyTurnover: null,
   changeProduct: "change.json",
   changeProductsLoaded: false,
   lightMap: null,
@@ -406,6 +407,40 @@ function renderCityMetrics() {
   $("city-source").textContent = `${formatNumber(city.tree_count)} public trees · ${local.length} local areas · 2022 LiDAR · ${formatNumber(visualTrees)} visual trees`;
 }
 
+function renderCanopyTurnover() {
+  const data = state.canopyTurnover;
+  const status = $("canopy-turnover-status");
+  if (!data) {
+    status.textContent = "none";
+    $("canopy-turnover-summary").innerHTML =
+      '<p class="muted">No turnover product in this dataset.</p>';
+    return;
+  }
+  const cells = data.cells || [];
+  const counts = {};
+  let gainPatches = 0;
+  let lossPatches = 0;
+  let turnover = 0;
+  let largest = 0;
+  for (const cell of cells) {
+    const tier = cell.turnover_tier || "none";
+    counts[tier] = (counts[tier] || 0) + 1;
+    gainPatches += Number(cell.gain_patch_count || 0);
+    lossPatches += Number(cell.loss_patch_count || 0);
+    turnover += Number(cell.turnover_area_m2 || 0);
+    largest = Math.max(largest, Number(cell.largest_gain_patch_m2 || 0), Number(cell.largest_loss_patch_m2 || 0));
+  }
+  $("canopy-turnover-summary").innerHTML = `
+    <div class="city-kpis" style="grid-template-columns:repeat(2,minmax(0,1fr));margin:0 0 10px">
+      <div class="kpi"><span>high turnover cells</span><strong>${formatNumber(counts.high || 0)}</strong><small>of ${formatNumber(cells.length)} cells</small></div>
+      <div class="kpi"><span>turnover area</span><strong>${formatCompact(turnover / 10000, " ha")}</strong><small>${formatNumber(gainPatches)} gain · ${formatNumber(lossPatches)} loss patches</small></div>
+    </div>
+    <div class="city-method"><strong>largest patch</strong><span>${formatCompact(largest / 10000, " ha")} · 2 m patches ≥50 m²</span></div>
+    <p class="muted" style="font-size:.68rem;margin-top:8px">Turnover screen, not net gain/loss or tree survival.</p>
+  `;
+  status.textContent = "screening";
+}
+
 function renderCanopyAction() {
   const data = state.canopyAction;
   const status = $("canopy-action-status");
@@ -731,6 +766,15 @@ async function init() {
         renderCanopyAction();
       }
     }
+    if (dataset.has_canopy_turnover) {
+      try {
+        state.canopyTurnover = await api("api/canopy-turnover");
+        renderCanopyTurnover();
+      } catch (_error) {
+        state.canopyTurnover = null;
+        renderCanopyTurnover();
+      }
+    }
     $("dataset-name").textContent = `${dataset.name} · ${dataset.tree_count.toLocaleString("en-CA")} tree records · ${dataset.sources.length} sources`;
     setStatus("live");
     renderKPIs(dataset.metrics);
@@ -934,6 +978,12 @@ function initMap() {
             ? "api/canopy-action.geojson"
             : { type: "FeatureCollection", features: [] },
         },
+        canopyTurnover: {
+          type: "geojson",
+          data: state.dataset?.has_canopy_turnover
+            ? "api/canopy-turnover.geojson"
+            : { type: "FeatureCollection", features: [] },
+        },
         offInventory: {
           type: "geojson",
           data: state.dataset?.has_off_inventory
@@ -1086,6 +1136,24 @@ function initMap() {
               "expand_canopy", "#e6911e",
               "protect_loss", "#c51b7d",
               "monitor", "#8c8c8c",
+              "#000000",
+            ],
+            "fill-opacity": 0.5,
+            "fill-outline-color": "rgba(255,255,255,0.35)",
+          },
+        },
+        {
+          id: "canopy-turnover",
+          type: "fill",
+          source: "canopyTurnover",
+          layout: { visibility: "none" },
+          paint: {
+            "fill-color": [
+              "match",
+              ["get", "turnover_tier"],
+              "high", "#c51b7d",
+              "medium", "#ef8a34",
+              "low", "#9bbe78",
               "#000000",
             ],
             "fill-opacity": 0.5,
@@ -2102,6 +2170,15 @@ function bindControls() {
     if (state.map && state.map.getLayer("heat-priority")) {
       state.map.setLayoutProperty(
         "heat-priority",
+        "visibility",
+        event.target.checked ? "visible" : "none",
+      );
+    }
+  });
+  $("toggle-canopy-turnover").addEventListener("change", (event) => {
+    if (state.map && state.map.getLayer("canopy-turnover")) {
+      state.map.setLayoutProperty(
+        "canopy-turnover",
         "visibility",
         event.target.checked ? "visible" : "none",
       );

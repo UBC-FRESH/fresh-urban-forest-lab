@@ -1226,9 +1226,9 @@ citywide net direction.
 
 Plan: `notes/design/p46-turnover-hotspots.md`.
 
-- [ ] P46.1 Patch labeling and cell aggregation (#232)
-- [ ] P46.2 Vancouver turnover product and method note (#233)
-- [ ] P46.3 API, GeoJSON layer, and map toggle (#234)
+- [x] P46.1 Patch labeling and cell aggregation (#232)
+- [x] P46.2 Vancouver turnover product and method note (#233)
+- [x] P46.3 API, GeoJSON layer, and map toggle (#234)
 - [ ] P46.4 Dashboard, browser smoke, and close-out (#235)
 
 Acceptance criteria:

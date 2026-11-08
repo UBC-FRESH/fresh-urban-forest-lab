@@ -268,6 +268,25 @@
           forecast. Change is observed only in the downtown pilot.
         </p>
       </section>
+
+      <section class="panel">
+        <div class="panel-heading">
+          <h2>Turnover hotspots</h2>
+          <span id="canopy-turnover-status" class="muted">checking</span>
+        </div>
+        <div id="canopy-turnover-summary">
+          <p class="muted">No turnover product in this dataset.</p>
+        </div>
+        <div class="heat-legend" aria-label="Turnover tiers">
+          <span><i class="heat-swatch turnover-high"></i>high</span>
+          <span><i class="heat-swatch turnover-medium"></i>medium</span>
+          <span><i class="heat-swatch turnover-low"></i>low</span>
+        </div>
+        <p class="hint">
+          Contiguous 2 m gain/loss patches at least 50 m². This is a turnover screen,
+          not a net gain/loss estimate or tree-survival record.
+        </p>
+      </section>
     </aside>
 
     <section class="stage">
@@ -291,6 +310,7 @@
           <label><input id="toggle-heat-equity" type="checkbox"> heat equity</label>
           <label><input id="toggle-canopy-change" type="checkbox"> canopy change</label>
           <label><input id="toggle-canopy-action" type="checkbox"> canopy action</label>
+          <label><input id="toggle-canopy-turnover" type="checkbox"> turnover hotspots</label>
           <label class="off-inventory-filter">conf
             <select id="off-inventory-confidence" aria-label="Minimum off-inventory confidence">
               <option value="0">all</option>
