@@ -681,3 +681,26 @@ select:focus, input:focus { outline: 2px solid #b8d3ae; outline-offset: 1px; }
 .turnover-high { background: #c51b7d; }
 .turnover-medium { background: #ef8a34; }
 .turnover-low { background: #9bbe78; }
+
+.pareto-ranges { margin: 5px 0 7px; line-height: 1.4; }
+.pareto-tooltip {
+  position: absolute;
+  z-index: 12;
+  max-width: 18rem;
+  padding: 7px 9px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.97);
+  box-shadow: var(--shadow);
+  color: var(--ink-soft);
+  font-size: 0.68rem;
+  line-height: 1.4;
+  pointer-events: none;
+}
+.pareto-tooltip strong { color: var(--green); font-family: var(--mono); }
+.pareto-delta { margin: 6px 0; }
+.pareto-delta .delta-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 5px; }
+.pareto-delta .delta-card { padding: 5px 6px; border: 1px solid #e3e9de; border-radius: 7px; background: #fbfcf8; }
+.pareto-delta .delta-card span { display: block; color: var(--ink-soft); font-size: 0.58rem; text-transform: uppercase; letter-spacing: 0.05em; }
+.pareto-delta .delta-card strong { display: block; margin-top: 2px; font-family: var(--mono); color: var(--green); }
+.pareto-delta .delta-bad { color: var(--red); }

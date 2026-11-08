@@ -535,6 +535,11 @@
             <select id="pareto-slice-objective"></select>
             <input id="pareto-slice" type="range" min="0" max="100" value="0" step="1">
           </label>
+          <label class="field">
+            <span>Robustness floor <output id="pareto-floor-value">all</output></span>
+            <input id="pareto-floor" type="range" min="0" max="100" value="0" step="1">
+          </label>
+          <p id="pareto-ranges" class="hint pareto-ranges"></p>
           <div id="pareto-info" class="pareto-info">
             <p class="muted">Run an optimization to build a front, then orbit, slice, and select a solution.</p>
           </div>
@@ -543,6 +548,13 @@
             <button id="pareto-clear-pins" class="button ghost" type="button" disabled>Clear pins</button>
           </div>
           <div id="pareto-compare" class="pareto-compare"></div>
+          <div id="pareto-delta" class="pareto-delta"></div>
+          <div class="button-row wrap">
+            <button id="pareto-reference" class="button ghost tiny" type="button" disabled>Set as reference</button>
+            <button id="pareto-clear-reference" class="button ghost tiny" type="button" disabled>Clear reference</button>
+            <button id="pareto-copy-link" class="button ghost tiny" type="button">Copy view link</button>
+            <button id="pareto-download-csv" class="button ghost tiny" type="button">Download filtered CSV</button>
+          </div>
           <button id="pareto-load" class="button primary" type="button" disabled>Load selected as scenario</button>
         </aside>
         <div id="pareto-axis-labels" class="pareto-axis-labels">
@@ -551,6 +563,7 @@
           <span id="pareto-axis-z">Z: --</span>
         </div>
         <div id="pareto-legend" class="change-legend"></div>
+        <div id="pareto-tooltip" class="pareto-tooltip" hidden></div>
       </div>
 
       <div class="timeline-strip">

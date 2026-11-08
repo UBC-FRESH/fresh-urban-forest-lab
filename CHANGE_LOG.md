@@ -1024,3 +1024,13 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - No implementation or branch yet.
 
 - Activated P47 on `feature/p47-optimization-ui-parity`; created child issues #238–#242.
+
+### P47.1 optimization viewer state and inspection
+
+- Added 3D hover tooltip with objective values and solution id.
+- Added selected and reference markers, actual axis ranges, and a robustness floor.
+- Added URL round-trip state including archive job, point, reference, floor, and axes.
+- Added copy-view-link and filtered CSV export.
+- Added reference delta cards and static web-asset checks.
+- Browser smoke: archive loaded, URL reload restored floor/point, hover and CSV worked.
+- Dashboard: GREEN (lint, format, types, tests, validator, docs).

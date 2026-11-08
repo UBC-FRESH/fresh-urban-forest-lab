@@ -57,6 +57,7 @@ const state = {
     jobId: null,
     result: null,
     selected: null,
+    reference: null,
     chart: null,
     mesh: null,
     pollTimer: null,
@@ -2886,7 +2887,7 @@ function renderBirdsChart(values) {
 
 function initOptimizeControls() {
   $("optimize-run").addEventListener("click", runOptimization);
-  $("optimize-load-saved").addEventListener("click", loadSavedArchive);
+  $("optimize-load-saved").addEventListener("click", () => loadSavedArchive());
   $("optimize-rename").addEventListener("click", renameSavedArchive);
   $("optimize-delete-saved").addEventListener("click", deleteSavedArchive);
   $("opt-saved").addEventListener("change", () => {
@@ -2907,6 +2908,16 @@ function initOptimizeControls() {
     $("pareto-slice-value").textContent = value <= 0 ? "all" : `>= ${value.toFixed(2)}`;
     drawPareto();
   });
+  $("pareto-floor").addEventListener("input", () => {
+    const value = Number($("pareto-floor").value) / 100;
+    $("pareto-floor-value").textContent = value <= 0 ? "all" : `>= ${value.toFixed(2)}`;
+    drawPareto();
+    persistParetoViewState();
+  });
+  $("pareto-reference").addEventListener("click", setParetoReference);
+  $("pareto-clear-reference").addEventListener("click", clearParetoReference);
+  $("pareto-copy-link").addEventListener("click", copyParetoLink);
+  $("pareto-download-csv").addEventListener("click", downloadParetoCsv);
 }
 
 function ensureOptimizeChart() {
@@ -2936,8 +2947,43 @@ function ensureOptimizeChart() {
   scene.add(box);
   const axes = buildParetoAxes();
   scene.add(axes);
+  const markerMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff, depthTest: false, transparent: true, opacity: 0.95 });
+  const referenceMaterial = new THREE.MeshBasicMaterial({ color: 0xffd24a, depthTest: false, transparent: true, opacity: 0.95 });
+  const marker = new THREE.Mesh(new THREE.SphereGeometry(0.09, 16, 12), markerMaterial);
+  const referenceMarker = new THREE.Mesh(new THREE.SphereGeometry(0.075, 16, 12), referenceMaterial);
+  marker.renderOrder = 10;
+  referenceMarker.renderOrder = 9;
+  marker.visible = false;
+  referenceMarker.visible = false;
+  scene.add(marker, referenceMarker);
   const raycaster = new THREE.Raycaster();
   const pointer = new THREE.Vector2();
+  canvas.addEventListener("pointermove", (event) => {
+    if (!state.optimize.mesh) {
+      $("pareto-tooltip").hidden = true;
+      return;
+    }
+    const rect = canvas.getBoundingClientRect();
+    pointer.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+    pointer.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+    raycaster.setFromCamera(pointer, camera);
+    const hits = raycaster.intersectObject(state.optimize.mesh, false);
+    if (!hits.length) {
+      $("pareto-tooltip").hidden = true;
+      return;
+    }
+    const index = hits[0].instanceId;
+    const solutions = state.optimize.mesh.userData.solutions || [];
+    const solution = index !== undefined ? solutions[index] : null;
+    if (!solution) {
+      $("pareto-tooltip").hidden = true;
+      return;
+    }
+    showParetoTooltip(solution, event);
+  });
+  canvas.addEventListener("pointerleave", () => {
+    $("pareto-tooltip").hidden = true;
+  });
   canvas.addEventListener("click", (event) => {
     if (!state.optimize.mesh) return;
     const rect = canvas.getBoundingClientRect();
@@ -2950,7 +2996,7 @@ function ensureOptimizeChart() {
     const solutions = state.optimize.mesh.userData.solutions || [];
     if (index !== undefined && solutions[index]) renderParetoInfo(solutions[index]);
   });
-  const chart = { renderer, scene, camera, controls, canvas, mesh: null, axes };
+  const chart = { renderer, scene, camera, controls, canvas, mesh: null, axes, marker, referenceMarker };
   window.addEventListener("resize", () => {
     if (!chart.canvas.clientWidth) return;
     renderer.setSize(chart.canvas.clientWidth, Math.max(chart.canvas.clientHeight, 1), false);
@@ -3136,6 +3182,11 @@ async function refreshSavedRuns() {
       const selected = jobs.find((job) => job.job_id === select.value) || jobs[0];
       select.value = selected.job_id;
       updateSavedArchiveMeta(selected);
+      const urlJob = new URLSearchParams(location.search).get("opt_job");
+      if (!state.optimize.result && urlJob && jobs.some((job) => job.job_id === urlJob)) {
+        select.value = urlJob;
+        await loadSavedArchive(urlJob);
+      }
     } else {
       updateSavedArchiveMeta(null);
     }
@@ -3208,21 +3259,21 @@ async function deleteSavedArchive() {
   }
 }
 
-async function loadSavedArchive() {
-  const jobId = $("opt-saved").value;
-  if (!jobId) return;
+async function loadSavedArchive(jobId = null) {
+  const selectedJobId = jobId || $("opt-saved").value;
+  if (!selectedJobId) return;
   $("optimize-status").textContent = "loading archive";
   try {
-    const payload = await api(`api/optimize/${encodeURIComponent(jobId)}`);
+    const payload = await api(`api/optimize/${encodeURIComponent(selectedJobId)}`);
     if (!payload.result) throw new Error("saved result is unavailable");
-    state.optimize.jobId = jobId;
+    state.optimize.jobId = selectedJobId;
     state.optimize.result = payload.result;
     state.optimize.pinned = [];
     renderParetoArchive(payload.result);
     $("optimize-status").textContent = "loaded";
-    const job = state.optimize.savedRuns.find((item) => item.job_id === jobId);
+    const job = state.optimize.savedRuns.find((item) => item.job_id === selectedJobId);
     updateSavedArchiveMeta(job || null);
-    toast(`Loaded ${job?.name || jobId}`);
+    toast(`Loaded ${job?.name || selectedJobId}`);
   } catch (error) {
     $("optimize-status").textContent = "load error";
     toast(`Could not load the saved archive: ${error.message}`, true);
@@ -3237,9 +3288,14 @@ function renderParetoArchive(result) {
   }
   populateParetoSelects(archive.objectives || []);
   state.optimize.pinned = [];
-  renderParetoStats({ status: "done", progress: result.scalarizations, total: result.scalarizations, result });
-  drawPareto();
+  renderParetoStats({
+    status: "done",
+    progress: result.scalarizations,
+    total: result.scalarizations,
+    result,
+  });
   renderParetoCompare();
+  restoreParetoViewState();
   $("optimize-status").textContent = "done";
 }
 
@@ -3272,6 +3328,237 @@ function paretoNorm(archive, objectiveIndex, value) {
   return Math.max(0, Math.min(1, (value - low) / (high - low)));
 }
 
+function updateParetoRanges(archive, xIndex, yIndex, zIndex) {
+  const labels = archive.objectives.map((objective) => objective.label || objective.name);
+  const ranges = archive.ideal.map((value, index) => {
+    const low = Math.min(Number(value), Number(archive.nadir[index]));
+    const high = Math.max(Number(value), Number(archive.nadir[index]));
+    return [low, high];
+  });
+  const parts = [
+    ["X", xIndex],
+    ["Y", yIndex],
+    ["Z", zIndex],
+  ].map(([axis, index]) => {
+    const label = labels[index] || axis;
+    const [low, high] = ranges[index] || [0, 0];
+    const constant = Math.abs(high - low) <= 1e-12;
+    return `${axis} ${label}: ${formatNumber(low, 4)}–${formatNumber(high, 4)}${constant ? " · constant" : ""}`;
+  });
+  $("pareto-ranges").textContent = `${parts.join("  ·  ")}  ·  axes normalized`;
+}
+
+function paretoNormalizedPoint(archive, solution) {
+  if (!archive || !solution) return null;
+  const xIndex = Number($("pareto-x").value || 0);
+  const yIndex = Number($("pareto-y").value || 1);
+  const zIndex = Number($("pareto-z").value || 2);
+  return {
+    x: paretoNorm(archive, xIndex, Number(solution.objectives[xIndex])),
+    y: paretoNorm(archive, yIndex, Number(solution.objectives[yIndex])),
+    z: paretoNorm(archive, zIndex, Number(solution.objectives[zIndex])),
+  };
+}
+
+function updateParetoMarkers() {
+  const chart = state.optimize.chart;
+  const result = state.optimize.result;
+  if (!chart || !result || !result.archive) return;
+  const place = (marker, solution) => {
+    const point = paretoNormalizedPoint(result.archive, solution);
+    if (!point) {
+      marker.visible = false;
+      return;
+    }
+    marker.position.set((point.x - 0.5) * 3.2, (point.y - 0.5) * 3.2, (point.z - 0.5) * 3.2);
+    marker.visible = true;
+  };
+  place(chart.marker, state.optimize.selected);
+  place(chart.referenceMarker, state.optimize.reference);
+}
+
+function showParetoTooltip(solution, event) {
+  const result = state.optimize.result;
+  if (!result || !result.archive) return;
+  const labels = result.archive.objectives.map((objective) => objective.label || objective.name);
+  const rows = labels
+    .map(
+      (label, index) =>
+        `<div><span>${escapeHtml(label)}</span> <strong>${formatNumber(Number(solution.objectives[index] || 0), 3)}</strong></div>`,
+    )
+    .join("");
+  const tooltip = $("pareto-tooltip");
+  tooltip.innerHTML = `<strong>${escapeHtml(String(solution.solution_id || "").slice(0, 10))}</strong>${rows}`;
+  tooltip.hidden = false;
+  const rect = $("pareto-canvas").getBoundingClientRect();
+  tooltip.style.left = `${Math.min(event.clientX - rect.left + 12, rect.width - 220)}px`;
+  tooltip.style.top = `${Math.min(event.clientY - rect.top + 12, rect.height - 120)}px`;
+}
+
+function setParetoReference() {
+  const selected = state.optimize.selected;
+  if (!selected) return;
+  state.optimize.reference = selected;
+  updateParetoMarkers();
+  renderParetoDelta();
+  $("pareto-clear-reference").disabled = false;
+  persistParetoViewState();
+  toast("Reference point set");
+}
+
+function clearParetoReference() {
+  state.optimize.reference = null;
+  updateParetoMarkers();
+  renderParetoDelta();
+  $("pareto-clear-reference").disabled = true;
+  persistParetoViewState();
+}
+
+function renderParetoDelta() {
+  const container = $("pareto-delta");
+  const selected = state.optimize.selected;
+  const reference = state.optimize.reference;
+  const result = state.optimize.result;
+  if (!container) return;
+  if (!result || !result.archive) {
+    container.innerHTML = "";
+    return;
+  }
+  if (!reference) {
+    container.innerHTML = '<p class="hint">Set one solution as the reference to compare objective deltas.</p>';
+    return;
+  }
+  const labels = result.archive.objectives.map((objective) => objective.label || objective.name);
+  const rows = labels
+    .map((label, index) => {
+      const selectedValue = selected ? Number(selected.objectives[index] || 0) : null;
+      const referenceValue = Number(reference.objectives[index] || 0);
+      if (selectedValue === null) {
+        return `<div class="delta-card"><span>${escapeHtml(label)}</span><strong>—</strong></div>`;
+      }
+      const delta = selectedValue - referenceValue;
+      return `<div class="delta-card"><span>${escapeHtml(label)}</span><strong class="${delta < 0 ? "delta-bad" : ""}">${delta >= 0 ? "+" : ""}${formatNumber(delta, 4)}</strong></div>`;
+    })
+    .join("");
+  container.innerHTML = `<p class="hint">Selected vs reference ${escapeHtml(String(reference.solution_id || "").slice(0, 10))}</p><div class="delta-grid">${rows}</div>`;
+}
+
+function persistParetoViewState() {
+  const result = state.optimize.result;
+  if (!result || !result.archive) return;
+  const params = new URLSearchParams(location.search);
+  params.set("opt_x", $("pareto-x").value || "0");
+  params.set("opt_y", $("pareto-y").value || "1");
+  params.set("opt_z", $("pareto-z").value || "2");
+  params.set("opt_colour", $("pareto-colour").value || "0");
+  params.set("opt_size", $("pareto-size").value || "-1");
+  params.set("opt_floor", $("pareto-floor").value || "0");
+  if (state.optimize.jobId) params.set("opt_job", state.optimize.jobId);
+  else params.delete("opt_job");
+  if (state.optimize.selected?.solution_id) params.set("opt_point", state.optimize.selected.solution_id);
+  else params.delete("opt_point");
+  if (state.optimize.reference?.solution_id) params.set("opt_reference", state.optimize.reference.solution_id);
+  else params.delete("opt_reference");
+  const search = params.toString();
+  history.replaceState(null, "", `${search ? `?${search}` : ""}${location.hash || "#optimize"}`);
+}
+
+function restoreParetoViewState() {
+  const result = state.optimize.result;
+  if (!result || !result.archive) return;
+  const params = new URLSearchParams(location.search);
+  const setSelect = (id, key) => {
+    const select = $(id);
+    const value = params.get(key);
+    if (!select || value === null) return;
+    if (Array.from(select.options).some((option) => option.value === value)) select.value = value;
+  };
+  setSelect("pareto-x", "opt_x");
+  setSelect("pareto-y", "opt_y");
+  setSelect("pareto-z", "opt_z");
+  setSelect("pareto-colour", "opt_colour");
+  setSelect("pareto-size", "opt_size");
+  const floor = Number(params.get("opt_floor") || 0);
+  if (Number.isFinite(floor)) {
+    $("pareto-floor").value = String(Math.max(0, Math.min(100, floor)));
+    $("pareto-floor-value").textContent = floor <= 0 ? "all" : `>= ${(floor / 100).toFixed(2)}`;
+  }
+  const pointId = params.get("opt_point");
+  if (pointId) {
+    const solution = result.archive.solutions.find((item) => item.solution_id === pointId);
+    if (solution) renderParetoInfo(solution);
+  }
+  const referenceId = params.get("opt_reference");
+  if (referenceId) {
+    const reference = result.archive.solutions.find((item) => item.solution_id === referenceId);
+    if (reference) {
+      state.optimize.reference = reference;
+      $("pareto-clear-reference").disabled = false;
+      updateParetoMarkers();
+      renderParetoDelta();
+    }
+  }
+  drawPareto();
+}
+
+async function copyText(text, message) {
+  try {
+    await navigator.clipboard.writeText(text);
+    toast(message);
+    return;
+  } catch (_error) {
+    const area = document.createElement("textarea");
+    area.value = text;
+    area.setAttribute("readonly", "");
+    area.style.position = "fixed";
+    area.style.opacity = "0";
+    document.body.append(area);
+    area.select();
+    document.execCommand("copy");
+    area.remove();
+    toast(message);
+  }
+}
+
+async function copyParetoLink() {
+  persistParetoViewState();
+  await copyText(location.href, "View link copied");
+}
+
+function downloadParetoCsv() {
+  const result = state.optimize.result;
+  const points = state.optimize.filtered || [];
+  if (!result || !result.archive || !points.length) {
+    toast("No visible solutions to export", true);
+    return;
+  }
+  const archive = result.archive;
+  const labels = archive.objectives.map((objective) => objective.label || objective.name);
+  const metrics = Object.keys(points[0].metrics || {});
+  const header = ["solution_id", ...labels, ...metrics, "robustness", "constraint_violation", "planted_sites"];
+  const rows = points.map((solution) => [
+    solution.solution_id,
+    ...archive.objectives.map((_, index) => solution.objectives[index]),
+    ...metrics.map((key) => solution.metrics?.[key] ?? ""),
+    solution.robustness ?? "",
+    solution.constraint_violation ?? "",
+    (solution.planted || []).length,
+  ]);
+  const csv = [header, ...rows]
+    .map((row) => row.map((value) => `"${String(value ?? "").replaceAll('"', '""')}"`).join(","))
+    .join("\n");
+  const blob = new Blob([csv + "\n"], { type: "text/csv" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = "pareto-visible-solutions.csv";
+  document.body.append(link);
+  link.click();
+  link.remove();
+  URL.revokeObjectURL(url);
+  toast(`Exported ${points.length} visible solutions`);
+}
+
 function drawPareto() {
   const chart = ensureOptimizeChart();
   const result = state.optimize.result;
@@ -3285,6 +3572,7 @@ function drawPareto() {
   const sizeIndex = Number($("pareto-size").value || -1);
   const sliceIndex = Number($("pareto-slice-objective").value || 0);
   const threshold = Number($("pareto-slice").value) / 100;
+  const robustnessFloor = Number($("pareto-floor").value || 0) / 100;
   const filtered = solutions
     .map((solution) => ({
       solution,
@@ -3294,8 +3582,13 @@ function drawPareto() {
       colour: paretoNorm(archive, colourIndex, Number(solution.objectives[colourIndex])),
       size: sizeIndex >= 0 ? paretoNorm(archive, sizeIndex, Number(solution.objectives[sizeIndex])) : 0.5,
       slice: paretoNorm(archive, sliceIndex, Number(solution.objectives[sliceIndex])),
+      robustness: Number(solution.robustness || 0),
     }))
-    .filter((point) => threshold <= 0 || point.slice >= threshold);
+    .filter(
+      (point) =>
+        (threshold <= 0 || point.slice >= threshold) &&
+        (robustnessFloor <= 0 || point.robustness >= robustnessFloor),
+    );
   state.optimize.filtered = filtered.map((point) => point.solution);
   clearParetoMesh();
   if (!filtered.length) {
@@ -3336,7 +3629,10 @@ function drawPareto() {
     `<span><i class="change-swatch" style="background:hsl(73 68% 48%)"></i>high ${escapeHtml(labels[colourIndex] || "")}</span>` +
     `<span>${filtered.length} of ${solutions.length} solutions</span>`;
   $("pareto-info").innerHTML = `<p class="muted">${filtered.length} visible solutions. Click a sphere to inspect it.</p>`;
+  updateParetoRanges(archive, xIndex, yIndex, zIndex);
+  updateParetoMarkers();
   chart.renderer.render(chart.scene, chart.camera);
+  persistParetoViewState();
 }
 
 function clearParetoMesh() {
@@ -3383,6 +3679,10 @@ function renderParetoInfo(solution) {
   state.optimize.selected = solution;
   $("pareto-load").disabled = false;
   $("pareto-pin").disabled = false;
+  $("pareto-reference").disabled = false;
+  updateParetoMarkers();
+  renderParetoDelta();
+  persistParetoViewState();
 }
 
 function pinSelectedSolution() {
