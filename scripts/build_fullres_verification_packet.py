@@ -22,7 +22,6 @@ from rasterio.windows import Window
 from scipy import ndimage
 from shapely.geometry import shape
 
-from build_off_inventory_layers import _lcc_grid
 from fresh_urban_forest.terrain import project_lonlat, unproject_xy
 
 TEMPLATE_PATH = Path(__file__).with_name("p37_verification_template.html")
@@ -463,6 +462,8 @@ def main(argv: list[str] | None = None) -> int:
     lcc_res = 5.0
     if args.lcc.exists() and args.boundary.exists():
         try:
+            from build_off_inventory_layers import _lcc_grid
+
             lcc_grid, lcc_classes = _lcc_grid(args.boundary, resolution_m=5.0)
             lcc_left = lcc_grid.left
             lcc_top = lcc_grid.top
