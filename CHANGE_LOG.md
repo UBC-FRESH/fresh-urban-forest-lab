@@ -1022,3 +1022,5 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Plan: `notes/design/p47-optimization-ui-parity.md`.
 - P48 site-level planting scenarios are queued after P47.
 - No implementation or branch yet.
+
+- Activated P47 on `feature/p47-optimization-ui-parity`; created child issues #238–#242.
