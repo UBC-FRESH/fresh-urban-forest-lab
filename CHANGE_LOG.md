@@ -913,3 +913,9 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - This is a staged downtown pilot, not a city-wide change claim.
 - Opened PR #201 for maintainer review; phase remains open until merge and parent-issue close-out.
 - Merged P41 as `3507e94` via PR #201; child issues #196–#200 and parent #195 are closed. Phase status: complete.
+
+### P42 integrated canopy-action screening start
+
+- Created parent issue #202, plan, and branch.
+- No implementation or product claim yet.
+- Plan: `notes/design/p42-action-screen.md`.
