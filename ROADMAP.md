@@ -40,6 +40,7 @@ This roadmap is the plan of record and the issue tracker map for FRESH Urban For
 | P41 Observed canopy change 2018-2022 | #195 | `feature/p41-canopy-change` | complete |
 | P42 Integrated canopy-action screening | #202 | `feature/p42-action-screen` | complete |
 | P43 Citywide observed canopy change 2018-2022 | #209 | `feature/p43-citywide-change` | complete |
+| P44 Citywide canopy-action refresh | #216 | `feature/p44-citywide-action` | pr-open |
 
 ## Lifecycle Map
 
@@ -1149,6 +1150,33 @@ Acceptance criteria:
 - Dashboard green.
 
 Phase 43 verification:
+
+- `python scripts/dashboard.py`
+- `python scripts/check_workflow.py`
+
+## Phase 44: Citywide canopy-action refresh
+
+Parent issue: #216
+Branch: `feature/p44-citywide-action`
+Status: pr-open
+
+Goal: refresh the P42 action screen with P43 citywide observed change.
+
+Plan: `notes/design/p44-citywide-action.md`.
+
+- [x] P44.1 Rebuild the 797 action cells with P43 change (#217)
+- [x] P44.2 Verify observed-change coverage and loss branch (#218)
+- [x] P44.3 Update method note, dashboard, and browser smoke (#219)
+- [ ] P44.4 Close-out (#220)
+
+Acceptance criteria:
+
+- All 797 cells carry P43 change.
+- The loss branch is populated by observed loss cells.
+- API/UI remain compatible.
+- Dashboard green.
+
+Phase 44 verification:
 
 - `python scripts/dashboard.py`
 - `python scripts/check_workflow.py`

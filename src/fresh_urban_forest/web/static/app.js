@@ -437,7 +437,7 @@ function renderCanopyAction() {
   $("canopy-action-summary").innerHTML = `
     <div class="city-kpis" style="grid-template-columns:repeat(2,minmax(0,1fr));margin:0 0 10px">
       <div class="kpi"><span>action cells</span><strong>${formatNumber(cells.length)}</strong><small>joined P38–P40</small></div>
-      <div class="kpi"><span>change observed</span><strong>${formatNumber(observed)}</strong><small>P41 downtown pilot only</small></div>
+      <div class="kpi"><span>change observed</span><strong>${formatNumber(observed)}</strong><small>P43 citywide change</small></div>
     </div>
     <div class="city-table">${rows}</div>
     <p class="muted" style="font-size:.68rem;margin-top:8px">Screening rule, not a planting plan or causal forecast.</p>
