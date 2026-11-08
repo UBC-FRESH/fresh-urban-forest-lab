@@ -34,19 +34,19 @@ Products:
 
 | Action | Original P44 | Corrected |
 | --- | ---: | ---: |
-| plant + cool | 265 | **166** |
-| monitor | 233 | **196** |
-| expand canopy | 133 | **110** |
-| structural shade | 127 | **113** |
-| protect / investigate loss | 39 | **212** |
+| plant + cool | 50 | **166** |
+| monitor | 101 | **196** |
+| expand canopy | 77 | **110** |
+| structural shade | 23 | **113** |
+| protect / investigate loss | 546 | **212** |
 
 ### P46 turnover
 
 - High-tier cells: **259** (original 260).
 - Total turnover area: **135.58 ha** (original 181.76 ha).
 
-The shift toward `protect / investigate loss` follows from the corrected negative net
-screen. It is a screen, not proof of loss; the P51 control sample and the P43
+The original P44 product has 546 protect/investigate cells; the corrected product has
+212. The shift follows from the corrected negative net screen. It is a screen, not proof of loss; the P51 control sample and the P43
 classification/co-registration limits still apply.
 
 ## API/UI status

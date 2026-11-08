@@ -494,6 +494,32 @@ def test_corrected_change_sidecar_is_selectable(tmp_path: Path) -> None:
     assert image.content.startswith(b"\x89PNG")
 
 
+def test_action_and_turnover_versions_are_selectable(tmp_path: Path) -> None:
+    """Original and control sidecars are exposed through version parameters."""
+    client = _client(tmp_path)
+    root = tmp_path / "dataset"
+    for stem in ("canopy_action", "canopy_action_control"):
+        (root / f"{stem}.json").write_text(json.dumps({"cells": []}), encoding="utf-8")
+        (root / f"{stem}.geojson").write_text(
+            json.dumps({"type": "FeatureCollection", "features": []}), encoding="utf-8"
+        )
+    for stem in ("canopy_turnover", "canopy_turnover_control"):
+        (root / f"{stem}.json").write_text(json.dumps({"cells": []}), encoding="utf-8")
+        (root / f"{stem}.geojson").write_text(
+            json.dumps({"type": "FeatureCollection", "features": []}), encoding="utf-8"
+        )
+    assert client.get("/api/canopy-action").status_code == 200
+    assert client.get("/api/canopy-action?version=control").status_code == 200
+    assert client.get("/api/canopy-action.geojson?version=control").status_code == 200
+    assert client.get("/api/canopy-turnover").status_code == 200
+    assert client.get("/api/canopy-turnover?version=control").status_code == 200
+    assert client.get("/api/canopy-turnover.geojson?version=control").status_code == 200
+    assert client.get("/api/canopy-action?version=bad").status_code == 400
+    summary = client.get("/api/dataset").json()
+    assert summary["has_canopy_action_control"] is True
+    assert summary["has_canopy_turnover_control"] is True
+
+
 def test_change_endpoint_is_404_without_a_product(tmp_path: Path) -> None:
     """A dataset without an observed-change product returns 404."""
     client = _client(tmp_path)

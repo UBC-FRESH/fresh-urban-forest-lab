@@ -184,7 +184,12 @@ ground, **965,995** pairs, median **+0.011 m** (bootstrap **+0.010 to +0.012 m**
 western tiles are stability outliers; excluding them, 145/145 tiles are within ±0.15 m and
 the easting/northing trends are +0.013 m / −0.082 m. The full-control corrected product is
 ``change_vancouver_2018_2022_citywide_2m_control_full/``: net **−94.3 ha**, stable-height
-change **+0.519 m**. The original P43 product remains available and is the default. The
-corrected product is published to the Change tab as ``change_control.json``; the original
-``change.json`` remains the default. The corrected P44/P46 sidecars are versioned data
-products, not a silent public substitution.
+change **+0.519 m**. The original P43 product remains available. The corrected product is
+published to the Change tab as ``change_control.json`` and is selected by default when
+present; the original ``change.json`` remains selectable.
+
+P54 exposes corrected P44/P46 sidecars through
+``/api/canopy-action?version=control`` and ``/api/canopy-turnover?version=control``, with
+matching GeoJSON routes. The action and turnover panels default to the corrected version
+when available and keep the original selectable. The API default remains ``original`` for
+backward compatibility.
