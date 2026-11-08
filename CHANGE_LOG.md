@@ -1055,3 +1055,13 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Added `opt_preset` preset links; reloading restores the full viewer state and preset name.
 - Browser smoke: save/load restored floor and selection, export/import worked, malformed JSON was rejected, preset URL reloaded, and mismatched archive was refused.
 - Dashboard: GREEN (lint, format, types, tests, validator, docs).
+
+### P47.5 docs, verification, and close-out
+
+- Updated the Optimization/Pareto reference with hover, ranges, reference deltas,
+  robustness floor, parallel coordinates, brushes, URL state, filtered CSV, local saved
+  views, import/export, preset links, and their limits.
+- Added the P47 method report and source attribution to `fable-pyculator` phases 41–50.
+- Deferred P47.4 shared review library; no server-backed collaboration layer is claimed.
+- Final browser smoke: 10 axes, 71 initial lines, two brushes to 4 of 71, 4-row filtered CSV, preset reload restored floor/selection/reference, no page errors.
+- Dashboard: GREEN (lint, format, types, tests, validator, docs).

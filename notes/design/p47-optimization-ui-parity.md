@@ -2,7 +2,7 @@
 
 Parent issue: #237
 Planned branch: `feature/p47-optimization-ui-parity`
-Status: active
+Status: pr-open
 
 ## Why
 

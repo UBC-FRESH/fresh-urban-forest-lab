@@ -43,7 +43,7 @@ This roadmap is the plan of record and the issue tracker map for FRESH Urban For
 | P44 Citywide canopy-action refresh | #216 | `feature/p44-citywide-action` | complete |
 | P45 Citywide canopy-change sensitivity | #224 | `feature/p45-change-sensitivity` | complete |
 | P46 Canopy turnover hotspots | #231 | `feature/p46-turnover-hotspots` | complete |
-| P47 Optimization UI parity | #237 | `feature/p47-optimization-ui-parity` | active |
+| P47 Optimization UI parity | #237 | `feature/p47-optimization-ui-parity` | pr-open |
 
 ## Lifecycle Map
 
@@ -1248,7 +1248,7 @@ Phase 46 verification:
 
 Parent issue: #237
 Branch: `feature/p47-optimization-ui-parity`
-Status: active
+Status: pr-open
 
 Goal: port the high-value Optimization-page interaction and review patterns developed in
 `fable-pyculator`, adapted to the FRESH Pareto archive.
@@ -1258,8 +1258,8 @@ Plan: `notes/design/p47-optimization-ui-parity.md`.
 - [x] P47.1 Hover, ranges, legend, robustness floor, URL, copy link, CSV (#238)
 - [x] P47.2 Synchronized parallel coordinates and brushes (#239)
 - [x] P47.3 Local saved views, import/export, preset links (#240)
-- [ ] P47.4 Optional shared review library (#241)
-- [ ] P47.5 Docs, dashboard, browser smoke, and close-out (#242)
+- [ ] P47.4 Optional shared review library (#241) — deferred
+- [x] P47.5 Docs, dashboard, browser smoke, and close-out (#242)
 
 Acceptance criteria:
 

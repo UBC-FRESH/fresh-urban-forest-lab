@@ -71,6 +71,38 @@ The **Optimize** tab:
 
 The viewer uses vendored Three.js and `OrbitControls`; there is no external service.
 
+Inspection, filters, and sharing
+--------------------------------
+
+The P47 explorer refresh adds:
+
+- a hover tooltip with the solution id and objective values;
+- selected and reference markers in the 3D cloud, with objective deltas against the
+  reference;
+- actual ideal/nadir ranges for the mapped axes;
+- a **robustness floor** that filters solutions by their bootstrap robustness score;
+- synchronized parallel coordinates for the filtered archive;
+- clickable parallel lines that select the same solution as the 3D view;
+- single-axis brushes and Shift-drag multi-axis brushes, with removable chips;
+- a copy-view link, filtered CSV export, and URL state for axes, floor, point, reference,
+  brushes, and preset name;
+- a local **Saved views** panel with save/load/delete, versioned JSON export/import, and a
+  portable preset link.
+
+The parallel axes are built from the archive objectives plus robustness, planted-site
+count, and habitat. Cost and water axes fall back to metrics only when the archive does
+not expose them as objectives. Brushes combine with AND and filter the 3D cloud, parallel
+lines, and CSV together.
+
+Local views are stored in the browser, not on the server. Imported libraries are
+versioned and validated. A view records its archive/job id and is refused when the current
+archive does not match, rather than silently applying to a different front.
+
+P47.4, a server-backed shared review library with self-declared author/note and
+``draft``/``reviewed`` metadata, is **not implemented** in this phase. There are no
+accounts, permissions, verified reviews, or server-shared views. The local library remains
+the supported path.
+
 Saved runs and scenarios
 ------------------------
 
@@ -159,5 +191,12 @@ Limits
 - The default candidate grid is small enough for a laptop. City-scale coverage needs a
   larger data and compute budget.
 - The surrogate is a screening aid. The archive always uses the exact evaluator.
+- The robustness floor is a bootstrap diagnostic, not a quality or feasibility guarantee.
+- Parallel brushes are viewer filters, not optimizer constraints or proof that a
+  solution is implementable.
+- Local saved views are browser-local and archive-specific; clearing browser storage
+  removes them. They are not a shared review record.
+- A copied preset link carries the viewer state but still needs the referenced saved
+  archive to be available on the server that opens it.
 
 The benchmark and method report are in ``notes/reports/p8-optimization-pareto.md``.
