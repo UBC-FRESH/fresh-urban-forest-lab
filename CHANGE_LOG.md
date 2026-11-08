@@ -982,3 +982,4 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Conclusion: P43 shows substantial turnover, but the citywide net direction is not
   resolved by this screen; P44 loss cells are investigation targets, not proof.
 - Dashboard: GREEN (lint, format, types, tests, validator, docs).
+- Opened PR #229 for maintainer review; phase remains open until merge and parent-issue close-out.
