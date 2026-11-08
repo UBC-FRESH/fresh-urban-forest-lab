@@ -50,6 +50,7 @@ This roadmap is the plan of record and the issue tracker map for FRESH Urban For
 | P51 Citywide vertical control and corrected products | #272 | `feature/p51-citywide-control` | complete |
 | P52 Lower Mainland candidate-data honesty | #278 | `feature/p51-candidate-honesty` | complete |
 | P53 Full-city vertical control and corrected publication | #282 | `feature/p53-full-control` | complete |
+| P54 Corrected action and turnover publication | #288 | `feature/p54-corrected-products` | active |
 
 ## Lifecycle Map
 
@@ -1456,6 +1457,34 @@ Acceptance criteria:
 - Dashboard green.
 
 Phase 53 verification:
+
+- `python scripts/dashboard.py`
+- `python scripts/check_workflow.py`
+
+## Phase 54: Corrected action and turnover publication
+
+Parent issue: #288
+Branch: `feature/p54-corrected-products`
+Status: active
+
+Goal: expose full-control corrected P44/P46 sidecars through versioned API/UI controls while
+keeping the original products selectable.
+
+Plan: `notes/design/p54-corrected-products.md`.
+
+- [ ] P54.1 API versioning and corrected sidecar publication (#289)
+- [ ] P54.2 UI version selectors and default (#290)
+- [ ] P54.3 Docs, browser smoke, and close-out (#291)
+
+Acceptance criteria:
+
+- Original and corrected action/turnover APIs both load.
+- UI selectors switch maps, summaries, and labels.
+- Corrected version is default when available, original remains selectable.
+- No silent replacement or unsupported claim.
+- Dashboard green.
+
+Phase 54 verification:
 
 - `python scripts/dashboard.py`
 - `python scripts/check_workflow.py`

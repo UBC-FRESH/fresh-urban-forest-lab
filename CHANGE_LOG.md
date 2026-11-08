@@ -1365,3 +1365,11 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Dashboard green.
 
 - Merged P53 as `39fd767` via PR #287; parent #282 and child issues #283–#286 are closed. Phase status: complete.
+
+### P54 corrected action/turnover publication start
+
+- Created parent issue #288 and plan `notes/design/p54-corrected-products.md`.
+- Scope: versioned action/turnover APIs, UI selectors, corrected default when available,
+  and explicit labels retaining original products.
+- Created child issues #289–#291 and activated `feature/p54-corrected-products`.
+- No field-validation, final citywide direction, survival, ownership, or planting claim.
