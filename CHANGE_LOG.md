@@ -912,3 +912,4 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
   1 ha loss, 43 ha stable; no console/page errors.
 - This is a staged downtown pilot, not a city-wide change claim.
 - Opened PR #201 for maintainer review; phase remains open until merge and parent-issue close-out.
+- Merged P41 as `3507e94` via PR #201; child issues #196–#200 and parent #195 are closed. Phase status: complete.

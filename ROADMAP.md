@@ -37,7 +37,7 @@ This roadmap is the plan of record and the issue tracker map for FRESH Urban For
 | P38 Shade and social-equity screening | #173 | `feature/p38-heat-canopy-priority` | complete |
 | P39 Canopy gaps and above-ground planting opportunity | #174 | `feature/p39-canopy-gaps` | complete |
 | P40 Open land-surface temperature and heat equity | #176 | `feature/p40-heat-equity` | complete |
-| P41 Observed canopy change 2018-2022 | #195 | `feature/p41-canopy-change` | pr-open |
+| P41 Observed canopy change 2018-2022 | #195 | `feature/p41-canopy-change` | complete |
 
 ## Lifecycle Map
 
@@ -1063,7 +1063,7 @@ Phase 40 verification:
 
 Parent issue: #195
 Branch: `feature/p41-canopy-change`
-Status: pr-open
+Status: complete
 
 Goal: extend the existing observed-change prototype to a city-scale 2018→2022
 canopy-change screen and join it to P38 shade, P39 gap, and P40 heat-equity cells.
@@ -1074,7 +1074,7 @@ Plan: `notes/design/p41-canopy-change.md`.
 - [x] P41.2 Build aligned 2018/2022 canopy-height grids (#197)
 - [x] P41.3 Build 400 m change cells and join P38–P40 fields (#198)
 - [x] P41.4 Add API, GeoJSON layer, map toggle, and method note (#199)
-- [ ] P41.5 Dashboard, browser smoke, and close-out (#200)
+- [x] P41.5 Dashboard, browser smoke, and close-out (#200)
 
 Acceptance criteria:
 
