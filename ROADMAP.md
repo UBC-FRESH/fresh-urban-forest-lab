@@ -44,6 +44,7 @@ This roadmap is the plan of record and the issue tracker map for FRESH Urban For
 | P45 Citywide canopy-change sensitivity | #224 | `feature/p45-change-sensitivity` | complete |
 | P46 Canopy turnover hotspots | #231 | `feature/p46-turnover-hotspots` | complete |
 | P47 Optimization UI parity | #237 | `feature/p47-optimization-ui-parity` | complete |
+| P48 Site-level planting scenarios | #247 | `feature/p48-site-scenarios` | pr-open |
 
 ## Lifecycle Map
 
@@ -1271,6 +1272,36 @@ Acceptance criteria:
 - Dashboard green.
 
 Phase 47 verification:
+
+- `python scripts/dashboard.py`
+- `python scripts/check_workflow.py`
+
+## Phase 48: Site-level planting scenarios
+
+Parent issue: #247
+Branch: `feature/p48-site-scenarios`
+Status: pr-open
+
+Goal: add a bounded, assumption-explicit scenario layer that places hypothetical trees at
+P39/P42 candidate sites and compares baseline and scenario shade. It is not a planting plan.
+
+Plan: `notes/design/p48-site-scenarios.md`.
+
+- [x] P48.1 Candidate-site and scenario data contract (#248)
+- [x] P48.2 Site-level shade simulation and scenario metrics (#249)
+- [x] P48.3 Scenario API, map/3D UI, and comparison (#250)
+- [x] P48.4 Validation, browser smoke, docs, and close-out (#251)
+
+Acceptance criteria:
+
+- Candidate sites are deterministic and separate from the public-tree inventory.
+- Scenario assumptions are explicit, bounded, and editable.
+- Baseline and scenario shade use the same time and geometry settings.
+- P45's unresolved citywide change direction is preserved.
+- No ownership, planting-plan, survival, or field-validation claim is added.
+- Dashboard green.
+
+Phase 48 verification:
 
 - `python scripts/dashboard.py`
 - `python scripts/check_workflow.py`

@@ -65,6 +65,8 @@ from fresh_urban_forest.shade import (
     shade_period,
     shade_png,
 )
+from fresh_urban_forest.site_scenario import CandidateSite, normalize_site_scenario
+from fresh_urban_forest.site_shade import evaluate_site_scenario as evaluate_site_shade
 from fresh_urban_forest.solar import (
     DEFAULT_TIMES,
     DEFAULT_TIMEZONE,
@@ -131,6 +133,17 @@ class PlantingRequest(BaseModel):
     center_lon: float | None = Field(default=None, ge=-180.0, le=180.0)
     center_lat: float | None = Field(default=None, ge=-90.0, le=90.0)
     radius_m: float | None = Field(default=None, ge=5.0, le=5000.0)
+
+
+class SiteScenarioRequest(BaseModel):
+    """A site-level shade scenario evaluation request."""
+
+    scenario: dict[str, object]
+    whens: list[str] = Field(default_factory=lambda: ["2026-06-21T12:00:00-07:00"])
+    target_height_m: float = Field(default=1.5, gt=0.0, le=10.0)
+    include_terrain: bool = False
+    include_per_site: bool = True
+    include_sensitivity: bool = False
 
 
 class ScenarioStore(BaseModel):
@@ -274,6 +287,7 @@ class LabState:
     agent_timeout: float = 300.0
     workspace: Path = field(default_factory=Path.cwd)
     dataset_root: Path | None = None
+    site_candidates: dict[str, CandidateSite] | None = None
 
 
 def create_app(
@@ -483,6 +497,7 @@ def create_app(
         summary["has_planting_opportunity"] = (
             _dataset_file(state, "planting_opportunity.json") is not None
         )
+        summary["has_site_candidates"] = _dataset_file(state, "site_candidates.json") is not None
         summary["has_heat_equity"] = _dataset_file(state, "heat_equity.json") is not None
         summary["has_canopy_change"] = _dataset_file(state, "canopy_change.json") is not None
         summary["has_canopy_action"] = _dataset_file(state, "canopy_action.json") is not None
@@ -967,6 +982,75 @@ def create_app(
             media_type="application/geo+json",
             headers={"Cache-Control": "no-store, max-age=0"},
         )
+
+    @app.get("/api/site-candidates")
+    def site_candidates() -> JSONResponse:
+        """Return the optional P48 candidate-site product.
+
+        Returns
+        -------
+        JSONResponse
+            Candidate-site JSON, or a 404 when the dataset has no product.
+        """
+        path = _dataset_file(state, "site_candidates.json")
+        if path is None:
+            raise HTTPException(status_code=404, detail="this dataset has no site candidates")
+        return JSONResponse(
+            json.loads(path.read_text(encoding="utf-8")),
+            headers={"Cache-Control": "no-store, max-age=0"},
+        )
+
+    @app.get("/api/site-candidates.geojson")
+    def site_candidates_geojson() -> FileResponse:
+        """Return candidate sites as WGS84 GeoJSON points.
+
+        Returns
+        -------
+        FileResponse
+            GeoJSON, or a 404 when the dataset has no product.
+        """
+        path = _dataset_file(state, "site_candidates.geojson")
+        if path is None:
+            raise HTTPException(status_code=404, detail="this dataset has no site candidates")
+        return FileResponse(
+            path,
+            media_type="application/geo+json",
+            headers={"Cache-Control": "no-store, max-age=0"},
+        )
+
+    @app.post("/api/site-scenario/evaluate")
+    def evaluate_site_scenario(payload: SiteScenarioRequest) -> dict[str, object]:
+        """Evaluate a validated site scenario against the baseline shade.
+
+        Parameters
+        ----------
+        payload : SiteScenarioRequest
+            Scenario document and shared evaluation settings.
+
+        Returns
+        -------
+        dict
+            Normalized scenario and baseline/scenario evaluation.
+        """
+        candidates = _site_candidate_map(state)
+        if candidates is None:
+            raise HTTPException(status_code=404, detail="this dataset has no site candidates")
+        try:
+            scenario = normalize_site_scenario(payload.scenario, candidate_ids=set(candidates))
+            whens = _parse_site_whens(payload.whens)
+        except ValueError as error:
+            raise HTTPException(status_code=400, detail=str(error)) from error
+        evaluation = evaluate_site_shade(
+            state.dataset,
+            scenario,
+            candidates,
+            whens,
+            target_height_m=payload.target_height_m,
+            include_terrain=payload.include_terrain,
+            include_per_site=payload.include_per_site,
+            include_sensitivity=payload.include_sensitivity,
+        )
+        return {"scenario": scenario.to_dict(), "evaluation": evaluation.to_dict()}
 
     @app.get("/api/heat-priority")
     def heat_priority() -> JSONResponse:
@@ -2644,6 +2728,78 @@ def _read_json_object(path: Path) -> dict[str, object]:
     if not isinstance(payload, dict):
         raise HTTPException(status_code=500, detail="change summary is not a JSON object")
     return {str(key): value for key, value in payload.items()}
+
+
+def _site_candidate_map(state: LabState) -> dict[str, CandidateSite] | None:
+    """Load and cache the optional candidate-site map.
+
+    Parameters
+    ----------
+    state : LabState
+        Application state.
+
+    Returns
+    -------
+    dict or None
+        Candidates keyed by site id, or ``None`` when the product is absent.
+    """
+    if state.site_candidates is not None:
+        return state.site_candidates
+    path = _dataset_file(state, "site_candidates.json")
+    if path is None:
+        return None
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    candidates: dict[str, CandidateSite] = {}
+    for record in payload.get("sites", []):
+        try:
+            candidate = CandidateSite(
+                site_id=str(record["site_id"]),
+                cell_id=str(record["cell_id"]),
+                lon=float(record["lon"]),
+                lat=float(record["lat"]),
+                area_m2=float(record["area_m2"]),
+                street_adjacent=bool(record["street_adjacent"]),
+                action_class=str(record.get("action_class", "unassigned")),
+                action_label=str(record.get("action_label", "unassigned")),
+                opportunity_tier=str(record.get("opportunity_tier", "unknown")),
+                source=str(record.get("source", "p39_edge_gap")),
+                evidence_tier=str(record.get("evidence_tier", "candidate")),
+            )
+        except (KeyError, TypeError, ValueError) as error:
+            raise HTTPException(status_code=500, detail="invalid site-candidate product") from error
+        candidates[candidate.site_id] = candidate
+    state.site_candidates = candidates
+    return candidates
+
+
+def _parse_site_whens(values: list[str]) -> tuple[dt.datetime, ...]:
+    """Parse and validate ISO-8601 scenario sample times.
+
+    Parameters
+    ----------
+    values : list of str
+        ISO timestamps.
+
+    Returns
+    -------
+    tuple of datetime.datetime
+        Aware timestamps.
+
+    Raises
+    ------
+    ValueError
+        When the list is empty, too long, or contains an invalid timestamp.
+    """
+    if not values or len(values) > 24:
+        raise ValueError("whens must contain 1 to 24 timestamps")
+    parsed: list[dt.datetime] = []
+    for value in values:
+        try:
+            when = dt.datetime.fromisoformat(value.replace("Z", "+00:00"))
+        except ValueError as error:
+            raise ValueError(f"invalid whens timestamp: {value}") from error
+        parsed.append(when if when.tzinfo is not None else when.replace(tzinfo=dt.UTC))
+    return tuple(sorted(parsed))
 
 
 def _dataset_file(state: LabState, name: str) -> Path | None:

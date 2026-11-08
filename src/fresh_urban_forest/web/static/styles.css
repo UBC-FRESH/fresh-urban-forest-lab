@@ -758,3 +758,21 @@ select:focus, input:focus { outline: 2px solid #b8d3ae; outline-offset: 1px; }
 .pareto-views-body .hint { margin: 0; }
 .file-button { position: relative; overflow: hidden; display: inline-flex; align-items: center; }
 .file-button input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+
+/* --------------------------------------------------------------- sites view */
+#map-sites { position: absolute; inset: 0; width: 100%; height: 100%; }
+.site-panel { max-height: calc(100% - 28px); overflow-y: auto; }
+.site-panel .field { margin-bottom: 6px; }
+.site-panel .inline-fields { gap: 6px; }
+.site-panel .button-row { margin-top: 5px; }
+.site-panel .check-field { display: flex; align-items: center; gap: 5px; margin: 4px 0 7px; color: var(--ink-soft); font-size: 0.65rem; }
+.site-panel .check-field input { width: auto; }
+.site-results { margin: 7px 0; overflow-x: auto; }
+.site-results table { width: 100%; border-collapse: collapse; font-size: 0.62rem; }
+.site-results th, .site-results td { padding: 3px 4px; border-bottom: 1px solid #e7ece3; text-align: right; white-space: nowrap; }
+.site-results th:first-child, .site-results td:first-child { text-align: left; color: var(--ink-soft); }
+.site-results th { color: var(--ink-soft); font-weight: 650; }
+.site-results .site-good { color: var(--green); font-family: var(--mono); }
+.site-results .site-bad { color: var(--red); font-family: var(--mono); }
+.site-legend { left: auto; right: 14px; }
+@media (max-width: 900px) { .site-legend { left: 14px; right: auto; } }

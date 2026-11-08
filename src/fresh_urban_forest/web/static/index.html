@@ -295,6 +295,7 @@
         <button class="tab" data-view="scene" role="tab" aria-selected="false">3D scene</button>
         <button class="tab" data-view="city" role="tab" aria-selected="false" hidden>City</button>
         <button class="tab" data-view="light" role="tab" aria-selected="false">Light</button>
+        <button class="tab" data-view="sites" role="tab" aria-selected="false" hidden>Sites</button>
         <button class="tab" data-view="change" role="tab" aria-selected="false">Change</button>
         <button class="tab" data-view="analytics" role="tab" aria-selected="false">Analytics</button>
         <button class="tab" data-view="birds" role="tab" aria-selected="false">Birds</button>
@@ -409,6 +410,64 @@
           </p>
         </aside>
         <div class="change-legend" id="light-legend"></div>
+      </div>
+
+      <div id="view-sites" class="view sites">
+        <div id="map-sites"></div>
+        <aside class="change-panel site-panel">
+          <div class="panel-heading">
+            <h2>Site planting scenario</h2>
+            <span id="site-status" class="muted">loading</span>
+          </div>
+          <label class="field">
+            <span>Action filter</span>
+            <select id="site-action-filter">
+              <option value="all">all candidate actions</option>
+              <option value="plant_cool">plant + cool</option>
+              <option value="expand_canopy">expand canopy</option>
+              <option value="structural_shade">structural shade</option>
+              <option value="protect_loss">protect / investigate loss</option>
+            </select>
+          </label>
+          <p class="hint" id="site-selection-summary">Click candidate sites on the map to add or remove them.</p>
+          <div class="button-row wrap">
+            <button id="site-select-six" class="button ghost tiny" type="button">Select 6 plant + cool</button>
+            <button id="site-clear" class="button ghost tiny" type="button">Clear selection</button>
+          </div>
+          <div class="inline-fields">
+            <label class="field"><span>Species</span><input id="site-species" type="text" value="Acer rubrum" maxlength="80"></label>
+            <label class="field"><span>Height (m)</span><input id="site-height" type="number" value="8" min="0.5" max="40" step="0.5"></label>
+          </div>
+          <div class="inline-fields">
+            <label class="field"><span>Crown radius (m)</span><input id="site-crown" type="number" value="3" min="0.25" max="20" step="0.25"></label>
+            <label class="field"><span>Trees per site</span><input id="site-count" type="number" value="1" min="1" max="50" step="1"></label>
+          </div>
+          <div class="inline-fields">
+            <label class="field"><span>Cost / tree (C$)</span><input id="site-cost" type="number" value="850" min="0" step="50"></label>
+            <label class="field"><span>Water / tree (L/yr)</span><input id="site-water" type="number" value="1200" min="0" step="50"></label>
+          </div>
+          <label class="field"><span>Maintenance assumption</span><input id="site-maintenance" type="text" value="establishment only" maxlength="120"></label>
+          <div class="inline-fields">
+            <label class="field"><span>Date</span><input id="site-date" type="date" value="2026-06-21"></label>
+            <label class="field"><span>Time</span><input id="site-time" type="time" value="12:00"></label>
+          </div>
+          <label class="field"><span>Target height (m)</span><input id="site-target-height" type="number" value="1.5" min="0.5" max="10" step="0.1"></label>
+          <label class="check-field"><input id="site-sensitivity" type="checkbox"> Include height/crown ±20% sensitivity</label>
+          <div class="button-row">
+            <button id="site-evaluate" class="button primary" type="button" disabled>Evaluate scenario</button>
+            <button id="site-open-3d" class="button ghost" type="button" disabled>Open in 3D</button>
+          </div>
+          <div id="site-scenario-summary" class="change-stats"></div>
+          <div id="site-results" class="site-results"></div>
+          <p class="hint">Hypothetical trees with explicit assumptions. This is not a planting plan, ownership check, survival estimate, or field validation.</p>
+        </aside>
+        <div class="change-legend site-legend" id="site-legend">
+          <span><i class="change-swatch" style="background:#377e22"></i>plant + cool</span>
+          <span><i class="change-swatch" style="background:#e6911e"></i>expand canopy</span>
+          <span><i class="change-swatch" style="background:#3182bd"></i>structural shade</span>
+          <span><i class="change-swatch" style="background:#c51b7d"></i>protect / investigate</span>
+          <span>click a point to select</span>
+        </div>
       </div>
 
       <div id="view-change" class="view">

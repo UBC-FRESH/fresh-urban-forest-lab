@@ -1084,3 +1084,65 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Dashboard: GREEN (lint, format, types, tests, validator, docs).
 
 - Merged P47 as `2b24607` via PR #245; parent #237 and child issues #238–#240 and #242 are closed. P47.4 remains deferred. Phase status: complete.
+
+### P48 site-level planting scenarios start
+
+- Created parent issue #247 and plan `notes/design/p48-site-scenarios.md`.
+- Scope: candidate sites from P39/P42, explicit species/height/crown/cost/water assumptions,
+  baseline-versus-scenario shade, and P47-style saved state.
+- Explicitly not a planting plan, ownership claim, survival claim, or citywide net-change
+  claim. P45 remains in force.
+- Created child issues #248–#251 and activated `feature/p48-site-scenarios`.
+- No implementation yet.
+
+### P48.1 candidate-site and scenario data contract
+
+- Added `fresh_urban_forest.site_scenario` with deterministic contiguous-gap candidate sites,
+  P42/P44 action-context joins, and no ownership/address fields.
+- Added the versioned `fresh-urban-forest.site-scenario.v1` contract with bounded sites,
+  explicit species/height/crown/cost/water/maintenance assumptions, derived totals, and
+  candidate-id validation.
+- Added candidate JSON/GeoJSON writers and the Vancouver candidate build script.
+- Vancouver build: 5,000 candidate sites (5,000 cap, 12 per cell); action context
+  expand 906, plant 588, protect/investigate 3,243, structural 263.
+- Added unit and build tests; no API or UI yet.
+
+### P48.2 site-level shade simulation and scenario metrics
+
+- Added `fresh_urban_forest.site_shade` using the existing projected-shadow accumulation
+  model on baseline and hypothetical scenario trees.
+- Baseline and scenario use the same samples, target height, terrain setting, and step.
+- Reports combined shade area-hours, shade fractions, percent deltas, per-site
+  contributions, and optional height/crown ±20% sensitivity.
+- Labels the result as a scenario screen; P45's unresolved citywide direction and the
+  non-observational limits are embedded in the output.
+- Two-site Vancouver pilot at 2026-06-21 12:00 PDT: baseline 35,752,669.3 m²h;
+  scenario +1,158.34 m²h (+0.0032%); per-site +579.17 m²h.
+- Sensitivity range +868.75 to +1,737.51 m²h across height/crown ±20%; one sample only,
+  not annual shade or an observed outcome.
+- Added synthetic tests for baseline/scenario determinism, per-site deltas, sensitivity,
+  missing candidates, and empty samples.
+
+### P48.3 scenario API, map, and 3D comparison
+
+- Added optional candidate endpoints: `/api/site-candidates` and
+  `/api/site-candidates.geojson`.
+- Added `/api/site-scenario/evaluate` with scenario validation, timestamp validation,
+  baseline/scenario shade, per-site contributions, and optional sensitivity.
+- Added a Sites tab with candidate/action map layers, map-click selection, six-site
+  quick-select, explicit species/height/crown/count/cost/water/maintenance inputs, and a
+  baseline-versus-scenario result panel.
+- Added "Open in 3D" by creating a normal scenario with the selected hypothetical trees.
+- Browser smoke: 5,000 candidates loaded; six `plant + cool` sites evaluated at
+  2026-06-21 12:00 Vancouver time; baseline 35.8M m²h, delta 3.5k m²h (+0.0097%);
+  per-site 290–869 m²h; 3D scenario opened with no page errors.
+- Added service and static web-asset tests.
+
+### P48.4 validation and close-out
+
+- Added the site-scenario reference page and agent index entry.
+- Final browser smoke covers candidate-map load, six-site selection, scenario evaluation,
+  per-site results, and the 3D handoff.
+- Dashboard: GREEN (lint, format, types, tests, validator, docs).
+- P48 remains a scenario screen: no ownership, field validation, survival, or planting-plan
+  claim. P45's citywide change direction remains unresolved.
