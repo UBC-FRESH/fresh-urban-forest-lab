@@ -932,3 +932,9 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Screening product only; no cost, utility, ownership, causal, or field claim.
 - Opened PR #208 for maintainer review; phase remains open until merge and parent-issue close-out.
 - Merged P42 as `bc940a2` via PR #208; child issues #203–#207 and parent #202 are closed. Phase status: complete.
+
+### P43 citywide canopy change start
+
+- Created parent issue #209, plan, and branch.
+- All 181 2018 ZIP tiles are present under `/srv/shared-data` (about 76 GB).
+- No citywide product or coverage claim yet.
