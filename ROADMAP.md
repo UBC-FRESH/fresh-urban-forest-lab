@@ -1193,9 +1193,9 @@ choice, and state what can be claimed.
 
 Plan: `notes/design/p45-change-sensitivity.md`.
 
-- [ ] P45.1 Offset sensitivity calculations and tests (#225)
-- [ ] P45.2 2 m vs 5 m scale comparison (#226)
-- [ ] P45.3 Vancouver sensitivity JSON and method note (#227)
+- [x] P45.1 Offset sensitivity calculations and tests (#225)
+- [x] P45.2 2 m vs 5 m scale comparison (#226)
+- [x] P45.3 Vancouver sensitivity JSON and method note (#227)
 - [ ] P45.4 Dashboard and close-out (#228)
 
 Acceptance criteria:

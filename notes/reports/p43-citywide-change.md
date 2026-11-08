@@ -70,3 +70,9 @@ toggle and sidebar summary.
 - **Class-1 exclusion.** 2018 unclassified points are excluded; earlier canopy may be
   conservative.
 - **No tree survival, species, ownership, causal, or field-validation claim.**
+
+## Post-hoc sensitivity (P45)
+
+P45 shows the citywide net sign is not stable across a ±1.0 m offset range:
+from about −99 ha to +488 ha. Do not claim a net gain or loss from this screen
+without external vertical control. See `notes/reports/p45-change-sensitivity.md`.
