@@ -1012,3 +1012,4 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Browser smoke: turnover layer showed 260 high cells, 182 ha turnover, 10,430 gain and
   7,516 loss patches, no console/page errors.
 - Dashboard: GREEN (lint, format, types, tests, validator, docs).
+- Opened PR #236 for maintainer review; phase remains open until merge and parent-issue close-out.

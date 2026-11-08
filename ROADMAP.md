@@ -42,7 +42,7 @@ This roadmap is the plan of record and the issue tracker map for FRESH Urban For
 | P43 Citywide observed canopy change 2018-2022 | #209 | `feature/p43-citywide-change` | complete |
 | P44 Citywide canopy-action refresh | #216 | `feature/p44-citywide-action` | complete |
 | P45 Citywide canopy-change sensitivity | #224 | `feature/p45-change-sensitivity` | complete |
-| P46 Canopy turnover hotspots | #231 | `feature/p46-turnover-hotspots` | active |
+| P46 Canopy turnover hotspots | #231 | `feature/p46-turnover-hotspots` | pr-open |
 
 ## Lifecycle Map
 
@@ -1219,7 +1219,7 @@ Phase 45 verification:
 
 Parent issue: #231
 Branch: `feature/p46-turnover-hotspots`
-Status: active
+Status: pr-open
 
 Goal: map contiguous gain/loss patches from the P43 2 m screen without claiming a
 citywide net direction.
