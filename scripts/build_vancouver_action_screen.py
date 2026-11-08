@@ -47,7 +47,7 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
     parser.add_argument(
         "--change",
         type=Path,
-        default=Path("data/processed/change_vancouver_2018_2022_downtown/canopy_change.json"),
+        default=Path("data/processed/change_vancouver_2018_2022_citywide/canopy_change.json"),
     )
     parser.add_argument("--out", type=Path, default=Path("data/processed/vancouver_2022"))
     return parser.parse_args(argv)
@@ -138,7 +138,8 @@ def build_product(
             "This is a screening action label, not a planting plan.",
             "Costs, utilities, ownership, access, soil, irrigation, and field validation "
             "are not modelled.",
-            "P41 change covers only the downtown pilot; other cells are marked not observed.",
+            "P43 change is a citywide 5 m thresholded LiDAR surface comparison; "
+            "it is not tree survival or growth.",
             "The joins are descriptive and do not establish cause.",
         ],
     }
