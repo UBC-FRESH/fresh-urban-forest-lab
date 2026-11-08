@@ -46,6 +46,7 @@ def test_build_change_cells_reports_gain_loss_and_join() -> None:
         priority={"r00c00": {"shade_deficit": 0.8, "equity_score": 0.7, "priority_class": "1A"}},
         planting={"r00c00": {"gap_m2": 100.0, "opportunity_tier": "high"}},
         heat={"r00c00": {"lst_mean_c": 40.0, "tespi_like": 0.8, "heat_equity_tier": "high"}},
+        action={"r00c00": {"action_class": "plant_cool", "action_label": "plant + cool"}},
     )
     assert len(cells) == 1
     cell = cells[0]
@@ -59,6 +60,8 @@ def test_build_change_cells_reports_gain_loss_and_join() -> None:
     assert cell.p38_priority_class == "1A"
     assert cell.opportunity_tier == "high"
     assert cell.heat_equity_tier == "high"
+    assert cell.action_class == "plant_cool"
+    assert cell.action_label == "plant + cool"
 
 
 def test_change_cell_is_gain_when_net_exceeds_five_percent() -> None:

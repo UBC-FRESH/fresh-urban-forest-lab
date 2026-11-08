@@ -476,7 +476,7 @@ function renderCanopyChange() {
     </div>
     <div class="city-method"><strong>stable canopy</strong><span>${formatCompact(stable / 10000, " ha")} unchanged at the 2 m threshold</span></div>
     <div class="city-method"><strong>method</strong><span>${escapeHtml(data.metadata?.earlier_label || "2018")} → ${escapeHtml(data.metadata?.later_label || "2022")} · thresholded LiDAR change</span></div>
-    <p class="muted" style="font-size:.68rem;margin-top:8px">Downtown pilot AOI · not tree survival or causal attribution</p>
+    <p class="muted" style="font-size:.68rem;margin-top:8px">Citywide 5 m surface comparison · not tree survival or causal attribution</p>
   `;
   status.textContent = "screening";
 }

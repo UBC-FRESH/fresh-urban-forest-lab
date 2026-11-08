@@ -1134,10 +1134,10 @@ P38–P42 cells.
 Plan: `notes/design/p43-citywide-change.md`.
 
 - [x] P43.1 Checksum and audit all 181 2018 LiDAR tiles (#210)
-- [ ] P43.2 Build the citywide 2018 CHM and align it to 2022 (#211)
-- [ ] P43.3 Build 400 m citywide change cells and joins (#212)
-- [ ] P43.4 API, GeoJSON layer, map toggle, and method note (#213)
-- [ ] P43.5 Dashboard, browser smoke, and close-out (#214)
+- [x] P43.2 Build the citywide 2018 CHM and align it to 2022 (#211)
+- [x] P43.3 Build 400 m citywide change cells and joins (#212)
+- [x] P43.4 API, GeoJSON layer, map toggle, and method note (#213)
+- [x] P43.5 Dashboard, browser smoke, and close-out (#214)
 
 Acceptance criteria:
 

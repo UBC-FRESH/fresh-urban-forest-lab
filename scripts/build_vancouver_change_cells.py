@@ -54,6 +54,7 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
         type=Path,
         default=Path("data/processed/vancouver_2022/heat_equity.json"),
     )
+    parser.add_argument("--action", type=Path, default=None)
     parser.add_argument("--out", type=Path, default=None)
     parser.add_argument("--threshold", type=float, default=2.0)
     parser.add_argument("--cell-size", type=float, default=400.0)
@@ -85,6 +86,7 @@ def build_product(
     heat_priority: Path,
     planting: Path,
     heat_equity: Path,
+    action: Path | None = None,
     out_dir: Path,
     threshold_m: float = 2.0,
     cell_size_m: float = 400.0,
@@ -101,6 +103,8 @@ def build_product(
         P39 cells.
     heat_equity : Path
         P40 cells.
+    action : Path or None
+        Optional P42 cells.
     out_dir : Path
         Output directory.
     threshold_m : float
@@ -118,6 +122,7 @@ def build_product(
     priority = load_cells(heat_priority)
     planting_cells = load_cells(planting)
     heat_cells = load_cells(heat_equity)
+    action_cells = load_cells(action) if action is not None else {}
     p38_payload = (
         json.loads(heat_priority.read_text(encoding="utf-8")) if heat_priority.exists() else {}
     )
@@ -132,18 +137,23 @@ def build_product(
         float(change_bounds_raw[2]),
         float(change_bounds_raw[3]),
     )
-    cells = build_change_cells(
-        earlier=grid["earlier"],
-        later=grid["later"],
-        valid=grid["valid"],
-        change_bounds=change_bounds,
-        grid_bounds=(grid_bounds[0], grid_bounds[1], grid_bounds[2], grid_bounds[3]),
-        crs=str(summary["crs"]),
-        threshold_m=threshold_m,
-        cell_size_m=cell_size_m,
-        priority=priority,
-        planting=planting_cells,
-        heat=heat_cells,
+    cells = tuple(
+        cell
+        for cell in build_change_cells(
+            earlier=grid["earlier"],
+            later=grid["later"],
+            valid=grid["valid"],
+            change_bounds=change_bounds,
+            grid_bounds=(grid_bounds[0], grid_bounds[1], grid_bounds[2], grid_bounds[3]),
+            crs=str(summary["crs"]),
+            threshold_m=threshold_m,
+            cell_size_m=cell_size_m,
+            priority=priority,
+            planting=planting_cells,
+            heat=heat_cells,
+            action=action_cells,
+        )
+        if cell.cell_id in priority
     )
     metadata: dict[str, object] = {
         "earlier_label": summary.get("earlier_label"),
@@ -162,7 +172,8 @@ def build_product(
             "2018 and 2022 differ in acquisition date, point density, and possible "
             "co-registration error.",
             "Joins to shade, gap, and heat scores are descriptive, not causal.",
-            "The approved pilot AOI is two downtown tiles; this is not a city-wide change claim.",
+            "This is a citywide 5 m surface comparison; valid overlap is limited by "
+            "missing or invalid pixels in both dates.",
         ],
     }
     paths = write_change_cells(
@@ -201,6 +212,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         heat_priority=args.heat_priority,
         planting=args.planting,
         heat_equity=args.heat_equity,
+        action=args.action,
         out_dir=out_dir,
         threshold_m=args.threshold,
         cell_size_m=args.cell_size,

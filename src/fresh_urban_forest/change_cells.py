@@ -109,6 +109,10 @@ class ChangeCell:
         P40 five-part index, when present.
     heat_equity_tier : str
         P40 tier, or ``NA``.
+    action_class : str
+        P42 action class, or ``NA``.
+    action_label : str
+        P42 action label, or ``NA``.
     """
 
     cell_id: str
@@ -136,6 +140,8 @@ class ChangeCell:
     lst_mean_c: float
     tespi_like: float
     heat_equity_tier: str
+    action_class: str
+    action_label: str
 
     def to_dict(self) -> dict[str, object]:
         """Convert the cell to a JSON-safe mapping.
@@ -175,6 +181,8 @@ class ChangeCell:
             "lst_mean_c": _optional(self.lst_mean_c),
             "tespi_like": _optional(self.tespi_like),
             "heat_equity_tier": self.heat_equity_tier,
+            "action_class": self.action_class,
+            "action_label": self.action_label,
         }
 
 
@@ -191,6 +199,7 @@ def build_change_cells(
     priority: Mapping[str, Mapping[str, object]] | None = None,
     planting: Mapping[str, Mapping[str, object]] | None = None,
     heat: Mapping[str, Mapping[str, object]] | None = None,
+    action: Mapping[str, Mapping[str, object]] | None = None,
 ) -> tuple[ChangeCell, ...]:
     """Aggregate a 1 m change grid to global 400 m cells.
 
@@ -218,6 +227,8 @@ def build_change_cells(
         P39 cells keyed by cell id.
     heat : mapping or None
         P40 cells keyed by cell id.
+    action : mapping or None
+        P42 cells keyed by cell id.
 
     Returns
     -------
@@ -285,6 +296,7 @@ def build_change_cells(
     priority = priority or {}
     planting = planting or {}
     heat = heat or {}
+    action = action or {}
     transformer = Transformer.from_crs(crs, "EPSG:4326", always_xy=True)
     cells: list[ChangeCell] = []
     for index in range(nrows * ncols):
@@ -312,6 +324,7 @@ def build_change_cells(
         p38 = priority.get(cell_id, {})
         p39 = planting.get(cell_id, {})
         p40 = heat.get(cell_id, {})
+        p42 = action.get(cell_id, {})
         cells.append(
             ChangeCell(
                 cell_id=cell_id,
@@ -341,6 +354,8 @@ def build_change_cells(
                 lst_mean_c=_as_float(p40.get("lst_mean_c")),
                 tespi_like=_as_float(p40.get("tespi_like")),
                 heat_equity_tier=str(p40.get("heat_equity_tier", "NA")),
+                action_class=str(p42.get("action_class", "NA")),
+                action_label=str(p42.get("action_label", "NA")),
             )
         )
     return tuple(cells)
