@@ -930,3 +930,4 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Browser smoke: **canopy action** layer loaded; sidebar showed 270 plant+cool,
   253 monitor, 145 expand, 129 structural shade, 0 protect loss; no console/page errors.
 - Screening product only; no cost, utility, ownership, causal, or field claim.
+- Opened PR #208 for maintainer review; phase remains open until merge and parent-issue close-out.

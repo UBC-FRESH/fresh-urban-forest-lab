@@ -38,7 +38,7 @@ This roadmap is the plan of record and the issue tracker map for FRESH Urban For
 | P39 Canopy gaps and above-ground planting opportunity | #174 | `feature/p39-canopy-gaps` | complete |
 | P40 Open land-surface temperature and heat equity | #176 | `feature/p40-heat-equity` | complete |
 | P41 Observed canopy change 2018-2022 | #195 | `feature/p41-canopy-change` | complete |
-| P42 Integrated canopy-action screening | #202 | `feature/p42-action-screen` | active |
+| P42 Integrated canopy-action screening | #202 | `feature/p42-action-screen` | pr-open |
 
 ## Lifecycle Map
 
@@ -1094,7 +1094,7 @@ Phase 41 verification:
 
 Parent issue: #202
 Branch: `feature/p42-action-screen`
-Status: active
+Status: pr-open
 
 Goal: join P38 shade/equity, P39 gaps, P40 heat equity, and P41 observed change into
 one 400 m screening layer with transparent action labels.
