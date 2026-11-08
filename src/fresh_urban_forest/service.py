@@ -484,6 +484,7 @@ def create_app(
             _dataset_file(state, "planting_opportunity.json") is not None
         )
         summary["has_heat_equity"] = _dataset_file(state, "heat_equity.json") is not None
+        summary["has_canopy_change"] = _dataset_file(state, "canopy_change.json") is not None
         summary["has_map_trees"] = _dataset_file(state, "map_trees.json.gz") is not None
         summary["has_map_buildings"] = _dataset_file(state, "map_buildings.geojson.gz") is not None
         summary["has_full_scene"] = _dataset_file(state, "full_scene.json.gz") is not None
@@ -757,6 +758,47 @@ def create_app(
             raise HTTPException(status_code=404, detail="this dataset has no city metrics")
         return JSONResponse(
             json.loads(path.read_text(encoding="utf-8")),
+            headers={"Cache-Control": "no-store, max-age=0"},
+        )
+
+    @app.get("/api/canopy-change")
+    def canopy_change() -> JSONResponse:
+        """Return the optional observed canopy-change cells.
+
+        Returns
+        -------
+        JSONResponse
+            The canopy-change JSON, or a 404 when the dataset has no product.
+        """
+        path = _dataset_file(state, "canopy_change.json")
+        if path is None:
+            raise HTTPException(
+                status_code=404,
+                detail="this dataset has no canopy-change product",
+            )
+        return JSONResponse(
+            json.loads(path.read_text(encoding="utf-8")),
+            headers={"Cache-Control": "no-store, max-age=0"},
+        )
+
+    @app.get("/api/canopy-change.geojson")
+    def canopy_change_geojson() -> FileResponse:
+        """Return the 400 m canopy-change cells as GeoJSON.
+
+        Returns
+        -------
+        FileResponse
+            GeoJSON, or a 404 when the dataset has no product.
+        """
+        path = _dataset_file(state, "canopy_change.geojson")
+        if path is None:
+            raise HTTPException(
+                status_code=404,
+                detail="this dataset has no canopy-change product",
+            )
+        return FileResponse(
+            path,
+            media_type="application/geo+json",
             headers={"Cache-Control": "no-store, max-age=0"},
         )
 

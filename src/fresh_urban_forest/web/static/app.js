@@ -39,6 +39,7 @@ const state = {
   heatPriority: null,
   plantingOpportunity: null,
   heatEquity: null,
+  canopyChange: null,
   changeProduct: "change.json",
   changeProductsLoaded: false,
   lightMap: null,
@@ -404,6 +405,42 @@ function renderCityMetrics() {
   $("city-source").textContent = `${formatNumber(city.tree_count)} public trees · ${local.length} local areas · 2022 LiDAR · ${formatNumber(visualTrees)} visual trees`;
 }
 
+function renderCanopyChange() {
+  const data = state.canopyChange;
+  const status = $("canopy-change-status");
+  if (!data) {
+    status.textContent = "none";
+    $("canopy-change-summary").innerHTML =
+      '<p class="muted">No observed-change product in this dataset.</p>';
+    return;
+  }
+  const cells = data.cells || [];
+  const counts = {};
+  let gain = 0;
+  let loss = 0;
+  let net = 0;
+  let stable = 0;
+  for (const cell of cells) {
+    const key = cell.change_class || "none";
+    counts[key] = (counts[key] || 0) + 1;
+    gain += Number(cell.gain_m2 || 0);
+    loss += Number(cell.loss_m2 || 0);
+    net += Number(cell.net_m2 || 0);
+    stable += Number(cell.stable_m2 || 0);
+  }
+  const netSign = net >= 0 ? "+" : "";
+  $("canopy-change-summary").innerHTML = `
+    <div class="city-kpis" style="grid-template-columns:repeat(2,minmax(0,1fr));margin:0 0 10px">
+      <div class="kpi"><span>net canopy</span><strong>${netSign}${formatCompact(net / 10000, " ha")}</strong><small>${formatNumber(cells.length)} cells</small></div>
+      <div class="kpi"><span>gain / loss</span><strong>${formatCompact(gain / 10000, " ha")}</strong><small>${formatCompact(loss / 10000, " ha")} loss</small></div>
+    </div>
+    <div class="city-method"><strong>stable canopy</strong><span>${formatCompact(stable / 10000, " ha")} unchanged at the 2 m threshold</span></div>
+    <div class="city-method"><strong>method</strong><span>${escapeHtml(data.metadata?.earlier_label || "2018")} → ${escapeHtml(data.metadata?.later_label || "2022")} · thresholded LiDAR change</span></div>
+    <p class="muted" style="font-size:.68rem;margin-top:8px">Downtown pilot AOI · not tree survival or causal attribution</p>
+  `;
+  status.textContent = "screening";
+}
+
 function renderHeatEquity() {
   const data = state.heatEquity;
   const status = $("heat-equity-status");
@@ -636,6 +673,15 @@ async function init() {
         renderHeatEquity();
       }
     }
+    if (dataset.has_canopy_change) {
+      try {
+        state.canopyChange = await api("api/canopy-change");
+        renderCanopyChange();
+      } catch (_error) {
+        state.canopyChange = null;
+        renderCanopyChange();
+      }
+    }
     $("dataset-name").textContent = `${dataset.name} · ${dataset.tree_count.toLocaleString("en-CA")} tree records · ${dataset.sources.length} sources`;
     setStatus("live");
     renderKPIs(dataset.metrics);
@@ -827,6 +873,12 @@ function initMap() {
             ? "api/heat-equity.geojson"
             : { type: "FeatureCollection", features: [] },
         },
+        canopyChange: {
+          type: "geojson",
+          data: state.dataset?.has_canopy_change
+            ? "api/canopy-change.geojson"
+            : { type: "FeatureCollection", features: [] },
+        },
         offInventory: {
           type: "geojson",
           data: state.dataset?.has_off_inventory
@@ -940,6 +992,25 @@ function initMap() {
               "high", "#b2182b",
               "medium", "#ef8a34",
               "low", "#4575b4",
+              "#000000",
+            ],
+            "fill-opacity": 0.5,
+            "fill-outline-color": "rgba(255,255,255,0.35)",
+          },
+        },
+        {
+          id: "canopy-change",
+          type: "fill",
+          source: "canopyChange",
+          layout: { visibility: "none" },
+          paint: {
+            "fill-color": [
+              "match",
+              ["get", "change_class"],
+              "gain", "#4d9221",
+              "loss", "#c51b7d",
+              "stable", "#5a5a5a",
+              "no canopy", "#b4b4b4",
               "#000000",
             ],
             "fill-opacity": 0.5,
@@ -1928,6 +1999,15 @@ function bindControls() {
     if (state.map && state.map.getLayer("heat-priority")) {
       state.map.setLayoutProperty(
         "heat-priority",
+        "visibility",
+        event.target.checked ? "visible" : "none",
+      );
+    }
+  });
+  $("toggle-canopy-change").addEventListener("change", (event) => {
+    if (state.map && state.map.getLayer("canopy-change")) {
+      state.map.setLayoutProperty(
+        "canopy-change",
         "visibility",
         event.target.checked ? "visible" : "none",
       );

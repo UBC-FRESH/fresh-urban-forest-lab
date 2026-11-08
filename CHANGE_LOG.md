@@ -882,3 +882,33 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
   the sidebar showed 37.7 °C mean LST, 305 high-tier cells, and no console or page
   errors.
 - Dashboard: GREEN (lint, format, types, tests, validator, docs).
+
+### P41 observed canopy change 2018–2022 start
+
+- Created parent issue #195, child issues #196–#200, plan, and branch.
+- Plan: `notes/design/p41-canopy-change.md`.
+- First dependency: full 2018 City LiDAR coverage; the current manifest covers a UBC subset.
+- No implementation or data claim yet.
+
+### P41.1 2018 LiDAR index and coverage audit
+
+- Added `scripts/audit_vancouver_2018_lidar.py` and tests.
+- Recorded the full 181-tile City of Vancouver 2018 LiDAR index.
+- Tile union covers 118.717 of 118.763 km² inside the P30 city boundary (99.96%).
+- Only 2 tiles are present, both from the earlier UBC pilot; city-boundary coverage is 0.0 km².
+- 179 tiles are missing. Full acquisition is blocked by the webtransfer Cloudflare 403
+  and the expected tens-of-gigabytes download.
+- Report: `notes/reports/p41-2018-lidar-coverage.md`.
+- No 2018→2022 change product has been computed yet.
+
+### P41.2–P41.4 downtown change pilot
+
+- Downloaded the two 2018 downtown LAS tiles through headed Chromium.
+- Built 2018 ground/CHM and aligned it to the P30 2022 1 m CHM.
+- Downtown 2 km² result: 440,509 m² earlier canopy, 498,871 m² later, +68,844 m²
+  gain, −10,482 m² loss, +58,362 m² net, +0.604 m mean height on stable canopy.
+- Added 400 m change cells with P38–P40 joins, API endpoints, map toggle, and report.
+- Browser smoke: **canopy change** layer loaded; sidebar showed +6 ha net, 7 ha gain,
+  1 ha loss, 43 ha stable; no console/page errors.
+- This is a staged downtown pilot, not a city-wide change claim.
+- Opened PR #201 for maintainer review; phase remains open until merge and parent-issue close-out.
