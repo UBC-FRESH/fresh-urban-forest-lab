@@ -47,6 +47,7 @@ This roadmap is the plan of record and the issue tracker map for FRESH Urban For
 | P48 Site-level planting scenarios | #247 | `feature/p48-site-scenarios` | complete |
 | P49 Site scenario comparison | #259 | `feature/p49-scenario-comparison` | complete |
 | P50 Canopy-change vertical control | #266 | `feature/p50-vertical-control` | complete |
+| P51 Citywide vertical control and corrected products | #272 | `feature/p51-citywide-control` | pr-open |
 | P52 Lower Mainland candidate-data honesty | #278 | `feature/p51-candidate-honesty` | complete |
 
 ## Lifecycle Map
@@ -1369,6 +1370,37 @@ Phase 50 verification:
 - `python scripts/dashboard.py`
 - `python scripts/check_workflow.py`
 
+## Phase 51: Citywide vertical control and corrected products
+
+Parent issue: #272
+Branch: `feature/p51-citywide-control`
+Status: pr-open
+
+Goal: expand the P50 control sample, test spatial stability, and produce versioned corrected
+change products only if the control is representative enough.
+
+Plan: `notes/design/p51-citywide-control.md`.
+
+- [x] P51.1 Citywide control sample and spatial estimate (#273)
+- [x] P51.2 Versioned corrected P43 screen (#274)
+- [x] P51.3 P44/P46 refresh and API/doc integration (#275) — corrected data/docs; public API unchanged
+- [x] P51.4 Browser/dashboard verification and close-out (#276)
+
+Acceptance criteria:
+
+- 30–50 tiles selected and checked with explicit spatial coverage.
+- Per-tile offsets and spatial uncertainty are reported.
+- Constant versus per-tile correction decision is explicit.
+- Original P43 product is preserved; corrected product is versioned.
+- Downstream labels no longer silently inherit the unsupported +1.0 m assumption.
+- No final citywide gain/loss or field-validation claim without support.
+- Dashboard green.
+
+Phase 51 verification:
+
+- `python scripts/dashboard.py`
+- `python scripts/check_workflow.py`
+
 ## Phase 52: Lower Mainland candidate-data honesty
 
 Parent issue: #278
@@ -1392,7 +1424,7 @@ Acceptance criteria:
 - No model, data, candidate-promotion, or inventory-validation change is made.
 - Dashboard green.
 
-Phase 51 verification:
+Phase 52 verification:
 
 - `node --check src/fresh_urban_forest/web/static/app.js`
 - `python scripts/dashboard.py`

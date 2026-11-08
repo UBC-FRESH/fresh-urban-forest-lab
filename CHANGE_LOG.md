@@ -1122,6 +1122,7 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Created child issues #248–#251 and activated `feature/p48-site-scenarios`.
 - Created child issues #260–#262 and activated `feature/p49-scenario-comparison`.
 - Created child issues #267–#270 and activated `feature/p50-vertical-control`.
+- Created child issues #273–#276 and activated `feature/p51-citywide-control`.
 - No implementation yet.
 
 ### P48.1 candidate-site and scenario data contract
@@ -1187,6 +1188,7 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
   or citywide-change claim.
 - Created child issues #260–#262 and activated `feature/p49-scenario-comparison`.
 - Created child issues #267–#270 and activated `feature/p50-vertical-control`.
+- Created child issues #273–#276 and activated `feature/p51-citywide-control`.
 - No implementation yet.
 
 ### P49.1 local scenario library and assumption presets
@@ -1229,6 +1231,7 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Scope: feasibility-first inventory and stable-surface control estimate for P43/P45.
 - No field work, survey-grade accuracy claim, or citywide direction claim yet.
 - Created child issues #267–#270 and activated `feature/p50-vertical-control`.
+- Created child issues #273–#276 and activated `feature/p51-citywide-control`.
 - No implementation yet.
 
 ### P50.1 vertical-reference inventory and feasibility gate
@@ -1270,6 +1273,57 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Merged P50 as `41d1a02` via PR #271; parent #266 and child issues #267–#270 are closed. Phase status: complete.
 
 ## 2026-11-08
+
+### P51 citywide vertical control start
+
+- Created parent issue #272 and plan `notes/design/p51-citywide-control.md`.
+- Scope: 30–50 spatially distributed 2018 tiles, spatial control stability, and versioned
+  corrected P43/P44/P46 products only if the gate passes.
+- No field-validation, final citywide direction, survival, ownership, or causal claim.
+- Created child issues #273–#276 and activated `feature/p51-citywide-control`.
+- No implementation yet.
+
+### P51.1 citywide control sample
+
+- Added deterministic 6 × 6 spatial tile selection and manifest writer.
+- Selected 34 tiles (13.1 GB); 5 reused from P50 and 29 downloaded by headful browser;
+  checksums matched.
+- 31 tiles contributed 196,943 class-2 ground pairs.
+- Median control offset +0.015 m; bootstrap +0.013 to +0.016 m; MAD 0.053 m.
+- 30/31 tile medians within ±0.15 m; one western −0.43 m outlier; no class-6 roof control.
+- Conditional gate pass for a constant +0.015 m offset; no per-tile correction.
+- P43 correction +0.985 m; corrected 2 m screen about −92.5 ha (range −93.6 to −92.2),
+  not +223 ha. Still a corrected screen, not a final citywide loss.
+
+### P51.2 corrected P43 product
+
+- Added `scripts/build_corrected_vancouver_change.py`.
+- Applied +0.985 m correction to the earlier surface and wrote a versioned product under
+  `change_vancouver_2018_2022_citywide_2m_control/`.
+- Original P43 product remains unchanged.
+- Corrected 2 m result: earlier 3,281.15 ha, later 3,188.65 ha, net **−92.50 ha**,
+  stable height +0.523 m. Original: +223 ha, +1.475 m.
+- Product remains a corrected screen, not a final citywide loss.
+- P44/P46 refresh still pending.
+
+### P51.3 rebuilt P38 and refreshed P44/P46
+
+- Rebuilt P38 from public 2021 Census Profile CSVs and public DA geometry: 1,035 DAs,
+  1,033 scored, 870 400 m cells; restricted to the original 797-cell P42/P44 grid.
+- Rebuilt corrected P44 action and P46 turnover on the corrected P43 screen.
+- P44 action counts: plant+cool 166, monitor 196, expand 110, structural 113,
+  protect/investigate 212 (original 265/233/133/127/39).
+- P46 high-tier 259 cells; turnover area 135.58 ha (original 260 / 181.76 ha).
+- Corrected products are versioned under `vancouver_2022_control/`; public API/UI unchanged.
+- Shift is a screening result, not proof of loss.
+
+### P51.4 documentation and close-out
+
+- Documented the 34-tile control sample, corrected P43 product, and corrected P44/P46
+  sidecars.
+- Public API/UI remains on the original products; no browser UI change was made.
+- Dashboard: GREEN (lint, format, types, tests, validator, docs).
+- Open PR for review; no final citywide net-loss claim.
 
 ### P52 Lower Mainland candidate-data honesty
 
