@@ -739,3 +739,22 @@ select:focus, input:focus { outline: 2px solid #b8d3ae; outline-offset: 1px; }
 @media (max-width: 900px) {
   .parallel-panel { left: 14px; height: 240px; }
 }
+
+.pareto-views {
+  margin: 7px 0 5px;
+  border-top: 1px solid var(--line);
+  padding-top: 6px;
+}
+.pareto-views summary {
+  cursor: pointer;
+  color: var(--green);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.pareto-views-body { display: grid; gap: 5px; margin-top: 6px; }
+.pareto-views-body .field { margin: 0; }
+.pareto-views-body .hint { margin: 0; }
+.file-button { position: relative; overflow: hidden; display: inline-flex; align-items: center; }
+.file-button input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }

@@ -1,6 +1,11 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/OrbitControls.js";
 
+const PARETO_VIEW_STORAGE_KEY = "fresh.pareto.views.v1";
+const PARETO_VIEW_VERSION = 1;
+const PARETO_VIEW_LIMIT = 50;
+const PARETO_VIEW_IMPORT_LIMIT = 250_000;
+
 const state = {
   dataset: null,
   scene: null,
@@ -68,6 +73,7 @@ const state = {
     parallelAxes: [],
     parallelDrag: null,
     parallelPointerId: null,
+    presetName: null,
   },
   previewYear: 0,
   playTimer: null,
@@ -2923,6 +2929,17 @@ function initOptimizeControls() {
   $("pareto-copy-link").addEventListener("click", copyParetoLink);
   $("pareto-download-csv").addEventListener("click", downloadParetoCsv);
   $("parallel-clear-brush").addEventListener("click", clearParallelBrushes);
+  $("pareto-view-save").addEventListener("click", saveParetoView);
+  $("pareto-view-load").addEventListener("click", loadParetoView);
+  $("pareto-view-delete").addEventListener("click", deleteParetoView);
+  $("pareto-view-export").addEventListener("click", exportParetoViews);
+  $("pareto-view-copy").addEventListener("click", copyParetoPresetLink);
+  $("pareto-view-import").addEventListener("change", importParetoViews);
+  $("pareto-view-select").addEventListener("change", () => {
+    $("pareto-view-name").value = $("pareto-view-select").value;
+    updateParetoViewButtons();
+  });
+  refreshParetoViewSelect();
   initParallelEvents();
 }
 
@@ -3112,7 +3129,11 @@ async function runOptimization() {
     state.optimize.jobId = payload.job_id;
     state.optimize.result = null;
     state.optimize.selected = null;
+    state.optimize.presetName = null;
     state.optimize.pinned = [];
+    const params = new URLSearchParams(location.search);
+    params.delete("opt_preset");
+    history.replaceState(null, "", `${params.toString() ? `?${params.toString()}` : ""}${location.hash || "#optimize"}`);
     $("pareto-load").disabled = true;
     $("pareto-pin").disabled = true;
     $("pareto-clear-pins").disabled = true;
@@ -3268,6 +3289,12 @@ async function deleteSavedArchive() {
 async function loadSavedArchive(jobId = null) {
   const selectedJobId = jobId || $("opt-saved").value;
   if (!selectedJobId) return;
+  if (state.optimize.jobId && state.optimize.jobId !== selectedJobId) {
+    state.optimize.presetName = null;
+    const params = new URLSearchParams(location.search);
+    params.delete("opt_preset");
+    history.replaceState(null, "", `${params.toString() ? `?${params.toString()}` : ""}${location.hash || "#optimize"}`);
+  }
   $("optimize-status").textContent = "loading archive";
   try {
     const payload = await api(`api/optimize/${encodeURIComponent(selectedJobId)}`);
@@ -3451,6 +3478,339 @@ function renderParetoDelta() {
   container.innerHTML = `<p class="hint">Selected vs reference ${escapeHtml(String(reference.solution_id || "").slice(0, 10))}</p><div class="delta-grid">${rows}</div>`;
 }
 
+function normalizeParetoViewerState(raw) {
+  if (!raw || typeof raw !== "object" || Array.isArray(raw)) return null;
+  const axis = (value, allowUniform = false) => {
+    const number = Number(value);
+    if (!Number.isInteger(number) || number < (allowUniform ? -1 : 0)) return null;
+    return String(number);
+  };
+  const x = axis(raw.x);
+  const y = axis(raw.y);
+  const z = axis(raw.z);
+  const colour = axis(raw.colour);
+  const size = axis(raw.size, true);
+  if (x === null || y === null || z === null || colour === null || size === null) return null;
+  const floor = Number(raw.floor);
+  if (!Number.isFinite(floor) || floor < 0 || floor > 100) return null;
+  if (!Array.isArray(raw.brushes) || raw.brushes.length > 12) return null;
+  const brushes = [];
+  for (const brush of raw.brushes) {
+    if (!brush || typeof brush !== "object") return null;
+    const axisKey = String(brush.axis || "");
+    const min = Number(brush.min);
+    const max = Number(brush.max);
+    if (!/^[A-Za-z0-9_]{1,40}$/.test(axisKey)) return null;
+    if (!Number.isFinite(min) || !Number.isFinite(max) || min < 0 || max > 1) return null;
+    brushes.push({ axis: axisKey, min: Math.min(min, max), max: Math.max(min, max) });
+  }
+  const point =
+    raw.point === null || raw.point === undefined
+      ? null
+      : typeof raw.point === "string" && raw.point.length <= 120
+        ? raw.point
+        : null;
+  const reference =
+    raw.reference === null || raw.reference === undefined
+      ? null
+      : typeof raw.reference === "string" && raw.reference.length <= 120
+        ? raw.reference
+        : null;
+  return { x, y, z, colour, size, floor, brushes, point, reference };
+}
+
+function normalizeParetoView(raw) {
+  if (!raw || typeof raw !== "object" || raw.version !== PARETO_VIEW_VERSION) return null;
+  const name = String(raw.name || "").trim().slice(0, 80);
+  if (!name) return null;
+  const jobId = String(raw.job_id || "").trim().slice(0, 120);
+  if (!jobId) return null;
+  const viewer = normalizeParetoViewerState(raw.state);
+  if (!viewer) return null;
+  return {
+    version: PARETO_VIEW_VERSION,
+    name,
+    job_id: jobId,
+    created_at:
+      typeof raw.created_at === "string" && raw.created_at.length <= 40
+        ? raw.created_at
+        : new Date().toISOString(),
+    state: viewer,
+  };
+}
+
+function normalizeParetoViewLibrary(raw) {
+  if (!raw || typeof raw !== "object" || raw.version !== PARETO_VIEW_VERSION) return null;
+  if (!Array.isArray(raw.views) || raw.views.length > PARETO_VIEW_LIMIT) return null;
+  const views = [];
+  for (const entry of raw.views) {
+    const view = normalizeParetoView(entry);
+    if (!view) return null;
+    const existing = views.findIndex((item) => item.name === view.name);
+    if (existing >= 0) views[existing] = view;
+    else views.push(view);
+  }
+  return views;
+}
+
+function readParetoViewLibrary() {
+  try {
+    const raw = localStorage.getItem(PARETO_VIEW_STORAGE_KEY);
+    if (!raw) return [];
+    return normalizeParetoViewLibrary(JSON.parse(raw)) || [];
+  } catch (_error) {
+    return [];
+  }
+}
+
+function writeParetoViewLibrary(views) {
+  try {
+    localStorage.setItem(
+      PARETO_VIEW_STORAGE_KEY,
+      JSON.stringify({ version: PARETO_VIEW_VERSION, views: views.slice(0, PARETO_VIEW_LIMIT) }),
+    );
+    return true;
+  } catch (error) {
+    toast(`Could not save local views: ${error.message}`, true);
+    return false;
+  }
+}
+
+function updateParetoViewButtons() {
+  const selected = $("pareto-view-select")?.value || "";
+  $("pareto-view-load").disabled = !selected;
+  $("pareto-view-delete").disabled = !selected;
+}
+
+function refreshParetoViewSelect(selectedName = null) {
+  const select = $("pareto-view-select");
+  if (!select) return;
+  const views = readParetoViewLibrary();
+  const current = selectedName || "";
+  select.innerHTML =
+    `<option value="">${views.length ? "— choose a saved view —" : "— no saved views —"}</option>` +
+    views
+      .map((view) => `<option value="${escapeHtml(view.name)}">${escapeHtml(view.name)}</option>`)
+      .join("");
+  if (current && views.some((view) => view.name === current)) select.value = current;
+  updateParetoViewButtons();
+  $("pareto-view-meta").textContent = `${views.length} local view${views.length === 1 ? "" : "s"} stored in this browser for this archive.`;
+}
+
+function currentParetoViewerState() {
+  return {
+    x: $("pareto-x").value || "0",
+    y: $("pareto-y").value || "1",
+    z: $("pareto-z").value || "2",
+    colour: $("pareto-colour").value || "0",
+    size: $("pareto-size").value || "-1",
+    floor: Number($("pareto-floor").value || 0),
+    brushes: (state.optimize.brushes || []).map((brush) => ({ ...brush })),
+    point: state.optimize.selected?.solution_id || null,
+    reference: state.optimize.reference?.solution_id || null,
+  };
+}
+
+function saveParetoView() {
+  if (!state.optimize.result?.archive) {
+    toast("Load an archive before saving a view.", true);
+    return;
+  }
+  const name = $("pareto-view-name").value.trim();
+  if (!name) {
+    toast("Name the view before saving.", true);
+    return;
+  }
+  const view = normalizeParetoView({
+    version: PARETO_VIEW_VERSION,
+    name,
+    job_id: state.optimize.jobId || "",
+    created_at: new Date().toISOString(),
+    state: currentParetoViewerState(),
+  });
+  if (!view) {
+    toast("Could not read the current viewer state.", true);
+    return;
+  }
+  const views = [view, ...readParetoViewLibrary().filter((item) => item.name !== view.name)].slice(
+    0,
+    PARETO_VIEW_LIMIT,
+  );
+  if (!writeParetoViewLibrary(views)) return;
+  state.optimize.presetName = view.name;
+  refreshParetoViewSelect(view.name);
+  persistParetoViewState();
+  toast(`Saved view “${view.name}”`);
+}
+
+function validateParetoViewForArchive(view) {
+  const archive = state.optimize.result?.archive;
+  if (!archive) return { ok: false, message: "Load the matching archive first." };
+  if (view.job_id && state.optimize.jobId && view.job_id !== state.optimize.jobId) {
+    return { ok: false, message: "This view belongs to a different archive. Load that archive first." };
+  }
+  for (const id of ["pareto-x", "pareto-y", "pareto-z", "pareto-colour", "pareto-size"]) {
+    const select = $(id);
+    if (!Array.from(select.options).some((option) => option.value === String(view.state[id.split("-")[1]]))) {
+      return { ok: false, message: "This view uses an axis that is not available in the current archive." };
+    }
+  }
+  const solutionIds = new Set((archive.solutions || []).map((solution) => solution.solution_id));
+  if (view.state.point && !solutionIds.has(view.state.point)) {
+    return { ok: false, message: "The selected solution is not present in this archive." };
+  }
+  if (view.state.reference && !solutionIds.has(view.state.reference)) {
+    return { ok: false, message: "The reference solution is not present in this archive." };
+  }
+  const axes = parallelAxesForArchive(archive).map((axis) => axis.key);
+  if (view.state.brushes.some((brush) => !axes.includes(brush.axis))) {
+    return { ok: false, message: "This view uses a brush axis that is not available in the current archive." };
+  }
+  return { ok: true };
+}
+
+function applyParetoView(view) {
+  const validation = validateParetoViewForArchive(view);
+  if (!validation.ok) {
+    toast(validation.message, true);
+    return false;
+  }
+  const archive = state.optimize.result.archive;
+  const viewer = view.state;
+  $("pareto-x").value = String(viewer.x);
+  $("pareto-y").value = String(viewer.y);
+  $("pareto-z").value = String(viewer.z);
+  $("pareto-colour").value = String(viewer.colour);
+  $("pareto-size").value = String(viewer.size);
+  $("pareto-floor").value = String(viewer.floor);
+  $("pareto-floor-value").textContent = viewer.floor <= 0 ? "all" : `>= ${(viewer.floor / 100).toFixed(2)}`;
+  state.optimize.brushes = viewer.brushes.map((brush) => ({ ...brush }));
+  state.optimize.selected =
+    (viewer.point && archive.solutions.find((solution) => solution.solution_id === viewer.point)) || null;
+  state.optimize.reference =
+    (viewer.reference && archive.solutions.find((solution) => solution.solution_id === viewer.reference)) || null;
+  state.optimize.presetName = view.name;
+  $("pareto-view-name").value = view.name;
+  $("pareto-reference").disabled = !state.optimize.selected;
+  $("pareto-clear-reference").disabled = !state.optimize.reference;
+  $("pareto-load").disabled = !state.optimize.selected;
+  $("pareto-pin").disabled = !state.optimize.selected;
+  drawPareto();
+  if (state.optimize.selected) {
+    renderParetoInfo(state.optimize.selected);
+  } else {
+    $("pareto-info").innerHTML = `<p class="muted">${state.optimize.filtered.length} visible solutions. Click a sphere or parallel line to inspect it.</p>`;
+    renderParetoDelta();
+    drawParallelCoordinates();
+  }
+  refreshParetoViewSelect(view.name);
+  persistParetoViewState();
+  toast(`Loaded view “${view.name}”`);
+  return true;
+}
+
+async function loadParetoView() {
+  const name = $("pareto-view-select").value;
+  if (!name) {
+    toast("Choose a saved view first.", true);
+    return;
+  }
+  const view = readParetoViewLibrary().find((item) => item.name === name);
+  if (!view) {
+    toast("That local view is no longer available.", true);
+    refreshParetoViewSelect();
+    return;
+  }
+  if (view.job_id && view.job_id !== state.optimize.jobId) {
+    const saved = state.optimize.savedRuns.find((item) => item.job_id === view.job_id);
+    if (!saved) {
+      toast("The archive for this view is not available. Load the matching archive first.", true);
+      return;
+    }
+    await loadSavedArchive(view.job_id);
+  }
+  applyParetoView(view);
+}
+
+function deleteParetoView() {
+  const name = $("pareto-view-select").value;
+  if (!name) {
+    toast("Choose a saved view first.", true);
+    return;
+  }
+  const views = readParetoViewLibrary().filter((view) => view.name !== name);
+  if (!writeParetoViewLibrary(views)) return;
+  if (state.optimize.presetName === name) {
+    state.optimize.presetName = null;
+    persistParetoViewState();
+  }
+  refreshParetoViewSelect();
+  toast(`Deleted view “${name}”`);
+}
+
+function downloadText(text, filename, type) {
+  const blob = new Blob([text], { type });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = filename;
+  document.body.append(link);
+  link.click();
+  link.remove();
+  URL.revokeObjectURL(url);
+}
+
+function exportParetoViews() {
+  const views = readParetoViewLibrary();
+  if (!views.length) {
+    toast("No local views to export.", true);
+    return;
+  }
+  downloadText(
+    JSON.stringify({ version: PARETO_VIEW_VERSION, exported_at: new Date().toISOString(), views }, null, 2),
+    "fresh-pareto-views.json",
+    "application/json",
+  );
+  toast(`Exported ${views.length} local views`);
+}
+
+async function importParetoViews(event) {
+  const input = event.target;
+  const file = input.files?.[0];
+  if (!file) return;
+  try {
+    if (file.size > PARETO_VIEW_IMPORT_LIMIT) {
+      toast("That view file is too large.", true);
+      return;
+    }
+    const payload = JSON.parse(await file.text());
+    const imported = normalizeParetoViewLibrary(payload);
+    if (!imported) {
+      toast("That JSON file is not a valid version 1 local-view library.", true);
+      return;
+    }
+    const merged = new Map(readParetoViewLibrary().map((view) => [view.name, view]));
+    for (const view of imported) merged.set(view.name, view);
+    const views = Array.from(merged.values()).slice(0, PARETO_VIEW_LIMIT);
+    if (!writeParetoViewLibrary(views)) return;
+    refreshParetoViewSelect();
+    toast(`Imported ${imported.length} views; ${views.length} local views available`);
+  } catch (error) {
+    toast(`Could not import views: ${error.message}`, true);
+  } finally {
+    input.value = "";
+  }
+}
+
+async function copyParetoPresetLink() {
+  if (!state.optimize.presetName) {
+    toast("Save or load a named view before copying a preset link.", true);
+    return;
+  }
+  persistParetoViewState();
+  await copyText(location.href, `Preset link copied · ${state.optimize.presetName}`);
+}
+
 function persistParetoViewState() {
   const result = state.optimize.result;
   if (!result || !result.archive) return;
@@ -3473,6 +3833,8 @@ function persistParetoViewState() {
   }
   if (state.optimize.jobId) params.set("opt_job", state.optimize.jobId);
   else params.delete("opt_job");
+  if (state.optimize.presetName) params.set("opt_preset", state.optimize.presetName);
+  else params.delete("opt_preset");
   if (state.optimize.selected?.solution_id) params.set("opt_point", state.optimize.selected.solution_id);
   else params.delete("opt_point");
   if (state.optimize.reference?.solution_id) params.set("opt_reference", state.optimize.reference.solution_id);
@@ -3485,6 +3847,9 @@ function restoreParetoViewState() {
   const result = state.optimize.result;
   if (!result || !result.archive) return;
   const params = new URLSearchParams(location.search);
+  const presetName = params.get("opt_preset");
+  state.optimize.presetName = presetName ? presetName.slice(0, 80) : null;
+  refreshParetoViewSelect(state.optimize.presetName);
   const setSelect = (id, key) => {
     const select = $(id);
     const value = params.get(key);

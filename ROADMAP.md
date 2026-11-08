@@ -1257,7 +1257,7 @@ Plan: `notes/design/p47-optimization-ui-parity.md`.
 
 - [x] P47.1 Hover, ranges, legend, robustness floor, URL, copy link, CSV (#238)
 - [x] P47.2 Synchronized parallel coordinates and brushes (#239)
-- [ ] P47.3 Local saved views, import/export, preset links (#240)
+- [x] P47.3 Local saved views, import/export, preset links (#240)
 - [ ] P47.4 Optional shared review library (#241)
 - [ ] P47.5 Docs, dashboard, browser smoke, and close-out (#242)
 

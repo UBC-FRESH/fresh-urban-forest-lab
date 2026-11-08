@@ -555,6 +555,30 @@
             <button id="pareto-copy-link" class="button ghost tiny" type="button">Copy view link</button>
             <button id="pareto-download-csv" class="button ghost tiny" type="button">Download filtered CSV</button>
           </div>
+          <details class="pareto-views" id="pareto-views-panel">
+            <summary>Local saved views</summary>
+            <div class="pareto-views-body">
+              <label class="field">
+                <span>Saved view</span>
+                <select id="pareto-view-select"></select>
+              </label>
+              <label class="field">
+                <span>View name</span>
+                <input id="pareto-view-name" type="text" maxlength="80" placeholder="Name this view">
+              </label>
+              <div class="button-row wrap">
+                <button id="pareto-view-save" class="button primary tiny" type="button">Save view</button>
+                <button id="pareto-view-load" class="button ghost tiny" type="button" disabled>Load view</button>
+                <button id="pareto-view-delete" class="button danger tiny" type="button" disabled>Delete view</button>
+              </div>
+              <div class="button-row wrap">
+                <button id="pareto-view-export" class="button ghost tiny" type="button">Export JSON</button>
+                <label class="button ghost tiny file-button">Import JSON<input id="pareto-view-import" type="file" accept=".json,application/json"></label>
+                <button id="pareto-view-copy" class="button ghost tiny" type="button">Copy preset link</button>
+              </div>
+              <p id="pareto-view-meta" class="hint">Saved locally in this browser.</p>
+            </div>
+          </details>
           <button id="pareto-load" class="button primary" type="button" disabled>Load selected as scenario</button>
         </aside>
         <div id="pareto-axis-labels" class="pareto-axis-labels">

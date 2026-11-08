@@ -1045,3 +1045,13 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Static checks cover the parallel panel hooks and brush helpers.
 - Browser smoke: 10 axes, select/reference line emphasis, two shift-drag brushes reduced 71 to 4 visible solutions, URL reload restored brushes, and clear restored all 71.
 - Dashboard: GREEN (lint, format, types, tests, validator, docs).
+
+### P47.3 local saved views, import/export, and preset links
+
+- Added named local views in `localStorage` with save/load/delete.
+- Views store axes, colour, size, robustness floor, brushes, selected point, reference, and archive job id.
+- Added versioned JSON export/import with strict schema validation, bounded libraries, and merge-by-name.
+- Views belonging to another archive are refused rather than silently applied.
+- Added `opt_preset` preset links; reloading restores the full viewer state and preset name.
+- Browser smoke: save/load restored floor and selection, export/import worked, malformed JSON was rejected, preset URL reloaded, and mismatched archive was refused.
+- Dashboard: GREEN (lint, format, types, tests, validator, docs).
