@@ -1067,3 +1067,13 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Dashboard: GREEN (lint, format, types, tests, validator, docs).
 
 - Merged P47 as `2b24607` via PR #245; parent #237 and child issues #238–#240 and #242 are closed. P47.4 remains deferred. Phase status: complete.
+
+### P48 site-level planting scenarios start
+
+- Created parent issue #247 and plan `notes/design/p48-site-scenarios.md`.
+- Scope: candidate sites from P39/P42, explicit species/height/crown/cost/water assumptions,
+  baseline-versus-scenario shade, and P47-style saved state.
+- Explicitly not a planting plan, ownership claim, survival claim, or citywide net-change
+  claim. P45 remains in force.
+- Created child issues #248–#251 and activated `feature/p48-site-scenarios`.
+- No implementation yet.
