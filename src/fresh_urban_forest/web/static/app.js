@@ -166,6 +166,13 @@ function treesToFeatureCollection(trees) {
   return { type: "FeatureCollection", features: trees.map(treeFeature) };
 }
 
+function candidateSpeciesScreening() {
+  // Only the Vancouver instance has an accepted candidate-species screening model.
+  // Surrey, Burnaby, and Coquitlam have no candidate-species validation, so they use
+  // confidence-only styling and do not show species-group counts.
+  return state.dataset?.dataset_id === "vancouver-city-2022";
+}
+
 function offInventoryFeatures() {
   const candidates = state.offInventory?.candidates || [];
   return {
@@ -197,6 +204,8 @@ function renderOffInventory() {
       (data.candidates || []).filter((candidate) => Number(candidate.confidence) >= 0.6).length,
   );
   const areaHa = Number(data.candidate_area_m2 || 0) / 10000;
+  const speciesScreening = candidateSpeciesScreening();
+  container.dataset.candidateSpecies = speciesScreening ? "screening" : "unvalidated";
   const value = state.offInventoryValue;
   const volumeDelta = value ? Number(value.augmented_canopy_volume_m3 || 0) - Number(value.official_canopy_volume_m3 || 0) : 0;
   const carbonDelta = value ? Number(value.augmented_carbon_kg || 0) - Number(value.official_carbon_kg || 0) : 0;
@@ -211,7 +220,15 @@ function renderOffInventory() {
       <article class="kpi"><span>Detected</span><strong>${formatNumber(data.detected_count)}</strong><small>${formatNumber(data.matched_count)} matched</small></article>
     </div>
     ${voi}
-    ${data.imagery ? `<p class="hint">Image scoring: ${formatNumber(data.imagery.scored_count)} candidates · ${escapeHtml(data.imagery.source)} · mapped groups ${formatNumber(data.imagery.groups.conifer)} conifer / ${formatNumber(data.imagery.groups.deciduous)} deciduous. ${escapeHtml(data.imagery.caveat || "")}</p>` : ""}`;
+    ${
+      data.imagery
+        ? `<p class="hint">Image scoring: ${formatNumber(data.imagery.scored_count)} candidates · ${escapeHtml(data.imagery.source)} · ${
+            speciesScreening
+              ? `mapped groups ${formatNumber(data.imagery.groups.conifer)} conifer / ${formatNumber(data.imagery.groups.deciduous)} deciduous.`
+              : "species groups are not validated for this dataset; candidate colors show confidence only."
+          } ${escapeHtml(data.imagery.caveat || "")}</p>`
+        : ""
+    }`;
   $("off-inventory-status").textContent = data.evidence?.tier || "pilot";
   renderClassifierQA();
 }
@@ -968,6 +985,7 @@ function initMap() {
     [east, south],
     [west, south],
   ];
+  const showCandidateSpecies = candidateSpeciesScreening();
   const map = new maplibregl.Map({
     container: "map",
     style: {
@@ -1194,14 +1212,16 @@ function initMap() {
           source: "offInventory",
           layout: { visibility: "none" },
           paint: {
-            "circle-color": [
-              "case",
-              ["==", ["coalesce", ["get", "imagery_group"], ["get", "predicted_group"]], "conifer"],
-              "#14563a",
-              ["==", ["coalesce", ["get", "imagery_group"], ["get", "predicted_group"]], "deciduous"],
-              "#91a948",
-              "#d98a2b",
-            ],
+            "circle-color": showCandidateSpecies
+              ? [
+                  "case",
+                  ["==", ["coalesce", ["get", "imagery_group"], ["get", "predicted_group"]], "conifer"],
+                  "#14563a",
+                  ["==", ["coalesce", ["get", "imagery_group"], ["get", "predicted_group"]], "deciduous"],
+                  "#91a948",
+                  "#d98a2b",
+                ]
+              : "#d98a2b",
             "circle-radius": ["interpolate", ["linear"], ["get", "height_m"], 3, 2, 30, 5, 70, 8],
             "circle-opacity": ["interpolate", ["linear"], ["get", "confidence"], 0.3, 0.35, 0.9, 0.9],
             "circle-stroke-color": "#7b4a12",

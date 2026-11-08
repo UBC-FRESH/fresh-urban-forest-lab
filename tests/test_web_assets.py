@@ -143,6 +143,8 @@ def test_app_script_has_the_expected_endpoints_and_layers() -> None:
         "api/off-inventory",
         "renderOffInventory",
         "offInventoryFeatures",
+        "candidateSpeciesScreening",
+        "species groups are not validated for this dataset",
         "api/birds",
         "loadBirds",
         "renderBirdsChart",

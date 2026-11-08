@@ -1268,3 +1268,17 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Opened PR #271 for review; phase remains open until merge and close-out.
 
 - Merged P50 as `41d1a02` via PR #271; parent #266 and child issues #267–#270 are closed. Phase status: complete.
+
+## 2026-11-08
+
+### P51 Lower Mainland candidate-data honesty
+
+- Suppressed candidate conifer/deciduous colors and mapped group counts for Surrey,
+  Burnaby, and Coquitlam, where candidate-species labels do not exist.
+- Those instances now use neutral confidence styling and state: “species groups are not
+  validated for this dataset; candidate colors show confidence only.”
+- Vancouver candidate species remains visible as screening with its existing
+  no-known-good-candidate-labels caveat.
+- No model, candidate data, tree/non-tree screening, or inventory validation changed.
+- Browser smoke covered all four instances with no page errors.
+- Report: `notes/reports/p51-candidate-honesty.md`.
