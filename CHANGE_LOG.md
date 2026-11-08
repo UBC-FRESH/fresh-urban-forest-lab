@@ -1271,7 +1271,7 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 
 ## 2026-11-08
 
-### P51 Lower Mainland candidate-data honesty
+### P52 Lower Mainland candidate-data honesty
 
 - Suppressed candidate conifer/deciduous colors and mapped group counts for Surrey,
   Burnaby, and Coquitlam, where candidate-species labels do not exist.
@@ -1281,6 +1281,7 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
   no-known-good-candidate-labels caveat.
 - No model, candidate data, tree/non-tree screening, or inventory validation changed.
 - Browser smoke covered all four instances with no page errors.
-- Report: `notes/reports/p51-candidate-honesty.md`.
+- Report: `notes/reports/p52-candidate-honesty.md`.
 
-- Merged P51 as `762a929` via PR #281; parent #278 and child #280 are closed. Phase status: complete.
+- Merged P52 as `762a929` via PR #281; parent #278 and child #280 are closed. Phase status: complete.
+- Phase renumbered to P52 to avoid collision with P51 citywide vertical-control work (#272).

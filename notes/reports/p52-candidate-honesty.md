@@ -1,4 +1,4 @@
-# P51: Lower Mainland candidate-data honesty
+# P52: Lower Mainland candidate-data honesty
 
 Date: 2026-11-08
 
@@ -39,7 +39,7 @@ sampling, tree/non-tree screening, or inventory metrics.
 
 ## Browser smoke
 
-Local portal: `http://127.0.0.1:8107/` (P51 branch, `PYTHONPATH=src`).
+Local portal: `http://127.0.0.1:8107/` (product-honesty branch, `PYTHONPATH=src`).
 
 Playwright checks after enabling the off-inventory layer:
 
