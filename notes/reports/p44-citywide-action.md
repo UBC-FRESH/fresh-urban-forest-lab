@@ -15,31 +15,27 @@ API, and map layer are refreshed.
 - 797 action cells
 - P43 change observed in **797 / 797** cells
 - Action counts:
-  - plant + cool: **265**
-  - monitor: **233**
-  - expand canopy: **133**
-  - structural shade / retain: **127**
-  - protect / investigate loss: **39**
+  - protect / investigate loss: **546**
+  - monitor: **101**
+  - expand canopy: **77**
+  - plant + cool: **50**
+  - structural shade / retain: **23**
 
-P42 comparison:
+The protect-loss branch is now populated by the citywide observed-loss cells. The action
+rule is unchanged and remains a relative screen.
 
-| Action | P42 (downtown change) | P44 (citywide change) |
-| --- | ---: | ---: |
-| plant + cool | 270 | 265 |
-| monitor | 253 | 233 |
-| expand canopy | 145 | 133 |
-| structural shade | 129 | 127 |
-| protect loss | 0 | 39 |
+## Correction
 
-The loss branch is now populated by observed loss cells. The largest single net-loss cell
-is `r19c07` at about **−1.23 ha**, P38 class `2A`, low heat tier, high gap tier. This is a
-screening label, not a causal attribution.
+A first refresh declared only 39 protect-loss cells because it did not use the canonical
+P43 citywide cells. The corrected build uses
+`data/processed/change_vancouver_2018_2022_citywide/canopy_change.json`; the action counts
+above supersede that first run.
 
 ## Limits
 
-- The action rule is unchanged and remains a relative screen.
-- P43 change is a 2 m thresholded LiDAR comparison with a +1.0 m DEM offset and a
-  scale-sensitive method; it is not tree survival or growth.
-- No cost, utilities, ownership, access, soil, irrigation, maintenance, or field
-  validation.
+- P43 change is a 2 m thresholded LiDAR comparison with a recorded point stride and
+  acquisition/classification/vertical/co-registration differences; it is not tree
+  survival, growth, species change, ownership, or causal attribution.
+- The action rule is a deterministic relative screen, not a planting plan, cost, utility,
+  access, ownership, or field-validated recommendation.
 - No causal claim.
