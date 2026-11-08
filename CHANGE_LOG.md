@@ -1269,3 +1269,15 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - No field-validation, final citywide direction, survival, ownership, or causal claim.
 - Created child issues #273–#276 and activated `feature/p51-citywide-control`.
 - No implementation yet.
+
+### P51.1 citywide control sample
+
+- Added deterministic 6 × 6 spatial tile selection and manifest writer.
+- Selected 34 tiles (13.1 GB); 5 reused from P50 and 29 downloaded by headful browser;
+  checksums matched.
+- 31 tiles contributed 196,943 class-2 ground pairs.
+- Median control offset +0.015 m; bootstrap +0.013 to +0.016 m; MAD 0.053 m.
+- 30/31 tile medians within ±0.15 m; one western −0.43 m outlier; no class-6 roof control.
+- Conditional gate pass for a constant +0.015 m offset; no per-tile correction.
+- P43 correction +0.985 m; corrected 2 m screen about −92.5 ha (range −93.6 to −92.2),
+  not +223 ha. Still a corrected screen, not a final citywide loss.

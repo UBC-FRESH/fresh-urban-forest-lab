@@ -1380,7 +1380,7 @@ change products only if the control is representative enough.
 
 Plan: `notes/design/p51-citywide-control.md`.
 
-- [ ] P51.1 Citywide control sample and spatial estimate (#273)
+- [x] P51.1 Citywide control sample and spatial estimate (#273)
 - [ ] P51.2 Versioned corrected P43 screen (#274)
 - [ ] P51.3 P44/P46 refresh and API/doc integration (#275)
 - [ ] P51.4 Browser/dashboard verification and close-out (#276)
