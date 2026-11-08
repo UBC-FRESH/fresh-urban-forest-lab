@@ -1255,3 +1255,5 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - P50 does not claim a final citywide loss: the seven-tile control sample is not a
   citywide probability sample and classification/co-registration/scale effects remain.
 - Opened PR #271 for review; phase remains open until merge and close-out.
+
+- Merged P50 as `41d1a02` via PR #271; parent #266 and child issues #267–#270 are closed. Phase status: complete.

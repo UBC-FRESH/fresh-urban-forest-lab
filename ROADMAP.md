@@ -46,7 +46,7 @@ This roadmap is the plan of record and the issue tracker map for FRESH Urban For
 | P47 Optimization UI parity | #237 | `feature/p47-optimization-ui-parity` | complete |
 | P48 Site-level planting scenarios | #247 | `feature/p48-site-scenarios` | complete |
 | P49 Site scenario comparison | #259 | `feature/p49-scenario-comparison` | complete |
-| P50 Canopy-change vertical control | #266 | `feature/p50-vertical-control` | pr-open |
+| P50 Canopy-change vertical control | #266 | `feature/p50-vertical-control` | complete |
 
 ## Lifecycle Map
 
@@ -1341,7 +1341,7 @@ Phase 49 verification:
 
 Parent issue: #266
 Branch: `feature/p50-vertical-control`
-Status: pr-open
+Status: complete
 
 Goal: test whether independent vertical control resolves the P43/P45 citywide net-change
 direction. Feasibility-first: if public control data cannot support an estimate, stop and

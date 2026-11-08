@@ -1,6 +1,6 @@
 # P50 vertical control and P43/P45 re-evaluation
 
-Status: complete; PR #271 open. Not merged.
+Status: complete. Merged in PR #271 as `41d1a02`.
 
 ## Data access
 

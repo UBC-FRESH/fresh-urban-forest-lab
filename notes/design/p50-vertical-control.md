@@ -2,7 +2,7 @@
 
 Parent issue: #266
 Planned branch: `feature/p50-vertical-control`
-Status: pr-open
+Status: complete
 
 ## Why
 
