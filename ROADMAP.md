@@ -49,6 +49,7 @@ This roadmap is the plan of record and the issue tracker map for FRESH Urban For
 | P50 Canopy-change vertical control | #266 | `feature/p50-vertical-control` | complete |
 | P51 Citywide vertical control and corrected products | #272 | `feature/p51-citywide-control` | complete |
 | P52 Lower Mainland candidate-data honesty | #278 | `feature/p51-candidate-honesty` | complete |
+| P53 Full-city vertical control and corrected publication | #282 | `feature/p53-full-control` | pr-open |
 
 ## Lifecycle Map
 
@@ -1428,6 +1429,36 @@ Phase 52 verification:
 
 - `node --check src/fresh_urban_forest/web/static/app.js`
 - `python scripts/dashboard.py`
+
+## Phase 53: Full-city vertical control and corrected publication
+
+Parent issue: #282
+Branch: `feature/p53-full-control`
+Status: pr-open
+
+Goal: use all 181 indexed 2018 tiles, test vertical-control stability, and publish corrected
+products as an explicit versioned layer.
+
+Plan: `notes/design/p53-full-control.md`.
+
+- [x] P53.1 Full tile sample and control estimate (#283)
+- [x] P53.2 Corrected P43/P44/P46 products (#284)
+- [x] P53.3 Versioned API/UI publication and docs (#285)
+- [x] P53.4 Browser/dashboard verification and close-out (#286)
+
+Acceptance criteria:
+
+- All available tiles are checksum-complete; missing tiles are explicit.
+- Full control estimate and spatial stability report are produced.
+- Original products remain; corrected products are versioned.
+- Public API/UI labels the corrected layer and its uncertainty.
+- No final citywide net-loss/gain or field-validation claim without support.
+- Dashboard green.
+
+Phase 53 verification:
+
+- `python scripts/dashboard.py`
+- `python scripts/check_workflow.py`
 
 ## Detailed Next Steps Notes
 

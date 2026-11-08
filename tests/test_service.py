@@ -472,6 +472,28 @@ def test_change_endpoints_when_a_product_exists(tmp_path: Path) -> None:
     assert client.get("/api/change").json()["legend"]
 
 
+def test_corrected_change_sidecar_is_selectable(tmp_path: Path) -> None:
+    """A control-corrected sidecar is listed without replacing the original."""
+    client = _client(tmp_path)
+    root = tmp_path / "dataset"
+    (root / "change.json").write_text(
+        json.dumps({"earlier_label": "original", "later_label": "later"}), encoding="utf-8"
+    )
+    (root / "change_control.json").write_text(
+        json.dumps({"earlier_label": "control-corrected", "later_label": "later"}),
+        encoding="utf-8",
+    )
+    (root / "change_control.png").write_bytes(b"\x89PNG\r\n\x1a\n")
+    products = client.get("/api/changes").json()["products"]
+    assert {item["id"] for item in products} >= {"change.json", "change_control.json"}
+    summary = client.get("/api/change", params={"product": "change_control.json"})
+    assert summary.status_code == 200
+    assert summary.json()["earlier_label"] == "control-corrected"
+    image = client.get("/api/change.png", params={"product": "change_control.json"})
+    assert image.status_code == 200
+    assert image.content.startswith(b"\x89PNG")
+
+
 def test_change_endpoint_is_404_without_a_product(tmp_path: Path) -> None:
     """A dataset without an observed-change product returns 404."""
     client = _client(tmp_path)

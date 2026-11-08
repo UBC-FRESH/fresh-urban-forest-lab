@@ -50,6 +50,11 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         default=Path("data/processed/change_vancouver_2018_2022_citywide_2m_control"),
     )
     parser.add_argument("--p43-offset", type=float, default=1.0)
+    parser.add_argument(
+        "--earlier-label",
+        default="City of Vancouver LiDAR 2018 (ground-control corrected)",
+        help="Label for the corrected earlier surface",
+    )
     return parser.parse_args(argv)
 
 
@@ -111,7 +116,7 @@ def run(args: argparse.Namespace) -> dict[str, object]:
         later_grid,
         args.out,
         threshold_m=2.0,
-        earlier_label="City of Vancouver LiDAR 2018 (P51 ground-control corrected)",
+        earlier_label=args.earlier_label,
         later_label="City of Vancouver LiDAR 2022 (citywide)",
     )
     change_path = args.out / "change.json"

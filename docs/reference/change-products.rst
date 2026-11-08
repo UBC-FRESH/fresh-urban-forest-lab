@@ -178,3 +178,13 @@ The corrected screen is about **−92.5 ha** net, with stable-height change **+0
 Corrected P44/P46 sidecars are under ``vancouver_2022_control/`` and are not the public API
 defaults. These remain screening products, not a final citywide net-loss claim or field
 validation.
+
+P53 extends the control to all **181** indexed 2018 tiles: 149 tiles with usable class-2
+ground, **965,995** pairs, median **+0.011 m** (bootstrap **+0.010 to +0.012 m**). Four
+western tiles are stability outliers; excluding them, 145/145 tiles are within ±0.15 m and
+the easting/northing trends are +0.013 m / −0.082 m. The full-control corrected product is
+``change_vancouver_2018_2022_citywide_2m_control_full/``: net **−94.3 ha**, stable-height
+change **+0.519 m**. The original P43 product remains available and is the default. The
+corrected product is published to the Change tab as ``change_control.json``; the original
+``change.json`` remains the default. The corrected P44/P46 sidecars are versioned data
+products, not a silent public substitution.
