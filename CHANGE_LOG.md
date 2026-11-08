@@ -1,3 +1,10 @@
+### P47 tree/non-tree pre-audit packet
+
+- Visual check of the first species-audit sheet showed many candidates on buildings,
+  driveways, and road edges; the species packet was not sent out.
+- Built a clean 200-candidate Tree/Non-tree/Uncertain pre-audit packet with no crown masks.
+- No labels or precision claim yet; candidate validity must be audited before species.
+
 ### P47 Surrey 0.30 m candidate sample
 
 - Scored a 200-candidate stratified Surrey sample with the P46 0.30 m model.
