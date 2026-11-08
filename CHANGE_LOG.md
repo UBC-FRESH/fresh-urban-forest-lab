@@ -1,10 +1,11 @@
-### P47 human candidate-species audit: rejected
+### P47 candidate-species audit: inconclusive, not a model rejection
 
 - All 97 AI-tree-like Surrey candidates were reviewed: 33 conifer, 53 deciduous, 11 uncertain.
-- P46 predicted 91/97 conifer. Valid-only accuracy 40.7%; conifer precision 39.0%,
-  conifer recall 97.0%, deciduous recall 5.7%.
-- Candidate species model rejected; no candidate promotion. Inventory-only 78.70% is not
-  candidate QA.
+- The crops are low-information visual labels: 384 px, no stereo, no CHM/crown shape overlay.
+- P46 predicted 91/97 conifer; agreement 35/86 = 40.7%. This is **human-AI agreement,
+  not accuracy against truth**.
+- Candidate species performance remains unmeasured; no candidate promotion. Inventory-only
+  78.70% is the only defensible validation.
 
 ### P47 AI-assisted candidate pre-audit
 

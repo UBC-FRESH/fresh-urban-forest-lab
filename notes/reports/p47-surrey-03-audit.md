@@ -57,22 +57,27 @@ The live review server returned labels for all **97** tree-like candidates:
 - deciduous: **53**
 - uncertain: **11**
 
-The P46 Surrey 0.30 m model predicts conifer for 91 of 97 candidates. Against the human
-labels, excluding uncertain:
+The P46 Surrey 0.30 m model predicts conifer for 91 of 97 candidates. The human labels are
+low-information visual labels (384 px crops, no stereo or CHM overlay), so the comparison is
+an **agreement check**, not accuracy against truth. Excluding uncertain:
 
 | Prediction | Valid n | Correct | Precision | Recall |
 | --- | ---: | ---: | ---: | ---: |
 | Conifer | 82 | 32 | **39.0%** | **97.0%** |
 | Deciduous | 4 | 3 | 75.0% | 5.7% |
 
-Valid-only accuracy is **35/86 = 40.7%**. The candidate model is severely conifer-biased
-and does not transfer from inventory validation to off-inventory candidates.
+Agreement is **35/86 = 40.7%**. This does not establish that the model is wrong on the
+candidate population; it establishes that the visual labels and the model disagree strongly,
+and that the labels are not a reliable species ground truth. The inventory-only P46 result
+(78.70%) remains the only defensible model validation.
 
 ## Decision
 
-- Stop candidate species scoring for Surrey.
-- Do not promote or display these candidate species labels as validated.
+- Candidate species performance is **unmeasured**, not proven bad.
+- Do not promote or display candidate species labels as validated.
 - Keep the inventory-only 78.70% result as inventory QA, not candidate QA.
-- P47 closes negative. The AI tree-like prefilter and human labels are evidence, not a product.
+- Do not use the weak visual labels as a confusion matrix against the model.
+- P47 closes **inconclusive** for candidate species; the AI tree-like prefilter is retained
+  only as a screening aid.
 
 Labels saved at `data/processed/surrey_2025/p47_audit/p47_tree_human_labels.csv`.
