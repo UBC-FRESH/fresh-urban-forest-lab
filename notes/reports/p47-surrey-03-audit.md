@@ -2,47 +2,49 @@
 
 Date: 2026-11-08
 
-Status: 200-candidate preflighted sample; tree/non-tree pre-audit packet ready. Species audit blocked on candidate validity.
+Status: AI-assisted tree/non-tree pre-audit complete; human species review not performed.
 
 ## Sample
 
-- High-confidence Surrey candidates were stratified across ten current image-probability
-  bins, 20 per bin.
-- 31 candidates were rejected by the crop preflight.
-- 200 candidates passed:
-  - minimum crop mean 42.4
-  - minimum crop standard deviation 15.3
-  - minimum crop maximum 223
-- Each candidate was scored with the P46 Surrey-specific 0.30 m model.
+- 200 candidates selected from ten current image-probability bins, 20 per bin.
+- 26 candidates rejected by crop preflight; replacements taken within each bin.
+- 200 accepted crops passed coverage/contrast checks.
+- The first attempted sample was not stratified; it was rejected and rebuilt. The result
+  below uses the corrected 20-per-bin sample.
 
-Outputs:
+## AI-assisted pre-audit
 
-- `data/processed/surrey_2025/p47_audit/audit_key.csv`
-- `data/processed/surrey_2025/p47_audit/preflight.json`
-- `data/processed/surrey_2025/p47_verification_packet/`
-- `data/processed/surrey_2025/p47_verification_packet.zip`
+A contact-sheet review was performed as an **AI-assisted visual pre-audit**, not a human
+or field audit.
 
-The review packet uses the existing P32 blind UI pattern: Conifer/Deciduous/Uncertain,
-common-comment checkboxes, notes, progress, filters, export/import, local storage, and
-optional server persistence.
+- Tree-like candidates: **97 / 200**
+- Non-tree / ambiguous candidates: **103 / 200**
+- Population-weighted tree-like share: **29.1%**
 
-## Boundary
+Tree-like counts rise sharply with the model probability bin:
 
-- This is a sample audit, not a full candidate rescore.
-- No candidate labels exist yet; no precision claim is made.
-- Do not promote the 0.30 m candidate layer before the sample is reviewed and scored.
-- Review server port used for smoke: 8105.
+| Bin | Tree-like / 20 |
+|---|---:|
+| 0.0–0.1 | 0 |
+| 0.1–0.2 | 3 |
+| 0.2–0.3 | 3 |
+| 0.3–0.4 | 7 |
+| 0.4–0.5 | 8 |
+| 0.5–0.6 | 11 |
+| 0.6–0.7 | 12 |
+| 0.7–0.8 | 15 |
+| 0.8–0.9 | 19 |
+| 0.9–1.0 | 19 |
 
-## Candidate-validity pre-audit
+The low and middle probability strata are dominated by roofs, roads, driveways, lawns,
+and other non-tree features. The species model cannot be fairly audited across the full
+candidate layer without first filtering those candidates.
 
-The first contact sheet showed numerous candidates centred on buildings, driveways, and
-road edges. The species packet is therefore not being sent out as a conifer/deciduous
-review.
+## Artifacts
 
-A second packet was built from the same 200 candidates with **no crown masks** and the
-existing blind UI pattern, labelled **Tree / Non-tree / Uncertain**:
+- `data/processed/surrey_2025/p47_audit/p47_ai_preaudit.csv`
+- `data/processed/surrey_2025/p47_audit/preaudit_contact_pages/`
+- `data/processed/surrey_2025/p47_preaudit_packet/`
 
-`data/processed/surrey_2025/p47_preaudit_packet/`
-
-This is the correct next gate: reject non-tree candidates before asking for species group.
-No validity labels have been entered.
+No human labels have been entered and no candidate promotion is made. The 97 tree-like
+cases are screening candidates for a future species review, not validated trees.

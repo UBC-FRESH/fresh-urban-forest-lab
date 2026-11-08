@@ -1,3 +1,14 @@
+### P47 AI-assisted candidate pre-audit
+
+- Rebuilt the sample with exactly 20 candidates per probability bin after the first
+  sample was found to be effectively single-bin.
+- AI-assisted contact-sheet pre-audit: 97 tree-like / 103 non-tree; weighted tree-like
+  share 29.1%.
+- Low/mid probability strata are dominated by roofs, roads, driveways, and lawns; high
+  bins are mostly tree crowns.
+- No human labels; no candidate promotion. Species review should be restricted to the
+  tree-like subset.
+
 ### P47 tree/non-tree pre-audit packet
 
 - Visual check of the first species-audit sheet showed many candidates on buildings,
@@ -1261,6 +1272,8 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 
 - Merged P50 as `41d1a02` via PR #271; parent #266 and child issues #267–#270 are closed. Phase status: complete.
 
+## 2026-11-08
+
 ### P51 citywide vertical control start
 
 - Created parent issue #272 and plan `notes/design/p51-citywide-control.md`.
@@ -1311,3 +1324,18 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Public API/UI remains on the original products; no browser UI change was made.
 - Dashboard: GREEN (lint, format, types, tests, validator, docs).
 - Open PR for review; no final citywide net-loss claim.
+
+### P52 Lower Mainland candidate-data honesty
+
+- Suppressed candidate conifer/deciduous colors and mapped group counts for Surrey,
+  Burnaby, and Coquitlam, where candidate-species labels do not exist.
+- Those instances now use neutral confidence styling and state: “species groups are not
+  validated for this dataset; candidate colors show confidence only.”
+- Vancouver candidate species remains visible as screening with its existing
+  no-known-good-candidate-labels caveat.
+- No model, candidate data, tree/non-tree screening, or inventory validation changed.
+- Browser smoke covered all four instances with no page errors.
+- Report: `notes/reports/p52-candidate-honesty.md`.
+
+- Merged P52 as `762a929` via PR #281; parent #278 and child #280 are closed. Phase status: complete.
+- Phase renumbered to P52 to avoid collision with P51 citywide vertical-control work (#272).
