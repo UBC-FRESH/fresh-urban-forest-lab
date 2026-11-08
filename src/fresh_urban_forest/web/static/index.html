@@ -564,6 +564,18 @@
         </div>
         <div id="pareto-legend" class="change-legend"></div>
         <div id="pareto-tooltip" class="pareto-tooltip" hidden></div>
+        <div class="parallel-panel" id="parallel-panel">
+          <div class="panel-heading">
+            <h2>Parallel coordinates</h2>
+            <span id="parallel-count" class="muted">--</span>
+          </div>
+          <div class="parallel-toolbar">
+            <span id="parallel-brush-label" class="parallel-brush-label"></span>
+            <button id="parallel-clear-brush" class="button tiny ghost" type="button" disabled>Clear brushes</button>
+            <span class="hint">Drag an axis to filter · Shift-drag adds a brush</span>
+          </div>
+          <svg id="parallel-chart" viewBox="0 0 1000 300" role="img" aria-label="Parallel coordinates of Pareto solutions"></svg>
+        </div>
       </div>
 
       <div class="timeline-strip">

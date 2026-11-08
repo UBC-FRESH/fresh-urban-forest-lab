@@ -1034,3 +1034,14 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Added reference delta cards and static web-asset checks.
 - Browser smoke: archive loaded, URL reload restored floor/point, hover and CSV worked.
 - Dashboard: GREEN (lint, format, types, tests, validator, docs).
+
+### P47.2 parallel coordinates and brushes
+
+- Added an SVG parallel-coordinates panel synchronized with the 3D Pareto view.
+- Axes derive from the archive objectives plus robustness, planted sites, and habitat; cost and water fall back to metrics only when absent as objectives.
+- Added single-axis and shift-drag multi-axis brushes with removable chips and a clear action.
+- Brushes filter the 3D cloud, parallel lines, and CSV export consistently.
+- Added selected/reference line emphasis and `opt_brushes` URL round-trip.
+- Static checks cover the parallel panel hooks and brush helpers.
+- Browser smoke: 10 axes, select/reference line emphasis, two shift-drag brushes reduced 71 to 4 visible solutions, URL reload restored brushes, and clear restored all 71.
+- Dashboard: GREEN (lint, format, types, tests, validator, docs).

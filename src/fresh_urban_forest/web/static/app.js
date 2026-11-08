@@ -64,6 +64,10 @@ const state = {
     filtered: [],
     savedRuns: [],
     pinned: [],
+    brushes: [],
+    parallelAxes: [],
+    parallelDrag: null,
+    parallelPointerId: null,
   },
   previewYear: 0,
   playTimer: null,
@@ -2918,6 +2922,8 @@ function initOptimizeControls() {
   $("pareto-clear-reference").addEventListener("click", clearParetoReference);
   $("pareto-copy-link").addEventListener("click", copyParetoLink);
   $("pareto-download-csv").addEventListener("click", downloadParetoCsv);
+  $("parallel-clear-brush").addEventListener("click", clearParallelBrushes);
+  initParallelEvents();
 }
 
 function ensureOptimizeChart() {
@@ -3401,6 +3407,7 @@ function setParetoReference() {
   state.optimize.reference = selected;
   updateParetoMarkers();
   renderParetoDelta();
+  drawParallelCoordinates();
   $("pareto-clear-reference").disabled = false;
   persistParetoViewState();
   toast("Reference point set");
@@ -3410,6 +3417,7 @@ function clearParetoReference() {
   state.optimize.reference = null;
   updateParetoMarkers();
   renderParetoDelta();
+  drawParallelCoordinates();
   $("pareto-clear-reference").disabled = true;
   persistParetoViewState();
 }
@@ -3453,6 +3461,16 @@ function persistParetoViewState() {
   params.set("opt_colour", $("pareto-colour").value || "0");
   params.set("opt_size", $("pareto-size").value || "-1");
   params.set("opt_floor", $("pareto-floor").value || "0");
+  if ((state.optimize.brushes || []).length) {
+    params.set(
+      "opt_brushes",
+      state.optimize.brushes
+        .map((brush) => `${brush.axis}:${brush.min.toFixed(3)}:${brush.max.toFixed(3)}`)
+        .join("~"),
+    );
+  } else {
+    params.delete("opt_brushes");
+  }
   if (state.optimize.jobId) params.set("opt_job", state.optimize.jobId);
   else params.delete("opt_job");
   if (state.optimize.selected?.solution_id) params.set("opt_point", state.optimize.selected.solution_id);
@@ -3483,6 +3501,23 @@ function restoreParetoViewState() {
     $("pareto-floor").value = String(Math.max(0, Math.min(100, floor)));
     $("pareto-floor-value").textContent = floor <= 0 ? "all" : `>= ${(floor / 100).toFixed(2)}`;
   }
+  const brushValue = params.get("opt_brushes");
+  state.optimize.brushes = brushValue
+    ? brushValue
+        .split("~")
+        .map((entry) => {
+          const [axis, min, max] = entry.split(":");
+          const lower = Number(min);
+          const upper = Number(max);
+          if (!axis || !Number.isFinite(lower) || !Number.isFinite(upper)) return null;
+          return {
+            axis,
+            min: Math.max(0, Math.min(1, Math.min(lower, upper))),
+            max: Math.max(0, Math.min(1, Math.max(lower, upper))),
+          };
+        })
+        .filter(Boolean)
+    : [];
   const pointId = params.get("opt_point");
   if (pointId) {
     const solution = result.archive.solutions.find((item) => item.solution_id === pointId);
@@ -3559,12 +3594,322 @@ function downloadParetoCsv() {
   toast(`Exported ${points.length} visible solutions`);
 }
 
+const PARALLEL_METRICS = [
+  {
+    key: "robustness",
+    label: "Robustness",
+    getter: (solution) => Number(solution.robustness || 0),
+  },
+  {
+    key: "planted_sites",
+    label: "Planted sites",
+    getter: (solution) => (solution.planted || []).length,
+  },
+  {
+    key: "cost_cad",
+    label: "Cost (C$)",
+    objectiveName: "cost",
+    getter: (solution) => Number(solution.metrics?.cost_cad ?? 0),
+  },
+  {
+    key: "water_l",
+    label: "Water (L)",
+    objectiveName: "water",
+    getter: (solution) => Number(solution.metrics?.water_l ?? 0),
+  },
+  {
+    key: "habitat_index",
+    label: "Habitat",
+    getter: (solution) => Number(solution.metrics?.habitat_index ?? 0),
+  },
+];
+
+function parallelAxesForArchive(archive) {
+  const axes = [];
+  const solutions = archive.solutions || [];
+  const ideal = archive.ideal || [];
+  const nadir = archive.nadir || [];
+  const objectiveNames = new Set((archive.objectives || []).map((objective) => objective.name));
+  (archive.objectives || []).forEach((objective, index) => {
+    const low = Math.min(Number(ideal[index] ?? 0), Number(nadir[index] ?? 0));
+    const high = Math.max(Number(ideal[index] ?? 0), Number(nadir[index] ?? 0));
+    if (!Number.isFinite(low) || !Number.isFinite(high) || high - low <= 1e-12) return;
+    axes.push({
+      key: `obj${index}`,
+      label: objective.label || objective.name || `Objective ${index + 1}`,
+      low,
+      high,
+      kind: "objective",
+      index,
+    });
+  });
+  for (const definition of PARALLEL_METRICS) {
+    if (definition.objectiveName && objectiveNames.has(definition.objectiveName)) continue;
+    const values = solutions.map(definition.getter).map(Number).filter(Number.isFinite);
+    if (!values.length) continue;
+    const low = Math.min(...values);
+    const high = Math.max(...values);
+    if (high - low <= 1e-12) continue;
+    axes.push({ key: definition.key, label: definition.label, low, high, kind: "metric", getter: definition.getter });
+  }
+  return axes.slice(0, 12);
+}
+
+function parallelAxisValue(axis, solution) {
+  if (axis.kind === "objective") return Number(solution.objectives?.[axis.index] ?? 0);
+  return Number(axis.getter(solution) || 0);
+}
+
+function parallelAxisNorm(axis, solution) {
+  const value = parallelAxisValue(axis, solution);
+  if (!Number.isFinite(value) || axis.high - axis.low <= 1e-12) return 0.5;
+  return Math.max(0, Math.min(1, (value - axis.low) / (axis.high - axis.low)));
+}
+
+function parallelBrushMatches(solution, axes) {
+  const brushes = state.optimize.brushes || [];
+  if (!brushes.length) return true;
+  for (const brush of brushes) {
+    const axis = axes.find((item) => item.key === brush.axis);
+    if (!axis) continue;
+    const value = parallelAxisNorm(axis, solution);
+    if (value < brush.min - 1e-9 || value > brush.max + 1e-9) return false;
+  }
+  return true;
+}
+
+function parallelCompact(value) {
+  const number = Number(value);
+  if (!Number.isFinite(number)) return "—";
+  const absolute = Math.abs(number);
+  if (absolute >= 1e9) return `${(number / 1e9).toFixed(1)}b`;
+  if (absolute >= 1e6) return `${(number / 1e6).toFixed(1)}m`;
+  if (absolute >= 1e3) return `${(number / 1e3).toFixed(1)}k`;
+  if (absolute >= 10) return number.toFixed(0);
+  return number.toFixed(2);
+}
+
+function parallelLocalPoint(event) {
+  const svg = $("parallel-chart");
+  if (!svg) return { x: 0, y: 0 };
+  const point = svg.createSVGPoint();
+  point.x = event.clientX;
+  point.y = event.clientY;
+  const matrix = svg.getScreenCTM();
+  if (!matrix) return { x: 0, y: 0 };
+  return point.matrixTransform(matrix.inverse());
+}
+
+function updateParallelBrushChips(axes) {
+  const container = $("parallel-brush-label");
+  const clear = $("parallel-clear-brush");
+  if (!container || !clear) return;
+  const brushes = state.optimize.brushes || [];
+  clear.disabled = brushes.length === 0;
+  if (!brushes.length) {
+    container.innerHTML = "";
+    return;
+  }
+  container.innerHTML = brushes
+    .map((brush) => {
+      const axis = axes.find((item) => item.key === brush.axis);
+      const label = axis?.label || brush.axis;
+      const low = axis ? axis.low + (axis.high - axis.low) * brush.min : brush.min;
+      const high = axis ? axis.low + (axis.high - axis.low) * brush.max : brush.max;
+      return `<span class="chip">${escapeHtml(label)} ${parallelCompact(low)}–${parallelCompact(high)} <button type="button" data-brush-axis="${escapeHtml(brush.axis)}" aria-label="Remove ${escapeHtml(label)} brush">×</button></span>`;
+    })
+    .join("");
+  container.querySelectorAll("[data-brush-axis]").forEach((button) => {
+    button.addEventListener("click", () => removeParallelBrush(button.dataset.brushAxis));
+  });
+}
+
+function removeParallelBrush(axisKey) {
+  state.optimize.brushes = (state.optimize.brushes || []).filter((brush) => brush.axis !== axisKey);
+  drawPareto();
+  persistParetoViewState();
+}
+
+function clearParallelBrushes() {
+  state.optimize.brushes = [];
+  state.optimize.parallelDrag = null;
+  drawPareto();
+  persistParetoViewState();
+}
+
+function drawParallelCoordinates() {
+  const svg = $("parallel-chart");
+  if (!svg) return;
+  const result = state.optimize.result;
+  const archive = result?.archive;
+  const count = $("parallel-count");
+  if (!archive) {
+    svg.innerHTML = "";
+    if (count) count.textContent = "--";
+    updateParallelBrushChips([]);
+    return;
+  }
+  const axes = state.optimize.parallelAxes.length
+    ? state.optimize.parallelAxes
+    : parallelAxesForArchive(archive);
+  const visible = state.optimize.filtered || [];
+  if (count) count.textContent = `${visible.length} of ${(archive.solutions || []).length} visible`;
+  updateParallelBrushChips(axes);
+  if (!axes.length) {
+    svg.innerHTML = '<text class="parallel-empty" x="500" y="150">No variable axes available.</text>';
+    return;
+  }
+  const width = 1000;
+  const height = 300;
+  const left = 42;
+  const right = 42;
+  const top = 36;
+  const bottom = 24;
+  const innerWidth = width - left - right;
+  const innerHeight = height - top - bottom;
+  const xFor = (index) => left + (axes.length === 1 ? innerWidth / 2 : (index * innerWidth) / (axes.length - 1));
+  const yFor = (value) => top + (1 - value) * innerHeight;
+  let markup = "";
+  axes.forEach((axis, index) => {
+    const x = xFor(index);
+    const low = parallelCompact(axis.low);
+    const high = parallelCompact(axis.high);
+    markup += `<line class="parallel-axis" x1="${x}" y1="${top}" x2="${x}" y2="${top + innerHeight}"></line>`;
+    markup += `<text class="parallel-axis-label" x="${x}" y="14">${escapeHtml(axis.label)}</text>`;
+    markup += `<text class="parallel-tick" x="${x}" y="${top + innerHeight + 14}">${escapeHtml(low)}</text>`;
+    markup += `<text class="parallel-tick" x="${x}" y="${top - 5}">${escapeHtml(high)}</text>`;
+  });
+  for (const brush of state.optimize.brushes || []) {
+    const axis = axes.find((item) => item.key === brush.axis);
+    if (!axis) continue;
+    const index = axes.indexOf(axis);
+    const x = xFor(index);
+    const y1 = yFor(brush.max);
+    const y2 = yFor(brush.min);
+    markup += `<rect class="parallel-brush" x="${x - 5}" y="${Math.min(y1, y2)}" width="10" height="${Math.abs(y2 - y1)}"></rect>`;
+  }
+  const drag = state.optimize.parallelDrag;
+  if (drag) {
+    const axis = axes.find((item) => item.key === drag.axisKey);
+    if (axis) {
+      const index = axes.indexOf(axis);
+      const x = xFor(index);
+      const y1 = yFor(Math.max(drag.startY, drag.currentY));
+      const y2 = yFor(Math.min(drag.startY, drag.currentY));
+      markup += `<rect class="parallel-brush" opacity="0.55" x="${x - 5}" y="${Math.min(y1, y2)}" width="10" height="${Math.abs(y2 - y1)}"></rect>`;
+    }
+  }
+  axes.forEach((axis, index) => {
+    const x = xFor(index);
+    markup += `<rect class="parallel-brush-hit" data-axis="${escapeHtml(axis.key)}" x="${x - 11}" y="${top}" width="22" height="${innerHeight}"></rect>`;
+  });
+  const displayed = visible.slice(0, 1200);
+  const solutionsById = new Map(displayed.map((solution) => [solution.solution_id, solution]));
+  const selectedId = state.optimize.selected?.solution_id;
+  const referenceId = state.optimize.reference?.solution_id;
+  for (const solution of displayed) {
+    const points = axes
+      .map((axis, index) => `${xFor(index)},${yFor(parallelAxisNorm(axis, solution))}`)
+      .join(" ");
+    const classes = ["parallel-line"];
+    if (solution.solution_id === selectedId) classes.push("selected");
+    if (solution.solution_id === referenceId) classes.push("reference");
+    markup += `<polyline class="${classes.join(" ")}" points="${points}" data-solution-id="${escapeHtml(solution.solution_id)}"></polyline>`;
+  }
+  if (!visible.length) {
+    markup += '<text class="parallel-empty" x="500" y="150">No solutions match the current filters.</text>';
+  } else if (visible.length > displayed.length) {
+    markup += `<text class="parallel-empty" x="500" y="150">Showing ${displayed.length} of ${visible.length} lines.</text>`;
+  }
+  svg.innerHTML = markup;
+  svg.querySelectorAll(".parallel-line").forEach((line) => {
+    line.addEventListener("click", (event) => {
+      event.stopPropagation();
+      const solution = solutionsById.get(line.dataset.solutionId);
+      if (solution) renderParetoInfo(solution);
+    });
+  });
+  svg.querySelectorAll(".parallel-brush-hit").forEach((hit) => {
+    hit.addEventListener("pointerdown", beginParallelBrush);
+  });
+}
+
+function initParallelEvents() {
+  const svg = $("parallel-chart");
+  if (!svg) return;
+  svg.addEventListener("pointermove", updateParallelBrush);
+  svg.addEventListener("pointerup", finishParallelBrush);
+  svg.addEventListener("pointercancel", finishParallelBrush);
+}
+
+function beginParallelBrush(event) {
+  const hit = event.target.closest?.(".parallel-brush-hit");
+  if (!hit) return;
+  event.preventDefault();
+  event.stopPropagation();
+  const svg = $("parallel-chart");
+  const local = parallelLocalPoint(event);
+  state.optimize.parallelDrag = {
+    axisKey: hit.dataset.axis,
+    add: event.shiftKey,
+    startY: local.y,
+    currentY: local.y,
+  };
+  state.optimize.parallelPointerId = event.pointerId;
+  if (svg?.setPointerCapture) svg.setPointerCapture(event.pointerId);
+  drawParallelCoordinates();
+}
+
+function updateParallelBrush(event) {
+  const drag = state.optimize.parallelDrag;
+  if (!drag || (state.optimize.parallelPointerId !== null && event.pointerId !== state.optimize.parallelPointerId)) return;
+  const local = parallelLocalPoint(event);
+  drag.currentY = local.y;
+  drawParallelCoordinates();
+}
+
+function finishParallelBrush(event) {
+  const drag = state.optimize.parallelDrag;
+  if (!drag) return;
+  const local = parallelLocalPoint(event);
+  drag.currentY = local.y;
+  const min = Math.min(drag.startY, drag.currentY);
+  const max = Math.max(drag.startY, drag.currentY);
+  const axis = state.optimize.parallelAxes.find((item) => item.key === drag.axisKey);
+  const svg = $("parallel-chart");
+  if (svg?.releasePointerCapture && state.optimize.parallelPointerId !== null) {
+    try {
+      svg.releasePointerCapture(state.optimize.parallelPointerId);
+    } catch (_error) {
+      // The pointer may already be released by the browser.
+    }
+  }
+  state.optimize.parallelDrag = null;
+  state.optimize.parallelPointerId = null;
+  if (axis && max - min > 0.01) {
+    const top = 36;
+    const innerHeight = 240;
+    const normalize = (y) => Math.max(0, Math.min(1, (top + innerHeight - y) / innerHeight));
+    const first = normalize(min);
+    const second = normalize(max);
+    state.optimize.brushes = (state.optimize.brushes || []).filter((brush) => brush.axis !== drag.axisKey);
+    state.optimize.brushes.push({
+      axis: drag.axisKey,
+      min: Math.min(first, second),
+      max: Math.max(first, second),
+    });
+  }
+  drawPareto();
+  persistParetoViewState();
+}
+
 function drawPareto() {
   const chart = ensureOptimizeChart();
   const result = state.optimize.result;
   if (!result || !result.archive) return;
   const archive = result.archive;
   const solutions = archive.solutions || [];
+  state.optimize.parallelAxes = parallelAxesForArchive(archive);
   const xIndex = Number($("pareto-x").value || 0);
   const yIndex = Number($("pareto-y").value || 1);
   const zIndex = Number($("pareto-z").value || 2);
@@ -3587,12 +3932,15 @@ function drawPareto() {
     .filter(
       (point) =>
         (threshold <= 0 || point.slice >= threshold) &&
-        (robustnessFloor <= 0 || point.robustness >= robustnessFloor),
+        (robustnessFloor <= 0 || point.robustness >= robustnessFloor) &&
+        parallelBrushMatches(point.solution, state.optimize.parallelAxes),
     );
   state.optimize.filtered = filtered.map((point) => point.solution);
   clearParetoMesh();
   if (!filtered.length) {
-    $("pareto-info").innerHTML = '<p class="hint">The slice is empty. Lower the slice threshold.</p>';
+    $("pareto-info").innerHTML =
+      '<p class="hint">No solutions match the current filters. Lower the slice or robustness floor, or clear a brush.</p>';
+    drawParallelCoordinates();
     chart.renderer.render(chart.scene, chart.camera);
     return;
   }
@@ -3631,6 +3979,7 @@ function drawPareto() {
   $("pareto-info").innerHTML = `<p class="muted">${filtered.length} visible solutions. Click a sphere to inspect it.</p>`;
   updateParetoRanges(archive, xIndex, yIndex, zIndex);
   updateParetoMarkers();
+  drawParallelCoordinates();
   chart.renderer.render(chart.scene, chart.camera);
   persistParetoViewState();
 }
@@ -3682,6 +4031,7 @@ function renderParetoInfo(solution) {
   $("pareto-reference").disabled = false;
   updateParetoMarkers();
   renderParetoDelta();
+  drawParallelCoordinates();
   persistParetoViewState();
 }
 
