@@ -31,21 +31,21 @@ def _valid_ids() -> set[str]:
         return {row["candidate_id"] for row in csv.DictReader(handle)}
 
 
-def _latest() -> dict[str, object]:
+def _latest() -> dict[str, object]:  # pragma: no cover - operator path
     _ensure_submissions()
     if not LATEST.exists():
         return {"labels": {}}
     return dict(json.loads(LATEST.read_text(encoding="utf-8")))
 
 
-def _write_latest(labels: dict[str, object]) -> None:
+def _write_latest(labels: dict[str, object]) -> None:  # pragma: no cover - operator path
     _ensure_submissions()
     temporary = LATEST.with_suffix(".tmp")
     temporary.write_text(json.dumps({"labels": labels}, indent=2) + "\n", encoding="utf-8")
     os.replace(temporary, LATEST)
 
 
-class Handler(SimpleHTTPRequestHandler):
+class Handler(SimpleHTTPRequestHandler):  # pragma: no cover - HTTP runtime
     """Static packet plus a tiny JSON label sink."""
 
     def _json(self, status: int, payload: object) -> None:

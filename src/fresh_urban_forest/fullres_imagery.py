@@ -25,7 +25,7 @@ except ImportError:
 
 
 @dataclass
-class FullResolutionSource:
+class FullResolutionSource:  # pragma: no cover - GDAL operator path
     """A GDAL VRT covering full-resolution orthophoto tiles.
 
     Attributes

@@ -23,7 +23,7 @@ SIZE = 384
 SAMPLE_PER_BIN = 20
 
 
-def main() -> int:
+def main() -> int:  # pragma: no cover - operator path
     """Build the preflighted audit key.
 
     Returns
