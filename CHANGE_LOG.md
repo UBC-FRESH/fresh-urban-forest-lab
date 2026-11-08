@@ -1093,6 +1093,7 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Explicitly not a planting plan, ownership claim, survival claim, or citywide net-change
   claim. P45 remains in force.
 - Created child issues #248–#251 and activated `feature/p48-site-scenarios`.
+- Created child issues #260–#262 and activated `feature/p49-scenario-comparison`.
 - No implementation yet.
 
 ### P48.1 candidate-site and scenario data contract
@@ -1148,3 +1149,13 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
   claim. P45's citywide change direction remains unresolved.
 
 - Merged P48 as `899615c` via PR #258; parent #247 and child issues #248–#251 are closed. Phase status: complete.
+
+### P49 scenario comparison start
+
+- Created parent issue #259 and plan `notes/design/p49-scenario-comparison.md`.
+- Scope: local saved site scenarios, explicit small/medium/large assumption presets, a
+  neutral comparison table, and versioned JSON export/import.
+- No ranking, planting plan, shared server library, ownership, survival, field-validation,
+  or citywide-change claim.
+- Created child issues #260–#262 and activated `feature/p49-scenario-comparison`.
+- No implementation yet.
