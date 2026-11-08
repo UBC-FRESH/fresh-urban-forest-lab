@@ -108,6 +108,30 @@ The **Sites** tab:
 
 The map and scenario are viewer screens. No ownership or permit inference is made.
 
+Saving and comparing scenarios
+------------------------------
+
+The Sites tab keeps up to 20 named scenarios in browser storage. A saved scenario stores
+the selected candidate ids, assumptions, date/time/target-height settings, dataset id,
+candidate schema, and an optional cached shade summary. Loading a scenario from a
+different dataset or candidate schema is refused.
+
+Three presets are shortcuts for hypothetical assumptions:
+
+| Preset | Height | Crown radius | Cost/tree | Water/tree/year |
+| --- | ---: | ---: | ---: | ---: |
+| small | 6 m | 2.0 m | C$650 | 800 L |
+| medium | 8 m | 3.0 m | C$850 | 1,200 L |
+| large | 12 m | 5.0 m | C$1,400 | 2,000 L |
+
+The presets are not species recommendations. Edit any value after applying one.
+
+Evaluated saved scenarios appear in a neutral comparison table with sites, trees,
+baseline shade, scenario shade, delta, delta percent, cost, and water. Rows are sorted by
+name and are **not ranked**; no row is described as best or recommended. A versioned JSON
+export/import carries the saved library, validates every record, merges by name, and caps
+the library at 20 scenarios.
+
 API
 ---
 

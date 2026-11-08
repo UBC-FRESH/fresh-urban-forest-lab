@@ -45,6 +45,7 @@ This roadmap is the plan of record and the issue tracker map for FRESH Urban For
 | P46 Canopy turnover hotspots | #231 | `feature/p46-turnover-hotspots` | complete |
 | P47 Optimization UI parity | #237 | `feature/p47-optimization-ui-parity` | complete |
 | P48 Site-level planting scenarios | #247 | `feature/p48-site-scenarios` | complete |
+| P49 Site scenario comparison | #259 | `feature/p49-scenario-comparison` | pr-open |
 
 ## Lifecycle Map
 
@@ -1302,6 +1303,35 @@ Acceptance criteria:
 - Dashboard green.
 
 Phase 48 verification:
+
+- `python scripts/dashboard.py`
+- `python scripts/check_workflow.py`
+
+## Phase 49: Site scenario comparison and assumption presets
+
+Parent issue: #259
+Branch: `feature/p49-scenario-comparison`
+Status: pr-open
+
+Goal: save and compare bounded hypothetical site scenarios with explicit tree assumptions,
+without ranking, planting-plan, ownership, survival, or field-validation claims.
+
+Plan: `notes/design/p49-scenario-comparison.md`.
+
+- [x] P49.1 Local scenario library, validation, and assumption presets (#260)
+- [x] P49.2 Comparison table and JSON export/import (#261)
+- [x] P49.3 Browser smoke, docs, and close-out (#262)
+
+Acceptance criteria:
+
+- Saved scenarios restore selection, assumptions, and settings.
+- Validation rejects malformed records, missing candidates, and wrong datasets.
+- Presets are labelled as assumptions, not recommendations.
+- Comparison is neutral and shows baseline/scenario/delta, cost, and water.
+- No ranking, planting-plan, ownership, survival, field-validation, or citywide-change claim.
+- Dashboard green.
+
+Phase 49 verification:
 
 - `python scripts/dashboard.py`
 - `python scripts/check_workflow.py`

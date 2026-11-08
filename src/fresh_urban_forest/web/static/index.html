@@ -447,6 +447,15 @@
             <label class="field"><span>Water / tree (L/yr)</span><input id="site-water" type="number" value="1200" min="0" step="50"></label>
           </div>
           <label class="field"><span>Maintenance assumption</span><input id="site-maintenance" type="text" value="establishment only" maxlength="120"></label>
+          <label class="field">
+            <span>Assumption preset</span>
+            <select id="site-preset">
+              <option value="custom">custom</option>
+              <option value="small">small tree — assumption</option>
+              <option value="medium">medium tree — assumption</option>
+              <option value="large">large tree — assumption</option>
+            </select>
+          </label>
           <div class="inline-fields">
             <label class="field"><span>Date</span><input id="site-date" type="date" value="2026-06-21"></label>
             <label class="field"><span>Time</span><input id="site-time" type="time" value="12:00"></label>
@@ -459,6 +468,30 @@
           </div>
           <div id="site-scenario-summary" class="change-stats"></div>
           <div id="site-results" class="site-results"></div>
+          <details class="pareto-views" id="site-library">
+            <summary>Saved scenarios</summary>
+            <div class="pareto-views-body">
+              <label class="field">
+                <span>Saved scenario</span>
+                <select id="site-saved-select"></select>
+              </label>
+              <label class="field">
+                <span>Scenario name</span>
+                <input id="site-saved-name" type="text" maxlength="80" placeholder="Name this scenario">
+              </label>
+              <div class="button-row wrap">
+                <button id="site-save" class="button primary tiny" type="button">Save scenario</button>
+                <button id="site-load" class="button ghost tiny" type="button" disabled>Load scenario</button>
+                <button id="site-delete" class="button danger tiny" type="button" disabled>Delete scenario</button>
+              </div>
+              <div class="button-row wrap">
+                <button id="site-export" class="button ghost tiny" type="button">Export JSON</button>
+                <label class="button ghost tiny file-button">Import JSON<input id="site-import" type="file" accept=".json,application/json"></label>
+              </div>
+              <p id="site-saved-meta" class="hint">Saved locally in this browser.</p>
+              <div id="site-comparison" class="site-comparison"></div>
+            </div>
+          </details>
           <p class="hint">Hypothetical trees with explicit assumptions. This is not a planting plan, ownership check, survival estimate, or field validation.</p>
         </aside>
         <div class="change-legend site-legend" id="site-legend">

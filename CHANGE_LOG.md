@@ -1109,6 +1109,7 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Explicitly not a planting plan, ownership claim, survival claim, or citywide net-change
   claim. P45 remains in force.
 - Created child issues #248–#251 and activated `feature/p48-site-scenarios`.
+- Created child issues #260–#262 and activated `feature/p49-scenario-comparison`.
 - No implementation yet.
 
 ### P48.1 candidate-site and scenario data contract
@@ -1164,3 +1165,45 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
   claim. P45's citywide change direction remains unresolved.
 
 - Merged P48 as `899615c` via PR #258; parent #247 and child issues #248–#251 are closed. Phase status: complete.
+
+### P49 scenario comparison start
+
+- Created parent issue #259 and plan `notes/design/p49-scenario-comparison.md`.
+- Scope: local saved site scenarios, explicit small/medium/large assumption presets, a
+  neutral comparison table, and versioned JSON export/import.
+- No ranking, planting plan, shared server library, ownership, survival, field-validation,
+  or citywide-change claim.
+- Created child issues #260–#262 and activated `feature/p49-scenario-comparison`.
+- No implementation yet.
+
+### P49.1 local scenario library and assumption presets
+
+- Added a capped browser-local scenario library with save/load/delete.
+- Records store selected candidate ids, assumptions, evaluation settings, dataset/schema ids,
+  and an optional cached shade summary.
+- Added strict validation for names, selected ids, numeric ranges, duplicate ids, dataset
+  compatibility, candidate-schema compatibility, and cached summaries.
+- Added small/medium/large **assumption presets** (height, crown radius, cost, water),
+  explicitly labelled as hypothetical assumptions rather than recommendations.
+- Browser smoke: preset values applied; six-site scenario saved; selection/assumptions
+  restored on load; delete removed the record; no page errors.
+- No comparison table or JSON export/import yet.
+
+### P49.2 scenario comparison and JSON portability
+
+- Added a neutral comparison table for saved evaluated scenarios compatible with the
+  current dataset and candidate schema.
+- Columns: scenario, sites, trees, baseline, scenario, delta, delta percent, cost, water.
+- Rows are name-ordered and explicitly not ranked.
+- Added versioned JSON export/import with validation, merge-by-name, and a 20-scenario cap.
+- Browser smoke: two evaluated scenarios compared; export contained both; delete cleared
+  the table; import restored both; malformed import rejected; no page errors.
+
+### P49.3 documentation and close-out
+
+- Documented local scenario saving, assumption presets, neutral comparison, and JSON
+  portability.
+- Final browser smoke covers candidate load, medium preset, six-site evaluation, two saved
+  scenarios, comparison, export/import, and 3D handoff with no page errors.
+- Dashboard: GREEN (lint, format, types, tests, validator, docs).
+- P49 is a neutral local comparison tool, not a ranking or planting recommendation.
