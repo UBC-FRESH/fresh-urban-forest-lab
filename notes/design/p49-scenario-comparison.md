@@ -2,7 +2,7 @@
 
 Parent issue: #259
 Planned branch: `feature/p49-scenario-comparison`
-Status: active
+Status: pr-open
 
 ## Why
 

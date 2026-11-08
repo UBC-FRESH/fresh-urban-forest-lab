@@ -1182,3 +1182,12 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Added versioned JSON export/import with validation, merge-by-name, and a 20-scenario cap.
 - Browser smoke: two evaluated scenarios compared; export contained both; delete cleared
   the table; import restored both; malformed import rejected; no page errors.
+
+### P49.3 documentation and close-out
+
+- Documented local scenario saving, assumption presets, neutral comparison, and JSON
+  portability.
+- Final browser smoke covers candidate load, medium preset, six-site evaluation, two saved
+  scenarios, comparison, export/import, and 3D handoff with no page errors.
+- Dashboard: GREEN (lint, format, types, tests, validator, docs).
+- P49 is a neutral local comparison tool, not a ranking or planting recommendation.

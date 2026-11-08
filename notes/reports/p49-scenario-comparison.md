@@ -1,6 +1,6 @@
 # P49 site scenario comparison
 
-Status: active.
+Status: implementation complete; close-out pending.
 
 ## P49.1 Local scenario library and assumption presets
 
@@ -28,8 +28,7 @@ Browser smoke: medium preset applied 8 m / 3 m / C$850 / 1,200 L; a six-site sce
 saved; changing preset and clearing selection then loading restored six sites and the
 medium assumptions; delete removed the record; no page errors.
 
-Comparison table and JSON export/import remain for P49.2. No ranking, planting-plan,
-ownership, survival, field-validation, or citywide-change claim is added.
+No ranking, planting-plan, ownership, survival, field-validation, or citywide-change claim is added.
 
 ## P49.2 Comparison table and JSON portability
 
@@ -44,3 +43,13 @@ every record, merges by name, caps the library at 20, and rejects malformed payl
 Browser smoke: two evaluated scenarios were saved; both appeared in the comparison table;
 export contained both; deleting them cleared the table; importing the export restored both;
 a malformed record was rejected. No page errors.
+
+## P49.3 Verification and close-out
+
+- Final browser smoke: 5,000 candidates loaded; medium preset applied; six-site scenario
+  evaluated; two saved scenarios compared; export/import round-trip; 3D handoff; no page
+  errors.
+- Documentation updated in `docs/reference/site-scenarios.rst`.
+- Dashboard gates green.
+- P49 remains a neutral local comparison tool. It does not rank scenarios or make a
+  planting-plan, ownership, survival, field-validation, or citywide-change claim.

@@ -45,7 +45,7 @@ This roadmap is the plan of record and the issue tracker map for FRESH Urban For
 | P46 Canopy turnover hotspots | #231 | `feature/p46-turnover-hotspots` | complete |
 | P47 Optimization UI parity | #237 | `feature/p47-optimization-ui-parity` | complete |
 | P48 Site-level planting scenarios | #247 | `feature/p48-site-scenarios` | complete |
-| P49 Site scenario comparison | #259 | `feature/p49-scenario-comparison` | active |
+| P49 Site scenario comparison | #259 | `feature/p49-scenario-comparison` | pr-open |
 
 ## Lifecycle Map
 
@@ -1311,7 +1311,7 @@ Phase 48 verification:
 
 Parent issue: #259
 Branch: `feature/p49-scenario-comparison`
-Status: active
+Status: pr-open
 
 Goal: save and compare bounded hypothetical site scenarios with explicit tree assumptions,
 without ranking, planting-plan, ownership, survival, or field-validation claims.
@@ -1320,7 +1320,7 @@ Plan: `notes/design/p49-scenario-comparison.md`.
 
 - [x] P49.1 Local scenario library, validation, and assumption presets (#260)
 - [x] P49.2 Comparison table and JSON export/import (#261)
-- [ ] P49.3 Browser smoke, docs, and close-out (#262)
+- [x] P49.3 Browser smoke, docs, and close-out (#262)
 
 Acceptance criteria:
 
