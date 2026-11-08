@@ -1013,3 +1013,4 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
   7,516 loss patches, no console/page errors.
 - Dashboard: GREEN (lint, format, types, tests, validator, docs).
 - Opened PR #236 for maintainer review; phase remains open until merge and parent-issue close-out.
+- Merged P46 as `b63977e` via PR #236; parent #231 and child issues #232–#235 are closed. Phase status: complete.
