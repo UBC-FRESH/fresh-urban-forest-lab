@@ -44,4 +44,5 @@ Compare with the original P43 2 m result: **+223 ha** net, +1.475 m stable heigh
 - No class-6 roof control was available.
 - Classification, co-registration, scale, edge, and acquisition-season effects remain.
 - This is a corrected **screen**, not a final citywide net-loss claim.
-- P44/P46 and public API products still need a controlled refresh in P51.3.
+- Downstream corrected P44/P46 data and the P38 rebuild are documented in
+`notes/reports/p51-downstream-refresh.md`; public API/UI remains on the original products.

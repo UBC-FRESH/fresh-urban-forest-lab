@@ -1292,3 +1292,14 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
   stable height +0.523 m. Original: +223 ha, +1.475 m.
 - Product remains a corrected screen, not a final citywide loss.
 - P44/P46 refresh still pending.
+
+### P51.3 rebuilt P38 and refreshed P44/P46
+
+- Rebuilt P38 from public 2021 Census Profile CSVs and public DA geometry: 1,035 DAs,
+  1,033 scored, 870 400 m cells; restricted to the original 797-cell P42/P44 grid.
+- Rebuilt corrected P44 action and P46 turnover on the corrected P43 screen.
+- P44 action counts: plant+cool 166, monitor 196, expand 110, structural 113,
+  protect/investigate 212 (original 265/233/133/127/39).
+- P46 high-tier 259 cells; turnover area 135.58 ha (original 260 / 181.76 ha).
+- Corrected products are versioned under `vancouver_2022_control/`; public API/UI unchanged.
+- Shift is a screening result, not proof of loss.

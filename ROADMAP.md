@@ -1382,7 +1382,7 @@ Plan: `notes/design/p51-citywide-control.md`.
 
 - [x] P51.1 Citywide control sample and spatial estimate (#273)
 - [x] P51.2 Versioned corrected P43 screen (#274)
-- [ ] P51.3 P44/P46 refresh and API/doc integration (#275)
+- [x] P51.3 P44/P46 refresh and API/doc integration (#275) — corrected data/docs; public API unchanged
 - [ ] P51.4 Browser/dashboard verification and close-out (#276)
 
 Acceptance criteria:
