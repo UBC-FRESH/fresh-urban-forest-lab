@@ -1172,3 +1172,13 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Browser smoke: preset values applied; six-site scenario saved; selection/assumptions
   restored on load; delete removed the record; no page errors.
 - No comparison table or JSON export/import yet.
+
+### P49.2 scenario comparison and JSON portability
+
+- Added a neutral comparison table for saved evaluated scenarios compatible with the
+  current dataset and candidate schema.
+- Columns: scenario, sites, trees, baseline, scenario, delta, delta percent, cost, water.
+- Rows are name-ordered and explicitly not ranked.
+- Added versioned JSON export/import with validation, merge-by-name, and a 20-scenario cap.
+- Browser smoke: two evaluated scenarios compared; export contained both; delete cleared
+  the table; import restored both; malformed import rejected; no page errors.

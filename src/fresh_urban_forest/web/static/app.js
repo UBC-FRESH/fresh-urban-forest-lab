@@ -5,6 +5,7 @@ const PARETO_VIEW_STORAGE_KEY = "fresh.pareto.views.v1";
 const SITE_SCENARIO_STORAGE_KEY = "fresh.site-scenarios.v1";
 const SITE_SCENARIO_LIBRARY_VERSION = 1;
 const SITE_SCENARIO_LIMIT = 20;
+const SITE_SCENARIO_IMPORT_LIMIT = 250_000;
 const PARETO_VIEW_VERSION = 1;
 const PARETO_VIEW_LIMIT = 50;
 const PARETO_VIEW_IMPORT_LIMIT = 250_000;
@@ -2583,6 +2584,8 @@ function initSiteControls() {
   $("site-save").addEventListener("click", saveSiteScenario);
   $("site-load").addEventListener("click", loadSiteScenario);
   $("site-delete").addEventListener("click", deleteSiteScenario);
+  $("site-export").addEventListener("click", exportSiteScenarios);
+  $("site-import").addEventListener("change", importSiteScenarios);
   $("site-saved-select").addEventListener("change", () => {
     $("site-saved-name").value = $("site-saved-select").value;
     updateSiteSavedButtons();
@@ -2790,6 +2793,7 @@ function refreshSiteScenarioSelect(selectedName = null) {
   }
   updateSiteSavedButtons();
   $("site-saved-meta").textContent = `${records.length} saved scenario${records.length === 1 ? "" : "s"} in this browser.`;
+  renderSiteComparison();
 }
 
 function currentSiteScenarioRecord(name) {
@@ -2903,6 +2907,105 @@ function loadSiteScenario() {
     $("site-scenario-summary").innerHTML = "";
     $("site-results").innerHTML = "";
     $("site-status").textContent = "ready";
+  }
+}
+
+function renderSiteComparison() {
+  const container = $("site-comparison");
+  if (!container) return;
+  const datasetId = state.dataset?.dataset_id || "";
+  const schema = state.siteScenario.candidatesSchema || "";
+  const records = readSiteScenarioLibrary()
+    .filter(
+      (record) =>
+        record.evaluation &&
+        record.dataset_id === datasetId &&
+        (!schema || record.candidates_schema === schema)
+    )
+    .sort((first, second) => first.name.localeCompare(second.name));
+  if (!records.length) {
+    container.innerHTML =
+      '<p class="site-comparison-note">Save evaluated scenarios to compare them here. Rows are not ranked.</p>';
+    return;
+  }
+  const rows = records
+    .map((record) => {
+      const evaluation = record.evaluation;
+      const trees = record.selected.length * record.assumptions.count;
+      const cost = trees * record.assumptions.cost_cad;
+      const water = trees * record.assumptions.water_l_per_year;
+      const deltaPct =
+        evaluation.delta_shade_pct == null
+          ? "n/a"
+          : `${evaluation.delta_shade_pct >= 0 ? "+" : ""}${Number(evaluation.delta_shade_pct).toFixed(4)}%`;
+      return `<tr><td>${escapeHtml(record.name)}</td><td>${formatNumber(record.selected.length)}</td><td>${formatNumber(trees)}</td><td>${formatCompact(evaluation.baseline_shade_m2h, " m²h")}</td><td>${formatCompact(evaluation.scenario_shade_m2h, " m²h")}</td><td>${formatSiteDelta(evaluation.delta_shade_m2h)}</td><td>${deltaPct}</td><td>C$${formatNumber(cost)}</td><td>${formatNumber(water)} L</td></tr>`;
+    })
+    .join("");
+  container.innerHTML = `
+    <table><thead><tr><th>Scenario</th><th>Sites</th><th>Trees</th><th>Baseline</th><th>Scenario</th><th>Δ</th><th>Δ %</th><th>Cost</th><th>Water</th></tr></thead><tbody>${rows}</tbody></table>
+    <p class="site-comparison-note">Saved evaluated scenarios for this dataset. Neutral name order; not a ranking or recommendation.</p>`;
+}
+
+function exportSiteScenarios() {
+  const records = readSiteScenarioLibrary();
+  if (!records.length) {
+    toast("No saved scenarios to export.", true);
+    return;
+  }
+  downloadText(
+    JSON.stringify(
+      {
+        version: SITE_SCENARIO_LIBRARY_VERSION,
+        exported_at: new Date().toISOString(),
+        scenarios: records,
+      },
+      null,
+      2
+    ),
+    "fresh-site-scenarios.json",
+    "application/json"
+  );
+  toast(`Exported ${records.length} saved scenarios`);
+}
+
+async function importSiteScenarios(event) {
+  const input = event.target;
+  const file = input.files?.[0];
+  if (!file) return;
+  try {
+    if (file.size > SITE_SCENARIO_IMPORT_LIMIT) {
+      toast("That scenario file is too large.", true);
+      return;
+    }
+    const payload = JSON.parse(await file.text());
+    if (
+      !payload ||
+      payload.version !== SITE_SCENARIO_LIBRARY_VERSION ||
+      !Array.isArray(payload.scenarios) ||
+      payload.scenarios.length > SITE_SCENARIO_LIMIT
+    ) {
+      toast("That JSON file is not a valid version 1 site-scenario library.", true);
+      return;
+    }
+    const imported = [];
+    for (const entry of payload.scenarios) {
+      const record = normalizeSiteScenarioRecord(entry);
+      if (!record) {
+        toast("That JSON file contains an invalid site scenario.", true);
+        return;
+      }
+      imported.push(record);
+    }
+    const merged = new Map(readSiteScenarioLibrary().map((record) => [record.name, record]));
+    for (const record of imported) merged.set(record.name, record);
+    const records = Array.from(merged.values()).slice(0, SITE_SCENARIO_LIMIT);
+    if (!writeSiteScenarioLibrary(records)) return;
+    refreshSiteScenarioSelect();
+    toast(`Imported ${imported.length} scenarios; ${records.length} saved locally`);
+  } catch (error) {
+    toast(`Could not import site scenarios: ${error.message}`, true);
+  } finally {
+    input.value = "";
   }
 }
 
@@ -3081,6 +3184,7 @@ async function ensureSitesView() {
     scenario.loading = false;
     $("site-status").textContent = `${scenario.candidates.size} candidates`;
     renderSiteSelection();
+    renderSiteComparison();
   } catch (error) {
     scenario.loading = false;
     $("site-status").textContent = "unavailable";

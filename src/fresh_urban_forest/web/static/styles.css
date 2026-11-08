@@ -779,3 +779,10 @@ select:focus, input:focus { outline: 2px solid #b8d3ae; outline-offset: 1px; }
 
 #site-preset { width: 100%; }
 .pareto-views-body .button-row { margin-top: 2px; }
+
+.site-comparison { margin-top: 5px; overflow-x: auto; }
+.site-comparison table { width: 100%; border-collapse: collapse; font-size: 0.6rem; }
+.site-comparison th, .site-comparison td { padding: 3px 4px; border-bottom: 1px solid #e7ece3; text-align: right; white-space: nowrap; }
+.site-comparison th:first-child, .site-comparison td:first-child { text-align: left; color: var(--ink-soft); }
+.site-comparison th { color: var(--ink-soft); font-weight: 650; }
+.site-comparison .site-comparison-note { margin: 4px 0 0; color: var(--ink-soft); font-size: 0.6rem; }

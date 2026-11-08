@@ -484,7 +484,12 @@
                 <button id="site-load" class="button ghost tiny" type="button" disabled>Load scenario</button>
                 <button id="site-delete" class="button danger tiny" type="button" disabled>Delete scenario</button>
               </div>
+              <div class="button-row wrap">
+                <button id="site-export" class="button ghost tiny" type="button">Export JSON</button>
+                <label class="button ghost tiny file-button">Import JSON<input id="site-import" type="file" accept=".json,application/json"></label>
+              </div>
               <p id="site-saved-meta" class="hint">Saved locally in this browser.</p>
+              <div id="site-comparison" class="site-comparison"></div>
             </div>
           </details>
           <p class="hint">Hypothetical trees with explicit assumptions. This is not a planting plan, ownership check, survival estimate, or field validation.</p>

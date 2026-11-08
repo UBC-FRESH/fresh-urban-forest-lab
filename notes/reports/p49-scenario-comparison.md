@@ -30,3 +30,17 @@ medium assumptions; delete removed the record; no page errors.
 
 Comparison table and JSON export/import remain for P49.2. No ranking, planting-plan,
 ownership, survival, field-validation, or citywide-change claim is added.
+
+## P49.2 Comparison table and JSON portability
+
+The saved-scenario panel now includes a neutral comparison table for evaluated scenarios
+compatible with the current dataset and candidate schema. It shows scenario name, sites,
+trees, baseline, scenario, delta, delta percent, cost, and water. Rows are sorted by name;
+there is no ranking or recommendation language.
+
+JSON export contains `{version, exported_at, scenarios}`. Import validates the version and
+every record, merges by name, caps the library at 20, and rejects malformed payloads.
+
+Browser smoke: two evaluated scenarios were saved; both appeared in the comparison table;
+export contained both; deleting them cleared the table; importing the export restored both;
+a malformed record was rejected. No page errors.

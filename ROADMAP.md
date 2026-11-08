@@ -1319,7 +1319,7 @@ without ranking, planting-plan, ownership, survival, or field-validation claims.
 Plan: `notes/design/p49-scenario-comparison.md`.
 
 - [x] P49.1 Local scenario library, validation, and assumption presets (#260)
-- [ ] P49.2 Comparison table and JSON export/import (#261)
+- [x] P49.2 Comparison table and JSON export/import (#261)
 - [ ] P49.3 Browser smoke, docs, and close-out (#262)
 
 Acceptance criteria:
