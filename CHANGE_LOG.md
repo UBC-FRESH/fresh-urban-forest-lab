@@ -1,3 +1,12 @@
+### P47 Surrey 0.30 m candidate sample
+
+- Scored a 200-candidate stratified Surrey sample with the P46 0.30 m model.
+- Preflight rejected 31 blank/low-content crops before review; all 200 accepted crops
+  passed contrast/coverage checks.
+- Built a blind P32-pattern review packet with Conifer/Deciduous/Uncertain labels,
+  checkboxes, notes, progress, CSV import/export, and optional server persistence.
+- No candidate promotion; human labels pending.
+
 ### P46 Surrey-specific 0.30 m image model
 
 - Fine-tuned the Vancouver P36 CNN on Surrey 2025 0.30 m chips from the public inventory.

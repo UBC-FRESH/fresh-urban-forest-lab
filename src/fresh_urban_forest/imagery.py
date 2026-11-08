@@ -222,3 +222,12 @@ def chips_for_points(
         ``(N, size, size, 3)`` uint8 array.
     """
     return np.stack([source.chip(lon, lat, size=size) for lon, lat in points], axis=0)
+
+
+def band_sequential_rgb(payload: bytes, height: int, width: int) -> NDArray[np.uint8]:
+    """Convert a band-sequential RGB buffer to an HWC image."""
+    values = np.frombuffer(payload, dtype=np.uint8)
+    expected = height * width * 3
+    if values.size != expected:
+        raise ValueError(f"expected {expected} bytes, received {values.size}")
+    return np.ascontiguousarray(values.reshape(3, height, width).transpose(1, 2, 0))
