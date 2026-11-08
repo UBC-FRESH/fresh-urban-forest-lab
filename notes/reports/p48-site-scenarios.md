@@ -1,6 +1,6 @@
 # P48 site-level planting scenarios
 
-Status: active.
+Status: implementation complete; close-out pending.
 
 ## P48.1 Candidate-site and scenario data contract
 
@@ -75,3 +75,15 @@ Browser smoke:
 
 Limits remain: this is an above-ground candidate screen and hypothetical scenario, not a
 planting plan, ownership or access check, survival forecast, or field validation.
+
+## P48.4 verification and limits
+
+- Dashboard gates green.
+- Final browser smoke: 5,000 candidates loaded; six `plant + cool` sites selected;
+  sensitivity enabled; baseline 35.8M m²h and delta +3.5k m²h (+0.0097%); 10 result rows
+  across per-site and sensitivity tables; clear and re-select worked; 3D handoff reached
+  the scene; no page errors.
+- Documentation: `docs/reference/site-scenarios.rst`.
+- P48 is a scenario screen. Candidate sites are not parcels or permission; shade is a
+  projected model result; P45's citywide change direction is unresolved.
+- No accounts, ownership, survival, field validation, or planting-plan claim is added.

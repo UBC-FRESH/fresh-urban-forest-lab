@@ -1120,3 +1120,12 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
   2026-06-21 12:00 Vancouver time; baseline 35.8M m²h, delta 3.5k m²h (+0.0097%);
   per-site 290–869 m²h; 3D scenario opened with no page errors.
 - Added service and static web-asset tests.
+
+### P48.4 validation and close-out
+
+- Added the site-scenario reference page and agent index entry.
+- Final browser smoke covers candidate-map load, six-site selection, scenario evaluation,
+  per-site results, and the 3D handoff.
+- Dashboard: GREEN (lint, format, types, tests, validator, docs).
+- P48 remains a scenario screen: no ownership, field validation, survival, or planting-plan
+  claim. P45's citywide change direction remains unresolved.

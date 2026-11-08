@@ -17,6 +17,7 @@
 - [Research agenda](reference/research-agenda.html): P7-P11 shade, optimization, off-inventory canopy, and bird programme; novelty and evidence tiers.
 - [Shade, species, water, and irrigation](reference/shade-and-species.html): marginal shade, solar method, species fit, water balance, irrigation cost, API, and limits.
 - [Optimization and Pareto explorer](reference/optimization-and-pareto.html): Fresh Solutions scalarizations, parallel search, fuzzy archive, 3D solution space, API, and limits.
+- [Site-level planting scenarios](reference/site-scenarios.html): P39 gap candidates, explicit assumptions, projected-scenario shade, Sites tab, API, and limits.
 - [Off-inventory canopy](reference/off-inventory-canopy.html): LiDAR unmatched-tree candidates, land-class proxy, privacy rule, value of information, API, and limits.
 - [Bird habitat and demography](reference/bird-habitat-and-demography.html): 3D canopy metrics, guild relative abundance, prior-driven lambda, Birds tab, and limits.
 - [Integration and release](reference/integration-and-release.html): unified lab report, v0.3.0 release, benchmark, and approval gates.

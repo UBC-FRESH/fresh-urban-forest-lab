@@ -28,6 +28,7 @@ act, and cite it in their reports. Start with the repository's ``AGENTS.md`` and
    reference/research-agenda
    reference/shade-and-species
    reference/optimization-and-pareto
+   reference/site-scenarios
    reference/off-inventory-canopy
    reference/bird-habitat-and-demography
    reference/integration-and-release

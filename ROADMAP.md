@@ -44,7 +44,7 @@ This roadmap is the plan of record and the issue tracker map for FRESH Urban For
 | P45 Citywide canopy-change sensitivity | #224 | `feature/p45-change-sensitivity` | complete |
 | P46 Canopy turnover hotspots | #231 | `feature/p46-turnover-hotspots` | complete |
 | P47 Optimization UI parity | #237 | `feature/p47-optimization-ui-parity` | complete |
-| P48 Site-level planting scenarios | #247 | `feature/p48-site-scenarios` | active |
+| P48 Site-level planting scenarios | #247 | `feature/p48-site-scenarios` | pr-open |
 
 ## Lifecycle Map
 
@@ -1280,7 +1280,7 @@ Phase 47 verification:
 
 Parent issue: #247
 Branch: `feature/p48-site-scenarios`
-Status: active
+Status: pr-open
 
 Goal: add a bounded, assumption-explicit scenario layer that places hypothetical trees at
 P39/P42 candidate sites and compares baseline and scenario shade. It is not a planting plan.
@@ -1290,7 +1290,7 @@ Plan: `notes/design/p48-site-scenarios.md`.
 - [x] P48.1 Candidate-site and scenario data contract (#248)
 - [x] P48.2 Site-level shade simulation and scenario metrics (#249)
 - [x] P48.3 Scenario API, map/3D UI, and comparison (#250)
-- [ ] P48.4 Validation, browser smoke, docs, and close-out (#251)
+- [x] P48.4 Validation, browser smoke, docs, and close-out (#251)
 
 Acceptance criteria:
 

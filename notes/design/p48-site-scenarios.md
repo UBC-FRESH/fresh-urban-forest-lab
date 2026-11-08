@@ -2,7 +2,7 @@
 
 Parent issue: #247
 Planned branch: `feature/p48-site-scenarios`
-Status: active
+Status: pr-open
 
 ## Why
 
