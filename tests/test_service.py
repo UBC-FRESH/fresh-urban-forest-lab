@@ -2,12 +2,14 @@
 
 from __future__ import annotations
 
+import json
 from pathlib import Path
 
 from fastapi.testclient import TestClient
 
 from fresh_urban_forest.service import create_app
-from tests.fixtures import make_dataset
+from fresh_urban_forest.terrain import unproject_xy
+from tests.fixtures import CRS, make_dataset
 
 
 def _client(tmp_path: Path) -> TestClient:
@@ -57,6 +59,89 @@ def test_city_metrics_endpoint_is_optional(tmp_path: Path) -> None:
     response = client.get("/api/city-metrics")
     assert response.status_code == 200
     assert response.json()["city"]["tree_count"] == 2
+
+
+def test_site_candidate_and_scenario_endpoints_are_optional(tmp_path: Path) -> None:
+    """Candidate products are optional and a scenario can be evaluated."""
+    client = _client(tmp_path)
+    assert client.get("/api/site-candidates").status_code == 404
+    lon, lat = unproject_xy(10.0, 90.0, CRS)
+    candidate = {
+        "site_id": "site-a",
+        "cell_id": "r00c00",
+        "lon": lon,
+        "lat": lat,
+        "area_m2": 100.0,
+        "street_adjacent": False,
+        "action_class": "plant_cool",
+        "action_label": "plant + cool",
+        "opportunity_tier": "high",
+        "source": "p39_edge_gap",
+        "evidence_tier": "candidate",
+    }
+    (tmp_path / "dataset" / "site_candidates.json").write_text(
+        json.dumps(
+            {
+                "schema_version": "fresh-urban-forest.site-candidates.v1",
+                "metadata": {},
+                "sites": [candidate],
+            }
+        ),
+        encoding="utf-8",
+    )
+    (tmp_path / "dataset" / "site_candidates.geojson").write_text(
+        json.dumps({"type": "FeatureCollection", "features": []}), encoding="utf-8"
+    )
+    assert client.get("/api/dataset").json()["has_site_candidates"] is True
+    assert client.get("/api/site-candidates").json()["sites"][0]["site_id"] == "site-a"
+    assert client.get("/api/site-candidates.geojson").status_code == 200
+    site = {
+        "site_id": "site-a",
+        "species": "Acer rubrum",
+        "height_m": 8.0,
+        "crown_radius_m": 3.0,
+        "count": 1,
+        "cost_cad": 850.0,
+        "water_l_per_year": 1200.0,
+        "maintenance": "establishment only",
+        "assumption_source": "test",
+    }
+    scenario = {
+        "schema_version": "fresh-urban-forest.site-scenario.v1",
+        "scenario_id": "scenario-test",
+        "label": "Test site scenario",
+        "created_at": "2026-11-08T00:00:00+00:00",
+        "settings": {},
+        "sites": [site],
+    }
+    response = client.post(
+        "/api/site-scenario/evaluate",
+        json={
+            "scenario": scenario,
+            "whens": ["2026-06-21T12:00:00-07:00"],
+            "include_per_site": True,
+        },
+    )
+    assert response.status_code == 200
+    payload = response.json()
+    assert payload["scenario"]["scenario_id"] == "scenario-test"
+    assert payload["evaluation"]["delta_shade_m2h"] >= 0.0
+    assert len(payload["evaluation"]["per_site"]) == 1
+    invalid = client.post(
+        "/api/site-scenario/evaluate",
+        json={"scenario": scenario, "whens": ["not-a-time"]},
+    )
+    assert invalid.status_code == 400
+    missing = client.post(
+        "/api/site-scenario/evaluate",
+        json={
+            "scenario": {
+                **scenario,
+                "sites": [{**site, "site_id": "missing"}],
+            }
+        },
+    )
+    assert missing.status_code == 400
 
 
 def test_heat_priority_endpoints_are_optional(tmp_path: Path) -> None:

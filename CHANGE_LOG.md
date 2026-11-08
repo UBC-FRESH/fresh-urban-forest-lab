@@ -1105,3 +1105,18 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
   not annual shade or an observed outcome.
 - Added synthetic tests for baseline/scenario determinism, per-site deltas, sensitivity,
   missing candidates, and empty samples.
+
+### P48.3 scenario API, map, and 3D comparison
+
+- Added optional candidate endpoints: `/api/site-candidates` and
+  `/api/site-candidates.geojson`.
+- Added `/api/site-scenario/evaluate` with scenario validation, timestamp validation,
+  baseline/scenario shade, per-site contributions, and optional sensitivity.
+- Added a Sites tab with candidate/action map layers, map-click selection, six-site
+  quick-select, explicit species/height/crown/count/cost/water/maintenance inputs, and a
+  baseline-versus-scenario result panel.
+- Added "Open in 3D" by creating a normal scenario with the selected hypothetical trees.
+- Browser smoke: 5,000 candidates loaded; six `plant + cool` sites evaluated at
+  2026-06-21 12:00 Vancouver time; baseline 35.8M m²h, delta 3.5k m²h (+0.0097%);
+  per-site 290–869 m²h; 3D scenario opened with no page errors.
+- Added service and static web-asset tests.

@@ -1289,7 +1289,7 @@ Plan: `notes/design/p48-site-scenarios.md`.
 
 - [x] P48.1 Candidate-site and scenario data contract (#248)
 - [x] P48.2 Site-level shade simulation and scenario metrics (#249)
-- [ ] P48.3 Scenario API, map/3D UI, and comparison (#250)
+- [x] P48.3 Scenario API, map/3D UI, and comparison (#250)
 - [ ] P48.4 Validation, browser smoke, docs, and close-out (#251)
 
 Acceptance criteria:

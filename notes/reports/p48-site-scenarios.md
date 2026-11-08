@@ -45,3 +45,33 @@ Vancouver two-site pilot:
 
 The output labels the method as `projected-shadow-accumulation-combined` and records:
 `scenario screen, not observed shade`; P45 citywide change remains unresolved.
+
+## P48.3 Scenario API, map, and 3D comparison
+
+The Sites tab loads the optional candidate GeoJSON, colours candidate points by action,
+and lets a user click sites on or off. A six-site quick-select chooses `plant + cool` sites.
+The panel applies shared species, height, crown radius, tree count, cost, water, and
+maintenance assumptions to every selected site.
+
+API:
+
+- `GET /api/site-candidates`
+- `GET /api/site-candidates.geojson`
+- `POST /api/site-scenario/evaluate`
+
+The evaluation endpoint validates the scenario and candidate ids, parses ISO sample times,
+and returns the normalized scenario plus baseline/scenario shade, per-site contributions,
+and optional sensitivity.
+
+Browser smoke:
+
+- 5,000 candidate points loaded on the Sites map.
+- Six `plant + cool` sites selected.
+- Sample: 2026-06-21 12:00 Vancouver local time; target height 1.5 m.
+- Baseline 35.8M m²h; scenario delta **+3.5k m²h (+0.0097%)**.
+- Per-site deltas ranged **+290 to +869 m²h**.
+- **Open in 3D** created a normal scenario with six hypothetical trees and switched to the
+  existing 3D scene without page errors.
+
+Limits remain: this is an above-ground candidate screen and hypothetical scenario, not a
+planting plan, ownership or access check, survival forecast, or field validation.

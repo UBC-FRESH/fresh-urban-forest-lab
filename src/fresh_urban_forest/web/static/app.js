@@ -58,6 +58,15 @@ const state = {
   lightDebounce: null,
   lightRequest: 0,
   lastSolar: null,
+  siteScenario: {
+    map: null,
+    candidates: new Map(),
+    selected: new Set(),
+    evaluation: null,
+    scenario: null,
+    loading: false,
+    busy: false,
+  },
   optimize: {
     jobId: null,
     result: null,
@@ -664,6 +673,7 @@ async function init() {
     ]);
     state.dataset = dataset;
     state.scene = scene;
+    updateSiteTabVisibility(Boolean(dataset.has_site_candidates));
     if (dataset.has_roads) {
       try {
         state.roads = await api("api/roads");
@@ -799,6 +809,7 @@ async function init() {
     bindControls();
     initLightControls();
     initOptimizeControls();
+    initSiteControls();
     updateSunForTime();
     updateHud();
     window.__freshLab = {
@@ -2464,6 +2475,12 @@ function switchView(view) {
   if (view === "birds") {
     loadBirds();
   }
+  if (view === "sites") {
+    ensureSitesView();
+    window.setTimeout(() => {
+      if (state.siteScenario.map) state.siteScenario.map.resize();
+    }, 60);
+  }
   if (view === "optimize") {
     ensureOptimizeChart();
     window.setTimeout(() => {
@@ -2518,6 +2535,445 @@ function formatClock(value) {
 function debounceLoadLight() {
   window.clearTimeout(state.lightDebounce);
   state.lightDebounce = window.setTimeout(loadLight, 420);
+}
+
+function updateSiteTabVisibility(visible) {
+  const tab = document.querySelector('[data-view="sites"]');
+  if (!tab) return;
+  tab.hidden = !visible;
+  if (!visible && tab.classList.contains("active")) switchView("map");
+}
+
+function initSiteControls() {
+  const inputIds = [
+    "site-species",
+    "site-height",
+    "site-crown",
+    "site-count",
+    "site-cost",
+    "site-water",
+    "site-maintenance",
+    "site-date",
+    "site-time",
+    "site-target-height",
+  ];
+  for (const id of inputIds) {
+    $(id).addEventListener("input", () => {
+      renderSiteSelection();
+      invalidateSiteEvaluation();
+    });
+  }
+  $("site-sensitivity").addEventListener("change", invalidateSiteEvaluation);
+  $("site-action-filter").addEventListener("change", applySiteFilter);
+  $("site-select-six").addEventListener("click", selectSixSiteCandidates);
+  $("site-clear").addEventListener("click", clearSiteSelection);
+  $("site-evaluate").addEventListener("click", evaluateSiteScenario);
+  $("site-open-3d").addEventListener("click", openSiteScenario3D);
+  renderSiteSelection();
+}
+
+function siteFeatureCollection() {
+  const features = [];
+  for (const siteId of state.siteScenario.selected) {
+    const site = state.siteScenario.candidates.get(siteId);
+    if (!site) continue;
+    features.push({
+      type: "Feature",
+      properties: {
+        site_id: site.site_id,
+        action_class: site.action_class,
+        action_label: site.action_label,
+      },
+      geometry: { type: "Point", coordinates: [site.lon, site.lat] },
+    });
+  }
+  return { type: "FeatureCollection", features };
+}
+
+function siteCandidateColor() {
+  return [
+    "match",
+    ["get", "action_class"],
+    "plant_cool",
+    "#377e22",
+    "expand_canopy",
+    "#e6911e",
+    "structural_shade",
+    "#3182bd",
+    "protect_loss",
+    "#c51b7d",
+    "#8c8c8c",
+  ];
+}
+
+async function ensureSitesView() {
+  const scenario = state.siteScenario;
+  if (scenario.map) {
+    scenario.map.resize();
+    return;
+  }
+  if (scenario.loading) return;
+  scenario.loading = true;
+  $("site-status").textContent = "loading";
+  try {
+    const payload = await api("api/site-candidates");
+    scenario.candidates = new Map(
+      (payload.sites || []).map((record) => [String(record.site_id), record])
+    );
+    const [west, south, east, north] = state.scene.bounds_wgs84;
+    const coordinates = state.scene.corners_wgs84 || [
+      [west, north],
+      [east, north],
+      [east, south],
+      [west, south],
+    ];
+    const map = new maplibregl.Map({
+      container: "map-sites",
+      style: {
+        version: 8,
+        sources: {
+          hillshade: { type: "image", url: "api/hillshade.png?width=1400", coordinates },
+          canopy: { type: "image", url: "api/canopy.png?width=1400", coordinates },
+          buildings: { type: "geojson", data: buildingFeatures() },
+          roads: {
+            type: "geojson",
+            data: state.roads || { type: "FeatureCollection", features: [] },
+          },
+          boundary: { type: "geojson", data: boundaryFeatures() },
+          siteCandidates: { type: "geojson", data: "api/site-candidates.geojson" },
+          siteSelected: { type: "geojson", data: siteFeatureCollection() },
+        },
+        layers: [
+          { id: "background", type: "background", paint: { "background-color": "#e6eae2" } },
+          {
+            id: "hillshade",
+            type: "raster",
+            source: "hillshade",
+            paint: { "raster-opacity": 0.32, "raster-resampling": "linear" },
+          },
+          {
+            id: "canopy",
+            type: "raster",
+            source: "canopy",
+            paint: { "raster-opacity": 0.46, "raster-resampling": "linear" },
+          },
+          {
+            id: "roads",
+            type: "line",
+            source: "roads",
+            paint: { "line-color": "#7b8479", "line-width": 0.8, "line-opacity": 0.65 },
+          },
+          {
+            id: "buildings",
+            type: "fill",
+            source: "buildings",
+            paint: { "fill-color": "#b6beb3", "fill-opacity": 0.82 },
+          },
+          {
+            id: "site-candidates",
+            type: "circle",
+            source: "siteCandidates",
+            paint: {
+              "circle-color": siteCandidateColor(),
+              "circle-radius": ["interpolate", ["linear"], ["zoom"], 11, 2.5, 16, 6],
+              "circle-opacity": 0.82,
+              "circle-stroke-color": "#ffffff",
+              "circle-stroke-width": 0.7,
+            },
+          },
+          {
+            id: "site-selected",
+            type: "circle",
+            source: "siteSelected",
+            paint: {
+              "circle-color": "#17231d",
+              "circle-radius": ["interpolate", ["linear"], ["zoom"], 11, 5, 16, 10],
+              "circle-stroke-color": "#ffffff",
+              "circle-stroke-width": 2,
+            },
+          },
+          {
+            id: "boundary",
+            type: "line",
+            source: "boundary",
+            paint: { "line-color": "#2f6b4f", "line-width": 1.1, "line-dasharray": [2, 2] },
+          },
+        ],
+      },
+      center: [(west + east) / 2, (south + north) / 2],
+      zoom: 12,
+      attributionControl: false,
+    });
+    map.addControl(new maplibregl.NavigationControl(), "bottom-right");
+    map.on("load", () => {
+      map.fitBounds(
+        [
+          [west, south],
+          [east, north],
+        ],
+        { padding: 36, duration: 0 }
+      );
+      applySiteFilter();
+      updateSiteSelectedSource();
+    });
+    const toggle = (event) => {
+      const feature = event.features?.[0];
+      const siteId = feature?.properties?.site_id;
+      if (siteId) toggleSiteSelection(String(siteId));
+    };
+    map.on("click", "site-candidates", toggle);
+    map.on("click", "site-selected", toggle);
+    map.on("mousemove", "site-candidates", () => {
+      map.getCanvas().style.cursor = "pointer";
+    });
+    map.on("mouseleave", "site-candidates", () => {
+      map.getCanvas().style.cursor = "";
+    });
+    scenario.map = map;
+    scenario.loading = false;
+    $("site-status").textContent = `${scenario.candidates.size} candidates`;
+    renderSiteSelection();
+  } catch (error) {
+    scenario.loading = false;
+    $("site-status").textContent = "unavailable";
+    toast(`Could not load candidate sites: ${error.message}`, true);
+  }
+}
+
+function applySiteFilter() {
+  const map = state.siteScenario.map;
+  if (!map || !map.getLayer("site-candidates")) return;
+  const value = $("site-action-filter").value;
+  map.setFilter("site-candidates", value === "all" ? null : ["==", ["get", "action_class"], value]);
+}
+
+function updateSiteSelectedSource() {
+  const map = state.siteScenario.map;
+  if (!map) return;
+  const source = map.getSource("siteSelected");
+  if (source) source.setData(siteFeatureCollection());
+}
+
+function toggleSiteSelection(siteId) {
+  const scenario = state.siteScenario;
+  if (!scenario.candidates.has(siteId)) return;
+  if (scenario.selected.has(siteId)) scenario.selected.delete(siteId);
+  else scenario.selected.add(siteId);
+  invalidateSiteEvaluation();
+  updateSiteSelectedSource();
+  renderSiteSelection();
+}
+
+function selectSixSiteCandidates() {
+  const scenario = state.siteScenario;
+  const candidates = [...scenario.candidates.values()];
+  const preferred = candidates.filter((site) => site.action_class === "plant_cool");
+  const chosen = (preferred.length ? preferred : candidates).slice(0, 6);
+  scenario.selected = new Set(chosen.map((site) => site.site_id));
+  invalidateSiteEvaluation();
+  updateSiteSelectedSource();
+  renderSiteSelection();
+  if (!chosen.length) toast("No candidate sites are available.", true);
+}
+
+function clearSiteSelection() {
+  state.siteScenario.selected.clear();
+  invalidateSiteEvaluation();
+  updateSiteSelectedSource();
+  renderSiteSelection();
+  $("site-status").textContent = `${state.siteScenario.candidates.size} candidates`;
+}
+
+function invalidateSiteEvaluation() {
+  state.siteScenario.evaluation = null;
+  state.siteScenario.scenario = null;
+  $("site-scenario-summary").innerHTML = "";
+  $("site-results").innerHTML = "";
+  if (state.siteScenario.selected.size) $("site-status").textContent = "ready";
+}
+
+function renderSiteSelection() {
+  const scenario = state.siteScenario;
+  const selected = [...scenario.selected]
+    .map((siteId) => scenario.candidates.get(siteId))
+    .filter(Boolean);
+  const count = Math.max(1, Math.round(Number($("site-count").value || 1)));
+  const cost = Math.max(0, Number($("site-cost").value || 0));
+  const water = Math.max(0, Number($("site-water").value || 0));
+  const trees = selected.length * count;
+  $("site-selection-summary").textContent = selected.length
+    ? `${selected.length} site${selected.length === 1 ? "" : "s"} · ${formatNumber(trees)} trees · C$${formatNumber(trees * cost)} · ${formatNumber(trees * water)} L/yr`
+    : "Click candidate sites on the map to add or remove them.";
+  $("site-evaluate").disabled = scenario.busy || !selected.length;
+  $("site-open-3d").disabled = scenario.busy || !selected.length;
+}
+
+function siteWhenIso() {
+  const date = $("site-date").value || "2026-06-21";
+  const time = $("site-time").value || "12:00";
+  const approx = new Date(`${date}T${time}:00Z`);
+  const zone = new Intl.DateTimeFormat("en-US", {
+    timeZone: "America/Vancouver",
+    timeZoneName: "longOffset",
+  })
+    .formatToParts(approx)
+    .find((part) => part.type === "timeZoneName")?.value;
+  const offset = zone?.replace("GMT", "") || "-07:00";
+  const parsed = new Date(`${date}T${time}:00${offset}`);
+  return Number.isNaN(parsed.getTime()) ? new Date().toISOString() : parsed.toISOString();
+}
+
+function buildSiteScenarioPayload() {
+  const scenario = state.siteScenario;
+  const count = Math.max(1, Math.round(Number($("site-count").value || 1)));
+  const height = Number($("site-height").value || 8);
+  const crown = Number($("site-crown").value || 3);
+  const cost = Number($("site-cost").value || 0);
+  const water = Number($("site-water").value || 0);
+  const species = $("site-species").value.trim() || "Acer rubrum";
+  const maintenance = $("site-maintenance").value.trim() || "unspecified";
+  const sites = [...scenario.selected]
+    .map((siteId) => scenario.candidates.get(siteId))
+    .filter(Boolean)
+    .map((site) => ({
+      site_id: site.site_id,
+      species,
+      height_m: height,
+      crown_radius_m: crown,
+      count,
+      cost_cad: cost,
+      water_l_per_year: water,
+      maintenance,
+      assumption_source: "browser scenario input",
+    }));
+  return {
+    schema_version: "fresh-urban-forest.site-scenario.v1",
+    scenario_id: `scenario-site-${Date.now().toString(36)}`,
+    label: "Site planting scenario",
+    created_at: new Date().toISOString(),
+    settings: {
+      date: $("site-date").value,
+      time: $("site-time").value,
+      target_height_m: Number($("site-target-height").value || 1.5),
+    },
+    sites,
+  };
+}
+
+async function evaluateSiteScenario() {
+  const scenario = state.siteScenario;
+  if (!scenario.selected.size || scenario.busy) return;
+  scenario.busy = true;
+  renderSiteSelection();
+  $("site-status").textContent = "evaluating";
+  $("site-results").innerHTML = '<p class="hint">Running baseline and scenario shadow accumulation...</p>';
+  try {
+    const document = buildSiteScenarioPayload();
+    const payload = await api("api/site-scenario/evaluate", {
+      method: "POST",
+      body: JSON.stringify({
+        scenario: document,
+        whens: [siteWhenIso()],
+        target_height_m: Number($("site-target-height").value || 1.5),
+        include_per_site: true,
+        include_sensitivity: $("site-sensitivity").checked,
+      }),
+    });
+    scenario.evaluation = payload.evaluation;
+    scenario.scenario = payload.scenario;
+    renderSiteEvaluation(payload);
+    $("site-status").textContent = "evaluated";
+  } catch (error) {
+    $("site-status").textContent = "error";
+    $("site-results").innerHTML = `<p class="hint">Evaluation failed: ${escapeHtml(error.message)}</p>`;
+    toast(`Site scenario failed: ${error.message}`, true);
+  } finally {
+    scenario.busy = false;
+    renderSiteSelection();
+  }
+}
+
+function formatSiteDelta(value, digits = 0) {
+  const number = Number(value || 0);
+  return `${number >= 0 ? "+" : ""}${formatNumber(number, digits)}`;
+}
+
+function renderSiteEvaluation(payload) {
+  const evaluation = payload.evaluation || payload;
+  const baseline = Number(evaluation.baseline_shade_m2h || 0);
+  const scenario = Number(evaluation.scenario_shade_m2h || 0);
+  const delta = Number(evaluation.delta_shade_m2h || 0);
+  const percent = evaluation.delta_shade_pct;
+  const deltaClass = delta >= 0 ? "gain" : "loss";
+  $("site-scenario-summary").innerHTML = `
+    <div class="change-stat"><span>Baseline</span><strong>${formatCompact(baseline, " m²h")}</strong></div>
+    <div class="change-stat"><span>Scenario</span><strong>${formatCompact(scenario, " m²h")}</strong></div>
+    <div class="change-stat ${deltaClass}"><span>Delta</span><strong>${formatCompact(delta, " m²h")}</strong></div>
+    <div class="change-stat ${deltaClass}"><span>Delta</span><strong>${percent == null ? "n/a" : `${delta >= 0 ? "+" : ""}${Number(percent).toFixed(4)}%`}</strong></div>`;
+  const rows = (evaluation.per_site || [])
+    .map(
+      (site) => `<tr><td>${escapeHtml(String(site.site_id))}</td><td>${formatNumber(site.trees)}</td><td>${formatSiteDelta(site.delta_shade_m2h)}</td><td>${site.delta_shade_pct == null ? "n/a" : `${site.delta_shade_pct >= 0 ? "+" : ""}${Number(site.delta_shade_pct).toFixed(4)}%`}</td></tr>`
+    )
+    .join("");
+  const sensitivity = (evaluation.sensitivity || [])
+    .map(
+      (entry) => `<tr><td>${escapeHtml(String(entry.case))}</td><td>${formatNumber(entry.height_scale, 2)}</td><td>${formatNumber(entry.crown_scale, 2)}</td><td>${formatSiteDelta(entry.delta_shade_m2h)}</td></tr>`
+    )
+    .join("");
+  $("site-results").innerHTML = `
+    <table><thead><tr><th>Site</th><th>Trees</th><th>Δ m²h</th><th>Δ %</th></tr></thead><tbody>${rows}</tbody></table>
+    ${sensitivity ? `<p class="hint">Height / crown sensitivity</p><table><thead><tr><th>Case</th><th>Height</th><th>Crown</th><th>Δ m²h</th></tr></thead><tbody>${sensitivity}</tbody></table>` : ""}
+    <p class="hint"><strong>${escapeHtml(String(evaluation.method || "shadow model"))}</strong> · ${escapeHtml(String(evaluation.uncertainty?.status || "scenario screen"))} · not an observed outcome.</p>`;
+}
+
+async function openSiteScenario3D() {
+  const scenario = state.siteScenario;
+  if (!scenario.selected.size || scenario.busy) return;
+  const count = Math.max(1, Math.round(Number($("site-count").value || 1)));
+  const height = Number($("site-height").value || 8);
+  const crown = Number($("site-crown").value || 3);
+  const species = $("site-species").value.trim() || "Acer rubrum";
+  const edits = [];
+  for (const siteId of scenario.selected) {
+    const site = scenario.candidates.get(siteId);
+    if (!site) continue;
+    for (let index = 0; index < count; index += 1) {
+      edits.push({
+        kind: "plant",
+        tree_id: `p48-${site.site_id}-${index}`,
+        lon: site.lon,
+        lat: site.lat,
+        species,
+        common_name: species,
+        dbh_cm: 8,
+        height_m: height,
+        crown_width_m: crown * 2,
+        note: "P48 hypothetical site scenario",
+      });
+    }
+  }
+  if (!edits.length) return;
+  if (edits.length > 1000) {
+    toast("That scenario is too large for the 3D preview.", true);
+    return;
+  }
+  scenario.busy = true;
+  renderSiteSelection();
+  $("site-status").textContent = "opening 3D";
+  try {
+    const created = await api("/api/scenarios", {
+      method: "POST",
+      body: JSON.stringify({ name: "P48 site scenario", years: 0, edits }),
+    });
+    await refreshScenarioOptions();
+    await loadScenario(created.scenario_id);
+  } catch (error) {
+    $("site-status").textContent = "3D error";
+    toast(`Could not open scenario in 3D: ${error.message}`, true);
+  } finally {
+    scenario.busy = false;
+    renderSiteSelection();
+  }
 }
 
 function ensureLightView() {
