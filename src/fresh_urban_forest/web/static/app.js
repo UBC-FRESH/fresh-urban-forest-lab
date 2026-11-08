@@ -1399,6 +1399,31 @@ function buildTerrainMesh() {
   return mesh;
 }
 
+function roadWidthMeters(highway) {
+  const widths = {
+    motorway: 10.0,
+    motorway_link: 6.0,
+    trunk: 9.0,
+    trunk_link: 5.5,
+    primary: 8.0,
+    primary_link: 5.0,
+    secondary: 6.5,
+    secondary_link: 4.5,
+    tertiary: 5.5,
+    tertiary_link: 4.0,
+    residential: 4.0,
+    living_street: 4.0,
+    unclassified: 3.5,
+    service: 3.0,
+    pedestrian: 3.0,
+    cycleway: 2.0,
+    footway: 1.5,
+    path: 1.2,
+    steps: 1.2,
+  };
+  return widths[String(highway || "unclassified")] || 3.5;
+}
+
 function buildRoadLines() {
   const source = threeScene();
   const features = state.roads?.features;
@@ -1423,12 +1448,12 @@ function buildRoadLines() {
     const row = Math.round(((top - (y + originY)) / Math.max(top - bottom, 1e-9)) * (height - 1));
     if (col < 0 || row < 0 || col >= width || row >= height) return null;
     const z = elevation[row * width + col];
-    return [x, Number.isFinite(z) ? z - originZ + 1.4 : 1.4, -y];
+    return [x, Number.isFinite(z) ? z - originZ + 0.08 : 0.08, -y];
   };
-  const halfWidth = 10.0;
   for (const feature of features) {
     const coordinates = feature.geometry?.coordinates;
     if (!Array.isArray(coordinates)) continue;
+    const halfWidth = roadWidthMeters(feature.properties?.highway) / 2.0;
     for (let index = 0; index < coordinates.length - 1; index += 1) {
       const first = point(coordinates[index][0], coordinates[index][1]);
       const second = point(coordinates[index + 1][0], coordinates[index + 1][1]);
@@ -1457,14 +1482,17 @@ function buildRoadLines() {
     color: 0xffffff,
     transparent: true,
     opacity: 0.9,
-    depthTest: false,
+    depthTest: true,
     depthWrite: false,
+    polygonOffset: true,
+    polygonOffsetFactor: -1,
+    polygonOffsetUnits: -1,
     side: THREE.DoubleSide,
   });
   const roads = new THREE.Mesh(geometry, material);
   roads.name = "roads";
   roads.userData.kind = "roads";
-  roads.renderOrder = 5;
+  roads.renderOrder = 1;
   return roads;
 }
 
