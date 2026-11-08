@@ -1,6 +1,6 @@
 # P48 site-level planting scenarios
 
-Status: implementation complete; close-out pending.
+Status: complete. Merged in PR #258 as `899615c`.
 
 ## P48.1 Candidate-site and scenario data contract
 

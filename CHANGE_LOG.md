@@ -1146,3 +1146,5 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Dashboard: GREEN (lint, format, types, tests, validator, docs).
 - P48 remains a scenario screen: no ownership, field validation, survival, or planting-plan
   claim. P45's citywide change direction remains unresolved.
+
+- Merged P48 as `899615c` via PR #258; parent #247 and child issues #248–#251 are closed. Phase status: complete.
