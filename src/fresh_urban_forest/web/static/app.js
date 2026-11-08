@@ -50,7 +50,9 @@ const state = {
   heatEquity: null,
   canopyChange: null,
   canopyAction: null,
+  canopyActionVersion: "original",
   canopyTurnover: null,
+  canopyTurnoverVersion: "original",
   changeProduct: "change.json",
   changeProductsLoaded: false,
   lightMap: null,
@@ -450,6 +452,38 @@ function renderCityMetrics() {
   $("city-source").textContent = `${formatNumber(city.tree_count)} public trees · ${local.length} local areas · 2022 LiDAR · ${formatNumber(visualTrees)} visual trees`;
 }
 
+async function loadCanopyActionVersion(version) {
+  state.canopyActionVersion = version;
+  try {
+    const [payload, geojson] = await Promise.all([
+      api(`api/canopy-action?version=${encodeURIComponent(version)}`),
+      api(`api/canopy-action.geojson?version=${encodeURIComponent(version)}`),
+    ]);
+    state.canopyAction = payload;
+    renderCanopyAction();
+    if (state.map?.getSource("canopyAction")) state.map.getSource("canopyAction").setData(geojson);
+  } catch (_error) {
+    state.canopyAction = null;
+    renderCanopyAction();
+  }
+}
+
+async function loadCanopyTurnoverVersion(version) {
+  state.canopyTurnoverVersion = version;
+  try {
+    const [payload, geojson] = await Promise.all([
+      api(`api/canopy-turnover?version=${encodeURIComponent(version)}`),
+      api(`api/canopy-turnover.geojson?version=${encodeURIComponent(version)}`),
+    ]);
+    state.canopyTurnover = payload;
+    renderCanopyTurnover();
+    if (state.map?.getSource("canopyTurnover")) state.map.getSource("canopyTurnover").setData(geojson);
+  } catch (_error) {
+    state.canopyTurnover = null;
+    renderCanopyTurnover();
+  }
+}
+
 function renderCanopyTurnover() {
   const data = state.canopyTurnover;
   const status = $("canopy-turnover-status");
@@ -481,7 +515,7 @@ function renderCanopyTurnover() {
     <div class="city-method"><strong>largest patch</strong><span>${formatCompact(largest / 10000, " ha")} · 2 m patches ≥50 m²</span></div>
     <p class="muted" style="font-size:.68rem;margin-top:8px">Turnover screen, not net gain/loss or tree survival.</p>
   `;
-  status.textContent = "screening";
+  status.textContent = state.canopyTurnoverVersion === "control" ? "full-control" : "original";
 }
 
 function renderCanopyAction() {
@@ -520,7 +554,7 @@ function renderCanopyAction() {
     <div class="city-table">${rows}</div>
     <p class="muted" style="font-size:.68rem;margin-top:8px">Screening rule, not a planting plan or causal forecast.</p>
   `;
-  status.textContent = "screening";
+  status.textContent = state.canopyActionVersion === "control" ? "full-control" : "original";
 }
 
 function renderCanopyChange() {
@@ -802,22 +836,18 @@ async function init() {
       }
     }
     if (dataset.has_canopy_action) {
-      try {
-        state.canopyAction = await api("api/canopy-action");
-        renderCanopyAction();
-      } catch (_error) {
-        state.canopyAction = null;
-        renderCanopyAction();
-      }
+      state.canopyActionVersion = dataset.has_canopy_action_control ? "control" : "original";
+      $("canopy-action-version").value = state.canopyActionVersion;
+      $("canopy-action-version").querySelector('option[value="control"]').disabled =
+        !dataset.has_canopy_action_control;
+      await loadCanopyActionVersion(state.canopyActionVersion);
     }
     if (dataset.has_canopy_turnover) {
-      try {
-        state.canopyTurnover = await api("api/canopy-turnover");
-        renderCanopyTurnover();
-      } catch (_error) {
-        state.canopyTurnover = null;
-        renderCanopyTurnover();
-      }
+      state.canopyTurnoverVersion = dataset.has_canopy_turnover_control ? "control" : "original";
+      $("canopy-turnover-version").value = state.canopyTurnoverVersion;
+      $("canopy-turnover-version").querySelector('option[value="control"]').disabled =
+        !dataset.has_canopy_turnover_control;
+      await loadCanopyTurnoverVersion(state.canopyTurnoverVersion);
     }
     $("dataset-name").textContent = `${dataset.name} · ${dataset.tree_count.toLocaleString("en-CA")} tree records · ${dataset.sources.length} sources`;
     setStatus("live");
@@ -1020,15 +1050,19 @@ function initMap() {
         },
         canopyAction: {
           type: "geojson",
-          data: state.dataset?.has_canopy_action
-            ? "api/canopy-action.geojson"
-            : { type: "FeatureCollection", features: [] },
+          data: state.dataset?.has_canopy_action_control
+            ? "api/canopy-action.geojson?version=control"
+            : state.dataset?.has_canopy_action
+              ? "api/canopy-action.geojson"
+              : { type: "FeatureCollection", features: [] },
         },
         canopyTurnover: {
           type: "geojson",
-          data: state.dataset?.has_canopy_turnover
-            ? "api/canopy-turnover.geojson"
-            : { type: "FeatureCollection", features: [] },
+          data: state.dataset?.has_canopy_turnover_control
+            ? "api/canopy-turnover.geojson?version=control"
+            : state.dataset?.has_canopy_turnover
+              ? "api/canopy-turnover.geojson"
+              : { type: "FeatureCollection", features: [] },
         },
         offInventory: {
           type: "geojson",
@@ -2231,6 +2265,12 @@ function bindControls() {
         event.target.checked ? "visible" : "none",
       );
     }
+  });
+  $("canopy-action-version").addEventListener("change", (event) => {
+    loadCanopyActionVersion(event.target.value);
+  });
+  $("canopy-turnover-version").addEventListener("change", (event) => {
+    loadCanopyTurnoverVersion(event.target.value);
   });
   $("toggle-canopy-action").addEventListener("change", (event) => {
     if (state.map && state.map.getLayer("canopy-action")) {
@@ -5452,7 +5492,11 @@ async function populateChangeProducts() {
           `<option value="${escapeHtml(product.id)}">${escapeHtml(product.label)}</option>`
       )
       .join("");
-    if (products.some((product) => product.id === state.changeProduct)) {
+    const control = products.find((product) => product.id === "change_control.json");
+    if (control) {
+      state.changeProduct = control.id;
+      select.value = state.changeProduct;
+    } else if (products.some((product) => product.id === state.changeProduct)) {
       select.value = state.changeProduct;
     } else if (products.length) {
       state.changeProduct = products[0].id;

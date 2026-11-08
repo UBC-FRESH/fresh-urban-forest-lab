@@ -1312,7 +1312,7 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
   1,033 scored, 870 400 m cells; restricted to the original 797-cell P42/P44 grid.
 - Rebuilt corrected P44 action and P46 turnover on the corrected P43 screen.
 - P44 action counts: plant+cool 166, monitor 196, expand 110, structural 113,
-  protect/investigate 212 (original 265/233/133/127/39).
+  protect/investigate 212 (original 50/101/77/23/546).
 - P46 high-tier 259 cells; turnover area 135.58 ha (original 260 / 181.76 ha).
 - Corrected products are versioned under `vancouver_2022_control/`; public API/UI unchanged.
 - Shift is a screening result, not proof of loss.
@@ -1373,3 +1373,14 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
   and explicit labels retaining original products.
 - Created child issues #289–#291 and activated `feature/p54-corrected-products`.
 - No field-validation, final citywide direction, survival, ownership, or planting claim.
+
+### P54 corrected action/turnover publication
+
+- Added `version=original|control` to action/turnover JSON and GeoJSON endpoints.
+- Published corrected sidecars; API default remains original.
+- Added UI version selectors; corrected version defaults when available.
+- Change tab defaults to `change_control.json`; original remains selectable.
+- Corrected action counts: plant 162, monitor 195, expand 110, structural 113,
+  protect 217. Original: 50/101/77/23/546.
+- Corrected turnover: 260 high, 135.64 ha; original 260 high, 181.76 ha.
+- Browser smoke clean; dashboard green.

@@ -501,7 +501,13 @@ def create_app(
         summary["has_heat_equity"] = _dataset_file(state, "heat_equity.json") is not None
         summary["has_canopy_change"] = _dataset_file(state, "canopy_change.json") is not None
         summary["has_canopy_action"] = _dataset_file(state, "canopy_action.json") is not None
+        summary["has_canopy_action_control"] = (
+            _dataset_file(state, "canopy_action_control.json") is not None
+        )
         summary["has_canopy_turnover"] = _dataset_file(state, "canopy_turnover.json") is not None
+        summary["has_canopy_turnover_control"] = (
+            _dataset_file(state, "canopy_turnover_control.json") is not None
+        )
         summary["has_map_trees"] = _dataset_file(state, "map_trees.json.gz") is not None
         summary["has_map_buildings"] = _dataset_file(state, "map_buildings.geojson.gz") is not None
         summary["has_full_scene"] = _dataset_file(state, "full_scene.json.gz") is not None
@@ -779,19 +785,27 @@ def create_app(
         )
 
     @app.get("/api/canopy-turnover")
-    def canopy_turnover() -> JSONResponse:
+    def canopy_turnover(version: str = "original") -> JSONResponse:
         """Return the optional canopy turnover-hotspot screen.
+
+        Parameters
+        ----------
+        version : str
+            ``original`` or ``control``.
 
         Returns
         -------
         JSONResponse
             The turnover JSON, or a 404 when the dataset has no product.
         """
-        path = _dataset_file(state, "canopy_turnover.json")
+        if version not in {"original", "control"}:
+            raise HTTPException(status_code=400, detail="version must be original or control")
+        name = "canopy_turnover_control.json" if version == "control" else "canopy_turnover.json"
+        path = _dataset_file(state, name)
         if path is None:
             raise HTTPException(
                 status_code=404,
-                detail="this dataset has no canopy-turnover product",
+                detail=f"this dataset has no {version} canopy-turnover product",
             )
         return JSONResponse(
             json.loads(path.read_text(encoding="utf-8")),
@@ -799,19 +813,29 @@ def create_app(
         )
 
     @app.get("/api/canopy-turnover.geojson")
-    def canopy_turnover_geojson() -> FileResponse:
+    def canopy_turnover_geojson(version: str = "original") -> FileResponse:
         """Return the 400 m turnover cells as GeoJSON.
+
+        Parameters
+        ----------
+        version : str
+            ``original`` or ``control``.
 
         Returns
         -------
         FileResponse
             GeoJSON, or a 404 when the dataset has no product.
         """
-        path = _dataset_file(state, "canopy_turnover.geojson")
+        if version not in {"original", "control"}:
+            raise HTTPException(status_code=400, detail="version must be original or control")
+        name = (
+            "canopy_turnover_control.geojson" if version == "control" else "canopy_turnover.geojson"
+        )
+        path = _dataset_file(state, name)
         if path is None:
             raise HTTPException(
                 status_code=404,
-                detail="this dataset has no canopy-turnover product",
+                detail=f"this dataset has no {version} canopy-turnover product",
             )
         return FileResponse(
             path,
@@ -820,19 +844,27 @@ def create_app(
         )
 
     @app.get("/api/canopy-action")
-    def canopy_action() -> JSONResponse:
+    def canopy_action(version: str = "original") -> JSONResponse:
         """Return the optional integrated canopy-action screen.
+
+        Parameters
+        ----------
+        version : str
+            ``original`` or ``control``.
 
         Returns
         -------
         JSONResponse
             The canopy-action JSON, or a 404 when the dataset has no product.
         """
-        path = _dataset_file(state, "canopy_action.json")
+        if version not in {"original", "control"}:
+            raise HTTPException(status_code=400, detail="version must be original or control")
+        name = "canopy_action_control.json" if version == "control" else "canopy_action.json"
+        path = _dataset_file(state, name)
         if path is None:
             raise HTTPException(
                 status_code=404,
-                detail="this dataset has no canopy-action product",
+                detail=f"this dataset has no {version} canopy-action product",
             )
         return JSONResponse(
             json.loads(path.read_text(encoding="utf-8")),
@@ -840,19 +872,27 @@ def create_app(
         )
 
     @app.get("/api/canopy-action.geojson")
-    def canopy_action_geojson() -> FileResponse:
+    def canopy_action_geojson(version: str = "original") -> FileResponse:
         """Return the 400 m canopy-action cells as GeoJSON.
+
+        Parameters
+        ----------
+        version : str
+            ``original`` or ``control``.
 
         Returns
         -------
         FileResponse
             GeoJSON, or a 404 when the dataset has no product.
         """
-        path = _dataset_file(state, "canopy_action.geojson")
+        if version not in {"original", "control"}:
+            raise HTTPException(status_code=400, detail="version must be original or control")
+        name = "canopy_action_control.geojson" if version == "control" else "canopy_action.geojson"
+        path = _dataset_file(state, name)
         if path is None:
             raise HTTPException(
                 status_code=404,
-                detail="this dataset has no canopy-action product",
+                detail=f"this dataset has no {version} canopy-action product",
             )
         return FileResponse(
             path,
