@@ -29,7 +29,7 @@ This roadmap is the plan of record and the issue tracker map for FRESH Urban For
 | P21 Ground-adapter second-tile smoke test | #126 | `feature/p21-ground-smoke` | complete |
 | P30 Full Vancouver city canopy and ecosystem-services pilot | #105 | `feature/p30-vancouver-city` | complete |
 | P31 Move the ground writer to FEMIC | #135 | `feature/p31-move-ground-writer` | complete |
-| P32 ALS-derived off-inventory and private-canopy inventory | #136 | `feature/p32-off-inventory-als` | active |
+| P32 ALS-derived off-inventory and private-canopy inventory | #136 | `feature/p32-off-inventory-als` | complete |
 | P33 Remove the ground-classifier prototype | #146 | `feature/p33-remove-ground-classifier` | complete |
 | P34 Surrey, Burnaby, and Coquitlam portal instances | #149 | `feature/p34-lower-mainland-instances` | complete |
 | P35 Off-inventory conifer/deciduous classifier and QA | #156 | `feature/p35-off-inventory-classifier` | complete |
@@ -831,7 +831,10 @@ module remains; the docs name FEMIC as canonical; the dashboard is green.
 
 Parent issue: #136
 Branch: `feature/p32-off-inventory-als`
-Status: active
+Status: complete
+
+Outcome: candidate layer and validation delivered in the main data snapshot;
+archived branch not merged because it diverged from P34–P44.
 
 Goal: turn the P9 off-inventory pilot into a full-city, confidence-scored ALS-derived
 candidate inventory that can represent likely private residential canopy without claiming a
@@ -840,12 +843,12 @@ census, ownership, or species.
 Plan: `notes/design/als-offinventory-inventory.md`.
 
 - [x] P32.1 Evidence, target definition, data lock, and validation protocol (#137)
-- [ ] P32.2 Full-city ALS point and CHM tile preparation (#138)
-- [ ] P32.3 Individual-tree segmentation and candidate detection (#139)
-- [ ] P32.4 Inventory reconciliation and public/private land proxy (#140)
-- [ ] P32.5 Candidate attributes and uncertainty (#141)
-- [ ] P32.6 City app off-inventory layer and private-canopy metrics (#142)
-- [ ] P32.7 Validation, manual audit, docs, and close-out (#143)
+- [x] P32.2 Full-city ALS point and CHM tile preparation (#138) — delivered
+- [x] P32.3 Individual-tree segmentation and candidate detection (#139) — delivered
+- [x] P32.4 Inventory reconciliation and public/private land proxy (#140) — delivered
+- [x] P32.5 Candidate attributes and uncertainty (#141) — delivered
+- [x] P32.6 City app off-inventory layer and private-canopy metrics (#142) — delivered
+- [x] P32.7 Validation, manual audit, docs, and close-out (#143) — delivered
 
 Acceptance criteria:
 

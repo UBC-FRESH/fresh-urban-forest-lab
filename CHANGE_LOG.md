@@ -1,3 +1,13 @@
+### P32 close-out: off-inventory candidate layer retained, branch archived
+
+- P32 candidate and validation data were already in the main Vancouver dataset:
+  528,812 detections, 335,471 candidates, 163,158 likely-private proxies.
+- Validation: 76.6% held-out public-tree recall; 78.2% strict blind-audit precision
+  (75.9% conservative); 52.64% independent UBC recall.
+- The P32 branch is 20 ahead / 16 behind main and conflicts with P34–P44 service/UI work.
+  It is archived, not merged.
+- Added `notes/reports/p32-closeout.md` and retained the P32 reports.
+
 # Change Log
 
 Newest entries last. Each milestone gets a dated entry that matches the roadmap status and the GitHub issue comments.
