@@ -965,3 +965,4 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
   133 expand, 127 structural, 39 protect loss; no console/page errors.
 - Dashboard: GREEN (lint, format, types, tests, validator, docs).
 - Opened PR #221 for maintainer review; phase remains open until merge and parent-issue close-out.
+- Merged P44 as `f554fa7` via PR #221; follow-up PR #222 fixed the action refresh to use the canonical P43 citywide change. Parent #216 and child issues #217–#220 are closed. Phase status: complete.
