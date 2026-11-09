@@ -1438,3 +1438,8 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
   at city zoom.
 - Verified with off-inventory enabled: clicking a public tree selects the tree, not the
   candidate overlay.
+
+### P57 v0.4.1 patch release start
+
+- Created parent issue #304 and branch `release/v0.4.1`.
+- Scope: ship the public-tree click priority and hit-tolerance fix.
