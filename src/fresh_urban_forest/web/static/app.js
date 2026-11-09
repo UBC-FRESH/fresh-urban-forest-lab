@@ -731,6 +731,7 @@ async function init() {
     state.dataset = dataset;
     state.scene = scene;
     updateSiteTabVisibility(Boolean(dataset.has_site_candidates));
+    updateLayerToggleAvailability(dataset);
     if (dataset.has_roads) {
       try {
         state.roads = await api("api/roads");
@@ -1005,6 +1006,26 @@ function renderTimeline(timeline) {
     <path d="${area}" fill="url(#canopy-fill)"></path>
     <path d="${points}" fill="none" stroke="#2f6b4f" stroke-width="2.5" stroke-linejoin="round"></path>
     ${labels}`;
+}
+
+function updateLayerToggleAvailability(dataset) {
+  const layers = {
+    "toggle-off-inventory": "has_off_inventory",
+    "toggle-heat-priority": "has_heat_priority",
+    "toggle-planting-opportunity": "has_planting_opportunity",
+    "toggle-heat-equity": "has_heat_equity",
+    "toggle-canopy-change": "has_canopy_change",
+    "toggle-canopy-action": "has_canopy_action",
+    "toggle-canopy-turnover": "has_canopy_turnover",
+  };
+  for (const [id, flag] of Object.entries(layers)) {
+    const input = $(id);
+    if (!input) continue;
+    const available = Boolean(dataset[flag]);
+    input.disabled = !available;
+    const label = input.closest("label");
+    if (label) label.hidden = !available;
+  }
 }
 
 function initMap() {

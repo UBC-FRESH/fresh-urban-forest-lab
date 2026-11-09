@@ -149,6 +149,7 @@ def test_app_script_has_the_expected_endpoints_and_layers() -> None:
         "species groups are not validated for this dataset",
         "api/birds",
         "loadBirds",
+        "updateLayerToggleAvailability",
         "loadCanopyActionVersion",
         "loadCanopyTurnoverVersion",
         "api/canopy-action?version=",
