@@ -1,15 +1,17 @@
 Project status and repository map
 =================================
 
-Status as of 2026-11-04:
+Status as of 2026-11-09:
 
-- Phases 0–15 are complete on ``main``.
-- v0.3.0 is released. The tag and GitHub release exist, and the documentation site is live
-  on GitHub Pages. See :doc:`research-agenda`, :doc:`shade-and-species`,
-  :doc:`optimization-and-pareto`, :doc:`off-inventory-canopy`,
-  :doc:`bird-habitat-and-demography`, and :doc:`integration-and-release`.
-- P30 is complete: a full-City-of-Vancouver public-data pilot. See
-  :doc:`vancouver-city-pilot`.
+- The mainline is complete through Phase 55; P37 remains a separate workstream.
+- v0.4.0 is prepared for release. P30 adds a full-City-of-Vancouver public-data pilot; P38–P46
+  add shade/equity, gap, heat, change, action, and turnover screens; P47–P49 add the
+  Optimization and site-scenario explorers; P50–P55 add full-city vertical control and
+  corrected change/action/turnover layers.
+- The documentation site remains live on GitHub Pages. See :doc:`research-agenda`,
+  :doc:`shade-and-species`, :doc:`optimization-and-pareto`, :doc:`site-scenarios`,
+  :doc:`off-inventory-canopy`, :doc:`bird-habitat-and-demography`,
+  :doc:`change-products`, :doc:`vancouver-city-pilot`, and :doc:`integration-and-release`.
 
 The live plan is ``ROADMAP.md`` and the GitHub issues. The dated narrative is
 ``CHANGE_LOG.md``.

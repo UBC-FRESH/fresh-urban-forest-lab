@@ -1412,3 +1412,19 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Scope: release metadata/docs, five-portal control audit, browser smoke, PR, and approval.
 - Created child issues #300–#302 and activated `release/v0.4.0`.
 - No tag or GitHub release without explicit approval.
+
+### P56.1 release metadata and notes
+
+- Bumped package/CITATION version to 0.4.0 (2026-11-09).
+- Updated README and project status for the mainline through P55.
+- Added `notes/releases/v0.4.0.md` with corrected-product and portal caveats.
+- Tag/GitHub release remains approval-gated.
+
+### P56.2 release verification
+
+- Audited all five portal routes and visible tabs: no page errors.
+- Confirmed no visible map toggle lacks its dataset product; unavailable toggles are hidden.
+- Vancouver: corrected/original action and turnover versions switch; Change defaults to
+  corrected; shade equity, canopy gaps, and heat equity layers render.
+- Dashboard, validator, and docs gates green.
+- Added `notes/reports/p56-release-verification.md`.
