@@ -1393,3 +1393,13 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Scope: inspect four western control outliers, decide constant vs local correction, and
   finalize release without overclaiming.
 - Created child issues #295–#297 and activated `feature/p55-outlier-adjudication`.
+
+### P55 outlier adjudication
+
+- Four western control tiles show broad class-2 differences, not isolated spikes.
+- Adjacent inliers are near zero; 2018 class-6 roofs are absent and no independent external
+  control was available.
+- Decision: retain the full-sample constant +0.011 m correction, retain the outlier caveat,
+  and do not apply a four-tile local correction.
+- Corrected P43/P44/P46 products remain unchanged; original lineage remains selectable.
+- Docs updated; dashboard verification remains P53/P54 browser smoke.

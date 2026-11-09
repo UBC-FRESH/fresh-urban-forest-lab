@@ -193,3 +193,10 @@ P54 exposes corrected P44/P46 sidecars through
 matching GeoJSON routes. The action and turnover panels default to the corrected version
 when available and keep the original selectable. The API default remains ``original`` for
 backward compatibility.
+
+P55 adjudicated the four western control outliers. Their class-2 differences are broad and
+localized to the western edge; adjacent inlier tiles are near zero. No independent roof,
+road, ICESat-2, or GEDI control was available, and 2018 class-6 roofs are absent. The
+constant **+0.011 m** correction is retained with the outlier caveat; no four-tile local
+correction is applied. The four tiles remain in the control count and are excluded only
+from the stability gate.

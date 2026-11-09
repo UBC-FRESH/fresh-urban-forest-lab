@@ -51,7 +51,7 @@ This roadmap is the plan of record and the issue tracker map for FRESH Urban For
 | P52 Lower Mainland candidate-data honesty | #278 | `feature/p51-candidate-honesty` | complete |
 | P53 Full-city vertical control and corrected publication | #282 | `feature/p53-full-control` | complete |
 | P54 Corrected action and turnover publication | #288 | `feature/p54-corrected-products` | complete |
-| P55 Vertical-control outlier adjudication | #294 | `feature/p55-outlier-adjudication` | active |
+| P55 Vertical-control outlier adjudication | #294 | `feature/p55-outlier-adjudication` | pr-open |
 
 ## Lifecycle Map
 
@@ -1494,16 +1494,16 @@ Phase 54 verification:
 
 Parent issue: #294
 Branch: `feature/p55-outlier-adjudication`
-Status: active
+Status: pr-open
 
 Goal: decide whether the four western control outliers invalidate the constant P53 correction
 or are localized effects that remain within the caveat.
 
 Plan: `notes/design/p55-outlier-adjudication.md`.
 
-- [ ] P55.1 Outlier tile adjudication (#295)
-- [ ] P55.2 Control-model decision and product update if warranted (#296)
-- [ ] P55.3 Docs, final verification, PR, and close-out (#297)
+- [x] P55.1 Outlier tile adjudication (#295)
+- [x] P55.2 Control-model decision and product update if warranted (#296)
+- [x] P55.3 Docs, final verification, PR, and close-out (#297)
 
 Acceptance criteria:
 
