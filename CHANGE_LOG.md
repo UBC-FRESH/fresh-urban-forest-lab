@@ -1449,3 +1449,5 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Bumped package/CITATION to 0.4.1 and added v0.4.1 release notes.
 - Documented the public-tree click priority/hit-tolerance fix.
 - No scientific/product defaults changed.
+
+- Merged P57 as `1422c2b` via PR #305; created tag `v0.4.1`, published the GitHub release, and closed parent #304. Phase status: complete.

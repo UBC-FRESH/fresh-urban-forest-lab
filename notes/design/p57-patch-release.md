@@ -2,7 +2,7 @@
 
 Parent issue: #304
 Branch: `release/v0.4.1`
-Status: active
+Status: complete
 
 ## Scope
 

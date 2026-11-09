@@ -1,6 +1,6 @@
 # P57 v0.4.1 patch release verification
 
-Status: complete; tag/GitHub release pending approval.
+Status: complete. Merged in PR #305 as `1422c2b`; tag `v0.4.1` and GitHub release published.
 
 - Version/CITATION/README updated to 0.4.1.
 - Release notes added.
