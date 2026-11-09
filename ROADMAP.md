@@ -53,6 +53,7 @@ This roadmap is the plan of record and the issue tracker map for FRESH Urban For
 | P54 Corrected action and turnover publication | #288 | `feature/p54-corrected-products` | complete |
 | P55 Vertical-control outlier adjudication | #294 | `feature/p55-outlier-adjudication` | complete |
 | P56 v0.4.0 release and portal verification | #299 | `release/v0.4.0` | complete |
+| P57 v0.4.1 patch release | #304 | `release/v0.4.1` | active |
 
 ## Lifecycle Map
 
@@ -1546,6 +1547,26 @@ Phase 56 verification:
 
 - `python scripts/dashboard.py`
 - `python scripts/check_workflow.py`
+
+## Phase 57: v0.4.1 patch release
+
+Parent issue: #304
+Branch: `release/v0.4.1`
+Status: active
+
+Goal: ship the public-tree click priority/hit-tolerance fix in a tagged patch release.
+
+Plan: `notes/design/p57-patch-release.md`.
+
+- [x] P57.1 Patch metadata, release notes, and verification
+- [ ] P57.2 Merge, tag v0.4.1, publish release, and close
+
+Acceptance criteria:
+
+- Version/CITATION/README/release notes are consistent at 0.4.1.
+- Public tree clicks select trees over overlapping off-inventory candidates.
+- Dashboard and portal verification green.
+- Tag/release created only after approval.
 
 ## Detailed Next Steps Notes
 
