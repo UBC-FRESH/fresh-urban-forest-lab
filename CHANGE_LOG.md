@@ -1392,3 +1392,4 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Created parent issue #294 and plan `notes/design/p55-outlier-adjudication.md`.
 - Scope: inspect four western control outliers, decide constant vs local correction, and
   finalize release without overclaiming.
+- Created child issues #295–#297 and activated `feature/p55-outlier-adjudication`.

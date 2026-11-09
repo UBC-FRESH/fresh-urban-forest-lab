@@ -1501,9 +1501,9 @@ or are localized effects that remain within the caveat.
 
 Plan: `notes/design/p55-outlier-adjudication.md`.
 
-- [ ] P55.1 Outlier tile adjudication
-- [ ] P55.2 Control-model decision and product update if warranted
-- [ ] P55.3 Docs, final verification, PR, and close-out
+- [ ] P55.1 Outlier tile adjudication (#295)
+- [ ] P55.2 Control-model decision and product update if warranted (#296)
+- [ ] P55.3 Docs, final verification, PR, and close-out (#297)
 
 Acceptance criteria:
 
