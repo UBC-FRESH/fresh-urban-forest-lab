@@ -2,7 +2,7 @@
 
 Parent issue: #294
 Planned branch: `feature/p55-outlier-adjudication`
-Status: pr-open
+Status: complete
 
 ## Why
 

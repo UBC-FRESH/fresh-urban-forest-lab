@@ -1,6 +1,6 @@
 # P55 vertical-control outlier adjudication
 
-Status: complete; constant correction retained. PR review pending.
+Status: complete. Merged in PR #298 as `2afb0bc`.
 
 ## Outliers
 

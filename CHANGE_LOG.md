@@ -1403,3 +1403,5 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
   and do not apply a four-tile local correction.
 - Corrected P43/P44/P46 products remain unchanged; original lineage remains selectable.
 - Docs updated; dashboard verification remains P53/P54 browser smoke.
+
+- Merged P55 as `2afb0bc` via PR #298; parent #294 and child issues #295–#297 are closed. Phase status: complete.
