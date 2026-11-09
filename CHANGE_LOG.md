@@ -1384,3 +1384,5 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
   protect 217. Original: 50/101/77/23/546.
 - Corrected turnover: 260 high, 135.64 ha; original 260 high, 181.76 ha.
 - Browser smoke clean; dashboard green.
+
+- Merged P54 as `ba15598` via PR #292; parent #288 and child issues #289–#291 are closed. Phase status: complete.

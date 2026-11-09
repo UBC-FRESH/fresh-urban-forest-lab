@@ -1,6 +1,6 @@
 # P54 corrected action and turnover publication
 
-Status: implementation complete; PR review pending.
+Status: complete. Merged in PR #292 as `ba15598`.
 
 ## API
 

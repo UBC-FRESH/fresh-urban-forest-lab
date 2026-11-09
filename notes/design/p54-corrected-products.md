@@ -2,7 +2,7 @@
 
 Parent issue: #288
 Planned branch: `feature/p54-corrected-products`
-Status: pr-open
+Status: complete
 
 ## Why
 

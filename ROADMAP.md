@@ -50,7 +50,7 @@ This roadmap is the plan of record and the issue tracker map for FRESH Urban For
 | P51 Citywide vertical control and corrected products | #272 | `feature/p51-citywide-control` | complete |
 | P52 Lower Mainland candidate-data honesty | #278 | `feature/p51-candidate-honesty` | complete |
 | P53 Full-city vertical control and corrected publication | #282 | `feature/p53-full-control` | complete |
-| P54 Corrected action and turnover publication | #288 | `feature/p54-corrected-products` | pr-open |
+| P54 Corrected action and turnover publication | #288 | `feature/p54-corrected-products` | complete |
 
 ## Lifecycle Map
 
@@ -1465,7 +1465,7 @@ Phase 53 verification:
 
 Parent issue: #288
 Branch: `feature/p54-corrected-products`
-Status: pr-open
+Status: complete
 
 Goal: expose full-control corrected P44/P46 sidecars through versioned API/UI controls while
 keeping the original products selectable.
