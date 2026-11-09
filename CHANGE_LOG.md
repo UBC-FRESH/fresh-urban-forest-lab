@@ -1386,3 +1386,9 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Browser smoke clean; dashboard green.
 
 - Merged P54 as `ba15598` via PR #292; parent #288 and child issues #289–#291 are closed. Phase status: complete.
+
+### P55 outlier adjudication start
+
+- Created parent issue #294 and plan `notes/design/p55-outlier-adjudication.md`.
+- Scope: inspect four western control outliers, decide constant vs local correction, and
+  finalize release without overclaiming.
