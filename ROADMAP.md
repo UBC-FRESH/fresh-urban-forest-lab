@@ -1558,7 +1558,7 @@ Goal: ship the public-tree click priority/hit-tolerance fix in a tagged patch re
 
 Plan: `notes/design/p57-patch-release.md`.
 
-- [ ] P57.1 Patch metadata, release notes, and verification
+- [x] P57.1 Patch metadata, release notes, and verification
 - [ ] P57.2 Merge, tag v0.4.1, publish release, and close
 
 Acceptance criteria:

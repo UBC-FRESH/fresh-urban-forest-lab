@@ -4,7 +4,7 @@ Project status and repository map
 Status as of 2026-11-09:
 
 - The mainline is complete through Phase 55; P37 remains a separate workstream.
-- v0.4.0 is released. P30 adds a full-City-of-Vancouver public-data pilot; P38–P46
+- v0.4.1 is released. P30 adds a full-City-of-Vancouver public-data pilot; P38–P46
   add shade/equity, gap, heat, change, action, and turnover screens; P47–P49 add the
   Optimization and site-scenario explorers; P50–P55 add full-city vertical control and
   corrected change/action/turnover layers.

@@ -1443,3 +1443,9 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 
 - Created parent issue #304 and branch `release/v0.4.1`.
 - Scope: ship the public-tree click priority and hit-tolerance fix.
+
+### P57.1 patch metadata and verification
+
+- Bumped package/CITATION to 0.4.1 and added v0.4.1 release notes.
+- Documented the public-tree click priority/hit-tolerance fix.
+- No scientific/product defaults changed.
