@@ -1,6 +1,6 @@
 # P56 v0.4.0 release verification
 
-Status: release candidate verified; tag/GitHub release pending approval.
+Status: complete. Merged in PR #303 as `e0ebc28`; tag and GitHub release created.
 
 ## Metadata
 

@@ -1428,3 +1428,5 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
   corrected; shade equity, canopy gaps, and heat equity layers render.
 - Dashboard, validator, and docs gates green.
 - Added `notes/reports/p56-release-verification.md`.
+
+- Merged P56 as `e0ebc28` via PR #303; created tag `v0.4.0` and published the GitHub release; parent #299 and child issues #300–#302 are closed. Phase status: complete.

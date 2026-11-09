@@ -52,7 +52,7 @@ This roadmap is the plan of record and the issue tracker map for FRESH Urban For
 | P53 Full-city vertical control and corrected publication | #282 | `feature/p53-full-control` | complete |
 | P54 Corrected action and turnover publication | #288 | `feature/p54-corrected-products` | complete |
 | P55 Vertical-control outlier adjudication | #294 | `feature/p55-outlier-adjudication` | complete |
-| P56 v0.4.0 release and portal verification | #299 | `release/v0.4.0` | pr-open |
+| P56 v0.4.0 release and portal verification | #299 | `release/v0.4.0` | complete |
 
 ## Lifecycle Map
 
@@ -1523,7 +1523,7 @@ Phase 55 verification:
 
 Parent issue: #299
 Branch: `release/v0.4.0`
-Status: pr-open
+Status: complete
 
 Goal: freeze and document the corrected product, audit the public portals/controls, and
 prepare v0.4.0 for approval.
@@ -1532,7 +1532,7 @@ Plan: `notes/design/p56-release.md`.
 
 - [x] P56.1 Release metadata, README, and release notes (#300)
 - [x] P56.2 Portal/UI control audit and browser smoke (#301)
-- [ ] P56.3 Release PR, approval, tag, and close-out (#302)
+- [x] P56.3 Release PR, approval, tag, and close-out (#302)
 
 Acceptance criteria:
 

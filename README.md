@@ -83,7 +83,7 @@ Open `http://127.0.0.1:8101/`; the apps are at `/ubc/`, `/vancouver/`, `/surrey/
 
 ## Status
 
-The mainline is complete through Phase 55 and prepared for the v0.4.0 release. The current
+The mainline is complete through Phase 55 and released as v0.4.0. The current
 public product includes the full Vancouver city pilot, shade/gap/heat screens, observed
 change and action/turnover products, the Optimization and site-scenario explorers, and the
 full-control corrected change/action/turnover layers. The documentation site is live on

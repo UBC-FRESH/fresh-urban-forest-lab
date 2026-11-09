@@ -2,7 +2,7 @@
 
 Parent issue: #299
 Branch: `release/v0.4.0`
-Status: pr-open
+Status: complete
 
 ## Goal
 
