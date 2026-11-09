@@ -1430,3 +1430,11 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Added `notes/reports/p56-release-verification.md`.
 
 - Merged P56 as `e0ebc28` via PR #303; created tag `v0.4.0` and published the GitHub release; parent #299 and child issues #300–#302 are closed. Phase status: complete.
+
+### Post-release map click fix
+
+- Tree clicks now take priority over overlapping off-inventory candidates.
+- The tree query uses a small screen-space tolerance so public-tree points remain clickable
+  at city zoom.
+- Verified with off-inventory enabled: clicking a public tree selects the tree, not the
+  candidate overlay.

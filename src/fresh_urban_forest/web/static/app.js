@@ -1329,32 +1329,48 @@ function initMap() {
       { padding: 28, duration: 0 }
     );
   });
-  map.on("click", "trees", (event) => {
-    const feature = event.features && event.features[0];
-    if (!feature) return;
-    selectTree(feature.properties.tree_id, feature.properties);
-  });
-  map.on("click", "off-inventory", (event) => {
-    const feature = event.features && event.features[0];
-    if (!feature) return;
-    const properties = feature.properties || {};
-    selectCandidate(properties.candidate_id, properties);
-  });
   map.on("click", (event) => {
+    const point = event.point;
+    const treeHits = map.queryRenderedFeatures(
+      [
+        [point.x - 6, point.y - 6],
+        [point.x + 6, point.y + 6],
+      ],
+      { layers: ["trees"] },
+    );
+    if (treeHits.length) {
+      const feature = treeHits[0];
+      selectTree(feature.properties.tree_id, feature.properties);
+      return;
+    }
+    const candidateHits = map.queryRenderedFeatures(event.point, {
+      layers: ["off-inventory"],
+    });
+    if (candidateHits.length) {
+      const properties = candidateHits[0].properties || {};
+      selectCandidate(properties.candidate_id, properties);
+      return;
+    }
     if (state.mode === "zone") {
       placeAt(event.lngLat.lng, event.lngLat.lat);
       return;
     }
-    const hits = map.queryRenderedFeatures(event.point, { layers: ["trees"] });
-    if (hits.length) return;
     if (state.mode === "plant" || state.mode === "move") {
       placeAt(event.lngLat.lng, event.lngLat.lat);
     }
   });
-  map.on("mousemove", "trees", () => {
-    map.getCanvas().style.cursor = "pointer";
+  map.on("mousemove", (event) => {
+    const point = event.point;
+    const hits = map.queryRenderedFeatures(
+      [
+        [point.x - 6, point.y - 6],
+        [point.x + 6, point.y + 6],
+      ],
+      { layers: ["trees", "off-inventory"] },
+    );
+    map.getCanvas().style.cursor = hits.length ? "pointer" : "";
   });
-  map.on("mouseleave", "trees", () => {
+  map.on("mouseleave", () => {
     map.getCanvas().style.cursor = "";
   });
   state.map = map;
