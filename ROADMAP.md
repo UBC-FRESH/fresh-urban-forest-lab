@@ -52,6 +52,7 @@ This roadmap is the plan of record and the issue tracker map for FRESH Urban For
 | P53 Full-city vertical control and corrected publication | #282 | `feature/p53-full-control` | complete |
 | P54 Corrected action and turnover publication | #288 | `feature/p54-corrected-products` | complete |
 | P55 Vertical-control outlier adjudication | #294 | `feature/p55-outlier-adjudication` | complete |
+| P56 v0.4.0 release and portal verification | #299 | `release/v0.4.0` | active |
 
 ## Lifecycle Map
 
@@ -1514,6 +1515,34 @@ Acceptance criteria:
 - Dashboard green.
 
 Phase 55 verification:
+
+- `python scripts/dashboard.py`
+- `python scripts/check_workflow.py`
+
+## Phase 56: v0.4.0 release and portal verification
+
+Parent issue: #299
+Branch: `release/v0.4.0`
+Status: active
+
+Goal: freeze and document the corrected product, audit the public portals/controls, and
+prepare v0.4.0 for approval.
+
+Plan: `notes/design/p56-release.md`.
+
+- [ ] P56.1 Release metadata, README, and release notes (#300)
+- [ ] P56.2 Portal/UI control audit and browser smoke (#301)
+- [ ] P56.3 Release PR, approval, tag, and close-out (#302)
+
+Acceptance criteria:
+
+- Version and release notes are consistent.
+- All five demo routes and visible controls are verified.
+- No dead switches; unavailable controls are hidden/disabled.
+- Dashboard and docs are green.
+- Tag/release remains blocked on explicit approval.
+
+Phase 56 verification:
 
 - `python scripts/dashboard.py`
 - `python scripts/check_workflow.py`
