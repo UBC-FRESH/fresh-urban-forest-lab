@@ -69,6 +69,12 @@ def test_static_shell_has_required_hooks() -> None:
         "pareto-view-copy",
         "off-inventory-summary",
         "toggle-off-inventory",
+        "scene-walk",
+        "scene-street",
+        "walk-hud",
+        "walk-minimap",
+        "walk-heading",
+        "walk-coordinates",
     ):
         assert marker in html
     assert "static/vendor/maplibre-gl.js" in html
@@ -153,6 +159,11 @@ def test_app_script_has_the_expected_endpoints_and_layers() -> None:
         "walkHeightAt",
         "updateWalk",
         "setWalkMode",
+        "buildWalkObstacles",
+        "walkBlockedAt",
+        "nearestWalkRoad",
+        "drawWalkMinimap",
+        "updateWalkHud",
         "loadCanopyActionVersion",
         "loadCanopyTurnoverVersion",
         "api/canopy-action?version=",

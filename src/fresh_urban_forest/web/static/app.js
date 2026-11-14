@@ -1,6 +1,9 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/OrbitControls.js";
 
+const WALK_OBSTACLE_CELL = 64;
+const WALK_ROAD_CELL = 128;
+const WALK_MAP_RADIUS = 90;
 const PARETO_VIEW_STORAGE_KEY = "fresh.pareto.views.v1";
 const SITE_SCENARIO_STORAGE_KEY = "fresh.site-scenarios.v1";
 const SITE_SCENARIO_LIBRARY_VERSION = 1;
@@ -872,6 +875,15 @@ async function init() {
       loadLight,
       selectPareto: selectParetoByIndex,
       paretoScreenPositions,
+      walkState: () => (state.three ? {
+        x: state.three.camera.position.x,
+        y: state.three.camera.position.y,
+        z: state.three.camera.position.z,
+        walkMode: state.three.walkMode,
+        obstacleCells: state.three.walkObstacles?.size || 0,
+        roadSegments: state.three.walkRoadSegments?.length || 0,
+      } : null),
+      walkBlockedAt,
       selectedSummary: () => ({
         id: state.optimize.selected?.solution_id || "",
         planted: state.optimize.selected?.planted?.length || 0,
@@ -1392,41 +1404,411 @@ function walkHeightAt(x, z) {
   return Number.isFinite(value) ? value - origin.z : null;
 }
 
-function setWalkMode(enabled) {
+function walkLocalFromLonLat(lon, lat) {
+  const source = threeScene();
+  const [originLon, originLat] = source.origin_lonlat;
+  const [metersPerLon, metersPerLat] = source.meters_per_degree;
+  return {
+    x: (Number(lon) - originLon) * metersPerLon,
+    z: -(Number(lat) - originLat) * metersPerLat,
+  };
+}
+
+function walkRoadLines(feature) {
+  const geometry = feature?.geometry;
+  if (!geometry) return [];
+  if (geometry.type === "LineString") return [geometry.coordinates || []];
+  if (geometry.type === "MultiLineString") return geometry.coordinates || [];
+  return [];
+}
+
+function buildWalkRoadSegments() {
+  const source = threeScene();
+  const features = state.roads?.features;
+  if (!source || !Array.isArray(features)) return [];
+  const segments = [];
+  for (const feature of features) {
+    const width = roadWidthMeters(feature.properties?.highway);
+    for (const line of walkRoadLines(feature)) {
+      for (let index = 0; index < line.length - 1; index += 1) {
+        const first = line[index];
+        const second = line[index + 1];
+        if (!Array.isArray(first) || !Array.isArray(second)) continue;
+        const a = walkLocalFromLonLat(first[0], first[1]);
+        const b = walkLocalFromLonLat(second[0], second[1]);
+        const length = Math.hypot(b.x - a.x, b.z - a.z);
+        if (length < 0.5) continue;
+        segments.push({ x1: a.x, z1: a.z, x2: b.x, z2: b.z, width });
+      }
+    }
+  }
+  return segments;
+}
+
+function buildWalkRoadIndex(segments) {
+  const index = new Map();
+  for (const segment of segments) {
+    const firstCol = Math.floor(Math.min(segment.x1, segment.x2) / WALK_ROAD_CELL);
+    const lastCol = Math.floor(Math.max(segment.x1, segment.x2) / WALK_ROAD_CELL);
+    const firstRow = Math.floor(Math.min(segment.z1, segment.z2) / WALK_ROAD_CELL);
+    const lastRow = Math.floor(Math.max(segment.z1, segment.z2) / WALK_ROAD_CELL);
+    for (let col = firstCol; col <= lastCol; col += 1) {
+      for (let row = firstRow; row <= lastRow; row += 1) {
+        const key = `${col}:${row}`;
+        if (!index.has(key)) index.set(key, []);
+        index.get(key).push(segment);
+      }
+    }
+  }
+  return index;
+}
+
+function nearestWalkRoad(x, z) {
+  const segments = state.three?.walkRoadSegments || [];
+  let best = null;
+  let bestDistance = Infinity;
+  for (const segment of segments) {
+    const dx = segment.x2 - segment.x1;
+    const dz = segment.z2 - segment.z1;
+    const lengthSquared = dx * dx + dz * dz;
+    if (lengthSquared < 1e-9) continue;
+    const t = Math.max(
+      0,
+      Math.min(1, ((x - segment.x1) * dx + (z - segment.z1) * dz) / lengthSquared),
+    );
+    const px = segment.x1 + t * dx;
+    const pz = segment.z1 + t * dz;
+    const distance = Math.hypot(x - px, z - pz);
+    if (distance < bestDistance) {
+      bestDistance = distance;
+      best = { x: px, z: pz, yaw: Math.atan2(-dx, -dz), distance };
+    }
+  }
+  return best;
+}
+
+function walkPointInRing(x, z, ring) {
+  let inside = false;
+  for (let index = 0, previous = ring.length - 1; index < ring.length; previous = index++) {
+    const [xi, zi] = ring[index];
+    const [xj, zj] = ring[previous];
+    const crosses = zi > z !== zj > z;
+    if (crosses && x < ((xj - xi) * (z - zi)) / (zj - zi) + xi) inside = !inside;
+  }
+  return inside;
+}
+
+function walkAddObstacle(index, obstacle) {
+  const firstCol = Math.floor(obstacle.minX / WALK_OBSTACLE_CELL);
+  const lastCol = Math.floor(obstacle.maxX / WALK_OBSTACLE_CELL);
+  const firstRow = Math.floor(obstacle.minZ / WALK_OBSTACLE_CELL);
+  const lastRow = Math.floor(obstacle.maxZ / WALK_OBSTACLE_CELL);
+  for (let col = firstCol; col <= lastCol; col += 1) {
+    for (let row = firstRow; row <= lastRow; row += 1) {
+      const key = `${col}:${row}`;
+      if (!index.has(key)) index.set(key, []);
+      index.get(key).push(obstacle);
+    }
+  }
+}
+
+function buildWalkObstacles() {
+  const index = new Map();
+  const source = threeScene();
+  if (!source) return index;
+  if (source.compact && source.building_boxes) {
+    const boxes = source.building_boxes;
+    const count = Array.isArray(boxes.x) ? boxes.x.length : 0;
+    for (let i = 0; i < count; i += 1) {
+      const x = Number(boxes.x[i]);
+      const z = -Number(boxes.z[i]);
+      const width = Math.max(Number(boxes.w[i]) || 0, 0.5);
+      const depth = Math.max(Number(boxes.d[i]) || 0, 0.5);
+      if (!Number.isFinite(x) || !Number.isFinite(z)) continue;
+      const obstacle = {
+        box: true,
+        minX: x - width / 2,
+        maxX: x + width / 2,
+        minZ: z - depth / 2,
+        maxZ: z + depth / 2,
+      };
+      walkAddObstacle(index, obstacle);
+    }
+    return index;
+  }
+  for (const building of source.buildings || []) {
+    const ring = (building.rings_local || [])[0] || [];
+    if (ring.length < 3) continue;
+    const points = ring
+      .map((point) => [Number(point[0]), -Number(point[1])])
+      .filter((point) => Number.isFinite(point[0]) && Number.isFinite(point[1]));
+    if (points.length < 3) continue;
+    let minX = Infinity;
+    let maxX = -Infinity;
+    let minZ = Infinity;
+    let maxZ = -Infinity;
+    for (const [x, z] of points) {
+      minX = Math.min(minX, x);
+      maxX = Math.max(maxX, x);
+      minZ = Math.min(minZ, z);
+      maxZ = Math.max(maxZ, z);
+    }
+    walkAddObstacle(index, { box: false, ring: points, minX, maxX, minZ, maxZ });
+  }
+  return index;
+}
+
+function walkBlockedAt(x, z) {
+  const three = state.three;
+  const index = three?.walkObstacles;
+  if (!index) return false;
+  const radius = three.walkRadius;
+  const firstCol = Math.floor((x - radius) / WALK_OBSTACLE_CELL);
+  const lastCol = Math.floor((x + radius) / WALK_OBSTACLE_CELL);
+  const firstRow = Math.floor((z - radius) / WALK_OBSTACLE_CELL);
+  const lastRow = Math.floor((z + radius) / WALK_OBSTACLE_CELL);
+  const probes = [
+    [0, 0],
+    [radius, 0],
+    [-radius, 0],
+    [0, radius],
+    [0, -radius],
+  ];
+  for (let col = firstCol; col <= lastCol; col += 1) {
+    for (let row = firstRow; row <= lastRow; row += 1) {
+      const obstacles = index.get(`${col}:${row}`);
+      if (!obstacles) continue;
+      for (const obstacle of obstacles) {
+        if (
+          x < obstacle.minX - radius ||
+          x > obstacle.maxX + radius ||
+          z < obstacle.minZ - radius ||
+          z > obstacle.maxZ + radius
+        ) {
+          continue;
+        }
+        if (obstacle.box) return true;
+        for (const [dx, dz] of probes) {
+          if (walkPointInRing(x + dx, z + dz, obstacle.ring)) return true;
+        }
+      }
+    }
+  }
+  return false;
+}
+
+function walkNearestOpenPoint(x, z, maximumDistance = 80) {
+  if (!walkBlockedAt(x, z) && walkHeightAt(x, z) !== null) return { x, z };
+  for (let radius = 2; radius <= maximumDistance; radius += 2) {
+    for (let step = 0; step < 16; step += 1) {
+      const angle = (step / 16) * Math.PI * 2;
+      const candidateX = x + Math.cos(angle) * radius;
+      const candidateZ = z + Math.sin(angle) * radius;
+      if (!walkBlockedAt(candidateX, candidateZ) && walkHeightAt(candidateX, candidateZ) !== null) {
+        return { x: candidateX, z: candidateZ };
+      }
+    }
+  }
+  return null;
+}
+
+function walkBearing() {
+  const bearing = (((-state.three.walkYaw * 180) / Math.PI) % 360 + 360) % 360;
+  const labels = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"];
+  return { bearing, label: labels[Math.round(bearing / 45) % labels.length] };
+}
+
+function drawWalkMinimap() {
+  const three = state.three;
+  const canvas = $("walk-minimap");
+  if (!three || !canvas) return;
+  const context = canvas.getContext("2d");
+  if (!context) return;
+  const size = canvas.width;
+  const center = size / 2;
+  const scale = size / (WALK_MAP_RADIUS * 2);
+  const cameraX = three.camera.position.x;
+  const cameraZ = three.camera.position.z;
+  const mapX = (x) => center + (x - cameraX) * scale;
+  const mapY = (z) => center + (z - cameraZ) * scale;
+  context.clearRect(0, 0, size, size);
+  context.fillStyle = "rgba(28, 45, 34, 0.96)";
+  context.fillRect(0, 0, size, size);
+  context.save();
+  context.beginPath();
+  context.rect(0, 0, size, size);
+  context.clip();
+  context.strokeStyle = "rgba(236, 228, 202, 0.72)";
+  const roadIndex = three.walkRoadIndex;
+  if (roadIndex) {
+    const firstCol = Math.floor((cameraX - WALK_MAP_RADIUS) / WALK_ROAD_CELL);
+    const lastCol = Math.floor((cameraX + WALK_MAP_RADIUS) / WALK_ROAD_CELL);
+    const firstRow = Math.floor((cameraZ - WALK_MAP_RADIUS) / WALK_ROAD_CELL);
+    const lastRow = Math.floor((cameraZ + WALK_MAP_RADIUS) / WALK_ROAD_CELL);
+    const seen = new Set();
+    for (let col = firstCol; col <= lastCol; col += 1) {
+      for (let row = firstRow; row <= lastRow; row += 1) {
+        for (const segment of roadIndex.get(`${col}:${row}`) || []) {
+          if (seen.has(segment)) continue;
+          seen.add(segment);
+          context.lineWidth = Math.max(0.8, Math.min(4, segment.width * scale * 0.8));
+          context.beginPath();
+          context.moveTo(mapX(segment.x1), mapY(segment.z1));
+          context.lineTo(mapX(segment.x2), mapY(segment.z2));
+          context.stroke();
+        }
+      }
+    }
+  }
+  const obstacleIndex = three.walkObstacles;
+  if (obstacleIndex) {
+    const firstCol = Math.floor((cameraX - WALK_MAP_RADIUS) / WALK_OBSTACLE_CELL);
+    const lastCol = Math.floor((cameraX + WALK_MAP_RADIUS) / WALK_OBSTACLE_CELL);
+    const firstRow = Math.floor((cameraZ - WALK_MAP_RADIUS) / WALK_OBSTACLE_CELL);
+    const lastRow = Math.floor((cameraZ + WALK_MAP_RADIUS) / WALK_OBSTACLE_CELL);
+    const seen = new Set();
+    context.fillStyle = "rgba(184, 194, 179, 0.58)";
+    for (let col = firstCol; col <= lastCol; col += 1) {
+      for (let row = firstRow; row <= lastRow; row += 1) {
+        for (const obstacle of obstacleIndex.get(`${col}:${row}`) || []) {
+          if (seen.has(obstacle)) continue;
+          seen.add(obstacle);
+          if (obstacle.box) {
+            context.fillRect(
+              mapX(obstacle.minX),
+              mapY(obstacle.minZ),
+              (obstacle.maxX - obstacle.minX) * scale,
+              (obstacle.maxZ - obstacle.minZ) * scale,
+            );
+          } else {
+            context.beginPath();
+            obstacle.ring.forEach(([x, z], index) => {
+              if (index === 0) context.moveTo(mapX(x), mapY(z));
+              else context.lineTo(mapX(x), mapY(z));
+            });
+            context.closePath();
+            context.fill();
+          }
+        }
+      }
+    }
+  }
+  context.save();
+  context.translate(center, center);
+  context.rotate((walkBearing().bearing * Math.PI) / 180);
+  context.fillStyle = "#d7f1b5";
+  context.beginPath();
+  context.moveTo(0, -7);
+  context.lineTo(5, 5);
+  context.lineTo(0, 2);
+  context.lineTo(-5, 5);
+  context.closePath();
+  context.fill();
+  context.restore();
+  context.fillStyle = "rgba(255, 255, 255, 0.78)";
+  context.font = "10px sans-serif";
+  context.textAlign = "center";
+  context.fillText("N", center, 12);
+  context.restore();
+}
+
+function updateWalkHud(delta = 0, force = false) {
+  const three = state.three;
+  if (!three?.walkMode) return;
+  three.walkHudClock += delta;
+  three.walkMapClock += delta;
+  if (!force && three.walkHudClock < 0.1) return;
+  three.walkHudClock = 0;
+  const heading = walkBearing();
+  $("walk-heading").textContent = heading.label;
+  $("walk-bearing").textContent = `${String(Math.round(heading.bearing)).padStart(3, "0")}°`;
+  const source = threeScene();
+  const origin = source.origin;
+  const ground = walkHeightAt(three.camera.position.x, three.camera.position.z);
+  $("walk-coordinates").textContent =
+    `${Math.round(three.camera.position.x + origin.x)} E · ${Math.round(origin.y - three.camera.position.z)} N`;
+  $("walk-elevation").textContent =
+    ground === null ? "—" : `${Math.round(ground + origin.z)} m`;
+  if (force || three.walkMapClock >= 0.2) {
+    three.walkMapClock = 0;
+    drawWalkMinimap();
+  }
+}
+
+function setWalkMode(enabled, options = {}) {
   const three = state.three;
   if (!three) return;
   const canvas = three.renderer.domElement;
   if (enabled) {
+    const wasWalking = three.walkMode;
     three.walkMode = true;
     three.controls.enabled = false;
     three.walkKeys.clear();
+    three.walkObstacles = buildWalkObstacles();
+    three.walkRoadSegments = buildWalkRoadSegments();
+    three.walkRoadIndex = buildWalkRoadIndex(three.walkRoadSegments);
+    if (!wasWalking) {
+      three.walkShadowState = {
+        renderer: three.renderer.shadowMap.enabled,
+        sun: three.sunLight.castShadow,
+      };
+      three.renderer.shadowMap.enabled = false;
+      three.sunLight.castShadow = false;
+    }
     const source = threeScene();
     const origin = source.origin;
     const [left, bottom, right, top] = source.bounds;
     let x = three.controls.target.x;
     let z = three.controls.target.z;
-    let height = walkHeightAt(x, z);
-    if (height === null) {
+    let roadYaw = null;
+    let streetFound = false;
+    if (options.street) {
+      const road = nearestWalkRoad(x, z);
+      if (road) {
+        x = road.x;
+        z = road.z;
+        roadYaw = road.yaw;
+        streetFound = true;
+      }
+    }
+    const open = walkNearestOpenPoint(x, z);
+    if (open) {
+      x = open.x;
+      z = open.z;
+    } else {
       x = (left + right) / 2 - origin.x;
       z = origin.y - (bottom + top) / 2;
-      height = walkHeightAt(x, z) ?? 0;
     }
+    let height = walkHeightAt(x, z);
+    if (height === null) height = 0;
     const direction = new THREE.Vector3();
     three.camera.getWorldDirection(direction);
-    three.walkYaw = Math.atan2(-direction.x, -direction.z);
+    three.walkYaw = roadYaw ?? Math.atan2(-direction.x, -direction.z);
     three.walkPitch = 0;
     three.camera.position.set(x, height + three.walkEyeHeight, z);
     three.camera.rotation.order = "YXZ";
     three.camera.rotation.set(0, three.walkYaw, 0);
+    three.walkHudClock = 0;
+    three.walkMapClock = 0;
     three.walkClock.start();
     three.walkClock.getDelta();
     $("walk-hud").hidden = false;
     $("scene-walk").textContent = "Orbit";
-    $("scene-walk-status").textContent = "click to look";
+    $("scene-walk-status").textContent =
+      options.street && !streetFound ? "street data unavailable" : "click to look";
+    updateWalkHud(0, true);
     canvas.requestPointerLock?.();
   } else {
     three.walkMode = false;
     three.walkKeys.clear();
+    three.walkObstacles = null;
+    three.walkRoadSegments = null;
+    three.walkRoadIndex = null;
+    if (three.walkShadowState) {
+      three.renderer.shadowMap.enabled = three.walkShadowState.renderer;
+      three.sunLight.castShadow = three.walkShadowState.sun;
+      three.walkShadowState = null;
+    }
     three.controls.enabled = true;
     if (document.pointerLockElement === canvas) document.exitPointerLock();
     const forward = new THREE.Vector3(-Math.sin(three.walkYaw), 0, -Math.cos(three.walkYaw));
@@ -1456,20 +1838,46 @@ function updateWalk(delta) {
   const directionZ = -Math.cos(three.walkYaw);
   const rightX = Math.cos(three.walkYaw);
   const rightZ = -Math.sin(three.walkYaw);
+  const currentX = three.camera.position.x;
+  const currentZ = three.camera.position.z;
   const nextX = Math.max(
     left - origin.x,
-    Math.min(right - origin.x, three.camera.position.x + (directionX * forward + rightX * strafe) * speed),
+    Math.min(right - origin.x, currentX + (directionX * forward + rightX * strafe) * speed),
   );
   const nextZ = Math.max(
     origin.y - top,
-    Math.min(origin.y - bottom, three.camera.position.z + (directionZ * forward + rightZ * strafe) * speed),
+    Math.min(origin.y - bottom, currentZ + (directionZ * forward + rightZ * strafe) * speed),
   );
-  const height = walkHeightAt(nextX, nextZ);
-  if (height !== null) {
-    three.camera.position.set(nextX, height + three.walkEyeHeight, nextZ);
+  const currentGround = walkHeightAt(currentX, currentZ);
+  const tryPosition = (x, z) => {
+    if (walkBlockedAt(x, z)) return null;
+    const ground = walkHeightAt(x, z);
+    if (ground === null) return null;
+    if (currentGround !== null && ground - currentGround > three.walkStepHeight) return null;
+    return { x, z, ground };
+  };
+  let target = null;
+  if (forward || strafe) {
+    target =
+      tryPosition(nextX, nextZ) ||
+      tryPosition(nextX, currentZ) ||
+      tryPosition(currentX, nextZ);
+  }
+  const ground =
+    target?.ground ?? walkHeightAt(three.camera.position.x, three.camera.position.z);
+  if (ground !== null) {
+    if (target) {
+      three.camera.position.x = target.x;
+      three.camera.position.z = target.z;
+    }
+    const targetY = ground + three.walkEyeHeight;
+    const eyeDelta = targetY - three.camera.position.y;
+    if (Math.abs(eyeDelta) > 2.5) three.camera.position.y = targetY;
+    else three.camera.position.y += eyeDelta * Math.min(1, delta * 14);
   }
   three.camera.rotation.order = "YXZ";
   three.camera.rotation.set(three.walkPitch, three.walkYaw, 0);
+  updateWalkHud(delta);
 }
 
 function ensureThree() {
@@ -1555,6 +1963,14 @@ function ensureThree() {
     walkEyeHeight: 1.7,
     walkSpeed: 7,
     walkSprint: 14,
+    walkStepHeight: 0.72,
+    walkRadius: 0.45,
+    walkObstacles: null,
+    walkRoadSegments: null,
+    walkRoadIndex: null,
+    walkShadowState: null,
+    walkHudClock: 0,
+    walkMapClock: 0,
     walkClock: new THREE.Clock(),
     sunLight: sun,
     sunSphere,
@@ -2386,6 +2802,7 @@ function bindControls() {
   $("scene-reset").addEventListener("click", resetCamera);
   $("scene-downtown").addEventListener("click", focusDowntown);
   $("scene-walk").addEventListener("click", () => setWalkMode(!state.three?.walkMode));
+  $("scene-street").addEventListener("click", () => setWalkMode(true, { street: true }));
   $("toggle-canopy").addEventListener("change", (event) => {
     if (state.map && state.map.getLayer("canopy")) {
       state.map.setLayoutProperty("canopy", "visibility", event.target.checked ? "visible" : "none");

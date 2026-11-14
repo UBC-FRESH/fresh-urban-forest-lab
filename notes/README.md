@@ -62,6 +62,8 @@ Keep private material out of this directory.
   branch cleanup.
 - `reports/p60-independent-control.md` and `.json`: ICESat-2/GEDI coverage screen for the
   four western vertical-control tiles and the inconclusive decision.
+- `reports/p61-walk-v2.md`: building collision, street spawn, step handling, compass, and
+  local minimap for Walk mode.
 - `releases/v0.2.0.md`: superseded draft; never tagged.
 - `reference/data-sources.md`: public UBC, Vancouver, and Metro Vancouver sources, with
   coverage, licences, and traps.

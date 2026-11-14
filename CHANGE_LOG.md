@@ -1539,3 +1539,20 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
   change.
 - Closed parent #310 and removed the phase branch and worktree.
 - Dashboard: **GREEN**.
+
+### P61 walk mode v2 start
+
+- Created parent issue #312 and branch `feature/p61-walk-v2`.
+- Scope: building collision, street spawning, slope/step handling, compass/coordinates,
+  and a local minimap. No Google imagery or scientific product changes.
+
+### P61.1/P61.2 walk mode v2
+
+- Added Street spawn at the nearest road centreline.
+- Added building-footprint collision with spatial indexing and axis sliding.
+- Added step-up blocking and smoothed eye-height following.
+- Added compass, coordinates, elevation, and local minimap HUD.
+- Disabled shadow rendering during Walk for performance; restored on exit.
+- Browser smoke passed on the UBC demo; the Vancouver city scene entered Walk with no page
+  errors, but the headless software renderer remains slow at street level.
+- Dashboard: **GREEN**.
