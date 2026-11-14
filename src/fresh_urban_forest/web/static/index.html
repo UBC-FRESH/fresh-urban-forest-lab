@@ -357,10 +357,20 @@
           <button id="scene-reset" class="button tiny ghost" type="button">City view</button>
           <button id="scene-downtown" class="button tiny ghost" type="button">Downtown</button>
           <button id="scene-walk" class="button tiny ghost" type="button">Walk</button>
+          <button id="scene-street" class="button tiny ghost" type="button">Street</button>
           <span id="scene-walk-status" class="muted">orbit</span>
         </div>
         <div id="walk-hud" class="walk-hud" hidden>
           <div class="walk-crosshair" aria-hidden="true"></div>
+          <div class="walk-compass">
+            <span id="walk-heading">N</span>
+            <span id="walk-bearing">000°</span>
+          </div>
+          <canvas id="walk-minimap" width="160" height="160" aria-label="Local walk map"></canvas>
+          <div class="walk-coordinates">
+            <span id="walk-coordinates">—</span>
+            <span id="walk-elevation">—</span>
+          </div>
           <span class="walk-hint">Click the scene to look · WASD / arrows move · Shift sprint · Esc releases mouse</span>
         </div>
       </div>

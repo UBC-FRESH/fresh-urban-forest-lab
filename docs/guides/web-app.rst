@@ -72,10 +72,13 @@ Walk mode
 
 Choose **Walk** in the 3D HUD and click the scene to capture the pointer. Use **WASD** or
 the arrow keys to move, **Shift** to sprint, and **Esc** to release the pointer. Choose
-**Orbit** to return to the overhead controls.
+**Street** to enter Walk mode at the nearest road centreline point and face along the
+street. Choose **Orbit** to return to the overhead controls.
 
-Walk mode follows the dataset terrain grid at 1.7 m eye height and clamps movement to the
-scene bounds. It does not model building interiors or complete physical collision.
+Walk mode follows the dataset terrain grid at 1.7 m eye height, clamps movement to the
+scene bounds, blocks building footprints with simple sliding, and limits step-ups. A
+compass, coordinates, ground elevation, and local minimap show nearby roads, buildings, and
+the player. It does not model building interiors, stairs, or complete physical physics.
 
 Observed change tab
 -------------------
@@ -151,7 +154,7 @@ Known UI limitations
 - Scenario edits are append-only; undo is per-edit, not a full undo stack.
 - No work orders, risk forms, or photo attachments.
 - The 3D scene uses procedural crowns, not species-specific meshes.
-- Walk mode follows terrain and stays within the scene bounds; it does not model building
-  interiors or complete physical collision. It is in-engine navigation, not Google Street
-  View imagery.
+- Walk mode uses building-footprint collision and terrain-following but does not model
+  building interiors, stairs, or complete physical collision. It is in-engine navigation,
+  not Google Street View imagery.
 - The time slider is a scenario projection, not an observed time series.

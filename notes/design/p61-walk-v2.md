@@ -2,7 +2,7 @@
 
 Parent issue: #312
 Branch: `feature/p61-walk-v2`
-Status: active
+Status: pr-open
 
 ## Goal
 

@@ -818,3 +818,47 @@ select:focus, input:focus { outline: 2px solid #b8d3ae; outline-offset: 1px; }
   font-size: 0.65rem;
   white-space: nowrap;
 }
+.walk-compass {
+  position: absolute;
+  top: 16px;
+  left: 50%;
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+  transform: translateX(-50%);
+  padding: 5px 11px;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  border-radius: 999px;
+  background: rgba(23, 35, 29, 0.76);
+  color: #fff;
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+}
+.walk-compass #walk-heading { font-weight: 700; }
+.walk-compass #walk-bearing { color: rgba(255, 255, 255, 0.72); font-variant-numeric: tabular-nums; }
+.walk-minimap {
+  position: absolute;
+  right: 14px;
+  bottom: 52px;
+  width: 160px;
+  height: 160px;
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  border-radius: 10px;
+  background: rgba(23, 35, 29, 0.72);
+  box-shadow: 0 8px 24px rgba(10, 18, 14, 0.25);
+}
+.walk-coordinates {
+  position: absolute;
+  left: 14px;
+  bottom: 16px;
+  display: flex;
+  gap: 10px;
+  padding: 5px 9px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 999px;
+  background: rgba(23, 35, 29, 0.72);
+  color: #fff;
+  font-size: 0.62rem;
+  font-variant-numeric: tabular-nums;
+}
+.walk-coordinates #walk-elevation { color: rgba(255, 255, 255, 0.72); }
