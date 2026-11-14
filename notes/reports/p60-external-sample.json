@@ -1,0 +1,71 @@
+{
+  "schema_version": "fresh-urban-forest.external-control-screen.v1",
+  "phase": "P60",
+  "decision": "inconclusive_retain_constant_correction",
+  "target_tiles": {
+    "4830E_54530N": {
+      "atl08_points": 0,
+      "atl03_high_confidence_photons": 0,
+      "gedi_plausible_points": 0
+    },
+    "4840E_54520N": {
+      "atl08_points": 0,
+      "atl03_high_confidence_photons": 0,
+      "gedi_plausible_points": 0,
+      "gedi_rejected_gross_vertical": 1
+    },
+    "4840E_54530N": {
+      "atl08_points": 1,
+      "atl03_high_confidence_photons": 665,
+      "gedi_plausible_points": 9,
+      "gedi_minus_2022_dem_m": -20.45
+    },
+    "4840E_54540N": {
+      "atl08_points": 1,
+      "atl03_high_confidence_photons": 156,
+      "gedi_plausible_points": 4,
+      "gedi_minus_2022_dem_m": -19.13
+    }
+  },
+  "inlier_tiles": {
+    "4850E_54520N": {
+      "gedi_plausible_points": 2,
+      "gedi_minus_2022_dem_m": -18.84
+    },
+    "4850E_54530N": {
+      "gedi_plausible_points": 5,
+      "gedi_minus_2022_dem_m": -18.77
+    },
+    "4850E_54540N": {
+      "gedi_plausible_points": 4,
+      "gedi_minus_2022_dem_m": -18.83
+    }
+  },
+  "sources": {
+    "ATL08": "NASA ICESat-2 ATL08 v007 (10.5067/ATLAS/ATL08.007) via OpenAltimetry; 55 date-track queries; 1,345 returned points",
+    "ATL03": "NASA ICESat-2 ATL03 via OpenAltimetry; high-confidence photons only; 19 date-track queries; 821 target photons",
+    "GEDI": "NASA GEDI02_A v003 (10.5067/GEDI/GEDI02_A.003) via Harmony; 100 input granules; 62 subset files",
+    "access": "NASA Earthdata Login; public products; raw/subset granules not tracked"
+  },
+  "filters": {
+    "gedi": [
+      "surface_flag == 1",
+      "degrade_flag == 0",
+      "0.5 <= sensitivity <= 1.0",
+      "-100 < elev_lowestmode < 300",
+      "0 <= elev_highestreturn-elev_lowestmode < 100",
+      "-30 < elev_lowestmode-2022DEM < 5"
+    ],
+    "atl03": [
+      "High confidence photons only"
+    ],
+    "vertical": "Ellipsoidal external heights; no geoid conversion to CGVD28GVRD, so only relative tile offsets were inspected"
+  },
+  "interpretation": [
+    "No independent samples were found in 4830E_54530N.",
+    "4840E_54520N had no usable independent ground sample after screening.",
+    "Two target tiles had sparse GEDI samples; relative offsets were about -1.6 m and -0.3 m against the inlier median.",
+    "The external sample does not resolve all four tiles and cannot support a local correction.",
+    "The full-sample +0.011 m correction and western-outlier caveat are retained."
+  ]
+}

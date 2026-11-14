@@ -2,7 +2,7 @@
 
 Parent issue: #310
 Branch: `feature/p60-independent-control`
-Status: active
+Status: pr-open
 
 ## Goal
 
