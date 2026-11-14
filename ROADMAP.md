@@ -57,6 +57,7 @@ This roadmap is the plan of record and the issue tracker map for FRESH Urban For
 | P58 Street-level first-person navigation | #306 | `feature/p58-walk-mode` | complete |
 | P59 v0.5.0 walk-mode release | #308 | `release/v0.5.0` | complete |
 | P60 Independent control for western vertical-control tiles | #310 | `feature/p60-independent-control` | complete |
+| P61 Walk mode v2 | #312 | `feature/p61-walk-v2` | active |
 
 ## Lifecycle Map
 
@@ -1619,6 +1620,21 @@ Plan: `notes/design/p60-independent-control.md`.
 Decision: inconclusive. ATL08/ATL03 and GEDI do not cover all four tiles, and external
 heights were not converted to CGVD28GVRD. Retain the constant +0.011 m correction and the
 western-outlier caveat; no product change.
+
+## Phase 61: Walk mode v2
+
+Parent issue: #312
+Branch: `feature/p61-walk-v2`
+Status: active
+
+Goal: make Walk mode street-navigable with building collision, street spawning, slope/step
+handling, and a compact navigation HUD.
+
+Plan: `notes/design/p61-walk-v2.md`.
+
+- [ ] P61.1 Collision, street spawn, slope/step handling
+- [ ] P61.2 Compass/coordinates HUD and minimap
+- [ ] P61.3 Browser smoke, city-scale performance check, docs, PR, and close-out
 
 ## Detailed Next Steps Notes
 

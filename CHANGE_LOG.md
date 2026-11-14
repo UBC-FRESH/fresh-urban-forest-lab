@@ -1539,3 +1539,9 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
   change.
 - Closed parent #310 and removed the phase branch and worktree.
 - Dashboard: **GREEN**.
+
+### P61 walk mode v2 start
+
+- Created parent issue #312 and branch `feature/p61-walk-v2`.
+- Scope: building collision, street spawning, slope/step handling, compass/coordinates,
+  and a local minimap. No Google imagery or scientific product changes.
