@@ -786,3 +786,35 @@ select:focus, input:focus { outline: 2px solid #b8d3ae; outline-offset: 1px; }
 .site-comparison th:first-child, .site-comparison td:first-child { text-align: left; color: var(--ink-soft); }
 .site-comparison th { color: var(--ink-soft); font-weight: 650; }
 .site-comparison .site-comparison-note { margin: 4px 0 0; color: var(--ink-soft); font-size: 0.6rem; }
+
+/* --------------------------------------------------------------- walk mode */
+.walk-hud {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+}
+.walk-crosshair {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 12px;
+  height: 12px;
+  transform: translate(-50%, -50%);
+  border: 1px solid rgba(23, 35, 29, 0.7);
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.7);
+}
+.walk-hint {
+  position: absolute;
+  left: 50%;
+  bottom: 16px;
+  transform: translateX(-50%);
+  padding: 5px 9px;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  border-radius: 999px;
+  background: rgba(23, 35, 29, 0.72);
+  color: #fff;
+  font-size: 0.65rem;
+  white-space: nowrap;
+}

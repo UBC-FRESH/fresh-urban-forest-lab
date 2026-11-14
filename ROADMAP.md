@@ -53,7 +53,8 @@ This roadmap is the plan of record and the issue tracker map for FRESH Urban For
 | P54 Corrected action and turnover publication | #288 | `feature/p54-corrected-products` | complete |
 | P55 Vertical-control outlier adjudication | #294 | `feature/p55-outlier-adjudication` | complete |
 | P56 v0.4.0 release and portal verification | #299 | `release/v0.4.0` | complete |
-| P57 v0.4.1 patch release | #304 | `release/v0.4.1` | active |
+| P57 v0.4.1 patch release | #304 | `release/v0.4.1` | complete |
+| P58 Street-level first-person navigation | #306 | `feature/p58-walk-mode` | pr-open |
 
 ## Lifecycle Map
 
@@ -1552,7 +1553,7 @@ Phase 56 verification:
 
 Parent issue: #304
 Branch: `release/v0.4.1`
-Status: active
+Status: complete
 
 Goal: ship the public-tree click priority/hit-tolerance fix in a tagged patch release.
 
@@ -1567,6 +1568,21 @@ Acceptance criteria:
 - Public tree clicks select trees over overlapping off-inventory candidates.
 - Dashboard and portal verification green.
 - Tag/release created only after approval.
+
+## Phase 58: Street-level first-person navigation
+
+Parent issue: #306
+Branch: `feature/p58-walk-mode`
+Status: pr-open
+
+Goal: add a Walk mode to the 3D scene with pointer-lock look, WASD movement, sprint, and
+terrain following. Not Google Street View imagery.
+
+Plan: `notes/design/p58-walk-mode.md`.
+
+- [x] P58.1 Walk-mode controls and terrain following
+- [x] P58.2 HUD, keyboard/pointer handling, and guardrails
+- [x] P58.3 Browser smoke, docs, and close-out
 
 ## Detailed Next Steps Notes
 

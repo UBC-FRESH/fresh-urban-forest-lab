@@ -1377,6 +1377,101 @@ function initMap() {
   state.selectedSourceReady = true;
 }
 
+function walkHeightAt(x, z) {
+  const source = threeScene();
+  if (!source) return null;
+  const terrain = source.terrain;
+  const [left, bottom, right, top] = source.bounds;
+  const origin = source.origin;
+  const xAbs = x + origin.x;
+  const yAbs = origin.y - z;
+  const col = Math.round(((xAbs - left) / Math.max(right - left, 1e-9)) * (terrain.width - 1));
+  const row = Math.round(((top - yAbs) / Math.max(top - bottom, 1e-9)) * (terrain.height - 1));
+  if (col < 0 || row < 0 || col >= terrain.width || row >= terrain.height) return null;
+  const value = terrain.elevation[row * terrain.width + col];
+  return Number.isFinite(value) ? value - origin.z : null;
+}
+
+function setWalkMode(enabled) {
+  const three = state.three;
+  if (!three) return;
+  const canvas = three.renderer.domElement;
+  if (enabled) {
+    three.walkMode = true;
+    three.controls.enabled = false;
+    three.walkKeys.clear();
+    const source = threeScene();
+    const origin = source.origin;
+    const [left, bottom, right, top] = source.bounds;
+    let x = three.controls.target.x;
+    let z = three.controls.target.z;
+    let height = walkHeightAt(x, z);
+    if (height === null) {
+      x = (left + right) / 2 - origin.x;
+      z = origin.y - (bottom + top) / 2;
+      height = walkHeightAt(x, z) ?? 0;
+    }
+    const direction = new THREE.Vector3();
+    three.camera.getWorldDirection(direction);
+    three.walkYaw = Math.atan2(-direction.x, -direction.z);
+    three.walkPitch = 0;
+    three.camera.position.set(x, height + three.walkEyeHeight, z);
+    three.camera.rotation.order = "YXZ";
+    three.camera.rotation.set(0, three.walkYaw, 0);
+    three.walkClock.start();
+    three.walkClock.getDelta();
+    $("walk-hud").hidden = false;
+    $("scene-walk").textContent = "Orbit";
+    $("scene-walk-status").textContent = "click to look";
+    canvas.requestPointerLock?.();
+  } else {
+    three.walkMode = false;
+    three.walkKeys.clear();
+    three.controls.enabled = true;
+    if (document.pointerLockElement === canvas) document.exitPointerLock();
+    const forward = new THREE.Vector3(-Math.sin(three.walkYaw), 0, -Math.cos(three.walkYaw));
+    three.controls.target.set(
+      three.camera.position.x + forward.x * Math.max(18, sceneSpan() * 0.02),
+      Math.max(1, three.camera.position.y - three.walkEyeHeight),
+      three.camera.position.z + forward.z * Math.max(18, sceneSpan() * 0.02),
+    );
+    three.controls.update();
+    $("walk-hud").hidden = true;
+    $("scene-walk").textContent = "Walk";
+    $("scene-walk-status").textContent = "orbit";
+  }
+}
+
+function updateWalk(delta) {
+  const three = state.three;
+  if (!three?.walkMode) return;
+  const keys = three.walkKeys;
+  const forward = Number(keys.has("w") || keys.has("arrowup")) - Number(keys.has("s") || keys.has("arrowdown"));
+  const strafe = Number(keys.has("d") || keys.has("arrowright")) - Number(keys.has("a") || keys.has("arrowleft"));
+  const source = threeScene();
+  const origin = source.origin;
+  const [left, bottom, right, top] = source.bounds;
+  const speed = (keys.has("shift") ? three.walkSprint : three.walkSpeed) * Math.min(delta, 0.1);
+  const directionX = -Math.sin(three.walkYaw);
+  const directionZ = -Math.cos(three.walkYaw);
+  const rightX = Math.cos(three.walkYaw);
+  const rightZ = -Math.sin(three.walkYaw);
+  const nextX = Math.max(
+    left - origin.x,
+    Math.min(right - origin.x, three.camera.position.x + (directionX * forward + rightX * strafe) * speed),
+  );
+  const nextZ = Math.max(
+    origin.y - top,
+    Math.min(origin.y - bottom, three.camera.position.z + (directionZ * forward + rightZ * strafe) * speed),
+  );
+  const height = walkHeightAt(nextX, nextZ);
+  if (height !== null) {
+    three.camera.position.set(nextX, height + three.walkEyeHeight, nextZ);
+  }
+  three.camera.rotation.order = "YXZ";
+  three.camera.rotation.set(three.walkPitch, three.walkYaw, 0);
+}
+
 function ensureThree() {
   if (state.three) {
     state.three.renderer.setSize(state.three.container.clientWidth, state.three.container.clientHeight, false);
@@ -1453,6 +1548,14 @@ function ensureThree() {
     trunkMeshes: [],
     treeGroups: new Map(),
     selectedMarker: null,
+    walkMode: false,
+    walkKeys: new Set(),
+    walkYaw: 0,
+    walkPitch: 0,
+    walkEyeHeight: 1.7,
+    walkSpeed: 7,
+    walkSprint: 14,
+    walkClock: new THREE.Clock(),
     sunLight: sun,
     sunSphere,
   };
@@ -1461,6 +1564,12 @@ function ensureThree() {
   const pointer = new THREE.Vector2();
   renderer.domElement.addEventListener("pointerdown", (event) => {
     if (event.button !== 0) return;
+    if (state.three?.walkMode) {
+      if (document.pointerLockElement !== renderer.domElement) {
+        renderer.domElement.requestPointerLock();
+      }
+      return;
+    }
     const rect = renderer.domElement.getBoundingClientRect();
     pointer.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
     pointer.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
@@ -1514,6 +1623,32 @@ function ensureThree() {
   renderer.domElement.addEventListener("pointerdown", () => {
     renderer.domElement.style.cursor = "default";
   });
+  document.addEventListener("pointerlockchange", () => {
+    if (!state.three?.walkMode) return;
+    $("scene-walk-status").textContent =
+      document.pointerLockElement === renderer.domElement ? "mouse captured" : "click to look";
+  });
+  document.addEventListener("mousemove", (event) => {
+    if (!state.three?.walkMode || document.pointerLockElement !== renderer.domElement) return;
+    state.three.walkYaw -= event.movementX * 0.0022;
+    state.three.walkPitch = Math.max(
+      -Math.PI / 2.05,
+      Math.min(Math.PI / 2.05, state.three.walkPitch - event.movementY * 0.0022),
+    );
+  });
+  window.addEventListener("keydown", (event) => {
+    if (!state.three?.walkMode) return;
+    if (event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement) return;
+    const key = event.key.toLowerCase();
+    if (["w", "a", "s", "d", "arrowup", "arrowdown", "arrowleft", "arrowright", "shift"].includes(key)) {
+      event.preventDefault();
+      state.three.walkKeys.add(key);
+    }
+  });
+  window.addEventListener("keyup", (event) => {
+    state.three?.walkKeys.delete(event.key.toLowerCase());
+  });
+  window.addEventListener("blur", () => state.three?.walkKeys.clear());
   window.addEventListener("resize", () => {
     if (!state.three) return;
     const width = state.three.container.clientWidth;
@@ -2094,7 +2229,9 @@ function updateSelectedMarker() {
 function animateThree() {
   if (!state.three) return;
   const three = state.three;
-  three.controls.update();
+  const delta = three.walkClock.getDelta();
+  if (three.walkMode) updateWalk(delta);
+  else three.controls.update();
   three.renderer.render(three.scene, three.camera);
   requestAnimationFrame(animateThree);
 }
@@ -2248,6 +2385,7 @@ function bindControls() {
   $("apply-recommend").addEventListener("click", applyRecommendations);
   $("scene-reset").addEventListener("click", resetCamera);
   $("scene-downtown").addEventListener("click", focusDowntown);
+  $("scene-walk").addEventListener("click", () => setWalkMode(!state.three?.walkMode));
   $("toggle-canopy").addEventListener("change", (event) => {
     if (state.map && state.map.getLayer("canopy")) {
       state.map.setLayoutProperty("canopy", "visibility", event.target.checked ? "visible" : "none");
@@ -2546,6 +2684,7 @@ async function sendAssistantMessage(text) {
 }
 
 function switchView(view) {
+  if (view !== "scene" && state.three?.walkMode) setWalkMode(false);
   document.querySelectorAll(".tab").forEach((tab) => {
     tab.classList.toggle("active", tab.dataset.view === view);
     tab.setAttribute("aria-selected", tab.dataset.view === view ? "true" : "false");
@@ -6092,6 +6231,7 @@ function applyRecommendations() {
 
 function focusDowntown() {
   if (!state.three) return;
+  if (state.three.walkMode) setWalkMode(false);
   const span = sceneSpan();
   const source = threeScene();
   const [originLon, originLat] = source.origin_lonlat;
@@ -6122,6 +6262,7 @@ function sceneSpan() {
 
 function resetCamera() {
   if (!state.three) return;
+  if (state.three.walkMode) setWalkMode(false);
   const span = sceneSpan();
   const distance = Math.max(300, span * 0.62);
   state.three.camera.position.set(distance * 0.55, distance * 0.52, distance * 0.85);

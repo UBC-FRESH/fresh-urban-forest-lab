@@ -1451,3 +1451,12 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - No scientific/product defaults changed.
 
 - Merged P57 as `1422c2b` via PR #305; created tag `v0.4.1`, published the GitHub release, and closed parent #304. Phase status: complete.
+
+### P58.1/P58.2 street-level walk mode
+
+- Added Walk/Orbit toggle to the 3D scene HUD.
+- Added pointer-lock mouse look, WASD/arrow movement, Shift sprint, and terrain-following
+  eye height.
+- Added crosshair/instruction overlay and bounds clamping.
+- Exiting Walk restores OrbitControls; switching tabs stops Walk mode.
+- Building interiors and full physical collision remain out of scope.
