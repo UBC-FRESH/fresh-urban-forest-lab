@@ -1477,3 +1477,20 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Replaced a machine-specific deployment path in the P58 report with a repository-relative
   path.
 - Dashboard: **GREEN**.
+
+### P59 v0.5.0 release start
+
+- Created parent issue #308 and branch `release/v0.5.0`.
+- Bumped package, citation, and runtime metadata to `0.5.0`.
+- Added `notes/releases/v0.5.0.md`, release design notes, and a version-consistency test.
+- Scope: P58 Walk mode and post-v0.4.1 documentation fixes; no scientific product or data
+  claim changes.
+
+### P59.1/P59.2 release verification
+
+- Version metadata, README, citation, project status, and release notes now agree at
+  `0.5.0`.
+- Added the release-metadata consistency test.
+- Dashboard: **GREEN**.
+- UBC browser smoke: Walk mode entered, pointer lock captured, HUD appeared, `W` was
+  accepted, Orbit restored, and no page errors occurred.

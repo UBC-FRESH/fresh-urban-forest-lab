@@ -1,13 +1,14 @@
 Project status and repository map
 =================================
 
-Status as of 2026-11-09:
+Status as of 2026-11-14:
 
-- The mainline is complete through Phase 55; P37 remains a separate workstream.
-- v0.4.1 is released. P30 adds a full-City-of-Vancouver public-data pilot; P38–P46
+- The mainline is complete through Phase 58; P37 remains a separate workstream.
+- v0.5.0 is released. P30 adds a full-City-of-Vancouver public-data pilot; P38–P46
   add shade/equity, gap, heat, change, action, and turnover screens; P47–P49 add the
   Optimization and site-scenario explorers; P50–P55 add full-city vertical control and
-  corrected change/action/turnover layers.
+  corrected change/action/turnover layers; P56–P57 publish v0.4.0/v0.4.1; P58 adds
+  street-level Walk mode to the 3D scene.
 - The documentation site remains live on GitHub Pages. See :doc:`research-agenda`,
   :doc:`shade-and-species`, :doc:`optimization-and-pareto`, :doc:`site-scenarios`,
   :doc:`off-inventory-canopy`, :doc:`bird-habitat-and-demography`,
@@ -39,7 +40,7 @@ Repository map
    * - ``DATA_LICENSES.md``
      - Source licences and attribution.
    * - ``CITATION.cff``
-     - Citation metadata for v0.3.0.
+     - Citation metadata for v0.5.0.
    * - ``AGENTS.md``
      - The coding-agent contract.
 
