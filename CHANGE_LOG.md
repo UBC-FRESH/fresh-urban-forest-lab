@@ -1494,3 +1494,11 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Dashboard: **GREEN**.
 - UBC browser smoke: Walk mode entered, pointer lock captured, HUD appeared, `W` was
   accepted, Orbit restored, and no page errors occurred.
+
+### P59 close-out
+
+- Squash-merged PR #309 into `main` as `f7ede17`.
+- Restarted the public portal on the release code from `main-worktree`; all five demo
+  routes returned HTTP 200 and the deployed Walk-mode smoke passed.
+- Tagged `v0.5.0`, published the GitHub release, and closed parent #308.
+- Dashboard: **GREEN**.

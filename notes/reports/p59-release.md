@@ -1,6 +1,6 @@
 # P59 v0.5.0 release verification
 
-Status: release candidate; merge, tag, and publication pending approval.
+Status: complete. Squash-merged in PR #309 as `f7ede17`.
 
 ## Metadata
 
@@ -24,13 +24,14 @@ Status: release candidate; merge, tag, and publication pending approval.
   - Orbit restored and HUD hid
   - no page errors
 
-## Release boundary
+## Release actions completed
 
-The release PR may be merged after approval. Still required:
-
-- tag `v0.5.0`
-- GitHub release
-- public portal restart on the release code
+- Tag `v0.5.0` created from this closeout commit.
+- GitHub release published from `notes/releases/v0.5.0.md`.
+- Public portal restarted on the release code from `main-worktree`.
+- Portal routes `/`, `/ubc/`, `/vancouver/`, `/surrey/`, `/burnaby/`, and `/coquitlam/`
+  returned HTTP 200.
+- Deployed UBC browser smoke passed with no page errors.
 
 ## Limits
 
