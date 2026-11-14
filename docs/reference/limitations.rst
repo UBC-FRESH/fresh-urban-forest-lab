@@ -58,11 +58,12 @@ Operational limits
 - Scenario state is file-based; there is no database or optimistic concurrency beyond the
   revision number.
 - The 3D scene uses procedural crowns and a display terrain mesh, not survey geometry.
-- Browser performance is untested at full city scale.
+- Hardware-GPU browser performance at full city scale remains untested. Headless
+  software rendering was slow at street level.
 
 Release limits
 --------------
 
-- v0.5.0 is a research prototype, not a final product.
+- v0.6.0 is a research prototype, not a final product.
 - Future tag, GitHub release, Pages setting, or branch-protection changes need explicit
   approval.

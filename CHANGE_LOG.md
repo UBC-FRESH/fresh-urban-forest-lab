@@ -1564,3 +1564,12 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Deployed UBC smoke passed for Street spawn, HUD, minimap, coordinates, and movement.
 - No scientific product, data claim, or default layer changed.
 - Dashboard: **GREEN**.
+
+### P62 v0.6.0 release start
+
+- Created parent issue #314 and branch `release/v0.6.0`.
+- Bumped package, citation, and runtime metadata to `0.6.0`.
+- Added v0.6.0 release notes and updated README, project status, limitations, and notes.
+- Scope: P61 Walk mode v2 and the P60 external-control record; no scientific product or
+  data-claim changes.
+- Dashboard: **GREEN**.

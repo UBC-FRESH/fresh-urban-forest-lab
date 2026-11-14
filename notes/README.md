@@ -30,8 +30,8 @@ Keep private material out of this directory.
 - `reference/bird-habitat-methods.md`: guild scope, structural metrics, demographic priors, and evidence tiers.
 - `reports/p10-birds.md`: bird habitat, guild relative abundance, prior lambda, and limits.
 - `reports/p11-integration.md`: unified report, integration limits, and v0.3.0 release.
-- `releases/v0.3.0.md`, `releases/v0.4.0.md`, `releases/v0.4.1.md`, and
-  `releases/v0.5.0.md`: tagged release notes.
+- `releases/v0.3.0.md`, `releases/v0.4.0.md`, `releases/v0.4.1.md`,
+  `releases/v0.5.0.md`, and `releases/v0.6.0.md`: tagged release notes.
 - `reports/growth-calibration-readiness.md`: why the current inventory cannot support growth calibration.
 - `reports/p12-arbor-method-mining.md`: P12 close-out, licence evidence, gate results, and the P13 recommendation.
 - `reports/p13-als-ground-validation.md` and `.json`: P13.2 real LidarBC tile validation, class-2 recall, HAG, and noise caveats.
@@ -64,6 +64,7 @@ Keep private material out of this directory.
   four western vertical-control tiles and the inconclusive decision.
 - `reports/p61-walk-v2.md`: building collision, street spawn, step handling, compass, and
   local minimap for Walk mode.
+- `reports/p62-release.md`: v0.6.0 Walk v2 release verification.
 - `releases/v0.2.0.md`: superseded draft; never tagged.
 - `reference/data-sources.md`: public UBC, Vancouver, and Metro Vancouver sources, with
   coverage, licences, and traps.
