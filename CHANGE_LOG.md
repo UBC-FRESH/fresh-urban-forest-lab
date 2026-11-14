@@ -1512,3 +1512,11 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
   branch tips that no longer matched their merged PR head.
 - Open issues: 0; open pull requests: 0.
 - Dashboard: **GREEN**.
+
+### P60 independent-control start
+
+- Created parent issue #310 and branch `feature/p60-independent-control`.
+- Defined the four 1 km western outlier tiles and adjacent inlier comparisons.
+- Feasibility-first scope: ICESat-2/GEDI or documented stable surfaces; stop if external
+  data cannot be tied to the 2018/2022 vertical datums.
+- No product or scientific claim changes yet.
