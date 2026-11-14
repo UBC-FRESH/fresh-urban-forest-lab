@@ -60,6 +60,8 @@ Keep private material out of this directory.
   optimization, site scenarios, release verification, Walk mode, and v0.5.0.
 - `reports/post-v0.5.0-housekeeping.md`: issue closure, current-status docs, and merged
   branch cleanup.
+- `reports/p60-independent-control.md` and `.json`: ICESat-2/GEDI coverage screen for the
+  four western vertical-control tiles and the inconclusive decision.
 - `releases/v0.2.0.md`: superseded draft; never tagged.
 - `reference/data-sources.md`: public UBC, Vancouver, and Metro Vancouver sources, with
   coverage, licences, and traps.

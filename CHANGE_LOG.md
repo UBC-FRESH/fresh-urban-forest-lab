@@ -1512,3 +1512,22 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
   branch tips that no longer matched their merged PR head.
 - Open issues: 0; open pull requests: 0.
 - Dashboard: **GREEN**.
+
+### P60 independent-control start
+
+- Created parent issue #310 and branch `feature/p60-independent-control`.
+- Defined the four 1 km western outlier tiles and adjacent inlier comparisons.
+- Feasibility-first scope: ICESat-2/GEDI or documented stable surfaces; stop if external
+  data cannot be tied to the 2018/2022 vertical datums.
+- No product or scientific claim changes yet.
+
+### P60 external-control screen
+
+- Searched ICESat-2 ATL08/ATL03 and GEDI L2A for the four western P53 outlier tiles.
+- No independent ground samples were found in `4830E_54530N`; `4840E_54520N` had no
+  usable screened GEDI sample; the other two tiles had sparse GEDI samples.
+- External heights are ellipsoidal and were not converted to CGVD28GVRD, so the check is
+  relative only.
+- Decision: inconclusive; retain the constant +0.011 m correction and western-outlier
+  caveat. No product, default, or data claim changed.
+- Dashboard: **GREEN**.

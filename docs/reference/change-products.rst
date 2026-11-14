@@ -195,8 +195,16 @@ when available and keep the original selectable. The API default remains ``origi
 backward compatibility.
 
 P55 adjudicated the four western control outliers. Their class-2 differences are broad and
-localized to the western edge; adjacent inlier tiles are near zero. No independent roof,
-road, ICESat-2, or GEDI control was available, and 2018 class-6 roofs are absent. The
-constant **+0.011 m** correction is retained with the outlier caveat; no four-tile local
-correction is applied. The four tiles remain in the control count and are excluded only
-from the stability gate.
+localized to the western edge; adjacent inlier tiles are near zero. P55 had no independent
+roof, road, ICESat-2, or GEDI control, and 2018 class-6 roofs are absent. The constant
+**+0.011 m** correction is retained with the outlier caveat; no four-tile local correction
+is applied. The four tiles remain in the control count and are excluded only from the
+stability gate.
+
+P60 searched ICESat-2 ATL08/ATL03 and GEDI L2A for the four outlier tiles. No independent
+ground samples were found in `4830E_54530N`; `4840E_54520N` had no usable screened GEDI
+sample; the other two tiles had only sparse GEDI samples. External heights are ellipsoidal
+and were not converted to CGVD28GVRD, so the comparison is relative, not an absolute
+datum check. The evidence does not support a local correction. The full-sample constant
+correction and the four-tile caveat remain. See
+``notes/reports/p60-independent-control.md``.

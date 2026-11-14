@@ -67,8 +67,9 @@ Known gaps
 - No completed field reference patch.
 - No repeat measurements for annual growth calibration.
 - P37 Surrey/Coquitlam imagery remains a separate workstream.
-- Four western vertical-control outliers are documented; independent external control is
-  unavailable.
+- Four western vertical-control outliers are documented. P60 found no independent ground
+  samples in `4830E_54530N` and only sparse samples elsewhere; the constant correction and
+  caveat remain.
 - No accounts, work orders, risk assessment, or mobile field app.
 
 Release actions
