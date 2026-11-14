@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "fresh-urban-forest"
-version = "0.4.1"
+version = "0.5.0"
 description = "Open urban-forest LiDAR, tree-inventory, growth, and 3D decision-support lab"
 readme = "README.md"
 requires-python = ">=3.11"

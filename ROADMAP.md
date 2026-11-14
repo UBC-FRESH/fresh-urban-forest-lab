@@ -55,6 +55,7 @@ This roadmap is the plan of record and the issue tracker map for FRESH Urban For
 | P56 v0.4.0 release and portal verification | #299 | `release/v0.4.0` | complete |
 | P57 v0.4.1 patch release | #304 | `release/v0.4.1` | complete |
 | P58 Street-level first-person navigation | #306 | `feature/p58-walk-mode` | complete |
+| P59 v0.5.0 walk-mode release | #308 | `release/v0.5.0` | pr-open |
 
 ## Lifecycle Map
 
@@ -1583,6 +1584,20 @@ Plan: `notes/design/p58-walk-mode.md`.
 - [x] P58.1 Walk-mode controls and terrain following
 - [x] P58.2 HUD, keyboard/pointer handling, and guardrails
 - [x] P58.3 Browser smoke, docs, and close-out
+
+## Phase 59: v0.5.0 walk-mode release
+
+Parent issue: #308
+Branch: `release/v0.5.0`
+Status: pr-open
+
+Goal: publish P58 and the post-v0.4.1 documentation fixes as v0.5.0.
+
+Plan: `notes/design/p59-release-v0.5.0.md`.
+
+- [x] P59.1 Release metadata, notes, docs, and consistency test
+- [x] P59.2 Dashboard, browser smoke, and release PR
+- [ ] P59.3 Merge, tag `v0.5.0`, publish release, deploy, and close out
 
 ## Detailed Next Steps Notes
 
