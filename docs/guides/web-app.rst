@@ -60,6 +60,8 @@ inside the radius.
 - instanced trunks and crowns by species group
 - building extrusions with terrain-based base elevation
 - orbit controls, scroll zoom, and raycast tree selection
+- **Walk** mode: pointer-lock mouse look, WASD/arrow movement, Shift sprint, and
+  terrain-following eye height
 - shared selection state with the 2D map
 
 The 3D scene is a context view, not a survey-grade visualization. Crown shapes are
@@ -139,4 +141,7 @@ Known UI limitations
 - Scenario edits are append-only; undo is per-edit, not a full undo stack.
 - No work orders, risk forms, or photo attachments.
 - The 3D scene uses procedural crowns, not species-specific meshes.
+- Walk mode follows terrain and stays within the scene bounds; it does not model building
+  interiors or complete physical collision. It is in-engine navigation, not Google Street
+  View imagery.
 - The time slider is a scenario projection, not an observed time series.
