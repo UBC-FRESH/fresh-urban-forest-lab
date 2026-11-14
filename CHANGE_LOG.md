@@ -1531,3 +1531,11 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Decision: inconclusive; retain the constant +0.011 m correction and western-outlier
   caveat. No product, default, or data claim changed.
 - Dashboard: **GREEN**.
+
+### P60 close-out
+
+- Squash-merged PR #311 into `main` as `fcb6627`.
+- Retained the constant +0.011 m correction and the western-outlier caveat; no product
+  change.
+- Closed parent #310 and removed the phase branch and worktree.
+- Dashboard: **GREEN**.

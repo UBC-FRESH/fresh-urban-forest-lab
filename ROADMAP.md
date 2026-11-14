@@ -56,7 +56,7 @@ This roadmap is the plan of record and the issue tracker map for FRESH Urban For
 | P57 v0.4.1 patch release | #304 | `release/v0.4.1` | complete |
 | P58 Street-level first-person navigation | #306 | `feature/p58-walk-mode` | complete |
 | P59 v0.5.0 walk-mode release | #308 | `release/v0.5.0` | complete |
-| P60 Independent control for western vertical-control tiles | #310 | `feature/p60-independent-control` | pr-open |
+| P60 Independent control for western vertical-control tiles | #310 | `feature/p60-independent-control` | complete |
 
 ## Lifecycle Map
 
@@ -1604,7 +1604,7 @@ Plan: `notes/design/p59-release-v0.5.0.md`.
 
 Parent issue: #310
 Branch: `feature/p60-independent-control`
-Status: pr-open
+Status: complete
 
 Goal: test the four western P53 outliers against an independent public vertical reference
 and decide whether the constant correction stands, a local correction is supported, or the
@@ -1614,7 +1614,7 @@ Plan: `notes/design/p60-independent-control.md`.
 
 - [x] P60.1 Tile bounds, external-data search, and feasibility gate
 - [x] P60.2 Independent control extraction and offset comparison
-- [ ] P60.3 Decision, docs, PR, and close-out
+- [x] P60.3 Decision, docs, PR, and close-out
 
 Decision: inconclusive. ATL08/ATL03 and GEDI do not cover all four tiles, and external
 heights were not converted to CGVD28GVRD. Retain the constant +0.011 m correction and the

@@ -1,6 +1,6 @@
 # P60 independent control for western vertical-control tiles
 
-Status: implementation complete; PR review pending.
+Status: complete. Squash-merged in PR #311 as `fcb6627`.
 
 ## Question
 
@@ -91,3 +91,11 @@ outlier caveat.**
 - External coverage and screening counts: `notes/reports/p60-external-sample.json`.
 - Dashboard run required before merge.
 - No product or UI behavior changed.
+
+## Close-out
+
+- PR #311 squash-merged into `main` as `fcb6627`.
+- Decision remains: inconclusive; retain the full-sample constant **+0.011 m** correction
+  and the four-tile western caveat.
+- No product, default layer, data claim, or application behavior changed.
+- Dashboard: **GREEN**.
