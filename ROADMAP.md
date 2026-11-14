@@ -58,7 +58,7 @@ This roadmap is the plan of record and the issue tracker map for FRESH Urban For
 | P59 v0.5.0 walk-mode release | #308 | `release/v0.5.0` | complete |
 | P60 Independent control for western vertical-control tiles | #310 | `feature/p60-independent-control` | complete |
 | P61 Walk mode v2 | #312 | `feature/p61-walk-v2` | complete |
-| P62 v0.6.0 walk-mode-v2 release | #314 | `release/v0.6.0` | pr-open |
+| P62 v0.6.0 walk-mode-v2 release | #314 | `release/v0.6.0` | complete |
 
 ## Lifecycle Map
 
@@ -1641,7 +1641,7 @@ Plan: `notes/design/p61-walk-v2.md`.
 
 Parent issue: #314
 Branch: `release/v0.6.0`
-Status: pr-open
+Status: complete
 
 Goal: publish P61 Walk mode v2 and the P60 external-control record as v0.6.0.
 
@@ -1649,7 +1649,7 @@ Plan: `notes/design/p62-release-v0.6.0.md`.
 
 - [x] P62.1 Version metadata, release notes, and docs
 - [x] P62.2 Dashboard, browser smoke, and release PR
-- [ ] P62.3 Merge, tag `v0.6.0`, publish release, deploy, and close out
+- [x] P62.3 Merge, tag `v0.6.0`, publish release, deploy, and close out
 
 ## Detailed Next Steps Notes
 

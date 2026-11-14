@@ -1573,3 +1573,11 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Scope: P61 Walk mode v2 and the P60 external-control record; no scientific product or
   data-claim changes.
 - Dashboard: **GREEN**.
+
+### P62 close-out
+
+- Squash-merged PR #315 into `main` as `7ad143a`.
+- Tagged `v0.6.0`, published the GitHub release, and restarted the public portal.
+- All six portal routes returned HTTP 200; deployed UBC Walk v2 smoke passed.
+- No scientific product, data claim, or default layer changed.
+- Dashboard: **GREEN**.

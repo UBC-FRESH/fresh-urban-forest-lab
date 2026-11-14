@@ -2,7 +2,7 @@
 
 Parent issue: #314
 Branch: `release/v0.6.0`
-Status: pr-open
+Status: complete
 
 ## Scope
 

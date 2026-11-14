@@ -1,6 +1,6 @@
 # P62 v0.6.0 release verification
 
-Status: release candidate; merge, tag, and publication pending approval.
+Status: complete. Squash-merged in PR #315 as `7ad143a`.
 
 ## Metadata
 
@@ -19,13 +19,14 @@ Status: release candidate; merge, tag, and publication pending approval.
 - Vancouver browser smoke: Street spawn and HUD, no page errors
 - Public portal routes remain healthy
 
-## Release boundary
+## Release actions completed
 
-The release PR may be merged after approval. Still required:
-
-- tag `v0.6.0`
-- GitHub release
-- public portal restart on the release code
+- Tag `v0.6.0` created from this closeout commit.
+- GitHub release published from `notes/releases/v0.6.0.md`.
+- Public portal restarted on the release code from `main-worktree`.
+- Portal routes `/`, `/ubc/`, `/vancouver/`, `/surrey/`, `/burnaby/`, and `/coquitlam/`
+  returned HTTP 200.
+- Deployed UBC Walk v2 smoke passed with no page errors.
 
 ## Limits
 
