@@ -2,7 +2,7 @@
 
 Parent issue: #306
 Branch: `feature/p58-walk-mode`
-Status: pr-open
+Status: complete
 
 ## Goal
 

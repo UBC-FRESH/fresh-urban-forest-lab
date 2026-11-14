@@ -1460,3 +1460,12 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Added crosshair/instruction overlay and bounds clamping.
 - Exiting Walk restores OrbitControls; switching tabs stops Walk mode.
 - Building interiors and full physical collision remain out of scope.
+
+### P58 close-out
+
+- Merged PR #307 into `main` as `c9d67f7`.
+- Restarted the public portal at `:8101` from `main-worktree`; all five demo routes
+  returned HTTP 200.
+- Deployed UBC browser smoke passed for Walk mode, pointer lock, keyboard input, and
+  Orbit restoration.
+- Dashboard: **GREEN**.

@@ -1,6 +1,6 @@
 # P58 street-level first-person navigation
 
-Status: implementation complete; PR review pending.
+Status: complete.
 
 ## Implemented
 
@@ -28,3 +28,20 @@ Browser smoke on the UBC demo:
 - No building interiors or complete physical collision.
 - Terrain height is the dataset grid, not survey-grade pedestrian ground.
 - No jump/crouch or physics.
+
+## Close-out
+
+- Merged PR #307 into `main` as `c9d67f7`.
+- Deployed `main` on the public portal at `:8101` from
+  `/srv/shared-data/gep/ws4/main-worktree` with
+  `PYTHONPATH=/srv/shared-data/gep/ws4/main-worktree/src`.
+- Portal routes `/`, `/ubc/`, `/vancouver/`, `/surrey/`, `/burnaby/`, and
+  `/coquitlam/` returned HTTP 200.
+- Deployed UBC browser smoke passed: Walk mode entered, pointer lock captured, HUD
+  appeared, `W` was accepted, and Orbit restored with the HUD hidden.
+- No browser page errors.
+
+## Dashboard
+
+`python scripts/dashboard.py`: **GREEN**. Every gate passed before merge; CI checks
+`Green dashboard summary`, `Pre-commit parity`, and `Quality gates` passed on PR #307.

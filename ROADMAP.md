@@ -54,7 +54,7 @@ This roadmap is the plan of record and the issue tracker map for FRESH Urban For
 | P55 Vertical-control outlier adjudication | #294 | `feature/p55-outlier-adjudication` | complete |
 | P56 v0.4.0 release and portal verification | #299 | `release/v0.4.0` | complete |
 | P57 v0.4.1 patch release | #304 | `release/v0.4.1` | complete |
-| P58 Street-level first-person navigation | #306 | `feature/p58-walk-mode` | pr-open |
+| P58 Street-level first-person navigation | #306 | `feature/p58-walk-mode` | complete |
 
 ## Lifecycle Map
 
@@ -1573,7 +1573,7 @@ Acceptance criteria:
 
 Parent issue: #306
 Branch: `feature/p58-walk-mode`
-Status: pr-open
+Status: complete
 
 Goal: add a Walk mode to the 3D scene with pointer-lock look, WASD movement, sprint, and
 terrain following. Not Google Street View imagery.
