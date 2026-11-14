@@ -66,13 +66,15 @@ Known gaps
 
 - No completed field reference patch.
 - No repeat measurements for annual growth calibration.
-- City coverage is two core tiles, not the whole city.
+- P37 Surrey/Coquitlam imagery remains a separate workstream.
+- Four western vertical-control outliers are documented; independent external control is
+  unavailable.
 - No accounts, work orders, risk assessment, or mobile field app.
 
 Release actions
 ---------------
 
-The v0.3.0 tag and GitHub release are complete. Future tag, release, Pages, repository
+The v0.5.0 tag and GitHub release are complete. Future tag, release, Pages, repository
 settings, public deployment, and announcement actions need explicit maintainer approval.
 
 The repository itself is public by design.

@@ -30,7 +30,10 @@ Data and coverage limits
 - The demo is a downsampled core-campus snapshot, not full UBC or Metro Vancouver coverage.
 - The 2016 UBC change product uses four core tiles; the 2015 product uses four other core
   tiles. They now share a common 2 km mask for comparison.
-- The City product covers two core tiles, not the whole city.
+- The Vancouver pilot is citywide: 2022 LiDAR plus 181 2018 LiDAR tiles. P37
+  Surrey/Coquitlam remains a separate workstream.
+- Corrected change/action/turnover products are screening layers, not final citywide
+  net-change claims.
 - The CanElevation tile index is about 428 MB and is not tracked.
 - The City download host requires a browser challenge; the manifest and browser helper are
   the workaround.
@@ -60,6 +63,6 @@ Operational limits
 Release limits
 --------------
 
-- v0.3.0 is a research prototype, not a final product.
+- v0.5.0 is a research prototype, not a final product.
 - Future tag, GitHub release, Pages setting, or branch-protection changes need explicit
   approval.

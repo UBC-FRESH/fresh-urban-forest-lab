@@ -1502,3 +1502,13 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
   routes returned HTTP 200 and the deployed Walk-mode smoke passed.
 - Tagged `v0.5.0`, published the GitHub release, and closed parent #308.
 - Dashboard: **GREEN**.
+
+### Post-v0.5.0 housekeeping
+
+- Closed eight completed child issues from P53-P56 with close-out comments.
+- Corrected stale current-status documentation: v0.5.0 release label, citywide Vancouver
+  coverage, P37 boundary, western-control caveat, and the notes report index.
+- Deleted 25 local and stale merged remote branch refs; kept active worktree branches and
+  branch tips that no longer matched their merged PR head.
+- Open issues: 0; open pull requests: 0.
+- Dashboard: **GREEN**.

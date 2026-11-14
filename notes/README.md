@@ -55,6 +55,11 @@ Keep private material out of this directory.
 - `reports/p21-ground-smoke.md`: P21 coastal-tile bundle smoke and Golden comparison.
 - `reports/p21-closeout.md`: P21 close-out and the P22 recommendation.
 - `reports/p30-vancouver-city.md`: full Vancouver city pilot close-out, metrics, validation, performance, storage, and limits.
+- `reports/p38-shade-equity.md` through `reports/p59-release.md`: P38–P59 phase
+  reports covering shade, gaps, heat, observed change, action/turnover, vertical control,
+  optimization, site scenarios, release verification, Walk mode, and v0.5.0.
+- `reports/post-v0.5.0-housekeeping.md`: issue closure, current-status docs, and merged
+  branch cleanup.
 - `releases/v0.2.0.md`: superseded draft; never tagged.
 - `reference/data-sources.md`: public UBC, Vancouver, and Metro Vancouver sources, with
   coverage, licences, and traps.
