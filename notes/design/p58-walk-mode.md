@@ -19,7 +19,8 @@ This is not Google Street View imagery and does not use Google APIs.
 - Terrain-height eye follow and scene-bounds clamping.
 - Preserve OrbitControls and tree selection when not walking.
 - Crosshair/instruction overlay.
-- Exit Walk on tab change or Escape/pointer-lock loss.
+- Exit Walk when switching tabs or choosing Orbit. Escape releases the pointer lock but
+  keeps Walk mode active, with a click-to-look hint.
 
 ## Out of scope
 

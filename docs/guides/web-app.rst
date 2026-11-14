@@ -67,6 +67,16 @@ inside the radius.
 The 3D scene is a context view, not a survey-grade visualization. Crown shapes are
 procedural approximations.
 
+Walk mode
+~~~~~~~~~
+
+Choose **Walk** in the 3D HUD and click the scene to capture the pointer. Use **WASD** or
+the arrow keys to move, **Shift** to sprint, and **Esc** to release the pointer. Choose
+**Orbit** to return to the overhead controls.
+
+Walk mode follows the dataset terrain grid at 1.7 m eye height and clamps movement to the
+scene bounds. It does not model building interiors or complete physical collision.
+
 Observed change tab
 -------------------
 

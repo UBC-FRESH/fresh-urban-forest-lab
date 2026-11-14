@@ -32,9 +32,8 @@ Browser smoke on the UBC demo:
 ## Close-out
 
 - Merged PR #307 into `main` as `c9d67f7`.
-- Deployed `main` on the public portal at `:8101` from
-  `/srv/shared-data/gep/ws4/main-worktree` with
-  `PYTHONPATH=/srv/shared-data/gep/ws4/main-worktree/src`.
+- Deployed `main` on the public portal at `:8101` from the `main-worktree` checkout with
+  `PYTHONPATH=src`.
 - Portal routes `/`, `/ubc/`, `/vancouver/`, `/surrey/`, `/burnaby/`, and
   `/coquitlam/` returned HTTP 200.
 - Deployed UBC browser smoke passed: Walk mode entered, pointer lock captured, HUD

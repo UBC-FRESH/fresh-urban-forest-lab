@@ -1469,3 +1469,11 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Deployed UBC browser smoke passed for Walk mode, pointer lock, keyboard input, and
   Orbit restoration.
 - Dashboard: **GREEN**.
+
+### P58 documentation correction
+
+- Added explicit Walk-mode controls and exit behavior to the web application guide.
+- Corrected the design note: Escape releases the pointer lock but does not exit Walk mode.
+- Replaced a machine-specific deployment path in the P58 report with a repository-relative
+  path.
+- Dashboard: **GREEN**.
