@@ -1,6 +1,6 @@
 # P61 Walk mode v2
 
-Status: implementation complete; PR review pending.
+Status: complete. Squash-merged in PR #313 as `dd43436`.
 
 ## Implemented
 
@@ -44,3 +44,12 @@ Status: implementation complete; PR review pending.
 - Trees are not collision objects.
 - Terrain height is still the dataset grid, not survey-grade pedestrian ground.
 - This is not Google Street View imagery.
+
+## Close-out
+
+- PR #313 squash-merged into `main` as `dd43436`.
+- Public portal restarted on the release code from `main-worktree`.
+- `/`, `/ubc/`, `/vancouver/`, `/surrey/`, `/burnaby/`, and `/coquitlam/` returned HTTP 200.
+- Deployed UBC smoke passed: Street spawn, HUD, minimap, coordinates, and walking input.
+- No product or scientific claims changed.
+- Dashboard: **GREEN**.

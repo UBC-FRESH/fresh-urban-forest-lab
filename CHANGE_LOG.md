@@ -1556,3 +1556,11 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Browser smoke passed on the UBC demo; the Vancouver city scene entered Walk with no page
   errors, but the headless software renderer remains slow at street level.
 - Dashboard: **GREEN**.
+
+### P61 close-out
+
+- Squash-merged PR #313 into `main` as `dd43436`.
+- Restarted the public portal on the P61 code; all six routes returned HTTP 200.
+- Deployed UBC smoke passed for Street spawn, HUD, minimap, coordinates, and movement.
+- No scientific product, data claim, or default layer changed.
+- Dashboard: **GREEN**.
