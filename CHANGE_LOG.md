@@ -1666,3 +1666,9 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Preserved the Commercial Drive pilot and the 85-image grid sample separately.
 - No off-inventory or official-inventory records were merged or changed.
 - Dashboard: **GREEN**.
+
+### P67 full live-host KartaView pass start
+
+- Created parent issue #324 and branch `feature/p67-full-kartaview`.
+- Scope: process every decodable non-storage1 KartaView image.
+- Street candidates remain separate from LiDAR off-inventory and official inventory.

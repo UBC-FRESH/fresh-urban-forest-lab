@@ -75,6 +75,11 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--fov", type=float, default=DEFAULT_FOV_DEG)
     parser.add_argument("--device", default="auto")
     parser.add_argument("--max-workers", type=int, default=32)
+    parser.add_argument(
+        "--include-dead-hosts",
+        action="store_true",
+        help="Include storage1 records whose blobs are normally missing.",
+    )
     return parser.parse_args(argv)
 
 
@@ -336,6 +341,13 @@ def run(args: argparse.Namespace) -> dict[str, object]:
         radius=args.radius,
         scan_limit=100,
     )
+    if not args.include_dead_hosts:
+        for cell in list(by_cell):
+            by_cell[cell] = [
+                image
+                for image in by_cell[cell]
+                if _storage_host(image) != "storage1.openstreetcam.org"
+            ]
     selected = _select_images(by_cell, per_cell=args.per_cell, maximum=args.max_images)
     host_counts = Counter(_storage_host(image) for image in selected)
     print(
@@ -387,6 +399,7 @@ def run(args: argparse.Namespace) -> dict[str, object]:
         "inventory_median_distance_m": summary.median_distance_m if summary else None,
         "fov_source": "assumed_default",
         "assumed_horizontal_fov_deg": args.fov,
+        "live_hosts_only": not args.include_dead_hosts,
         "caveats": [
             "KartaView imagery is CC BY-SA 4.0 and must be attributed.",
             "KartaView often omits camera FOV; 60° is assumed.",
