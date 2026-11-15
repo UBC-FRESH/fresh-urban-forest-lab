@@ -1629,3 +1629,12 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Scope: P63/P64 street-level tree candidate layer; no scientific product or data-claim
   changes.
 - Dashboard: **GREEN**.
+
+### P65 close-out
+
+- Squash-merged PR #321 into `main` as `abb7961`.
+- Tagged `v0.7.0`, published the GitHub release, and restarted the public portal.
+- All six portal routes returned HTTP 200; Vancouver API returned 24 candidates and the
+  street-trees toggle worked.
+- No scientific product, default layer, or off-inventory data changed.
+- Dashboard: **GREEN**.

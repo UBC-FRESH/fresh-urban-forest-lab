@@ -2,7 +2,7 @@
 
 Parent issue: #320
 Branch: `release/v0.7.0`
-Status: pr-open
+Status: complete
 
 ## Scope
 

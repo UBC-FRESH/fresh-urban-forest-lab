@@ -1,6 +1,6 @@
 # P65 v0.7.0 release verification
 
-Status: release candidate; merge, tag, and publication pending approval.
+Status: complete. Squash-merged in PR #321 as `abb7961`.
 
 ## Metadata
 
@@ -19,13 +19,13 @@ Status: release candidate; merge, tag, and publication pending approval.
 - UBC toggle hidden/disabled; no page errors
 - Public portal routes remain healthy
 
-## Release boundary
+## Release actions completed
 
-The release PR may be merged after approval. Still required:
-
-- tag `v0.7.0`
-- GitHub release
-- public portal restart on the release code
+- Tag `v0.7.0` created from this closeout commit.
+- GitHub release published from `notes/releases/v0.7.0.md`.
+- Public portal restarted on the release code.
+- Vancouver API returned 24 street-tree candidates and the toggle worked.
+- All six portal routes returned HTTP 200.
 
 ## Limits
 
