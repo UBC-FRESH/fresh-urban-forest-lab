@@ -1687,3 +1687,11 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Public API and map toggle serve 19,790 features.
 - Batched inference, detection caching, and the `--max-spread` argument are in PR #325;
   no merge or release yet.
+
+### P68 street-layer UI cue and calibration audit start
+
+- Created parent issue #326 and stacked branch `feature/p68-street-audit`.
+- Add a dynamic candidate count and screening caveat beside the Vancouver `street trees`
+  toggle.
+- Scope: FOV/pose sensitivity, stratified detector audit, and inventory-tolerance
+  sensitivity. No release or merge without approval.

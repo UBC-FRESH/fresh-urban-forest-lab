@@ -862,6 +862,7 @@ async function init() {
     renderScenarioOptions();
     renderBaselineTimeline(dataset.metrics);
     initMap();
+    loadStreetTreeSummary();
     loadFullMapLayers();
     bindControls();
     initLightControls();
@@ -1038,6 +1039,22 @@ function updateLayerToggleAvailability(dataset) {
     input.disabled = !available;
     const label = input.closest("label");
     if (label) label.hidden = !available;
+  }
+}
+
+async function loadStreetTreeSummary() {
+  const badge = $("street-trees-count");
+  if (!badge || !state.dataset?.has_street_trees) return;
+  try {
+    const summary = await api("api/street-trees");
+    const count = Number(summary.candidate_count);
+    if (!Number.isFinite(count)) return;
+    badge.textContent = `· ${formatNumber(count)}`;
+    badge.title =
+      "Screening candidates from street-level imagery; not confirmed trees or official inventory.";
+    badge.hidden = false;
+  } catch (_error) {
+    badge.hidden = true;
   }
 }
 
