@@ -65,6 +65,7 @@ This roadmap is the plan of record and the issue tracker map for FRESH Urban For
 | P66 Citywide street-level tree candidates | #322 | `feature/p66-citywide-street-trees` | complete |
 | P67 Full live-host KartaView pass | #324 | `feature/p67-full-kartaview` | complete |
 | P68 Street-layer UI and calibration audit | #326 | `feature/p68-street-audit` | complete |
+| P69 Street-tree detector and trunk-base audit | #328 | `feature/p69-trunk-audit` | pr-open |
 
 ## Lifecycle Map
 
@@ -1746,6 +1747,22 @@ Plan: `notes/design/p68-street-audit.md`.
 - [x] P68.2 FOV/pose metadata and sensitivity audit
 - [x] P68.3 Stratified detector contact sheet and observations
 - [x] P68.4 Inventory tolerance sensitivity, docs, and PR
+
+## Phase 69: Street-tree detector and trunk-base audit
+
+Parent issue: #328
+Branch: `feature/p69-trunk-audit`
+Status: pr-open
+
+Goal: audit current detector boxes, trial open promptable segmentation, and produce a
+sample-only confidence layer without overwriting canonical data.
+
+Plan: `notes/design/p69-trunk-audit.md`.
+
+- [x] P69.1 Stratified 200-crop audit and summary
+- [x] P69.2 Open promptable segmentation trial
+- [x] P69.3 Confidence/sanity filter and sample layer
+- [ ] P69.4 Report, docs, PR, and approval gate
 
 ## Detailed Next Steps Notes
 

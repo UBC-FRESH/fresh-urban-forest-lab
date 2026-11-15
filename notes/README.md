@@ -79,6 +79,9 @@ Keep private material out of this directory.
   `reports/p68-inventory-sensitivity.json`, and `reports/p68-detector-sample.json`:
   street-layer UI count/caveat, FOV/heading audit, detector sample, and inventory-tolerance
   sensitivity.
+- `reports/p69-trunk-audit.md`, `reports/p69-mask-audit.json`,
+  `reports/p69-trunk-trial.json`, and `reports/p69-confidence-sample.json`: 200-candidate
+  mask audit, trunk-detection trial, and multi-view screening subset.
 - `releases/v0.2.0.md`: superseded draft; never tagged.
 - `reference/data-sources.md`: public UBC, Vancouver, and Metro Vancouver sources, with
   coverage, licences, and traps.
