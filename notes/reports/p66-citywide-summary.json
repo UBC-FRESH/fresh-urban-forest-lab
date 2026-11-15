@@ -16,15 +16,27 @@
     "radius_m": 500,
     "cells": 118
   },
-  "image_count": 85,
-  "selected_image_count": 500,
-  "downloaded_image_count": 85,
-  "component_count": 1023,
-  "detection_count": 1023,
-  "candidate_count": 258,
+  "image_count": 1167,
+  "selected_image_count": 1200,
+  "selected_storage_hosts": {
+    "storage3.openstreetcam.org": 1080,
+    "storage5.openstreetcam.org": 8,
+    "storage4.openstreetcam.org": 54,
+    "storage1.openstreetcam.org": 36,
+    "storage6.openstreetcam.org": 9,
+    "storage11.openstreetcam.org": 2,
+    "storage7.openstreetcam.org": 3,
+    "storage9.openstreetcam.org": 3,
+    "storage8.openstreetcam.org": 4,
+    "storage13.openstreetcam.org": 1
+  },
+  "downloaded_image_count": 1167,
+  "component_count": 17016,
+  "detection_count": 17016,
+  "candidate_count": 3462,
   "inventory_match_tolerance_m": 8.0,
-  "inventory_matched_count": 70,
-  "inventory_median_distance_m": 5.31521490160872,
+  "inventory_matched_count": 1005,
+  "inventory_median_distance_m": 5.197254124599461,
   "fov_source": "assumed_default",
   "assumed_horizontal_fov_deg": 60.0,
   "caveats": [
@@ -36,19 +48,25 @@
     "Candidates are screening estimates, not field-validated tree locations.",
     "The layer is separate from LiDAR off-inventory and official inventory."
   ],
-  "started_utc": "2026-11-15T09:33:02Z",
+  "started_utc": "2026-11-15T17:40:24Z",
   "view_count_distribution": {
-    "1": 225,
-    "2": 16,
-    "3": 10,
-    "4": 7
+    "1": 3047,
+    "2": 277,
+    "3": 83,
+    "4": 28,
+    "5": 12,
+    "6": 8,
+    "7": 4,
+    "8": 1,
+    "9": 1,
+    "10": 1
   },
   "off_inventory_comparison": {
     "candidate_count": 335471,
-    "within_5m": 41,
-    "within_10m": 106,
-    "within_20m": 184,
-    "median_distance_m": 11.73,
+    "within_5m": 694,
+    "within_10m": 1804,
+    "within_20m": 3018,
+    "median_distance_m": 9.72,
     "note": "Descriptive overlap only; no merge or identity claim."
   }
 }

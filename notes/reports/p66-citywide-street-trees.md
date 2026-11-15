@@ -15,26 +15,45 @@ Status: implementation complete; PR review pending.
 
 Coverage summary: `notes/reports/p66-coverage-summary.json`.
 
+## Why earlier 500s happened
+
+The KartaView CDN proxy (`cdn.kartaview.org/pr:sharp/...`) returns HTTP 500 with body
+`azure download error` when its origin storage returns 404. Examples pointed at
+`storage1.openstreetcam.org`; direct requests returned `BlobNotFound`. The metadata records
+remain after those blobs were removed or migrated.
+
+Storage-host counts in the 10,204 record audit:
+
+- storage1: 3,772
+- storage3: 2,724
+- storage4: 1,357
+- storage5: 813
+- other storage hosts: ~1,500
+- no URL: 7
+
+The earlier 500-image selection was biased toward dead storage1 records. The corrected
+run ranks live storage hosts first and preflights downloads.
+
 ## Run
 
-The citywide screen selected 500 images across 117 populated cells. The public KartaView
-CDN returned usable imagery for 85 of them.
+The citywide screen selected 1,200 images across 117 populated cells. The public KartaView
+CDN returned usable imagery for 1,167 of them.
 
-- 85 images decoded.
-- 1,023 tree components.
-- 258 fused candidates.
-- 225 single-view, 16 two-view, 10 three-view, and 7 four-view candidates.
-- 70 candidates matched a public tree within 8 m; median matched distance **5.32 m**.
+- 1,167 images decoded.
+- 17,016 tree components.
+- 3,462 fused candidates.
+- 3,047 single-view candidates and 415 with two or more views.
+- 1,005 candidates matched a public tree within 8 m; median matched distance **5.20 m**.
 
 ## Off-inventory comparison
 
-Off-inventory is a separate LiDAR candidate population, not ground truth. Of the 258 street
-candidates:
+Off-inventory is a separate LiDAR candidate population, not ground truth. Of the 3,462
+street candidates:
 
-- 41 are within 5 m of an off-inventory candidate;
-- 106 are within 10 m;
-- 184 are within 20 m;
-- median nearest distance is 11.73 m.
+- 694 are within 5 m of an off-inventory candidate;
+- 1,804 are within 10 m;
+- 3,018 are within 20 m;
+- median nearest distance is 9.72 m.
 
 This is descriptive overlap only. It does not merge the layers or establish that a street
 candidate and a LiDAR candidate are the same tree.

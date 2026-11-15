@@ -17,5 +17,20 @@
     "2022": 9,
     "2026": 6
   },
-  "note": "Metadata-only coverage audit; image CDN availability is lower."
+  "note": "Metadata-only coverage audit; image CDN availability is lower.",
+  "storage_host_counts": {
+    "storage1.openstreetcam.org": 3772,
+    "storage3.openstreetcam.org": 2724,
+    "storage4.openstreetcam.org": 1357,
+    "storage6.openstreetcam.org": 465,
+    "storage8.openstreetcam.org": 237,
+    "storage13.openstreetcam.org": 23,
+    "storage5.openstreetcam.org": 813,
+    "storage7.openstreetcam.org": 322,
+    "storage9.openstreetcam.org": 99,
+    "storage12.openstreetcam.org": 55,
+    "storage11.openstreetcam.org": 330,
+    "no_url": 7
+  },
+  "storage1_note": "Sampled storage1 blobs return 404 BlobNotFound; the CDN proxy reports 500 \"azure download error\"."
 }

@@ -1649,11 +1649,11 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 ### P66 citywide street-tree sample
 
 - Audited 118 boundary grid cells and 10,204 unique KartaView metadata records.
-- Selected 500 images across 117 populated cells; decoded 85 available images.
-- Produced 1,023 components, 258 fused candidates, and 70 public-tree matches within 8 m
-  (median 5.32 m).
-- 225 candidates are single-view; 33 have two or more views.
-- 106/258 street candidates are within 10 m of an off-inventory LiDAR candidate. This is
+- Selected 1,200 images across 117 populated cells; decoded 1,167 available images.
+- Produced 17,016 components, 3,462 fused candidates, and 1,005 public-tree matches within
+  8 m (median 5.20 m).
+- 3,047 candidates are single-view; 415 have two or more views.
+- 1,804/3,462 street candidates are within 10 m of an off-inventory LiDAR candidate. This is
   descriptive overlap, not identity or merge.
 - Preserved the 24-candidate Commercial Drive pilot separately.
 - Dashboard: **GREEN**.

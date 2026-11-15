@@ -9,10 +9,12 @@ citywide census.
 from __future__ import annotations
 
 import argparse
+import base64
 import contextlib
 import json
+import re
 import time
-from collections import defaultdict
+from collections import Counter, defaultdict
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import replace
 from pathlib import Path
@@ -72,7 +74,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--min-area", type=int, default=1200)
     parser.add_argument("--fov", type=float, default=DEFAULT_FOV_DEG)
     parser.add_argument("--device", default="auto")
-    parser.add_argument("--max-workers", type=int, default=16)
+    parser.add_argument("--max-workers", type=int, default=32)
     return parser.parse_args(argv)
 
 
@@ -140,15 +142,37 @@ def _collect_images(
     return by_cell
 
 
+def _storage_host(image: StreetImage) -> str:
+    """Return the original storage host encoded in a KartaView CDN URL."""
+    match = re.search(r"/pr:sharp/([^/?]+)", image.image_url)
+    if match is None:
+        return "unknown"
+    encoded = match.group(1)
+    try:
+        source = base64.b64decode(encoded + "=" * ((4 - len(encoded) % 4) % 4)).decode()
+    except Exception:
+        return "unknown"
+    return source.split("/")[2] if "://" in source else "unknown"
+
+
 def _select_images(
     by_cell: dict[int, list[StreetImage]],
     *,
     per_cell: int,
     maximum: int,
 ) -> tuple[StreetImage, ...]:
-    """Select evenly from successful cells, with a per-cell cap."""
+    """Select evenly from cells, preferring storage hosts that still exist."""
     selected: list[StreetImage] = []
     cells = sorted(by_cell)
+    for cell in cells:
+        records = sorted(
+            by_cell[cell],
+            key=lambda image: (
+                _storage_host(image) == "storage1.openstreetcam.org",
+                _storage_host(image),
+            ),
+        )
+        by_cell[cell] = records
     cursor = 0
     while len(selected) < maximum:
         added = False
@@ -313,7 +337,11 @@ def run(args: argparse.Namespace) -> dict[str, object]:
         scan_limit=100,
     )
     selected = _select_images(by_cell, per_cell=args.per_cell, maximum=args.max_images)
-    print(f"selected images: {len(selected)} across {len(by_cell)} cells", flush=True)
+    host_counts = Counter(_storage_host(image) for image in selected)
+    print(
+        f"selected images: {len(selected)} across {len(by_cell)} cells; hosts={dict(host_counts)}",
+        flush=True,
+    )
     if not selected:
         raise RuntimeError("no KartaView images selected")
     device = _device(args.device)
@@ -349,6 +377,7 @@ def run(args: argparse.Namespace) -> dict[str, object]:
         "grid": {"spacing_m": args.spacing, "radius_m": args.radius, "cells": len(points)},
         "image_count": decoded_count,
         "selected_image_count": len(selected),
+        "selected_storage_hosts": dict(host_counts),
         "downloaded_image_count": decoded_count,
         "component_count": components,
         "detection_count": len(detections),
