@@ -60,7 +60,7 @@ This roadmap is the plan of record and the issue tracker map for FRESH Urban For
 | P61 Walk mode v2 | #312 | `feature/p61-walk-v2` | complete |
 | P62 v0.6.0 walk-mode-v2 release | #314 | `release/v0.6.0` | complete |
 | P63 Street-level tree candidate layer | #316 | `feature/p63-street-tree-cv` | complete |
-| P64 Canonical street-tree map layer | #318 | `feature/p64-street-tree-layer` | pr-open |
+| P64 Canonical street-tree map layer | #318 | `feature/p64-street-tree-layer` | complete |
 
 ## Lifecycle Map
 
@@ -1673,7 +1673,7 @@ Plan: `notes/design/p63-street-tree-cv.md`.
 
 Parent issue: #318
 Branch: `feature/p64-street-tree-layer`
-Status: pr-open
+Status: complete
 
 Goal: publish the P63 Vancouver pilots as a canonical, selectable map layer without merging
 them into the LiDAR off-inventory or official inventory populations.
@@ -1682,7 +1682,7 @@ Plan: `notes/design/p64-street-tree-layer.md`.
 
 - [x] P64.1 Canonical pilot data and API endpoints
 - [x] P64.2 Map layer, toggle, and candidate popup
-- [ ] P64.3 Tests, browser smoke, docs, PR, and close-out
+- [x] P64.3 Tests, browser smoke, docs, PR, and close-out
 
 ## Detailed Next Steps Notes
 

@@ -1611,3 +1611,12 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Added a screening-point popup with view count and positional uncertainty.
 - Toggle is hidden for datasets without the layer; no merge with off-inventory.
 - Dashboard: **GREEN**.
+
+### P64 close-out
+
+- Squash-merged PR #319 into `main` as `9b547e4`.
+- Restarted the public portal; all six routes returned HTTP 200.
+- Vancouver serves 24 street-tree candidates and advertises `has_street_trees`.
+- Vancouver toggle visible/enabled; UBC toggle hidden/disabled; no page errors.
+- No off-inventory or official-inventory records were merged or changed.
+- Dashboard: **GREEN**.

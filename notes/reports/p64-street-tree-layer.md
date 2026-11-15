@@ -1,6 +1,6 @@
 # P64 canonical street-tree layer verification
 
-Status: implementation complete; PR review pending.
+Status: complete. Squash-merged in PR #319 as `9b547e4`.
 
 ## Data
 
@@ -43,3 +43,11 @@ The files stay in the generated dataset, not in git. The dataset advertises
 - Imagery is 2016 and the public inventory is current.
 - Candidate positions and detections are screening results, not field facts.
 - The public inventory cannot identify private-tree false positives.
+
+## Close-out
+
+- PR #319 squash-merged into `main` as `9b547e4`.
+- Public portal restarted on the new code; Vancouver `has_street_trees=true`, 24 features.
+- Vancouver browser smoke: toggle visible/enabled and checked with no page errors.
+- UBC browser smoke: toggle hidden/disabled with no page errors.
+- Dashboard: **GREEN**.
