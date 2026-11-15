@@ -63,7 +63,7 @@ This roadmap is the plan of record and the issue tracker map for FRESH Urban For
 | P64 Canonical street-tree map layer | #318 | `feature/p64-street-tree-layer` | complete |
 | P65 v0.7.0 street-tree-layer release | #320 | `release/v0.7.0` | complete |
 | P66 Citywide street-level tree candidates | #322 | `feature/p66-citywide-street-trees` | complete |
-| P67 Full live-host KartaView pass | #324 | `feature/p67-full-kartaview` | pr-open |
+| P67 Full live-host KartaView pass | #324 | `feature/p67-full-kartaview` | complete |
 | P68 Street-layer UI and calibration audit | #326 | `feature/p68-street-audit` | pr-open |
 
 ## Lifecycle Map
@@ -1721,7 +1721,7 @@ Plan: `notes/design/p66-citywide-street-trees.md`.
 
 Parent issue: #324
 Branch: `feature/p67-full-kartaview`
-Status: pr-open
+Status: complete
 
 Goal: process every decodable KartaView image on a live storage host.
 
@@ -1729,7 +1729,7 @@ Plan: `notes/design/p67-full-kartaview.md`.
 
 - [x] P67.1 Live-host selection and full image audit
 - [x] P67.2 Full inference and canonical layer
-- [ ] P67.3 Validation, docs, PR, and close-out
+- [x] P67.3 Validation, docs, PR, and close-out
 
 ## Phase 68: Street-layer UI and calibration audit
 
