@@ -17,10 +17,8 @@ from pathlib import Path
 from typing import cast
 
 import numpy as np
-import torch
 from PIL import Image, ImageDraw, ImageFont
 from scipy.spatial import cKDTree
-from transformers import OneFormerForUniversalSegmentation, OneFormerProcessor
 
 from street_tree_pilot import ONEFORMER_MODEL, _device, _load_inventory
 
@@ -213,6 +211,9 @@ def run(args: argparse.Namespace) -> dict[str, object]:
     dict[str, object]
         Audit payload written to disk.
     """
+    import torch
+    from transformers import OneFormerForUniversalSegmentation, OneFormerProcessor
+
     samples, stratum_counts = _sample(
         args.candidates,
         args.detections,
