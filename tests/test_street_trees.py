@@ -285,7 +285,12 @@ def test_kartaview_client_handles_malformed_payloads() -> None:
             lon=-123.1, lat=49.25, radius_m=100, limit=10
         )
 
-    for payload in ({"result": []}, {"result": {"data": {}}}, {"result": {"data": [1, {}]}}):
+    payloads: tuple[dict[str, object], ...] = (
+        {"result": []},
+        {"result": {"data": {}}},
+        {"result": {"data": [1, {}]}},
+    )
+    for payload in payloads:
 
         def handler(request: httpx.Request, payload: object = payload) -> httpx.Response:
             return httpx.Response(200, json=payload)
