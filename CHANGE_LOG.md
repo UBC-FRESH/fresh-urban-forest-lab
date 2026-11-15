@@ -1735,4 +1735,4 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
   overlapped the current candidate; not integrated.
 - Published an external multi-view subset (8,608 candidates); canonical 19,790-feature layer
   unchanged.
-- No release, tag, or canonical overwrite.
+- No release, tag, or canonical overwrite. P69 PR #329 is open for approval.

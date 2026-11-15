@@ -1,6 +1,6 @@
 # P69 street-tree detector and trunk-base audit
 
-Status: implementation complete; PR pending approval.
+Status: implementation complete; PR #329 open for approval.
 
 ## 200-candidate mask audit
 
