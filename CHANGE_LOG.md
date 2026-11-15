@@ -1657,3 +1657,12 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
   descriptive overlap, not identity or merge.
 - Preserved the 24-candidate Commercial Drive pilot separately.
 - Dashboard: **GREEN**.
+
+### P66 close-out
+
+- Squash-merged PR #323 into `main` as `81f51e9`.
+- Canonical citywide layer now has 3,462 candidates from 1,167 decoded KartaView images.
+- Public API and map layer serve the citywide data.
+- Preserved the Commercial Drive pilot and the 85-image grid sample separately.
+- No off-inventory or official-inventory records were merged or changed.
+- Dashboard: **GREEN**.

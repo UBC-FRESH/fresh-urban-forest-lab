@@ -1,6 +1,6 @@
 # P66 citywide street-level tree candidate sample
 
-Status: implementation complete; PR review pending.
+Status: complete. Squash-merged in PR #323 as `81f51e9`.
 
 ## Coverage audit
 
@@ -70,3 +70,13 @@ with the LiDAR off-inventory layer or official inventory.
 - Imagery is predominantly 2016-2018; inventory is current.
 - Single-view candidates dominate when image coverage is sparse.
 - No precision, recall, field-validation, survival, ownership, or citywide census claim.
+
+## Close-out
+
+- PR #323 squash-merged into `main` as `81f51e9`.
+- Canonical citywide layer: 3,462 candidates from 1,167 decoded images.
+- Public API on `:8101` returns 3,462 features; map toggle works.
+- Preserved the 24-candidate Commercial Drive pilot and the 85-image grid sample as separate
+  historical files.
+- No merge with LiDAR off-inventory or official inventory.
+- Dashboard: **GREEN**.
