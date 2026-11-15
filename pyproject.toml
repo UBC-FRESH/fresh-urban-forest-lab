@@ -48,7 +48,6 @@ street = [
   "torchvision>=0.17",
   "transformers>=4.45,<5",
   "accelerate>=0.30",
-  "scikit-image>=0.23",
 ]
 optimize = ["fresh-solutions @ git+https://github.com/UBC-FRESH/fresh-solutions.git@v0.8.0"]
 web = ["fastapi>=0.110", "uvicorn>=0.29", "pillow>=10"]
@@ -136,8 +135,6 @@ module = [
   "scipy.*",
   "transformers",
   "transformers.*",
-  "skimage",
-  "skimage.*",
 ]
 ignore_missing_imports = true
 

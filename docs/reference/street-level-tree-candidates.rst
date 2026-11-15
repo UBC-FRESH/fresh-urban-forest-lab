@@ -38,15 +38,15 @@ Pilot
 -----
 
 The first Vancouver pilot used eight KartaView images around the Commercial Drive area. It
-produced 29 fused candidates from 75 image components; six candidates matched a public tree
-within 8 m, with a median matched distance of 5.41 m. This is a screening result, not a
+produced 24 fused candidates from 111 image components; six candidates matched a public
+tree within 8 m, with a median matched distance of 5.35 m. This is a screening result, not a
 detection rate: the public inventory does not contain all private trees.
 
 Limits
 ------
 
 - Assumed FOV and uncalibrated camera pitch.
-- Semantic masks plus watershed splitting are not a trained tree-instance detector.
+- Semantic masks plus distance-peak splitting are not a trained tree-instance detector.
 - Imagery is from 2016; inventory records are current.
 - No field validation, private-tree census, ownership, survival, or citywide claim.
 - The current layer does not replace or modify the LiDAR off-inventory population.

@@ -30,8 +30,8 @@ Query: Commercial Drive area, `49.255 N, -123.070 W`, 500 m radius.
 
 - 70 KartaView metadata records returned; 8 images decoded successfully.
 - Several older CDN image URLs returned HTTP 500 and were skipped.
-- 8 images produced 75 tree components and 29 fused candidates.
-- 6 candidates matched a public tree within 8 m; median matched distance **5.41 m**.
+- 8 images produced 111 tree components and 24 fused candidates.
+- 6 candidates matched a public tree within 8 m; median matched distance **5.35 m**.
 - Camera FOV was not supplied by KartaView, so a documented **60°** default was used.
 - Imagery is from 2016; the inventory is current. This is a temporal mismatch.
 - No detection-rate or precision claim is made. The public inventory cannot identify
@@ -51,7 +51,7 @@ Summary: `notes/reports/p63-pilot-summary.json`.
 ## Limits
 
 - FOV is assumed for KartaView images; positional error is not independently calibrated.
-- OneFormer is a semantic segmenter; watershed splitting is a heuristic for dense crowns.
+- OneFormer is a semantic segmenter; distance-peak splitting is a heuristic for dense crowns.
 - The 60° assumption and 2016 imagery make the pilot unsuitable for a change or survival
   claim.
 - No field validation, private-tree census, ownership, or citywide claim.

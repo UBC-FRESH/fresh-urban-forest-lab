@@ -17,13 +17,6 @@ import numpy as np
 import torch
 from PIL import Image
 from scipy import ndimage
-from skimage.feature import peak_local_max
-from skimage.segmentation import watershed
-from transformers import (
-    OneFormerForUniversalSegmentation,
-    OneFormerProcessor,
-    pipeline,
-)
 
 from fresh_urban_forest.street_trees import (
     KartaViewClient,
@@ -99,6 +92,20 @@ def _download_images(
     return result
 
 
+def _split_tree_mask(binary: np.ndarray) -> np.ndarray:
+    """Split a binary tree mask into nearest-peak components."""
+    distance = ndimage.distance_transform_edt(binary)
+    local_max = distance == ndimage.maximum_filter(distance, size=45)
+    peaks = local_max & binary & (distance > 2.0)
+    markers, count = ndimage.label(peaks)
+    if count == 0:
+        labels, _ = ndimage.label(binary)
+        return np.asarray(labels)
+    _, indices = ndimage.distance_transform_edt(markers == 0, return_indices=True)
+    nearest = markers[indices[0], indices[1]]
+    return np.asarray(nearest * binary)
+
+
 def _tree_components(
     image: Image.Image,
     tree_mask: np.ndarray,
@@ -107,15 +114,7 @@ def _tree_components(
 ) -> tuple[tuple[float, float, float, float], ...]:
     """Split a semantic tree mask into instance-like components."""
     binary = tree_mask.astype(bool)
-    distance = ndimage.distance_transform_edt(binary)
-    peaks = peak_local_max(distance, min_distance=22, threshold_abs=2.0, labels=binary)  # type: ignore[no-untyped-call]  # skimage has no stubs
-    markers = np.zeros(binary.shape, dtype=np.int32)
-    if len(peaks) > 0:
-        for index, (row, col) in enumerate(peaks, 1):
-            markers[row, col] = index
-        labels = watershed(-distance, markers, mask=binary)  # type: ignore[no-untyped-call]  # skimage has no stubs
-    else:
-        labels, _ = ndimage.label(binary)
+    labels = _split_tree_mask(binary)
     boxes: list[tuple[float, float, float, float]] = []
     for label in np.unique(labels):
         if label == 0:
@@ -169,6 +168,12 @@ def run(args: argparse.Namespace) -> dict[str, object]:
     dict[str, object]
         Pilot summary written next to the candidates.
     """
+    from transformers import (
+        OneFormerForUniversalSegmentation,
+        OneFormerProcessor,
+        pipeline,
+    )
+
     device = _device(args.device)
     print(f"device={device}", flush=True)
     client = KartaViewClient()
@@ -260,7 +265,7 @@ def run(args: argparse.Namespace) -> dict[str, object]:
     )
     payload: dict[str, object] = {
         "schema_version": "fresh-urban-forest.street-tree-pilot.v1",
-        "method": "OneFormer ADE20K semantic tree mask + watershed split + ZoeDepth metric depth",
+        "method": "OneFormer semantic tree mask + distance-peak split + ZoeDepth depth",
         "models": {
             "segmentation": ONEFORMER_MODEL,
             "segmentation_license": "MIT",

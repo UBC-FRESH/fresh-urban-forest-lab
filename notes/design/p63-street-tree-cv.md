@@ -28,7 +28,7 @@ complementary to, and separate from, the LiDAR off-inventory layer.
 - It does not merge with `off_inventory.geojson`, the official inventory, or corrected
   LiDAR products.
 - The operator pilot in `scripts/street_tree_pilot.py` uses OneFormer semantic tree masks,
-  watershed instance splitting, and ZoeDepth metric depth.
+  distance-peak instance splitting, and ZoeDepth metric depth.
 - The first pilot assumes a 60° horizontal FOV because KartaView generally omits camera
   calibration; this must remain explicit.
 
