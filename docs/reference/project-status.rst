@@ -1,15 +1,16 @@
 Project status and repository map
 =================================
 
-Status as of 2026-11-14:
+Status as of 2026-11-15:
 
-- The mainline is complete through Phase 61; P37 remains a separate workstream.
-- v0.6.0 is released. P30 adds a full-City-of-Vancouver public-data pilot; P38–P46
+- The mainline is complete through Phase 64; P37 remains a separate workstream.
+- v0.7.0 is released. P30 adds a full-City-of-Vancouver public-data pilot; P38–P46
   add shade/equity, gap, heat, change, action, and turnover screens; P47–P49 add the
   Optimization and site-scenario explorers; P50–P55 add full-city vertical control and
   corrected change/action/turnover layers; P56–P57 publish v0.4.0/v0.4.1; P58 adds
   street-level Walk mode; P60 records the inconclusive external-control check; P61 adds
-  building collision, street spawning, compass, and minimap.
+  building collision, street spawning, compass, and minimap; P62 publishes v0.6.0; P63–P64
+  add the separate open street-level tree candidate layer and map overlay.
 - The documentation site remains live on GitHub Pages. See :doc:`research-agenda`,
   :doc:`shade-and-species`, :doc:`optimization-and-pareto`, :doc:`site-scenarios`,
   :doc:`off-inventory-canopy`, :doc:`bird-habitat-and-demography`,
@@ -76,7 +77,7 @@ Known gaps
 Release actions
 ---------------
 
-The v0.6.0 tag and GitHub release are complete. Future tag, release, Pages, repository
+The v0.7.0 tag and GitHub release are complete. Future tag, release, Pages, repository
 settings, public deployment, and announcement actions need explicit maintainer approval.
 
 The repository itself is public by design.

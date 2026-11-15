@@ -1620,3 +1620,12 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Vancouver toggle visible/enabled; UBC toggle hidden/disabled; no page errors.
 - No off-inventory or official-inventory records were merged or changed.
 - Dashboard: **GREEN**.
+
+### P65 v0.7.0 release start
+
+- Created parent issue #320 and branch `release/v0.7.0`.
+- Bumped package, citation, and runtime metadata to `0.7.0`.
+- Added v0.7.0 release notes and updated README, project status, limitations, and notes.
+- Scope: P63/P64 street-level tree candidate layer; no scientific product or data-claim
+  changes.
+- Dashboard: **GREEN**.

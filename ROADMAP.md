@@ -61,6 +61,7 @@ This roadmap is the plan of record and the issue tracker map for FRESH Urban For
 | P62 v0.6.0 walk-mode-v2 release | #314 | `release/v0.6.0` | complete |
 | P63 Street-level tree candidate layer | #316 | `feature/p63-street-tree-cv` | complete |
 | P64 Canonical street-tree map layer | #318 | `feature/p64-street-tree-layer` | complete |
+| P65 v0.7.0 street-tree-layer release | #320 | `release/v0.7.0` | pr-open |
 
 ## Lifecycle Map
 
@@ -1683,6 +1684,20 @@ Plan: `notes/design/p64-street-tree-layer.md`.
 - [x] P64.1 Canonical pilot data and API endpoints
 - [x] P64.2 Map layer, toggle, and candidate popup
 - [x] P64.3 Tests, browser smoke, docs, PR, and close-out
+
+## Phase 65: v0.7.0 street-tree-layer release
+
+Parent issue: #320
+Branch: `release/v0.7.0`
+Status: pr-open
+
+Goal: publish P63/P64 as v0.7.0 with the separate open street-level tree candidate layer.
+
+Plan: `notes/design/p65-release-v0.7.0.md`.
+
+- [x] P65.1 Version metadata, release notes, and docs
+- [x] P65.2 Dashboard, API/browser smoke, and release PR
+- [ ] P65.3 Merge, tag `v0.7.0`, publish release, deploy, and close out
 
 ## Detailed Next Steps Notes
 
