@@ -64,3 +64,31 @@ def test_discover_vancouver_rejects_unknown_year() -> None:
     """An unsupported year is refused."""
     with pytest.raises(ValueError, match="unsupported"):
         discover_vancouver_tiles(2024, BBOX)
+
+
+def test_discover_vancouver_handles_nonmapping_payload() -> None:
+    """A non-mapping API response yields no tiles."""
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        return httpx.Response(200, json=[])
+
+    with httpx.Client(transport=httpx.MockTransport(handler)) as client:
+        assert discover_vancouver_tiles(2022, BBOX, client=client) == ()
+
+
+def test_discover_vancouver_handles_bad_records_and_total() -> None:
+    """Malformed records and an untrusted total count do not create tiles."""
+    payload = {
+        "total_count": None,
+        "results": [
+            1,
+            {"name": "missing-url"},
+            {"name": "missing-geometry", "lidar_url": "https://example.test/x.zip"},
+        ],
+    }
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        return httpx.Response(200, json=payload)
+
+    with httpx.Client(transport=httpx.MockTransport(handler)) as client:
+        assert discover_vancouver_tiles(2022, BBOX, client=client, page_size=10) == ()

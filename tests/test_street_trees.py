@@ -8,16 +8,19 @@ from dataclasses import replace
 from pathlib import Path
 
 import httpx
+import pytest
 
 from fresh_urban_forest.street_trees import (
     KartaViewClient,
     StreetImage,
+    _parse_kartaview_record,
     bearing_offset_deg,
     candidates_geojson,
     detection_from_box,
     fuse_detections,
     match_inventory,
     project_pixel,
+    write_candidates,
 )
 
 
@@ -196,3 +199,163 @@ def test_write_candidates_round_trip(tmp_path: Path) -> None:
     payload = json.loads(path.read_text(encoding="utf-8"))
     assert payload["schema_version"] == "fresh-urban-forest.street-tree-candidates.v1"
     assert len(payload["features"]) == 1
+
+
+def test_projection_rejects_invalid_inputs() -> None:
+    """Projection helpers reject impossible dimensions and depths."""
+    with pytest.raises(ValueError, match="width must be positive"):
+        bearing_offset_deg(0.0, 0, 60.0)
+    with pytest.raises(ValueError, match="horizontal_fov_deg"):
+        bearing_offset_deg(0.0, 1000, 0.0)
+    with pytest.raises(ValueError, match="depth_m"):
+        project_pixel(_image(), 500.0, 0.0)
+
+
+def test_fusion_rejects_invalid_options() -> None:
+    """Fusion validates its radius, spread, and empty input."""
+    assert fuse_detections(()) == ()
+    detection = detection_from_box(_image(), (400.0, 500.0, 600.0, 700.0), score=0.8, depth_m=8.0)
+    with pytest.raises(ValueError, match="radius_m"):
+        fuse_detections((detection,), radius_m=0.0)
+    with pytest.raises(ValueError, match="max_spread_m"):
+        fuse_detections((detection,), radius_m=1.0, max_spread_m=0.0)
+
+
+def test_fusion_handles_a_closed_triangle() -> None:
+    """Repeated edges and a closed triangle do not duplicate candidates."""
+    base = detection_from_box(_image(), (400.0, 500.0, 600.0, 700.0), score=0.8, depth_m=8.0)
+    points = (
+        replace(base, image_id="image-a", lon=base.lon, lat=base.lat),
+        replace(base, image_id="image-b", lon=base.lon + 4.0 / 85_000.0, lat=base.lat),
+        replace(
+            base,
+            image_id="image-c",
+            lon=base.lon,
+            lat=base.lat + 4.0 / 110_540.0,
+        ),
+    )
+    candidates = fuse_detections(points, radius_m=6.0, max_spread_m=10.0)
+    assert len(candidates) == 1
+    assert candidates[0].view_count == 3
+
+
+def test_inventory_match_rejects_invalid_tolerance_and_empty_inputs() -> None:
+    """Inventory matching validates tolerance and handles empty inputs."""
+    detection = detection_from_box(_image(), (400.0, 500.0, 600.0, 700.0), score=0.8, depth_m=8.0)
+    candidates = fuse_detections((detection,))
+    with pytest.raises(ValueError, match="tolerance_m"):
+        match_inventory(candidates, ((detection.lon, detection.lat, "public-1"),), tolerance_m=0.0)
+    empty = match_inventory((), ((detection.lon, detection.lat, "public-1"),), tolerance_m=8.0)
+    assert empty.matched_count == 0
+    no_inventory = match_inventory(candidates, (), tolerance_m=8.0)
+    assert no_inventory.matched_count == 0
+
+
+def test_inventory_match_handles_no_nearby_records() -> None:
+    """A candidate outside the tolerance has no matched distance."""
+    detection = detection_from_box(_image(), (400.0, 500.0, 600.0, 700.0), score=0.8, depth_m=8.0)
+    candidates = fuse_detections((detection,))
+    summary = match_inventory(
+        candidates,
+        ((detection.lon + 0.1, detection.lat + 0.1, "public-far"),),
+        tolerance_m=8.0,
+    )
+    assert summary.matched_count == 0
+    assert summary.median_distance_m is None
+
+
+def test_kartaview_client_rejects_invalid_query_limits() -> None:
+    """The provider validates radius and limit before making a request."""
+    transport = httpx.MockTransport(lambda request: httpx.Response(500))
+    client = KartaViewClient(httpx.Client(transport=transport))
+    with pytest.raises(ValueError, match="radius_m and limit"):
+        client.images_near(lon=-123.1, lat=49.25, radius_m=0, limit=10)
+    with pytest.raises(ValueError, match="radius_m and limit"):
+        client.images_near(lon=-123.1, lat=49.25, radius_m=100, limit=0)
+
+
+def test_kartaview_client_handles_malformed_payloads() -> None:
+    """Malformed provider payloads are rejected or treated as empty."""
+
+    def list_handler(request: httpx.Request) -> httpx.Response:
+        return httpx.Response(200, json=[])
+
+    with pytest.raises(ValueError, match="not an object"):
+        KartaViewClient(httpx.Client(transport=httpx.MockTransport(list_handler))).images_near(
+            lon=-123.1, lat=49.25, radius_m=100, limit=10
+        )
+
+    for payload in ({"result": []}, {"result": {"data": {}}}, {"result": {"data": [1, {}]}}):
+
+        def handler(request: httpx.Request, payload: object = payload) -> httpx.Response:
+            return httpx.Response(200, json=payload)
+
+        client = KartaViewClient(httpx.Client(transport=httpx.MockTransport(handler)))
+        assert client.images_near(lon=-123.1, lat=49.25, radius_m=100, limit=10) == ()
+
+
+def test_kartaview_client_skips_records_that_fail_parsing() -> None:
+    """A malformed record is skipped without aborting the whole response."""
+    payload = {
+        "result": {
+            "data": [
+                {
+                    "id": "bad",
+                    "imageLthUrl": "https://example.test/bad.jpg",
+                    "lat": 49.25,
+                    "lng": -123.1,
+                }
+            ]
+        }
+    }
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        return httpx.Response(200, json=payload)
+
+    client = KartaViewClient(httpx.Client(transport=httpx.MockTransport(handler)))
+    assert client.images_near(lon=-123.1, lat=49.25, radius_m=100, limit=10) == ()
+
+
+def test_kartaview_record_parser_rejects_bad_records() -> None:
+    """Records without a secure URL, id, or required coordinates are skipped."""
+    assert _parse_kartaview_record({"id": "1", "imageLthUrl": "http://example.test/1.jpg"}) is None
+    assert _parse_kartaview_record({"id": {}, "imageLthUrl": "https://example.test/1.jpg"}) is None
+    parsed = _parse_kartaview_record(
+        {
+            "id": 7,
+            "imageLthUrl": "https://example.test/7.jpg",
+            "lat": 49.25,
+            "lng": -123.1,
+            "heading": 0,
+            "width": None,
+            "height": None,
+        }
+    )
+    assert parsed is not None
+    assert parsed.image_id == "7"
+    assert parsed.width == 1280
+    assert parsed.height == 960
+    with pytest.raises(ValueError, match="missing heading"):
+        _parse_kartaview_record(
+            {
+                "id": "8",
+                "imageLthUrl": "https://example.test/8.jpg",
+                "lat": 49.25,
+                "lng": -123.1,
+            }
+        )
+
+
+def test_kartaview_image_bytes_and_write_candidates(tmp_path: Path) -> None:
+    """Image bytes are returned and candidate files are written."""
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        return httpx.Response(200, content=b"image-bytes")
+
+    client = KartaViewClient(httpx.Client(transport=httpx.MockTransport(handler)))
+    assert client.image_bytes(_image()) == b"image-bytes"
+    detection = detection_from_box(_image(), (400.0, 500.0, 600.0, 700.0), score=0.8, depth_m=8.0)
+    candidates = fuse_detections((detection,))
+    path = tmp_path / "candidates.geojson"
+    write_candidates(path, candidates)
+    assert path.is_file()

@@ -150,7 +150,11 @@ markers = [
 branch = true
 source = ["src/fresh_urban_forest", "scripts"]
 # Optional ML operator script; its model dependencies are not installed in the default gate.
-omit = ["scripts/street_tree_pilot.py", "scripts/street_tree_city.py"]
+omit = [
+    "scripts/street_tree_pilot.py",
+    "scripts/street_tree_city.py",
+    "scripts/street_tree_fov_audit.py",
+]
 
 [tool.coverage.report]
 show_missing = true
