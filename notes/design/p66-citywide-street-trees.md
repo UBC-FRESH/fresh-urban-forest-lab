@@ -2,7 +2,7 @@
 
 Parent issue: #322
 Branch: `feature/p66-citywide-street-trees`
-Status: active
+Status: pr-open
 
 ## Goal
 

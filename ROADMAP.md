@@ -62,7 +62,7 @@ This roadmap is the plan of record and the issue tracker map for FRESH Urban For
 | P63 Street-level tree candidate layer | #316 | `feature/p63-street-tree-cv` | complete |
 | P64 Canonical street-tree map layer | #318 | `feature/p64-street-tree-layer` | complete |
 | P65 v0.7.0 street-tree-layer release | #320 | `release/v0.7.0` | complete |
-| P66 Citywide street-level tree candidates | #322 | `feature/p66-citywide-street-trees` | active |
+| P66 Citywide street-level tree candidates | #322 | `feature/p66-citywide-street-trees` | pr-open |
 
 ## Lifecycle Map
 
@@ -1704,15 +1704,15 @@ Plan: `notes/design/p65-release-v0.7.0.md`.
 
 Parent issue: #322
 Branch: `feature/p66-citywide-street-trees`
-Status: active
+Status: pr-open
 
 Goal: extend the Commercial Drive street-level pilot to a citywide Vancouver screening
 sample using KartaView imagery and the existing open pipeline.
 
 Plan: `notes/design/p66-citywide-street-trees.md`.
 
-- [ ] P66.1 Road/grid sampling and image coverage audit
-- [ ] P66.2 Citywide inference, fusion, and canonical layer
+- [x] P66.1 Road/grid sampling and image coverage audit
+- [x] P66.2 Citywide inference, fusion, and canonical layer
 - [ ] P66.3 Validation, docs, PR, and close-out
 
 ## Detailed Next Steps Notes

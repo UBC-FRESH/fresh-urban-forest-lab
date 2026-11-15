@@ -1,0 +1,54 @@
+{
+  "schema_version": "fresh-urban-forest.street-tree-pilot.v1",
+  "extent": "vancouver_citywide_sample",
+  "method": "OneFormer semantic tree mask + distance-peak split + ZoeDepth depth",
+  "models": {
+    "segmentation": "shi-labs/oneformer_ade20k_swin_tiny",
+    "segmentation_license": "MIT",
+    "depth": "Intel/zoedepth-nyu-kitti",
+    "depth_license": "MIT"
+  },
+  "provider": "kartaview",
+  "provider_license": "CC BY-SA 4.0",
+  "provider_attribution": "\u00a9 Grab and KartaView contributors",
+  "grid": {
+    "spacing_m": 1000,
+    "radius_m": 500,
+    "cells": 118
+  },
+  "image_count": 85,
+  "selected_image_count": 500,
+  "downloaded_image_count": 85,
+  "component_count": 1023,
+  "detection_count": 1023,
+  "candidate_count": 258,
+  "inventory_match_tolerance_m": 8.0,
+  "inventory_matched_count": 70,
+  "inventory_median_distance_m": 5.31521490160872,
+  "fov_source": "assumed_default",
+  "assumed_horizontal_fov_deg": 60.0,
+  "caveats": [
+    "KartaView imagery is CC BY-SA 4.0 and must be attributed.",
+    "KartaView often omits camera FOV; 60\u00b0 is assumed.",
+    "Coverage is a sampled road-network grid, not a complete image census.",
+    "Imagery is predominantly 2016-2018; inventory is current.",
+    "Public tree inventory is incomplete for private trees; unmatched candidates are not false positives.",
+    "Candidates are screening estimates, not field-validated tree locations.",
+    "The layer is separate from LiDAR off-inventory and official inventory."
+  ],
+  "started_utc": "2026-11-15T09:33:02Z",
+  "view_count_distribution": {
+    "1": 225,
+    "2": 16,
+    "3": 10,
+    "4": 7
+  },
+  "off_inventory_comparison": {
+    "candidate_count": 335471,
+    "within_5m": 41,
+    "within_10m": 106,
+    "within_20m": 184,
+    "median_distance_m": 11.73,
+    "note": "Descriptive overlap only; no merge or identity claim."
+  }
+}

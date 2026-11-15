@@ -65,4 +65,21 @@ Limits
 - No field validation, private-tree census, ownership, survival, or citywide claim.
 - The current layer does not replace or modify the LiDAR off-inventory population.
 
-Reproduction and full caveats are in ``notes/reports/p63-vancouver-pilot.md``.
+Citywide sample
+---------------
+
+P66 extended the pilot to a 118-cell, 1 km boundary grid. The metadata audit found 10,204
+unique KartaView image records; the bounded run selected 500 images, decoded 85, and
+produced 1,023 image components, 258 fused candidates, and 70 public-tree matches within
+8 m (median 5.32 m).
+
+The citywide layer is the current canonical street-tree layer. The 24-candidate Commercial
+Drive pilot is preserved as `street_tree_candidates_commercial_pilot.geojson` and is not
+served as the default layer.
+
+Off-inventory is a separate LiDAR population. Of the 258 street candidates, 106 fall within
+10 m of an off-inventory candidate. That is a descriptive overlap only: the two methods see
+different objects and do not establish identity.
+
+Reproduction and full caveats are in ``notes/reports/p63-vancouver-pilot.md`` and the P66
+coverage summary.

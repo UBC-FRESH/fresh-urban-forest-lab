@@ -1,0 +1,21 @@
+{
+  "schema_version": "fresh-urban-forest.street-tree-coverage.v1",
+  "grid_points": 118,
+  "grid_spacing_m": 1000,
+  "query_radius_m": 500,
+  "unique_images": 10204,
+  "failed_queries": 0,
+  "cell_records_min": 0,
+  "cell_records_median": 100,
+  "cell_records_max": 100,
+  "capture_year_counts": {
+    "2016": 1534,
+    "2017": 7573,
+    "2018": 635,
+    "2019": 446,
+    "2020": 1,
+    "2022": 9,
+    "2026": 6
+  },
+  "note": "Metadata-only coverage audit; image CDN availability is lower."
+}
