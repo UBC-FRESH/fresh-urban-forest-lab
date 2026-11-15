@@ -1638,3 +1638,10 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
   street-trees toggle worked.
 - No scientific product, default layer, or off-inventory data changed.
 - Dashboard: **GREEN**.
+
+### P66 citywide street-tree extension start
+
+- Created parent issue #322 and branch `feature/p66-citywide-street-trees`.
+- Scope: extend the P63/P64 open street-level candidate sample from Commercial Drive to
+  Vancouver-wide grid coverage.
+- Street candidates remain separate from LiDAR off-inventory and official inventory.
