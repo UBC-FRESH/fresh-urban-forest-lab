@@ -1687,3 +1687,26 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Public API and map toggle serve 19,790 features.
 - Batched inference, detection caching, and the `--max-spread` argument are in PR #325;
   no merge or release yet.
+
+### P68 street-layer UI cue and calibration audit start
+
+- Created parent issue #326 and stacked branch `feature/p68-street-audit`.
+- Add a dynamic candidate count and screening caveat beside the Vancouver `street trees`
+  toggle.
+- Scope: FOV/pose sensitivity, stratified detector audit, and inventory-tolerance
+  sensitivity. No release or merge without approval.
+
+### P68 street-layer UI and calibration audit
+
+- Added a dynamic candidate count and screening caveat beside the Vancouver `street trees`
+  toggle; browser smoke shows 19,790 candidates with no console or page errors.
+- Found zero provider FOV values across 6,425 selected images. FOV 50°/70° reprojection
+  moves detections by a median 1.1-1.2 m (p95 2.9-3.2 m) and changes candidate counts by
+  about ±5%.
+- A ±5° heading offset moves detections by a median 2.1 m (p95 4.5 m). Camera pitch remains
+  unmodeled.
+- Detector sample shows semantic-mask boxes often cover canopy, sky, vehicles, facades, or
+  signs; bottom-centre depth is not necessarily the trunk. This is a descriptive audit, not
+  an accuracy estimate.
+- Inventory matches are tolerance-sensitive: 2,008 at 4 m, 6,078 at 8 m, and 8,978 at 12 m.
+- No release, tag, or merge; P68 PR #327 is stacked on P67 pending approval.

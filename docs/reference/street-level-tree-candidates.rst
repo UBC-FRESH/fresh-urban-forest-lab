@@ -96,6 +96,29 @@ within 10 m of an off-inventory candidate and 16,753 fall within 20 m; median ne
 distance is 10.05 m. That is a descriptive overlap only: the two methods see different
 objects and do not establish identity.
 
+Uncertainty audit
+------------------
+
+P68 found that none of the 6,425 selected images supplied a provider FOV value; all used
+the 60° assumption. Reprojecting under 50° and 70° moved detections by a median of
+1.124-1.244 m and a p95 of 2.874-3.180 m. A ±5° heading offset moved detections by a median
+of 2.103 m and p95 of 4.457 m. Camera pitch remains unmodeled.
+
+A stratified 24-detection contact sheet showed that semantic mask boxes frequently cover
+canopy, sky, vehicles, facades, or signs, and that bottom-centre depth is not necessarily
+the trunk. The detector is therefore a screening component detector, not a tree-instance
+or trunk detector. Public-tree match counts are sensitive to tolerance: 2,008 candidates
+within 4 m, 6,078 within 8 m, and 8,978 within 12 m. These are descriptive counts, not
+precision estimates.
+
+The demo layer now shows a dynamic candidate count beside the `street trees` toggle and
+carries the screening caveat.
+
+Details: ``notes/reports/p68-street-audit.md``,
+``notes/reports/p68-fov-sensitivity.json``,
+``notes/reports/p68-inventory-sensitivity.json``, and
+``notes/reports/p68-detector-sample.json``.
+
 Reproduction and full caveats are in ``notes/reports/p63-vancouver-pilot.md``,
 ``notes/reports/p66-citywide-street-trees.md``, and
 ``notes/reports/p67-full-kartaview.md``.

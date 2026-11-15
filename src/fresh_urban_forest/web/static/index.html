@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>FRESH Urban Forest Lab</title>
   <link rel="stylesheet" href="static/vendor/maplibre-gl.css">
-  <link rel="stylesheet" href="static/styles.css?v=p30b">
+  <link rel="stylesheet" href="static/styles.css?v=p68">
   <script src="static/vendor/maplibre-gl.js"></script>
   <script type="importmap">
     {
@@ -314,7 +314,7 @@
           <label><input id="toggle-roads" type="checkbox" checked> streets</label>
           <label><input id="toggle-buildings" type="checkbox" checked> buildings</label>
           <label><input id="toggle-off-inventory" type="checkbox"> off-inventory</label>
-          <label><input id="toggle-street-trees" type="checkbox"> street trees</label>
+          <label title="Screening candidates from street-level imagery; not confirmed trees or official inventory."><input id="toggle-street-trees" type="checkbox"> street trees <span id="street-trees-count" class="layer-count" hidden></span></label>
           <label><input id="toggle-heat-priority" type="checkbox"> shade equity</label>
           <label><input id="toggle-planting-opportunity" type="checkbox"> canopy gaps</label>
           <label><input id="toggle-heat-equity" type="checkbox"> heat equity</label>
@@ -767,6 +767,6 @@
   </aside>
 
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
-  <script type="module" src="static/app.js?v=p41"></script>
+  <script type="module" src="static/app.js?v=p68"></script>
 </body>
 </html>

@@ -75,6 +75,10 @@ Keep private material out of this directory.
 - `reports/p67-full-kartaview.md`, `reports/p67-citywide-summary.json`, and
   `reports/p67-coverage-summary.json`: full live-host KartaView pass, bounded fusion,
   canonical layer, and coverage.
+- `reports/p68-street-audit.md`, `reports/p68-fov-sensitivity.json`,
+  `reports/p68-inventory-sensitivity.json`, and `reports/p68-detector-sample.json`:
+  street-layer UI count/caveat, FOV/heading audit, detector sample, and inventory-tolerance
+  sensitivity.
 - `releases/v0.2.0.md`: superseded draft; never tagged.
 - `reference/data-sources.md`: public UBC, Vancouver, and Metro Vancouver sources, with
   coverage, licences, and traps.
