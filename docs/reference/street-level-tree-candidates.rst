@@ -34,6 +34,20 @@ Street candidates are emitted separately from LiDAR candidates:
 - the source imagery licence and attribution are recorded with the run;
 - candidates are never merged into ``off_inventory.geojson`` or the official inventory.
 
+Layer and API
+-------------
+
+The Vancouver pilot is published as a selectable map layer when the dataset contains
+``street_tree_candidates.geojson``. The dataset advertises ``has_street_trees``; the layer
+toggle is hidden when that flag is false.
+
+- ``GET /api/street-trees`` returns the method, counts, provenance, and caveats.
+- ``GET /api/street-trees.geojson`` returns the candidate FeatureCollection.
+
+The map source is independent of the off-inventory source. Clicking a street candidate
+opens a screening-point popup; it does not select an official tree or an off-inventory
+candidate.
+
 Pilot
 -----
 
