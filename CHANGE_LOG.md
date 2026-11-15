@@ -1685,5 +1685,5 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - 9,844 candidates are within 10 m of a LiDAR off-inventory candidate; descriptive only.
 - Canonical layer updated; P66 1,167-image sample preserved separately.
 - Public API and map toggle serve 19,790 features.
-- Synthetic `--max-spread` argument and batched inference/detection caching are in the P67
-  PR; no merge or release yet.
+- Batched inference, detection caching, and the `--max-spread` argument are in PR #325;
+  no merge or release yet.

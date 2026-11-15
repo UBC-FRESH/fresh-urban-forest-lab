@@ -1,6 +1,6 @@
 # P67 full live-host KartaView pass
 
-Status: data published; code and documentation PR pending merge.
+Status: data published; PR #325 open for approval before merge.
 
 ## Coverage
 
@@ -104,4 +104,4 @@ so no second inference pass was needed.
 - Public API and map toggle verified against 19,790 features.
 - P67 code changes add batched inference, detection caching, bounded fusion,
   and regression tests.
-- PR remains open for approval before merge; no tag or release was created.
+- PR #325 is open for approval before merge; no tag or release was created.
