@@ -1,0 +1,345 @@
+{
+  "schema_version": "fresh-urban-forest.street-tree-detector-sample.v1",
+  "phase": "P68",
+  "count": 24,
+  "samples": [
+    {
+      "candidate_id": "street:23304896:12546",
+      "image_id": "39444412",
+      "view_count": 4,
+      "score": 0.95,
+      "uncertainty_m": 7.612,
+      "nearest_inventory_m": 6.21,
+      "box": [
+        677.0,
+        171.0,
+        817.0,
+        324.0
+      ]
+    },
+    {
+      "candidate_id": "street:187637315:1593",
+      "image_id": "187637315",
+      "view_count": 1,
+      "score": 0.95,
+      "uncertainty_m": 6.451,
+      "nearest_inventory_m": 2.93,
+      "box": [
+        677.0,
+        552.0,
+        728.0,
+        620.0
+      ]
+    },
+    {
+      "candidate_id": "street:33319047:7798",
+      "image_id": "33319047",
+      "view_count": 1,
+      "score": 0.95,
+      "uncertainty_m": 3.0,
+      "nearest_inventory_m": 21.1,
+      "box": [
+        428.0,
+        520.0,
+        629.0,
+        738.0
+      ]
+    },
+    {
+      "candidate_id": "street:40251537:13127",
+      "image_id": "40251537",
+      "view_count": 1,
+      "score": 0.95,
+      "uncertainty_m": 9.218,
+      "nearest_inventory_m": 3.64,
+      "box": [
+        1087.0,
+        452.0,
+        1187.0,
+        532.0
+      ]
+    },
+    {
+      "candidate_id": "street:100251659:5",
+      "image_id": "100251659",
+      "view_count": 1,
+      "score": 0.95,
+      "uncertainty_m": 3.0,
+      "nearest_inventory_m": 5.72,
+      "box": [
+        0.0,
+        258.0,
+        76.0,
+        529.0
+      ]
+    },
+    {
+      "candidate_id": "street:20884999:1908",
+      "image_id": "20884999",
+      "view_count": 1,
+      "score": 0.7658,
+      "uncertainty_m": 6.531,
+      "nearest_inventory_m": 50.67,
+      "box": [
+        879.0,
+        19.0,
+        922.0,
+        93.0
+      ]
+    },
+    {
+      "candidate_id": "street:30105164:13893",
+      "image_id": "35109920",
+      "view_count": 4,
+      "score": 0.95,
+      "uncertainty_m": 7.585,
+      "nearest_inventory_m": 13.65,
+      "box": [
+        733.0,
+        36.0,
+        1083.0,
+        263.0
+      ]
+    },
+    {
+      "candidate_id": "street:24818304:3427",
+      "image_id": "24818304",
+      "view_count": 1,
+      "score": 0.5506,
+      "uncertainty_m": 5.747,
+      "nearest_inventory_m": 2.71,
+      "box": [
+        803.0,
+        431.0,
+        868.0,
+        488.0
+      ]
+    },
+    {
+      "candidate_id": "street:269316905:3977",
+      "image_id": "269316905",
+      "view_count": 3,
+      "score": 0.95,
+      "uncertainty_m": 6.221,
+      "nearest_inventory_m": 11.85,
+      "box": [
+        435.0,
+        528.0,
+        539.0,
+        614.0
+      ]
+    },
+    {
+      "candidate_id": "street:100251659:1",
+      "image_id": "100251659",
+      "view_count": 1,
+      "score": 0.6232,
+      "uncertainty_m": 3.274,
+      "nearest_inventory_m": 11.03,
+      "box": [
+        1184.0,
+        50.0,
+        1276.0,
+        149.0
+      ]
+    },
+    {
+      "candidate_id": "street:117225017:12848",
+      "image_id": "117225017",
+      "view_count": 3,
+      "score": 0.95,
+      "uncertainty_m": 6.491,
+      "nearest_inventory_m": 3.58,
+      "box": [
+        0.0,
+        236.0,
+        162.0,
+        479.0
+      ]
+    },
+    {
+      "candidate_id": "street:369110157:10899",
+      "image_id": "369110157",
+      "view_count": 1,
+      "score": 0.6922,
+      "uncertainty_m": 3.0,
+      "nearest_inventory_m": 7.4,
+      "box": [
+        1087.0,
+        219.0,
+        1179.0,
+        343.0
+      ]
+    },
+    {
+      "candidate_id": "street:26683068:3780",
+      "image_id": "26683068",
+      "view_count": 1,
+      "score": 0.4908,
+      "uncertainty_m": 3.0,
+      "nearest_inventory_m": 24.6,
+      "box": [
+        606.0,
+        405.0,
+        674.0,
+        474.0
+      ]
+    },
+    {
+      "candidate_id": "street:30280037:5693",
+      "image_id": "30280037",
+      "view_count": 1,
+      "score": 0.5031,
+      "uncertainty_m": 3.0,
+      "nearest_inventory_m": 10.83,
+      "box": [
+        465.0,
+        503.0,
+        523.0,
+        591.0
+      ]
+    },
+    {
+      "candidate_id": "street:348313735:8833",
+      "image_id": "348313735",
+      "view_count": 1,
+      "score": 0.8133,
+      "uncertainty_m": 5.777,
+      "nearest_inventory_m": 4.37,
+      "box": [
+        16.0,
+        83.0,
+        119.0,
+        193.0
+      ]
+    },
+    {
+      "candidate_id": "street:49624468:16126",
+      "image_id": "49624468",
+      "view_count": 1,
+      "score": 0.6065,
+      "uncertainty_m": 8.136,
+      "nearest_inventory_m": 29.26,
+      "box": [
+        964.0,
+        504.0,
+        1048.0,
+        579.0
+      ]
+    },
+    {
+      "candidate_id": "street:36075526:10209",
+      "image_id": "36075526",
+      "view_count": 1,
+      "score": 0.717,
+      "uncertainty_m": 3.0,
+      "nearest_inventory_m": 17.92,
+      "box": [
+        436.0,
+        1715.0,
+        575.0,
+        1803.0
+      ]
+    },
+    {
+      "candidate_id": "street:483504881:15795",
+      "image_id": "483504881",
+      "view_count": 1,
+      "score": 0.95,
+      "uncertainty_m": 3.0,
+      "nearest_inventory_m": 7.86,
+      "box": [
+        522.0,
+        145.0,
+        751.0,
+        417.0
+      ]
+    },
+    {
+      "candidate_id": "street:137393267:4592",
+      "image_id": "47163167",
+      "view_count": 7,
+      "score": 0.95,
+      "uncertainty_m": 8.49,
+      "nearest_inventory_m": 19.76,
+      "box": [
+        16.0,
+        545.0,
+        172.0,
+        737.0
+      ]
+    },
+    {
+      "candidate_id": "street:185949105:17003",
+      "image_id": "53493248",
+      "view_count": 7,
+      "score": 0.95,
+      "uncertainty_m": 7.947,
+      "nearest_inventory_m": 24.76,
+      "box": [
+        305.0,
+        345.0,
+        570.0,
+        548.0
+      ]
+    },
+    {
+      "candidate_id": "street:30421278:6018",
+      "image_id": "30421278",
+      "view_count": 1,
+      "score": 0.95,
+      "uncertainty_m": 3.0,
+      "nearest_inventory_m": 6.58,
+      "box": [
+        1029.0,
+        0.0,
+        1279.0,
+        361.0
+      ]
+    },
+    {
+      "candidate_id": "street:100266043:12307",
+      "image_id": "82751951",
+      "view_count": 7,
+      "score": 0.95,
+      "uncertainty_m": 7.94,
+      "nearest_inventory_m": 12.48,
+      "box": [
+        450.0,
+        0.0,
+        687.0,
+        260.0
+      ]
+    },
+    {
+      "candidate_id": "street:40230264:13076",
+      "image_id": "40230264",
+      "view_count": 1,
+      "score": 0.5955,
+      "uncertainty_m": 3.0,
+      "nearest_inventory_m": 8.06,
+      "box": [
+        287.0,
+        437.0,
+        380.0,
+        525.0
+      ]
+    },
+    {
+      "candidate_id": "street:33609251:10716",
+      "image_id": "36564499",
+      "view_count": 4,
+      "score": 0.95,
+      "uncertainty_m": 6.931,
+      "nearest_inventory_m": 14.95,
+      "box": [
+        500.0,
+        973.0,
+        1279.0,
+        1189.0
+      ]
+    }
+  ],
+  "contact_sheet": "/srv/shared-data/gep/ws4/external/street_trees/p68_detector_contact_sheet.png",
+  "note": "Convenience sample; visual audit only, not an accuracy estimate."
+}

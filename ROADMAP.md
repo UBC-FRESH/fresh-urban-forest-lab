@@ -64,7 +64,7 @@ This roadmap is the plan of record and the issue tracker map for FRESH Urban For
 | P65 v0.7.0 street-tree-layer release | #320 | `release/v0.7.0` | complete |
 | P66 Citywide street-level tree candidates | #322 | `feature/p66-citywide-street-trees` | complete |
 | P67 Full live-host KartaView pass | #324 | `feature/p67-full-kartaview` | pr-open |
-| P68 Street-layer UI and calibration audit | #326 | `feature/p68-street-audit` | active |
+| P68 Street-layer UI and calibration audit | #326 | `feature/p68-street-audit` | pr-open |
 
 ## Lifecycle Map
 
@@ -1735,17 +1735,17 @@ Plan: `notes/design/p67-full-kartaview.md`.
 
 Parent issue: #326
 Branch: `feature/p68-street-audit`
-Status: active
+Status: pr-open
 
 Goal: expose the street-layer count/caveat in the demo and audit FOV, detector, and
 inventory-tolerance sensitivity.
 
 Plan: `notes/design/p68-street-audit.md`.
 
-- [ ] P68.1 Street-layer UI count/caveat and browser verification
-- [ ] P68.2 FOV/pose metadata and sensitivity audit
-- [ ] P68.3 Stratified detector contact sheet and observations
-- [ ] P68.4 Inventory tolerance sensitivity, docs, and PR
+- [x] P68.1 Street-layer UI count/caveat and browser verification
+- [x] P68.2 FOV/pose metadata and sensitivity audit
+- [x] P68.3 Stratified detector contact sheet and observations
+- [x] P68.4 Inventory tolerance sensitivity, docs, and PR
 
 ## Detailed Next Steps Notes
 

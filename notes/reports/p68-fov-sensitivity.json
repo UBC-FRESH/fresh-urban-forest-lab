@@ -1,0 +1,118 @@
+{
+  "schema_version": "fresh-urban-forest.street-tree-fov-audit.v1",
+  "phase": "P68",
+  "detection_count": 96731,
+  "selected_metadata_image_count": 6425,
+  "detection_unique_image_count": 6285,
+  "missing_metadata_image_count": 68,
+  "missing_metadata_detection_count": 1017,
+  "selected_image_count": 6425,
+  "image_size_overrides": 6394,
+  "provider_fov_image_count": 0,
+  "provider_fov_values": [],
+  "assumed_fov_image_count": 6425,
+  "heading_distinct_values": 5534,
+  "heading_min": 0.0,
+  "heading_max": 359.92,
+  "depth_m": {
+    "min": 1.404,
+    "median": 22.947,
+    "p90": 43.349,
+    "p95": 50.099,
+    "p99": 61.866,
+    "max": 80.176
+  },
+  "baseline": {
+    "candidate_count": 19790,
+    "inventory_matched_count": 6078,
+    "inventory_median_distance_m": 4.990683751134795
+  },
+  "fov_results": {
+    "50.0": {
+      "fov_deg": 50.0,
+      "candidate_count": 18782,
+      "inventory_matched_count": 5822,
+      "inventory_median_distance_m": 5.034811210875439,
+      "detection_displacement_m": {
+        "min": 0.0,
+        "median": 1.124,
+        "p90": 2.403,
+        "p95": 2.874,
+        "p99": 3.862,
+        "max": 6.144
+      },
+      "baseline_candidates_with_variant_within_5m": 18501,
+      "baseline_candidates_with_variant_within_10m": 19786,
+      "elapsed_seconds": 6.7
+    },
+    "60.0": {
+      "fov_deg": 60.0,
+      "candidate_count": 19790,
+      "inventory_matched_count": 6078,
+      "inventory_median_distance_m": 4.990683751134795,
+      "detection_displacement_m": {
+        "min": 0.0,
+        "median": 0.0,
+        "p90": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+      },
+      "baseline_candidates_with_variant_within_5m": 19790,
+      "baseline_candidates_with_variant_within_10m": 19790,
+      "elapsed_seconds": 6.9
+    },
+    "70.0": {
+      "fov_deg": 70.0,
+      "candidate_count": 20719,
+      "inventory_matched_count": 6225,
+      "inventory_median_distance_m": 5.007043794007298,
+      "detection_displacement_m": {
+        "min": 0.0,
+        "median": 1.244,
+        "p90": 2.658,
+        "p95": 3.18,
+        "p99": 4.273,
+        "max": 6.798
+      },
+      "baseline_candidates_with_variant_within_5m": 18933,
+      "baseline_candidates_with_variant_within_10m": 19790,
+      "elapsed_seconds": 6.5
+    }
+  },
+  "heading_results": {
+    "-5.0": {
+      "heading_offset_deg": -5.0,
+      "candidate_count": 19768,
+      "inventory_matched_count": 5948,
+      "inventory_median_distance_m": 4.996182791629051,
+      "detection_displacement_m": {
+        "min": 0.0,
+        "median": 2.103,
+        "p90": 3.889,
+        "p95": 4.457,
+        "p99": 5.442,
+        "max": 6.996
+      },
+      "baseline_candidates_with_variant_within_5m": 18062,
+      "baseline_candidates_with_variant_within_10m": 19789
+    },
+    "5.0": {
+      "heading_offset_deg": 5.0,
+      "candidate_count": 19810,
+      "inventory_matched_count": 6023,
+      "inventory_median_distance_m": 5.0350060891095465,
+      "detection_displacement_m": {
+        "min": 0.0,
+        "median": 2.103,
+        "p90": 3.889,
+        "p95": 4.457,
+        "p99": 5.442,
+        "max": 6.996
+      },
+      "baseline_candidates_with_variant_within_5m": 18050,
+      "baseline_candidates_with_variant_within_10m": 19786
+    }
+  },
+  "note": "Sensitivity audit only. FOV and camera pose are not calibrated; no field validation or precision/recall claim."
+}
