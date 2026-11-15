@@ -749,3 +749,47 @@ def test_lab_report_endpoint(tmp_path: Path) -> None:
     assert "shade" in payload
     assert "birds" in payload
     assert payload["evidence"]
+
+
+def test_street_tree_endpoints_are_optional_and_separate(tmp_path: Path) -> None:
+    """Street-level candidates are exposed separately from off-inventory."""
+    import json
+
+    client = _client(tmp_path)
+    assert client.get("/api/street-trees").status_code == 404
+    assert client.get("/api/street-trees.geojson").status_code == 404
+    root = tmp_path / "dataset"
+    summary = {
+        "schema_version": "fresh-urban-forest.street-tree-pilot.v1",
+        "candidate_count": 1,
+        "method": "test",
+        "caveats": ["separate layer"],
+    }
+    (root / "street_tree_candidates.json").write_text(json.dumps(summary), encoding="utf-8")
+    features = {
+        "type": "FeatureCollection",
+        "schema_version": "fresh-urban-forest.street-tree-candidates.v1",
+        "features": [
+            {
+                "type": "Feature",
+                "geometry": {"type": "Point", "coordinates": [-123.07, 49.255]},
+                "properties": {
+                    "candidate_id": "street:test:1",
+                    "source": "street_level_cv",
+                    "view_count": 2,
+                    "score": 0.8,
+                    "positional_uncertainty_m": 4.0,
+                    "not_ground_truth": True,
+                },
+            }
+        ],
+    }
+    (root / "street_tree_candidates.geojson").write_text(json.dumps(features), encoding="utf-8")
+    report = client.get("/api/street-trees")
+    assert report.status_code == 200
+    assert report.json()["candidate_count"] == 1
+    geojson = client.get("/api/street-trees.geojson")
+    assert geojson.status_code == 200
+    assert geojson.json()["features"][0]["properties"]["source"] == "street_level_cv"
+    dataset = client.get("/api/dataset").json()
+    assert dataset["has_street_trees"] is True

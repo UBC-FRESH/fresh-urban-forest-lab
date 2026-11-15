@@ -485,6 +485,9 @@ def create_app(
         summary["has_off_inventory_3d"] = (
             _dataset_file(state, "off_inventory_3d.json.gz") is not None
         )
+        summary["has_street_trees"] = (
+            _dataset_file(state, "street_tree_candidates.geojson") is not None
+        )
         summary["has_classifier"] = _dataset_file(state, "classifier_report.json") is not None
         summary["has_imagery_classifier"] = (
             _dataset_file(state, "imagery_classifier_report.json") is not None
@@ -576,6 +579,55 @@ def create_app(
             media_type="application/geo+json",
             filename="off_inventory.geojson",
             headers=headers,
+        )
+
+    @app.get("/api/street-trees")
+    def street_trees() -> dict[str, object]:
+        """Return the street-level tree candidate summary.
+
+        Returns
+        -------
+        dict
+            Candidate summary, method, provenance, and caveats.
+
+        Raises
+        ------
+        fastapi.HTTPException
+            When the dataset has no street-tree candidate summary.
+        """
+        path = _dataset_file(state, "street_tree_candidates.json")
+        if path is None:
+            raise HTTPException(
+                status_code=404,
+                detail="this dataset has no street-tree candidate layer",
+            )
+        return _read_json_object(path)
+
+    @app.get("/api/street-trees.geojson")
+    def street_trees_geojson() -> FileResponse:
+        """Return the street-level tree candidate GeoJSON.
+
+        Returns
+        -------
+        fastapi.responses.FileResponse
+            Candidate FeatureCollection.
+
+        Raises
+        ------
+        fastapi.HTTPException
+            When the dataset has no street-tree candidate layer.
+        """
+        path = _dataset_file(state, "street_tree_candidates.geojson")
+        if path is None:
+            raise HTTPException(
+                status_code=404,
+                detail="this dataset has no street-tree candidate layer",
+            )
+        return FileResponse(
+            path,
+            media_type="application/geo+json",
+            filename="street_tree_candidates.geojson",
+            headers={"Cache-Control": "no-store, max-age=0"},
         )
 
     @app.get("/api/off-inventory-3d")

@@ -1023,6 +1023,7 @@ function renderTimeline(timeline) {
 function updateLayerToggleAvailability(dataset) {
   const layers = {
     "toggle-off-inventory": "has_off_inventory",
+    "toggle-street-trees": "has_street_trees",
     "toggle-heat-priority": "has_heat_priority",
     "toggle-planting-opportunity": "has_planting_opportunity",
     "toggle-heat-equity": "has_heat_equity",
@@ -1102,6 +1103,12 @@ function initMap() {
           data: state.dataset?.has_off_inventory
             ? "api/off-inventory.geojson"
             : offInventoryFeatures(),
+        },
+        streetTrees: {
+          type: "geojson",
+          data: state.dataset?.has_street_trees
+            ? "api/street-trees.geojson"
+            : { type: "FeatureCollection", features: [] },
         },
         boundary: { type: "geojson", data: boundaryFeatures() },
         roads: { type: "geojson", data: state.roads || { type: "FeatureCollection", features: [] } },
@@ -1296,6 +1303,27 @@ function initMap() {
           },
         },
         {
+          id: "street-tree-candidates",
+          type: "circle",
+          source: "streetTrees",
+          layout: { visibility: "none" },
+          paint: {
+            "circle-color": "#008c95",
+            "circle-radius": [
+              "interpolate",
+              ["linear"],
+              ["coalesce", ["get", "view_count"], 1],
+              1,
+              2.5,
+              5,
+              5,
+            ],
+            "circle-opacity": 0.82,
+            "circle-stroke-color": "#ffffff",
+            "circle-stroke-width": 0.8,
+          },
+        },
+        {
           id: "boundary",
           type: "line",
           source: "boundary",
@@ -1363,6 +1391,27 @@ function initMap() {
       selectCandidate(properties.candidate_id, properties);
       return;
     }
+    const streetHits = map.queryRenderedFeatures(event.point, {
+      layers: ["street-tree-candidates"],
+    });
+    if (streetHits.length) {
+      const feature = streetHits[0];
+      const properties = feature.properties || {};
+      const coordinates = feature.geometry?.coordinates;
+      if (Array.isArray(coordinates) && coordinates.length >= 2) {
+        new maplibregl.Popup({ closeButton: true, maxWidth: "280px" })
+          .setLngLat([Number(coordinates[0]), Number(coordinates[1])])
+          .setHTML(
+            `<strong>Street-level candidate</strong><br>` +
+              `${escapeHtml(String(properties.candidate_id || "unknown"))}<br>` +
+              `views: ${formatNumber(Number(properties.view_count || 0))} · ` +
+              `±${formatNumber(Number(properties.positional_uncertainty_m || 0))} m<br>` +
+              `<span class="muted">Screening point, not a confirmed tree.</span>`,
+          )
+          .addTo(map);
+      }
+      return;
+    }
     if (state.mode === "zone") {
       placeAt(event.lngLat.lng, event.lngLat.lat);
       return;
@@ -1378,7 +1427,7 @@ function initMap() {
         [point.x - 6, point.y - 6],
         [point.x + 6, point.y + 6],
       ],
-      { layers: ["trees", "off-inventory"] },
+      { layers: ["trees", "off-inventory", "street-tree-candidates"] },
     );
     map.getCanvas().style.cursor = hits.length ? "pointer" : "";
   });
@@ -2839,6 +2888,15 @@ function bindControls() {
       state.three.offInventoryGroup.visible = event.target.checked;
     }
     if (event.target.checked) ensureOffInventory3D();
+  });
+  $("toggle-street-trees").addEventListener("change", (event) => {
+    if (state.map && state.map.getLayer("street-tree-candidates")) {
+      state.map.setLayoutProperty(
+        "street-tree-candidates",
+        "visibility",
+        event.target.checked ? "visible" : "none",
+      );
+    }
   });
   $("toggle-heat-priority").addEventListener("change", (event) => {
     if (state.map && state.map.getLayer("heat-priority")) {

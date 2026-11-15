@@ -1602,3 +1602,12 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - No public portal, scientific product, default layer, or off-inventory behavior changed.
 - Closed parent #316 and removed the phase branch and worktree.
 - Dashboard: **GREEN**.
+
+### P64 canonical street-tree layer
+
+- Published the Vancouver pilot summary and 24-candidate GeoJSON in the generated dataset.
+- Added `has_street_trees`, `/api/street-trees`, and `/api/street-trees.geojson`.
+- Added a separate teal map source/layer and `street trees` toggle.
+- Added a screening-point popup with view count and positional uncertainty.
+- Toggle is hidden for datasets without the layer; no merge with off-inventory.
+- Dashboard: **GREEN**.

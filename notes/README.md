@@ -67,6 +67,7 @@ Keep private material out of this directory.
 - `reports/p62-release.md`: v0.6.0 Walk v2 release verification.
 - `reports/p63-vancouver-pilot.md` and `reports/p63-pilot-summary.json`: street-level tree
   candidate pilot, method, licences, and caveats.
+- `reports/p64-street-tree-layer.md`: canonical map layer, API, toggle, and browser smoke.
 - `releases/v0.2.0.md`: superseded draft; never tagged.
 - `reference/data-sources.md`: public UBC, Vancouver, and Metro Vancouver sources, with
   coverage, licences, and traps.
