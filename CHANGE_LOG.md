@@ -1710,3 +1710,11 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
   an accuracy estimate.
 - Inventory matches are tolerance-sensitive: 2,008 at 4 m, 6,078 at 8 m, and 8,978 at 12 m.
 - No release, tag, or merge; P68 PR #327 is stacked on P67 pending approval.
+
+### P68 close-out
+
+- Squash-merged PR #327 into `main` as `429a42f`.
+- Public Vancouver portal now shows `street trees · 19,790` with the screening caveat.
+- P68 audit reports and FOV script are on `main`.
+- No tag or release was created.
+- Dashboard: **GREEN**.

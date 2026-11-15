@@ -1,6 +1,6 @@
 # P68 street-layer UI cue and calibration audit
 
-Status: implementation complete; PR #327 open (stacked on P67) for approval.
+Status: complete. Squash-merged in PR #327 as `429a42f`.
 
 ## Demo UI cue
 
@@ -95,9 +95,8 @@ tolerance is useful for descriptive comparison, not a validated match threshold.
 
 ## Release decision
 
-No tag or release is created. The P67 data layer remains live; P67 and P68 PRs remain
-separate approval gates. P68 is stacked on P67 and should be retargeted to `main` after P67
-merges. The next technical step should be a trunk/instance detector or a
+No tag or release is created. P67 and P68 are merged; the P67 data layer and P68 UI cue are
+live on the public Vancouver portal. The next technical step should be a trunk/instance detector or a
 calibrated pose model, not more KartaView volume.
 
 ## Limits
