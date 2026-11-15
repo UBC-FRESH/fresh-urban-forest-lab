@@ -1,6 +1,6 @@
 # P63 street-level tree candidate pilot
 
-Status: implementation complete; PR review pending.
+Status: complete. Squash-merged in PR #317 as `8067f8f`.
 
 ## What this is
 
@@ -70,3 +70,12 @@ PYTHONPATH=src python scripts/street_tree_pilot.py \
 
 The first run downloads model weights and optional dependencies. Raw KartaView images and
 pilot outputs stay outside git.
+
+## Close-out
+
+- PR #317 squash-merged into `main` as `8067f8f`.
+- The package module, provider, geometry/fusion contracts, optional pilot script, tests, and
+  docs are on `main`.
+- No public portal or scientific product behavior changed; the street layer remains a
+  separate pilot output and is not merged with off-inventory.
+- Dashboard: **GREEN**.

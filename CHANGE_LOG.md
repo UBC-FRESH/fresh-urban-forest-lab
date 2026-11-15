@@ -1594,3 +1594,11 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Street-level candidates remain a separate layer; no merge into LiDAR off-inventory.
 - The optional ML operator script is omitted from default coverage because `transformers` and
   `scikit-image` are optional; the package geometry/provider module is covered by tests.
+
+### P63 close-out
+
+- Squash-merged PR #317 into `main` as `8067f8f`.
+- Street-level candidates are now available as a separate package layer and operator pilot.
+- No public portal, scientific product, default layer, or off-inventory behavior changed.
+- Closed parent #316 and removed the phase branch and worktree.
+- Dashboard: **GREEN**.

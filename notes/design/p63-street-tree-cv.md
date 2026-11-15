@@ -2,7 +2,7 @@
 
 Parent issue: #316
 Branch: `feature/p63-street-tree-cv`
-Status: pr-open
+Status: complete
 
 ## Goal
 

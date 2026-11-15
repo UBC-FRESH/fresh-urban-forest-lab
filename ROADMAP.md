@@ -59,7 +59,7 @@ This roadmap is the plan of record and the issue tracker map for FRESH Urban For
 | P60 Independent control for western vertical-control tiles | #310 | `feature/p60-independent-control` | complete |
 | P61 Walk mode v2 | #312 | `feature/p61-walk-v2` | complete |
 | P62 v0.6.0 walk-mode-v2 release | #314 | `release/v0.6.0` | complete |
-| P63 Street-level tree candidate layer | #316 | `feature/p63-street-tree-cv` | pr-open |
+| P63 Street-level tree candidate layer | #316 | `feature/p63-street-tree-cv` | complete |
 
 ## Lifecycle Map
 
@@ -1656,7 +1656,7 @@ Plan: `notes/design/p62-release-v0.6.0.md`.
 
 Parent issue: #316
 Branch: `feature/p63-street-tree-cv`
-Status: pr-open
+Status: complete
 
 Goal: add an open, reproducible street-level tree candidate layer for Vancouver, separate
 from the LiDAR off-inventory and official inventory populations.
@@ -1666,7 +1666,7 @@ Plan: `notes/design/p63-street-tree-cv.md`.
 - [x] P63.1 Literature/provider/model feasibility and design
 - [x] P63.2 Core street-tree geometry, provider, fusion, and tests
 - [x] P63.3 Vancouver corridor pilot and inventory comparison
-- [ ] P63.4 Docs, PR, and close-out
+- [x] P63.4 Docs, PR, and close-out
 
 ## Detailed Next Steps Notes
 
