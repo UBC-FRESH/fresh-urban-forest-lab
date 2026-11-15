@@ -1709,4 +1709,4 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
   signs; bottom-centre depth is not necessarily the trunk. This is a descriptive audit, not
   an accuracy estimate.
 - Inventory matches are tolerance-sensitive: 2,008 at 4 m, 6,078 at 8 m, and 8,978 at 12 m.
-- No release, tag, or merge; P68 is stacked on P67 pending approval.
+- No release, tag, or merge; P68 PR #327 is stacked on P67 pending approval.
