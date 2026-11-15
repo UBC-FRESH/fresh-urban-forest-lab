@@ -1581,3 +1581,16 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - All six portal routes returned HTTP 200; deployed UBC Walk v2 smoke passed.
 - No scientific product, data claim, or default layer changed.
 - Dashboard: **GREEN**.
+
+### P63 street-level tree candidate pilot
+
+- Added `fresh_urban_forest.street_trees` with KartaView image metadata, camera projection,
+  multi-view fusion, public-inventory matching, and GeoJSON output.
+- Added `street` optional dependencies and `scripts/street_tree_pilot.py` using OneFormer
+  semantic tree masks, distance-peak splitting, and ZoeDepth metric depth.
+- Ran a Commercial Drive pilot: 8 images, 111 image components, 24 fused candidates, 6
+  matches to public trees within 8 m (median 5.35 m).
+- Documented FOV, temporal, licensing, and private-tree caveats.
+- Street-level candidates remain a separate layer; no merge into LiDAR off-inventory.
+- The optional ML operator script is omitted from default coverage because `transformers` and
+  `scikit-image` are optional; the package geometry/provider module is covered by tests.

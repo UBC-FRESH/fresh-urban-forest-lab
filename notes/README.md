@@ -65,6 +65,8 @@ Keep private material out of this directory.
 - `reports/p61-walk-v2.md`: building collision, street spawn, step handling, compass, and
   local minimap for Walk mode.
 - `reports/p62-release.md`: v0.6.0 Walk v2 release verification.
+- `reports/p63-vancouver-pilot.md` and `reports/p63-pilot-summary.json`: street-level tree
+  candidate pilot, method, licences, and caveats.
 - `releases/v0.2.0.md`: superseded draft; never tagged.
 - `reference/data-sources.md`: public UBC, Vancouver, and Metro Vancouver sources, with
   coverage, licences, and traps.

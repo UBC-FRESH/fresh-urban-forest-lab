@@ -1,0 +1,35 @@
+{
+  "schema_version": "fresh-urban-forest.street-tree-pilot.v1",
+  "method": "OneFormer semantic tree mask + distance-peak split + ZoeDepth depth",
+  "models": {
+    "segmentation": "shi-labs/oneformer_ade20k_swin_tiny",
+    "segmentation_license": "MIT",
+    "depth": "Intel/zoedepth-nyu-kitti",
+    "depth_license": "MIT"
+  },
+  "provider": "kartaview",
+  "provider_license": "CC BY-SA 4.0",
+  "provider_attribution": "\u00a9 Grab and KartaView contributors",
+  "query": {
+    "lon": -123.07,
+    "lat": 49.255,
+    "radius_m": 500
+  },
+  "assumed_horizontal_fov_deg": 60.0,
+  "fov_source": "assumed_default",
+  "image_count": 8,
+  "component_count": 111,
+  "detection_count": 111,
+  "candidate_count": 24,
+  "inventory_match_tolerance_m": 8.0,
+  "inventory_matched_count": 6,
+  "inventory_median_distance_m": 5.35,
+  "caveats": [
+    "KartaView imagery is CC BY-SA 4.0 and must be attributed.",
+    "KartaView often omits camera FOV; a documented default FOV is used.",
+    "The public tree inventory is incomplete for private trees; unmatched candidates are not false positives.",
+    "Candidate positions are screening estimates, not field-validated tree locations.",
+    "This layer is separate from the LiDAR off-inventory layer and is not merged with it."
+  ],
+  "started_utc": "2026-11-15T07:54:16Z"
+}
