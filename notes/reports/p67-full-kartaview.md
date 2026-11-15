@@ -7,7 +7,7 @@ Status: data published; PR #325 open for approval before merge.
 - Same 118-cell, 1 km boundary grid with a 500 m query radius.
 - Metadata audit: 10,204 unique KartaView records.
 - 3,772 records point at `storage1.openstreetcam.org`; sampled blobs return
-  `BlobNotFound`, so those records were excluded.
+  `BlobNotFound`, so those records were excluded. Seven records have no image URL.
 - 6,425 live-host records were selected, spanning all 117 populated cells.
 - 6,425 images decoded; no download failures in the final pass.
 
