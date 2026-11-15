@@ -43,6 +43,13 @@ dependencies = [
 [project.optional-dependencies]
 fvs = ["fresh-fvsbc>=0.20.0"]
 imagery = ["torch>=2.2"]
+street = [
+  "torch>=2.2",
+  "torchvision>=0.17",
+  "transformers>=4.45,<5",
+  "accelerate>=0.30",
+  "scikit-image>=0.23",
+]
 optimize = ["fresh-solutions @ git+https://github.com/UBC-FRESH/fresh-solutions.git@v0.8.0"]
 web = ["fastapi>=0.110", "uvicorn>=0.29", "pillow>=10"]
 dev = [
@@ -127,6 +134,10 @@ module = [
   "numpydoc.*",
   "scipy",
   "scipy.*",
+  "transformers",
+  "transformers.*",
+  "skimage",
+  "skimage.*",
 ]
 ignore_missing_imports = true
 
@@ -141,6 +152,8 @@ markers = [
 [tool.coverage.run]
 branch = true
 source = ["src/fresh_urban_forest", "scripts"]
+# Optional ML operator script; its model dependencies are not installed in the default gate.
+omit = ["scripts/street_tree_pilot.py"]
 
 [tool.coverage.report]
 show_missing = true

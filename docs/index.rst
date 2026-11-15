@@ -30,6 +30,7 @@ act, and cite it in their reports. Start with the repository's ``AGENTS.md`` and
    reference/optimization-and-pareto
    reference/site-scenarios
    reference/off-inventory-canopy
+   reference/street-level-tree-candidates
    reference/bird-habitat-and-demography
    reference/integration-and-release
    reference/vancouver-city-pilot
