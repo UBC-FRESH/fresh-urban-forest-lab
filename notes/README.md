@@ -72,6 +72,9 @@ Keep private material out of this directory.
 - `reports/p65-release.md`: v0.7.0 street-tree-layer release verification.
 - `reports/p66-citywide-street-trees.md`, `reports/p66-citywide-summary.json`, and
   `reports/p66-coverage-summary.json`: citywide KartaView coverage and street-tree sample.
+- `reports/p67-full-kartaview.md`, `reports/p67-citywide-summary.json`, and
+  `reports/p67-coverage-summary.json`: full live-host KartaView pass, bounded fusion,
+  canonical layer, and coverage.
 - `releases/v0.2.0.md`: superseded draft; never tagged.
 - `reference/data-sources.md`: public UBC, Vancouver, and Metro Vancouver sources, with
   coverage, licences, and traps.

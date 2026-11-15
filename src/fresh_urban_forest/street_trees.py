@@ -299,8 +299,13 @@ def fuse_detections(
     detections: tuple[StreetDetection, ...],
     *,
     radius_m: float = 6.0,
+    max_spread_m: float = 10.0,
 ) -> tuple[StreetTreeCandidate, ...]:
     """Fuse detections from multiple views into candidate positions.
+
+    Joining is constrained by both the neighbour radius and the diameter of the
+    resulting component. This prevents a sequence of nearby trees from collapsing
+    into one long chain of detections.
 
     Parameters
     ----------
@@ -308,6 +313,8 @@ def fuse_detections(
         Projected detections.
     radius_m : float
         Maximum distance for joining detections.
+    max_spread_m : float
+        Maximum pairwise distance within one fused component.
 
     Returns
     -------
@@ -318,7 +325,12 @@ def fuse_detections(
         return ()
     if radius_m <= 0:
         raise ValueError("radius_m must be positive")
+    if max_spread_m <= 0:
+        raise ValueError("max_spread_m must be positive")
+    origin_lon, origin_lat = detections[0].lon, detections[0].lat
+    points = [_local_xy(item.lon, item.lat, origin_lon, origin_lat) for item in detections]
     parent = list(range(len(detections)))
+    members: dict[int, list[int]] = {index: [index] for index in range(len(detections))}
 
     def find(index: int) -> int:
         while parent[index] != index:
@@ -326,38 +338,56 @@ def fuse_detections(
             index = parent[index]
         return index
 
-    def union(first: int, second: int) -> None:
+    buckets: dict[tuple[int, int], list[int]] = {}
+    for index, (east, north) in enumerate(points):
+        key = (math.floor(east / radius_m), math.floor(north / radius_m))
+        buckets.setdefault(key, []).append(index)
+
+    edges: list[tuple[float, int, int]] = []
+    for index, (east, north) in enumerate(points):
+        col = math.floor(east / radius_m)
+        row = math.floor(north / radius_m)
+        for neighbour_col in range(col - 1, col + 2):
+            for neighbour_row in range(row - 1, row + 2):
+                for other in buckets.get((neighbour_col, neighbour_row), []):
+                    if other >= index:
+                        continue
+                    other_east, other_north = points[other]
+                    distance = math.hypot(east - other_east, north - other_north)
+                    if distance <= radius_m:
+                        edges.append((distance, index, other))
+    edges.sort()
+
+    for _distance, first, second in edges:
         root_first, root_second = find(first), find(second)
-        if root_first != root_second:
-            parent[root_second] = root_first
-
-    for first in range(len(detections)):
-        for second in range(first + 1, len(detections)):
-            east, north = _local_xy(
-                detections[first].lon,
-                detections[first].lat,
-                detections[second].lon,
-                detections[second].lat,
+        if root_first == root_second:
+            continue
+        first_members = members[root_first]
+        second_members = members[root_second]
+        if any(
+            math.hypot(
+                points[first_index][0] - points[second_index][0],
+                points[first_index][1] - points[second_index][1],
             )
-            if math.hypot(east, north) <= radius_m:
-                union(first, second)
-
-    groups: dict[int, list[int]] = {}
-    for index in range(len(detections)):
-        groups.setdefault(find(index), []).append(index)
+            > max_spread_m
+            for first_index in first_members
+            for second_index in second_members
+        ):
+            continue
+        parent[root_second] = root_first
+        first_members.extend(second_members)
+        del members[root_second]
 
     candidates: list[StreetTreeCandidate] = []
-    for indices in groups.values():
-        members = [detections[index] for index in indices]
-        origin_lon = sum(item.lon for item in members) / len(members)
-        origin_lat = sum(item.lat for item in members) / len(members)
-        image_ids = tuple(sorted({item.image_id for item in members}))
+    for indices in members.values():
+        selected = [detections[index] for index in indices]
+        origin_lon = sum(item.lon for item in selected) / len(selected)
+        origin_lat = sum(item.lat for item in selected) / len(selected)
+        image_ids = tuple(sorted({item.image_id for item in selected}))
         spread = max(
             (
-                math.hypot(
-                    *_local_xy(item.lon, item.lat, origin_lon, origin_lat),
-                )
-                for item in members
+                math.hypot(*_local_xy(item.lon, item.lat, origin_lon, origin_lat))
+                for item in selected
             ),
             default=0.0,
         )
@@ -368,7 +398,7 @@ def fuse_detections(
                 lon=origin_lon,
                 lat=origin_lat,
                 view_count=len(image_ids),
-                score=max(item.score for item in members),
+                score=max(item.score for item in selected),
                 uncertainty_m=round(3.0 + spread, 3),
                 image_ids=image_ids,
             )

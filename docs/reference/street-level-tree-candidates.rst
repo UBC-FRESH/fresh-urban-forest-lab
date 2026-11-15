@@ -1,7 +1,7 @@
 Street-level tree candidates
 ============================
 
-Status: P63 open-data pilot.
+Status: P63 open-data pilot; P67 full live-host sample published.
 
 This layer maps tree candidates visible in street-level imagery. It complements, but does
 not replace, the official tree inventory or the LiDAR-derived
@@ -73,13 +73,29 @@ unique KartaView image records; the bounded run selected 1,200 images, decoded 1
 produced 17,016 image components, 3,462 fused candidates, and 1,005 public-tree matches
 within 8 m (median 5.20 m).
 
-The citywide layer is the current canonical street-tree layer. The 24-candidate Commercial
-Drive pilot is preserved as `street_tree_candidates_commercial_pilot.geojson` and is not
-served as the default layer.
+The P66 bounded sample is preserved separately as
+`street_tree_candidates_sample1200.geojson` and is not the default layer.
 
-Off-inventory is a separate LiDAR population. Of the 3,462 street candidates, 1,804 fall
-within 10 m of an off-inventory candidate. That is a descriptive overlap only: the two
-methods see different objects and do not establish identity.
+Full live-host pass
+-------------------
 
-Reproduction and full caveats are in ``notes/reports/p63-vancouver-pilot.md`` and the P66
-coverage summary.
+P67 processed every live-host KartaView image reachable through the same bounded 100-record
+cell scan. It excluded 3,772 `storage1` records whose source blobs return `BlobNotFound`.
+The pass selected and decoded 6,425 images across 117 populated cells, produced 96,731 tree
+components and detections, and fused 19,790 candidates using a 7 m neighbour radius and a
+10 m maximum component spread. Of those candidates, 11,182 are single-view, 8,608 have two
+or more views, and the maximum view count is 19. The median positional uncertainty is
+5.996 m and the maximum is 10.462 m.
+
+6,078 street candidates matched a public tree record within 8 m, with a median matched
+distance of 4.99 m. The layer is the current canonical street-tree layer. The 24-candidate
+Commercial Drive pilot and the 85-image sparse sample are preserved as separate files.
+
+Off-inventory is a separate LiDAR population. Of the 19,790 street candidates, 9,844 fall
+within 10 m of an off-inventory candidate and 16,753 fall within 20 m; median nearest
+distance is 10.05 m. That is a descriptive overlap only: the two methods see different
+objects and do not establish identity.
+
+Reproduction and full caveats are in ``notes/reports/p63-vancouver-pilot.md``,
+``notes/reports/p66-citywide-street-trees.md``, and
+``notes/reports/p67-full-kartaview.md``.

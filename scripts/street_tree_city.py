@@ -16,7 +16,7 @@ import re
 import time
 from collections import Counter, defaultdict
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from dataclasses import replace
+from dataclasses import asdict, replace
 from pathlib import Path
 
 import numpy as np
@@ -72,9 +72,16 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--per-cell", type=int, default=6)
     parser.add_argument("--max-images", type=int, default=500)
     parser.add_argument("--min-area", type=int, default=1200)
+    parser.add_argument("--max-spread", type=float, default=10.0)
     parser.add_argument("--fov", type=float, default=DEFAULT_FOV_DEG)
     parser.add_argument("--device", default="auto")
     parser.add_argument("--max-workers", type=int, default=32)
+    parser.add_argument("--batch-size", type=int, default=8)
+    parser.add_argument(
+        "--include-dead-hosts",
+        action="store_true",
+        help="Include storage1 records whose blobs are normally missing.",
+    )
     return parser.parse_args(argv)
 
 
@@ -229,6 +236,8 @@ def _infer(
     min_area: int,
     images_dir: Path,
     max_workers: int,
+    batch_size: int,
+    detections_log: Path | None = None,
 ) -> tuple[tuple[StreetDetection, ...], int, int]:
     """Run the open segmentation and depth models over selected images."""
     from transformers import OneFormerForUniversalSegmentation, OneFormerProcessor, pipeline
@@ -249,68 +258,83 @@ def _infer(
     decoded = _download_many(images, images_dir, max_workers=max_workers)
     detections: list[StreetDetection] = []
     components = 0
-    for index, (image, rgb) in enumerate(decoded, 1):
-        image = StreetImage(
-            provider=image.provider,
-            image_id=image.image_id,
-            lon=image.lon,
-            lat=image.lat,
-            heading_deg=image.heading_deg,
-            width=rgb.width,
-            height=rgb.height,
-            captured_at=image.captured_at,
-            image_url=image.image_url,
-            license=image.license,
-            attribution=image.attribution,
-            horizontal_fov_deg=fov,
-            fov_source="assumed_default",
-        )
-        inputs = processor(images=rgb, task_inputs=["semantic"], return_tensors="pt").to(device)
+    log_handle = detections_log.open("w", encoding="utf-8") if detections_log else None
+    for start in range(0, len(decoded), batch_size):
+        batch = decoded[start : start + batch_size]
+        batch_detection_start = len(detections)
+        rgb_images = [rgb for _image, rgb in batch]
+        inputs = processor(
+            images=rgb_images,
+            task_inputs=["semantic"] * len(rgb_images),
+            return_tensors="pt",
+        ).to(device)
         with torch.no_grad():
             outputs = segmenter(**inputs)
-        semantic = (
-            processor.post_process_semantic_segmentation(
-                outputs,
-                target_sizes=[rgb.size[::-1]],
-            )[0]
-            .cpu()
-            .numpy()
+        semantic_maps = processor.post_process_semantic_segmentation(
+            outputs,
+            target_sizes=[rgb.size[::-1] for rgb in rgb_images],
         )
-        boxes = _tree_components(rgb, semantic == tree_id, min_area=min_area)
-        components += len(boxes)
-        depth_result = depth_pipe(rgb)
-        depth = np.squeeze(depth_result["predicted_depth"].detach().cpu().numpy())
-        if depth.ndim != 2:
-            continue
-        if depth.shape != (rgb.height, rgb.width):
-            depth = np.asarray(
-                Image.fromarray(depth.astype(np.float32), mode="F").resize(
-                    rgb.size, Image.Resampling.BILINEAR
-                )
+        depth_results = depth_pipe(rgb_images)
+        for (image, rgb), semantic, depth_result in zip(
+            batch,
+            semantic_maps,
+            depth_results,
+            strict=True,
+        ):
+            image = StreetImage(
+                provider=image.provider,
+                image_id=image.image_id,
+                lon=image.lon,
+                lat=image.lat,
+                heading_deg=image.heading_deg,
+                width=rgb.width,
+                height=rgb.height,
+                captured_at=image.captured_at,
+                image_url=image.image_url,
+                license=image.license,
+                attribution=image.attribution,
+                horizontal_fov_deg=fov,
+                fov_source="assumed_default",
             )
-        for box in boxes:
-            xmin, ymin, xmax, ymax = box
-            lower = max(ymin, int(ymax - 0.25 * (ymax - ymin)))
-            crop = depth[int(lower) : int(ymax) + 1, int(xmin) : int(xmax) + 1]
-            values = crop[np.isfinite(crop) & (crop > 0)]
-            if values.size == 0:
+            boxes = _tree_components(rgb, semantic.cpu().numpy() == tree_id, min_area=min_area)
+            components += len(boxes)
+            depth = np.squeeze(depth_result["predicted_depth"].detach().cpu().numpy())
+            if depth.ndim != 2:
                 continue
-            area = max((xmax - xmin) * (ymax - ymin), 1.0)
-            score = min(0.95, 0.35 + 0.6 * min(area / 20_000.0, 1.0))
-            detections.append(
-                detection_from_box(
-                    image,
-                    box,
-                    score=score,
-                    depth_m=float(np.median(values)),
+            if depth.shape != (rgb.height, rgb.width):
+                depth = np.asarray(
+                    Image.fromarray(depth.astype(np.float32), mode="F").resize(
+                        rgb.size, Image.Resampling.BILINEAR
+                    )
                 )
-            )
-        if index % 10 == 0:
-            print(
-                f"inferred {index}/{len(decoded)} components={components} "
-                f"detections={len(detections)}",
-                flush=True,
-            )
+            for box in boxes:
+                xmin, ymin, xmax, ymax = box
+                lower = max(ymin, int(ymax - 0.25 * (ymax - ymin)))
+                crop = depth[int(lower) : int(ymax) + 1, int(xmin) : int(xmax) + 1]
+                values = crop[np.isfinite(crop) & (crop > 0)]
+                if values.size == 0:
+                    continue
+                area = max((xmax - xmin) * (ymax - ymin), 1.0)
+                score = min(0.95, 0.35 + 0.6 * min(area / 20_000.0, 1.0))
+                detections.append(
+                    detection_from_box(
+                        image,
+                        box,
+                        score=score,
+                        depth_m=float(np.median(values)),
+                    )
+                )
+        if log_handle is not None:
+            for detection in detections[batch_detection_start:]:
+                log_handle.write(json.dumps(asdict(detection)) + "\n")
+            log_handle.flush()
+        print(
+            f"inferred {min(start + len(batch), len(decoded))}/{len(decoded)} "
+            f"components={components} detections={len(detections)}",
+            flush=True,
+        )
+    if log_handle is not None:
+        log_handle.close()
     return tuple(detections), components, len(decoded)
 
 
@@ -327,6 +351,7 @@ def run(args: argparse.Namespace) -> dict[str, object]:
     dict[str, object]
         Citywide summary.
     """
+    args.out.mkdir(parents=True, exist_ok=True)
     points = _grid_points(args.dataset, args.spacing)
     print(f"grid points: {len(points)}", flush=True)
     client = KartaViewClient()
@@ -336,6 +361,13 @@ def run(args: argparse.Namespace) -> dict[str, object]:
         radius=args.radius,
         scan_limit=100,
     )
+    if not args.include_dead_hosts:
+        for cell in list(by_cell):
+            by_cell[cell] = [
+                image
+                for image in by_cell[cell]
+                if _storage_host(image) != "storage1.openstreetcam.org"
+            ]
     selected = _select_images(by_cell, per_cell=args.per_cell, maximum=args.max_images)
     host_counts = Counter(_storage_host(image) for image in selected)
     print(
@@ -352,11 +384,20 @@ def run(args: argparse.Namespace) -> dict[str, object]:
         min_area=args.min_area,
         images_dir=args.images_dir,
         max_workers=args.max_workers,
+        batch_size=args.batch_size,
+        detections_log=args.out / "street_tree_detections.jsonl",
     )
-    candidates = fuse_detections(detections, radius_m=7.0)
+    (args.out / "street_tree_detections.json").write_text(
+        json.dumps([asdict(detection) for detection in detections], indent=2) + "\n",
+        encoding="utf-8",
+    )
+    candidates = fuse_detections(
+        detections,
+        radius_m=7.0,
+        max_spread_m=args.max_spread,
+    )
     inventory = _load_inventory(args.dataset)
     summary = match_inventory(candidates, inventory, tolerance_m=8.0) if inventory else None
-    args.out.mkdir(parents=True, exist_ok=True)
     (args.out / "street_tree_candidates_citywide.geojson").write_text(
         json.dumps(candidates_geojson(candidates), indent=2) + "\n",
         encoding="utf-8",
@@ -376,10 +417,13 @@ def run(args: argparse.Namespace) -> dict[str, object]:
         "provider_attribution": "© Grab and KartaView contributors",
         "grid": {"spacing_m": args.spacing, "radius_m": args.radius, "cells": len(points)},
         "image_count": decoded_count,
+        "detection_cache": "street_tree_detections.json",
         "selected_image_count": len(selected),
         "selected_storage_hosts": dict(host_counts),
         "downloaded_image_count": decoded_count,
         "component_count": components,
+        "fusion_radius_m": 7.0,
+        "max_cluster_spread_m": args.max_spread,
         "detection_count": len(detections),
         "candidate_count": len(candidates),
         "inventory_match_tolerance_m": 8.0,
@@ -387,6 +431,7 @@ def run(args: argparse.Namespace) -> dict[str, object]:
         "inventory_median_distance_m": summary.median_distance_m if summary else None,
         "fov_source": "assumed_default",
         "assumed_horizontal_fov_deg": args.fov,
+        "live_hosts_only": not args.include_dead_hosts,
         "caveats": [
             "KartaView imagery is CC BY-SA 4.0 and must be attributed.",
             "KartaView often omits camera FOV; 60° is assumed.",
