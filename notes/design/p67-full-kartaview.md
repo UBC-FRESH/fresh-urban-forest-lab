@@ -17,6 +17,8 @@ per-cell sample.
 - Download concurrently and process with OneFormer + ZoeDepth in batches of eight.
 - Persist detections incrementally before fusion so a downstream failure does not
   discard completed inference.
+- Fuse with a 7 m neighbour radius and a 10 m maximum component diameter, preventing
+  chains along a row of trees from merging into one candidate.
 - Preserve earlier pilot and sample layers separately.
 - Publish the full available layer with explicit coverage and failure accounting.
 

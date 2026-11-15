@@ -72,6 +72,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--per-cell", type=int, default=6)
     parser.add_argument("--max-images", type=int, default=500)
     parser.add_argument("--min-area", type=int, default=1200)
+    parser.add_argument("--max-spread", type=float, default=10.0)
     parser.add_argument("--fov", type=float, default=DEFAULT_FOV_DEG)
     parser.add_argument("--device", default="auto")
     parser.add_argument("--max-workers", type=int, default=32)
@@ -390,7 +391,11 @@ def run(args: argparse.Namespace) -> dict[str, object]:
         json.dumps([asdict(detection) for detection in detections], indent=2) + "\n",
         encoding="utf-8",
     )
-    candidates = fuse_detections(detections, radius_m=7.0)
+    candidates = fuse_detections(
+        detections,
+        radius_m=7.0,
+        max_spread_m=args.max_spread,
+    )
     inventory = _load_inventory(args.dataset)
     summary = match_inventory(candidates, inventory, tolerance_m=8.0) if inventory else None
     (args.out / "street_tree_candidates_citywide.geojson").write_text(
@@ -417,6 +422,8 @@ def run(args: argparse.Namespace) -> dict[str, object]:
         "selected_storage_hosts": dict(host_counts),
         "downloaded_image_count": decoded_count,
         "component_count": components,
+        "fusion_radius_m": 7.0,
+        "max_cluster_spread_m": args.max_spread,
         "detection_count": len(detections),
         "candidate_count": len(candidates),
         "inventory_match_tolerance_m": 8.0,

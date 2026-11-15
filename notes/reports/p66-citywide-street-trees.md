@@ -1,6 +1,7 @@
 # P66 citywide street-level tree candidate sample
 
-Status: complete. Squash-merged in PR #323 as `81f51e9`.
+Status: historical. Squash-merged in PR #323 as `81f51e9`; superseded as the canonical
+layer by the P67 full live-host pass (`notes/reports/p67-full-kartaview.md`).
 
 ## Coverage audit
 
@@ -74,7 +75,8 @@ with the LiDAR off-inventory layer or official inventory.
 ## Close-out
 
 - PR #323 squash-merged into `main` as `81f51e9`.
-- Canonical citywide layer: 3,462 candidates from 1,167 decoded images.
+- Historical layer: 3,462 candidates from 1,167 decoded images; preserved as
+  `street_tree_candidates_sample1200.geojson`.
 - Public API on `:8101` returns 3,462 features; map toggle works.
 - Preserved the 24-candidate Commercial Drive pilot and the 85-image grid sample as separate
   historical files.

@@ -1672,3 +1672,18 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Created parent issue #324 and branch `feature/p67-full-kartaview`.
 - Scope: process every decodable non-storage1 KartaView image.
 - Street candidates remain separate from LiDAR off-inventory and official inventory.
+
+### P67 full live-host KartaView pass
+
+- Selected and decoded all 6,425 live-host KartaView records reachable through the
+  118-cell, 100-record scan; excluded 3,772 dead storage1 records.
+- Produced 96,731 components/detections and 19,790 fused candidates.
+- Added a 10 m maximum component spread to prevent nearby tree rows from chaining into
+  implausibly large candidates; maximum candidate uncertainty is 10.462 m.
+- 11,182 candidates are single-view and 8,608 have two or more views; maximum 19 views.
+- 6,078 candidates match public inventory within 8 m (median 4.99 m).
+- 9,844 candidates are within 10 m of a LiDAR off-inventory candidate; descriptive only.
+- Canonical layer updated; P66 1,167-image sample preserved separately.
+- Public API and map toggle serve 19,790 features.
+- Synthetic `--max-spread` argument and batched inference/detection caching are in the P67
+  PR; no merge or release yet.

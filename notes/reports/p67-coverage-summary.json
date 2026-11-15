@@ -1,0 +1,41 @@
+{
+  "schema_version": "fresh-urban-forest.street-tree-coverage.v1",
+  "phase": "P67",
+  "grid_points": 118,
+  "grid_spacing_m": 1000,
+  "query_radius_m": 500,
+  "populated_cells": 117,
+  "selected_cells": 117,
+  "selected_images": 6425,
+  "decoded_images": 6425,
+  "failed_download_count": 0,
+  "selected_storage_hosts": {
+    "storage13.openstreetcam.org": 23,
+    "storage3.openstreetcam.org": 2724,
+    "storage12.openstreetcam.org": 55,
+    "storage11.openstreetcam.org": 330,
+    "storage5.openstreetcam.org": 813,
+    "storage4.openstreetcam.org": 1357,
+    "storage6.openstreetcam.org": 465,
+    "storage9.openstreetcam.org": 99,
+    "storage8.openstreetcam.org": 237,
+    "storage7.openstreetcam.org": 322
+  },
+  "metadata_unique_images": 10204,
+  "metadata_storage_host_counts": {
+    "storage1.openstreetcam.org": 3772,
+    "storage3.openstreetcam.org": 2724,
+    "storage4.openstreetcam.org": 1357,
+    "storage5.openstreetcam.org": 813,
+    "storage6.openstreetcam.org": 465,
+    "storage7.openstreetcam.org": 322,
+    "storage8.openstreetcam.org": 237,
+    "storage9.openstreetcam.org": 99,
+    "storage11.openstreetcam.org": 330,
+    "storage12.openstreetcam.org": 55,
+    "storage13.openstreetcam.org": 23,
+    "no_url": 7
+  },
+  "excluded_dead_host_records": 3772,
+  "note": "All 6,425 live-host records reachable through the bounded 100-record cell scan were selected; storage1 blobs return 404 BlobNotFound."
+}

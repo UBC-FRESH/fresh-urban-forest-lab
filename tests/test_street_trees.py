@@ -99,6 +99,15 @@ def test_fusion_links_points_across_grid_cells() -> None:
     assert candidates[0].view_count == 2
 
 
+def test_fusion_rejects_overspread_components() -> None:
+    """A diameter cap prevents a long chain from becoming one candidate."""
+    base = detection_from_box(_image(), (400.0, 500.0, 600.0, 700.0), score=0.8, depth_m=8.0)
+    first = replace(base, lon=base.lon)
+    second = replace(base, image_id="image-2", lon=base.lon + 12.0 / 85_000.0)
+    candidates = fuse_detections((first, second), radius_m=20.0, max_spread_m=10.0)
+    assert len(candidates) == 2
+
+
 def test_fusion_transitively_links_detection_chain() -> None:
     """Union-find links a chain even when the endpoints are farther than the radius."""
     base = detection_from_box(_image(), (400.0, 500.0, 600.0, 700.0), score=0.8, depth_m=8.0)
