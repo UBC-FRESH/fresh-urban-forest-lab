@@ -1638,3 +1638,22 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
   street-trees toggle worked.
 - No scientific product, default layer, or off-inventory data changed.
 - Dashboard: **GREEN**.
+
+### P66 citywide street-tree extension start
+
+- Created parent issue #322 and branch `feature/p66-citywide-street-trees`.
+- Scope: extend the P63/P64 open street-level candidate sample from Commercial Drive to
+  Vancouver-wide grid coverage.
+- Street candidates remain separate from LiDAR off-inventory and official inventory.
+
+### P66 citywide street-tree sample
+
+- Audited 118 boundary grid cells and 10,204 unique KartaView metadata records.
+- Selected 1,200 images across 117 populated cells; decoded 1,167 available images.
+- Produced 17,016 components, 3,462 fused candidates, and 1,005 public-tree matches within
+  8 m (median 5.20 m).
+- 3,047 candidates are single-view; 415 have two or more views.
+- 1,804/3,462 street candidates are within 10 m of an off-inventory LiDAR candidate. This is
+  descriptive overlap, not identity or merge.
+- Preserved the 24-candidate Commercial Drive pilot separately.
+- Dashboard: **GREEN**.

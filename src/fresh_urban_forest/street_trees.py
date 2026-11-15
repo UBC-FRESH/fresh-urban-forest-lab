@@ -14,6 +14,8 @@ from pathlib import Path
 from typing import cast
 
 import httpx
+import numpy as np
+from scipy.spatial import cKDTree
 
 STREET_TREE_SCHEMA = "fresh-urban-forest.street-tree-candidates.v1"
 STREET_TREE_METHOD = "open street-level imagery + semantic tree mask + metric depth"
@@ -402,26 +404,31 @@ def match_inventory(
     """
     if tolerance_m <= 0:
         raise ValueError("tolerance_m must be positive")
-    distances: list[float] = []
-    for candidate in candidates:
-        nearest = math.inf
-        for lon, lat, _tree_id in inventory:
-            east, north = _local_xy(candidate.lon, candidate.lat, lon, lat)
-            nearest = min(nearest, math.hypot(east, north))
-        if nearest <= tolerance_m:
-            distances.append(nearest)
-    distances.sort()
-    median = None
-    if distances:
-        midpoint = len(distances) // 2
-        median = (
-            distances[midpoint]
-            if len(distances) % 2
-            else (distances[midpoint - 1] + distances[midpoint]) / 2.0
+    if not candidates or not inventory:
+        return MatchSummary(
+            candidate_count=len(candidates),
+            matched_count=0,
+            tolerance_m=tolerance_m,
+            median_distance_m=None,
         )
+    origin_lon, origin_lat = inventory[0][0], inventory[0][1]
+    inventory_points = np.asarray(
+        [_local_xy(lon, lat, origin_lon, origin_lat) for lon, lat, _tree_id in inventory],
+        dtype=np.float64,
+    )
+    candidate_points = np.asarray(
+        [_local_xy(item.lon, item.lat, origin_lon, origin_lat) for item in candidates],
+        dtype=np.float64,
+    )
+    distances, _indices = cKDTree(inventory_points).query(candidate_points, k=1)
+    matched = np.asarray(distances, dtype=np.float64)
+    matched = matched[matched <= tolerance_m]
+    median = None
+    if matched.size:
+        median = float(np.median(matched))
     return MatchSummary(
         candidate_count=len(candidates),
-        matched_count=len(distances),
+        matched_count=int(matched.size),
         tolerance_m=tolerance_m,
         median_distance_m=median,
     )

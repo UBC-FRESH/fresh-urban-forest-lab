@@ -70,6 +70,8 @@ Keep private material out of this directory.
   candidate pilot, method, licences, and caveats.
 - `reports/p64-street-tree-layer.md`: canonical map layer, API, toggle, and browser smoke.
 - `reports/p65-release.md`: v0.7.0 street-tree-layer release verification.
+- `reports/p66-citywide-street-trees.md`, `reports/p66-citywide-summary.json`, and
+  `reports/p66-coverage-summary.json`: citywide KartaView coverage and street-tree sample.
 - `releases/v0.2.0.md`: superseded draft; never tagged.
 - `reference/data-sources.md`: public UBC, Vancouver, and Metro Vancouver sources, with
   coverage, licences, and traps.

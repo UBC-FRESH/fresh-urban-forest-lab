@@ -60,9 +60,9 @@ Operational limits
 - The 3D scene uses procedural crowns and a display terrain mesh, not survey geometry.
 - Hardware-GPU browser performance at full city scale remains untested. Headless
   software rendering was slow at street level.
-- Street-level tree candidates are a Commercial Drive pilot, not a citywide inventory;
-  camera FOV is assumed, imagery is from 2016, and no field validation or private-tree
-  census exists.
+- Street-level tree candidates are a citywide screening sample, not a complete inventory;
+  camera FOV is assumed, imagery is predominantly 2016-2018, and no field validation or
+  private-tree census exists.
 
 Release limits
 --------------
