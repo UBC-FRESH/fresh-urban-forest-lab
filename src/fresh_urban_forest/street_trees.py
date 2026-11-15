@@ -318,6 +318,10 @@ def fuse_detections(
         return ()
     if radius_m <= 0:
         raise ValueError("radius_m must be positive")
+    origin_lon, origin_lat = detections[0].lon, detections[0].lat
+    points = [
+        _local_xy(item.lon, item.lat, origin_lon, origin_lat) for item in detections
+    ]
     parent = list(range(len(detections)))
 
     def find(index: int) -> int:
@@ -331,16 +335,21 @@ def fuse_detections(
         if root_first != root_second:
             parent[root_second] = root_first
 
-    for first in range(len(detections)):
-        for second in range(first + 1, len(detections)):
-            east, north = _local_xy(
-                detections[first].lon,
-                detections[first].lat,
-                detections[second].lon,
-                detections[second].lat,
-            )
-            if math.hypot(east, north) <= radius_m:
-                union(first, second)
+    buckets: dict[tuple[int, int], list[int]] = {}
+    for index, (east, north) in enumerate(points):
+        key = (math.floor(east / radius_m), math.floor(north / radius_m))
+        buckets.setdefault(key, []).append(index)
+    for index, (east, north) in enumerate(points):
+        col = math.floor(east / radius_m)
+        row = math.floor(north / radius_m)
+        for neighbour_col in range(col - 1, col + 2):
+            for neighbour_row in range(row - 1, row + 2):
+                for other in buckets.get((neighbour_col, neighbour_row), []):
+                    if other >= index:
+                        continue
+                    other_east, other_north = points[other]
+                    if math.hypot(east - other_east, north - other_north) <= radius_m:
+                        union(index, other)
 
     groups: dict[int, list[int]] = {}
     for index in range(len(detections)):
@@ -354,9 +363,7 @@ def fuse_detections(
         image_ids = tuple(sorted({item.image_id for item in members}))
         spread = max(
             (
-                math.hypot(
-                    *_local_xy(item.lon, item.lat, origin_lon, origin_lat),
-                )
+                math.hypot(*_local_xy(item.lon, item.lat, origin_lon, origin_lat))
                 for item in members
             ),
             default=0.0,

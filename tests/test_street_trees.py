@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import math
+from dataclasses import replace
 from pathlib import Path
 
 import httpx
@@ -80,6 +81,34 @@ def test_fusion_combines_same_tree_views() -> None:
     assert candidates[0].view_count == 2
     assert candidates[0].score == 0.9
     assert candidates[0].candidate_id.startswith("street:image-1:")
+
+
+def test_fusion_links_points_across_grid_cells() -> None:
+    """Spatial bucketing does not miss a pair that straddles a cell boundary."""
+    base = detection_from_box(_image(), (400.0, 500.0, 600.0, 700.0), score=0.8, depth_m=8.0)
+    east_per_degree = 111_320.0 * math.cos(math.radians(base.lat))
+    first = replace(base, lon=base.lon + 5.9 / east_per_degree, lat=base.lat + 0.1 / 110_540.0)
+    second = replace(
+        base,
+        image_id="image-2",
+        lon=base.lon + 6.1 / east_per_degree,
+        lat=base.lat + 0.1 / 110_540.0,
+    )
+    candidates = fuse_detections((first, second), radius_m=6.0)
+    assert len(candidates) == 1
+    assert candidates[0].view_count == 2
+
+
+def test_fusion_transitively_links_detection_chain() -> None:
+    """Union-find links a chain even when the endpoints are farther than the radius."""
+    base = detection_from_box(_image(), (400.0, 500.0, 600.0, 700.0), score=0.8, depth_m=8.0)
+    detections = tuple(
+        replace(base, image_id=f"image-{index}", lon=base.lon + offset / 85_000.0)
+        for index, offset in enumerate((0.0, 4.0, 8.0))
+    )
+    candidates = fuse_detections(detections, radius_m=6.0)
+    assert len(candidates) == 1
+    assert candidates[0].view_count == 3
 
 
 def test_inventory_match_is_descriptive() -> None:

@@ -13,8 +13,10 @@ per-cell sample.
 
 - Query the same 118-cell 1 km grid.
 - Exclude `storage1.openstreetcam.org` records whose blobs return 404.
-- Select all remaining live-host records, with no per-cell cap.
-- Download concurrently and process with OneFormer + ZoeDepth.
+- Select all remaining live-host records reachable through the 100-record cell scan.
+- Download concurrently and process with OneFormer + ZoeDepth in batches of eight.
+- Persist detections incrementally before fusion so a downstream failure does not
+  discard completed inference.
 - Preserve earlier pilot and sample layers separately.
 - Publish the full available layer with explicit coverage and failure accounting.
 
