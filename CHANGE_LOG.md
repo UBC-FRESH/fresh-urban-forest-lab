@@ -1780,3 +1780,10 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Metadata text uses METADATA:2.0 with CAMERA/EXIF/COMPASS/GRAVITY rows, but no documented
   per-photo pitch/roll mapping. Metadata-driven ground-plane retry is not justified.
 - No data, canonical, demo, or release change.
+
+### P72 close-out
+
+- Squash-merged PR #335 into `main` as `bc0a7a1`.
+- Camera-pose metadata audit recorded as a negative feasibility result.
+- No data, canonical, demo, tag, or release change; v0.8.0 remains latest.
+- Dashboard: **GREEN**.

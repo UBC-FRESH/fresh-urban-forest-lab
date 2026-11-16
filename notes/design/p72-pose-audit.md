@@ -2,7 +2,7 @@
 
 Parent issue: #334
 Branch: `feature/p72-pose-audit`
-Status: pr-open
+Status: complete
 
 ## Goal
 

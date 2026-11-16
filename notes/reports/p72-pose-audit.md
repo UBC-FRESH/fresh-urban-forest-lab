@@ -1,6 +1,6 @@
 # P72 KartaView camera-pose metadata audit
 
-Status: implementation complete; PR #335 open for approval.
+Status: complete. Squash-merged in PR #335 as `bc0a7a1`.
 
 ## Sample
 

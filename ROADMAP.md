@@ -68,7 +68,7 @@ This roadmap is the plan of record and the issue tracker map for FRESH Urban For
 | P69 Street-tree detector and trunk-base audit | #328 | `feature/p69-trunk-audit` | complete |
 | P70 v0.8.0 street-tree audit release | #330 | `release/v0.8.0` | complete |
 | P71 Street-tree ground-plane sanity gate | #332 | `feature/p71-ground-plane` | complete |
-| P72 KartaView camera-pose metadata audit | #334 | `feature/p72-pose-audit` | pr-open |
+| P72 KartaView camera-pose metadata audit | #334 | `feature/p72-pose-audit` | complete |
 
 ## Lifecycle Map
 
@@ -1800,7 +1800,7 @@ Plan: `notes/design/p71-ground-plane.md`.
 
 Parent issue: #334
 Branch: `feature/p72-pose-audit`
-Status: pr-open
+Status: complete
 
 Goal: test whether KartaView provides usable camera pose/FOV metadata before another
 ground-plane attempt.
@@ -1809,7 +1809,7 @@ Plan: `notes/design/p72-pose-audit.md`.
 
 - [x] P72.1 Selected-image and sequence metadata audit
 - [x] P72.2 Orientation text inspection and feasibility conclusion
-- [ ] P72.3 Report, docs, PR, and approval gate
+- [x] P72.3 Report, docs, PR, and approval gate
 
 ## Detailed Next Steps Notes
 
