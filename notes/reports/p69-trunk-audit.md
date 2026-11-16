@@ -1,6 +1,6 @@
 # P69 street-tree detector and trunk-base audit
 
-Status: implementation complete; PR #329 open for approval.
+Status: complete. Squash-merged in PR #329 as `88bcb42`.
 
 ## 200-candidate mask audit
 

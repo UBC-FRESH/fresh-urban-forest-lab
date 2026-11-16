@@ -67,6 +67,6 @@ Operational limits
 Release limits
 --------------
 
-- v0.7.0 is a research prototype, not a final product.
+- v0.8.0 is a research prototype, not a final product.
 - Future tag, GitHub release, Pages setting, or branch-protection changes need explicit
   approval.

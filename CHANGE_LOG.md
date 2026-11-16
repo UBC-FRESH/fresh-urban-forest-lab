@@ -1736,3 +1736,9 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Published an external multi-view subset (8,608 candidates); canonical 19,790-feature layer
   unchanged.
 - No release, tag, or canonical overwrite. P69 PR #329 is open for approval.
+
+### P70 v0.8.0 street-tree audit release
+
+- Bumped package, citation, and runtime metadata to `0.8.0`.
+- Added release notes for the full live-host layer, demo count/caveat, and P68/P69 audits.
+- Closed out P69 and queued v0.8.0 verification, tag, release, and deployment.
