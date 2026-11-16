@@ -1771,3 +1771,12 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Ground-plane gate recorded as a negative result; no canonical or demo change.
 - No tag or release; v0.8.0 remains the latest release.
 - Dashboard: **GREEN**.
+
+### P72 KartaView camera-pose metadata audit
+
+- Sampled 50 selected images and 50 sequences.
+- Photo-level `cameraParameters` and pitch/roll fields were absent; all photo FOV values were 0.
+- Only 1/50 sequences had nonzero hFoV (67.256°); 49/50 were zero.
+- Metadata text uses METADATA:2.0 with CAMERA/EXIF/COMPASS/GRAVITY rows, but no documented
+  per-photo pitch/roll mapping. Metadata-driven ground-plane retry is not justified.
+- No data, canonical, demo, or release change.
