@@ -152,6 +152,16 @@ nonzero sequence hFoV (67.256°); 49/50 were zero. The metadata text uses `METAD
 pitch/roll mapping. Direct metadata-driven pose calibration is therefore not available at
 scale.
 
+Detector labeling packet
+------------------------
+
+P73 exported a 400-candidate human-labeling packet (100 per single/multi-view ×
+matched/unmatched stratum) with 512×512 crops, box overlays, a blank CSV label schema, and
+four contact sheets. The labels are for a future trained tree/trunk detector; no model was
+trained and no canonical data changed.
+
+Details: ``notes/reports/p73-label-packet.md``.
+
 Details: ``notes/reports/p72-pose-audit.md``.
 
 Details: ``notes/reports/p71-ground-gate.md``.

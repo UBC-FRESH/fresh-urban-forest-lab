@@ -1787,3 +1787,11 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Camera-pose metadata audit recorded as a negative feasibility result.
 - No data, canonical, demo, tag, or release change; v0.8.0 remains latest.
 - Dashboard: **GREEN**.
+
+### P73 street-tree detector labeling packet
+
+- Exported 400 candidates (100 per single/multi × matched/unmatched stratum) as 512×512
+  box-overlay crops.
+- Added a blank CSV label schema and JSON manifest; no labels collected.
+- Added four contact sheets and a labeling protocol.
+- No model training, canonical data, demo, tag, or release change.

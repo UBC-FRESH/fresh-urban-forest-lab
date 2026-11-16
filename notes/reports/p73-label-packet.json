@@ -1,0 +1,22 @@
+{
+  "schema_version": "fresh-urban-forest.street-tree-label-packet.v1",
+  "phase": "P73",
+  "requested_per_stratum": 100,
+  "sample_count": 400,
+  "stratum_counts": {
+    "single_matched": 100,
+    "single_unmatched": 100,
+    "multi_matched": 100,
+    "multi_unmatched": 100
+  },
+  "packet_dir": "/srv/shared-data/gep/ws4/external/street_trees/p73_label_packet",
+  "manifest": "notes/reports/p73-label-manifest.json",
+  "labels_csv": "/srv/shared-data/gep/ws4/external/street_trees/p73_label_packet/labels.csv",
+  "label_schema": {
+    "tree_present": "yes / partial / no",
+    "trunk_visible": "yes / no",
+    "box_quality": "good / loose / bad",
+    "notes": "free text"
+  },
+  "note": "Labels are blank. No model was trained and no canonical data changed."
+}
