@@ -1762,5 +1762,5 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Tested camera heights 2.0/2.5/3.0 m and depth/range bounds 0.5-2.0.
 - The gate did not improve the P69 semantic audit: at 2.5 m, gate-consistent audit boxes had
   40.6% bottom-tree labels versus 45.3% for inconsistent boxes. A tighter ratio was worse.
-- Negative result: no canonical integration, no demo change, no release.
+- Negative result: no canonical integration, no demo change, no release. P71 PR #333 is open.
 - Diagnostic sample-only GeoJSON remains external.

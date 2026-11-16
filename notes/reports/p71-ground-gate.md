@@ -1,6 +1,6 @@
 # P71 street-tree ground-plane sanity gate
 
-Status: implementation complete; PR pending approval.
+Status: implementation complete; PR #333 open for approval.
 
 ## Gate
 
