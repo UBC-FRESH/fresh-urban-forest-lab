@@ -1794,13 +1794,13 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
   box-overlay crops.
 - Added a blank CSV label schema and JSON manifest; no labels collected.
 - Added four contact sheets and a labeling protocol.
-- No model training, canonical data, demo, tag, or release change. P73 PR #337 is open.
+- No model training, canonical data, demo, tag, or release change. P74 PR #339 is open. P73 PR #337 is open.
 
 ### P73 close-out
 
 - Squash-merged PR #337 into `main` as `9b3114d`.
 - 400-candidate labeling packet and label schema are available externally.
-- No model training, canonical data, demo, tag, or release change.
+- No model training, canonical data, demo, tag, or release change. P74 PR #339 is open.
 - Dashboard: **GREEN**.
 
 ### P74 street-tree labeling UI and benchmark split
@@ -1810,4 +1810,4 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Added an image-grouped train/validation/test split (seed 74): 277/60/60 images,
   279/60/61 candidates.
 - Browser smoke with a temporary labels file passed; packet labels remain blank.
-- No model training, canonical data, demo, tag, or release change.
+- No model training, canonical data, demo, tag, or release change. P74 PR #339 is open.

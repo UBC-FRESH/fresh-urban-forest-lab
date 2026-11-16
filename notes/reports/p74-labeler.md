@@ -1,6 +1,6 @@
 # P74 street-tree labeling UI and benchmark split
 
-Status: implementation complete; PR pending approval.
+Status: implementation complete; PR #339 open for approval.
 
 ## Labeling UI
 
