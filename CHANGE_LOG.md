@@ -1795,3 +1795,10 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Added a blank CSV label schema and JSON manifest; no labels collected.
 - Added four contact sheets and a labeling protocol.
 - No model training, canonical data, demo, tag, or release change. P73 PR #337 is open.
+
+### P73 close-out
+
+- Squash-merged PR #337 into `main` as `9b3114d`.
+- 400-candidate labeling packet and label schema are available externally.
+- No model training, canonical data, demo, tag, or release change.
+- Dashboard: **GREEN**.

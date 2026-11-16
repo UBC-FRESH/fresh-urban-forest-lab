@@ -1,6 +1,6 @@
 # P73 street-tree detector labeling packet
 
-Status: implementation complete; PR #337 open for approval.
+Status: complete. Squash-merged in PR #337 as `9b3114d`.
 
 ## Packet
 

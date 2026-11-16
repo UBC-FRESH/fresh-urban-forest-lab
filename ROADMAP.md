@@ -69,7 +69,7 @@ This roadmap is the plan of record and the issue tracker map for FRESH Urban For
 | P70 v0.8.0 street-tree audit release | #330 | `release/v0.8.0` | complete |
 | P71 Street-tree ground-plane sanity gate | #332 | `feature/p71-ground-plane` | complete |
 | P72 KartaView camera-pose metadata audit | #334 | `feature/p72-pose-audit` | complete |
-| P73 Street-tree detector labeling packet | #336 | `feature/p73-label-packet` | pr-open |
+| P73 Street-tree detector labeling packet | #336 | `feature/p73-label-packet` | complete |
 
 ## Lifecycle Map
 
@@ -1816,7 +1816,7 @@ Plan: `notes/design/p72-pose-audit.md`.
 
 Parent issue: #336
 Branch: `feature/p73-label-packet`
-Status: pr-open
+Status: complete
 
 Goal: create a reproducible human-labeling packet for a future trained tree/trunk detector.
 
@@ -1824,7 +1824,7 @@ Plan: `notes/design/p73-label-packet.md`.
 
 - [x] P73.1 Sampling, crop export, and manifest
 - [x] P73.2 Contact sheets and labeling protocol
-- [ ] P73.3 Report, docs, PR, and approval gate
+- [x] P73.3 Report, docs, PR, and approval gate
 
 ## Detailed Next Steps Notes
 

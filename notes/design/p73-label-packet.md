@@ -2,7 +2,7 @@
 
 Parent issue: #336
 Branch: `feature/p73-label-packet`
-Status: pr-open
+Status: complete
 
 ## Goal
 
