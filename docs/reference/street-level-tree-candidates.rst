@@ -152,6 +152,17 @@ nonzero sequence hFoV (67.256°); 49/50 were zero. The metadata text uses `METAD
 pitch/roll mapping. Direct metadata-driven pose calibration is therefore not available at
 scale.
 
+Labeling interface
+------------------
+
+P74 adds a local stdlib labeling server and browser UI for the 400-crop P73 packet. It
+supports `tree_present`, `trunk_visible`, `box_quality`, and notes with validated CSV
+autosave. A deterministic image-grouped split (seed 74) provides 277/60/60 images and
+279/60/61 candidates for train/validation/test. The interface is operator-only; the packet
+labels remain blank until a human reviewer fills them.
+
+Details: ``notes/reports/p74-labeler.md``.
+
 Detector labeling packet
 ------------------------
 

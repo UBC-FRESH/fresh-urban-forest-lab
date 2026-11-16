@@ -1802,3 +1802,12 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - 400-candidate labeling packet and label schema are available externally.
 - No model training, canonical data, demo, tag, or release change.
 - Dashboard: **GREEN**.
+
+### P74 street-tree labeling UI and benchmark split
+
+- Added a local stdlib labeling server and browser UI for the P73 packet.
+- Added validated CSV autosave for tree presence, trunk visibility, box quality, and notes.
+- Added an image-grouped train/validation/test split (seed 74): 277/60/60 images,
+  279/60/61 candidates.
+- Browser smoke with a temporary labels file passed; packet labels remain blank.
+- No model training, canonical data, demo, tag, or release change.
