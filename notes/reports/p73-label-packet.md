@@ -1,6 +1,6 @@
 # P73 street-tree detector labeling packet
 
-Status: implementation complete; PR pending approval.
+Status: implementation complete; PR #337 open for approval.
 
 ## Packet
 

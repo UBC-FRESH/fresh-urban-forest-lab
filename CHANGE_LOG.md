@@ -1794,4 +1794,4 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
   box-overlay crops.
 - Added a blank CSV label schema and JSON manifest; no labels collected.
 - Added four contact sheets and a labeling protocol.
-- No model training, canonical data, demo, tag, or release change.
+- No model training, canonical data, demo, tag, or release change. P73 PR #337 is open.
