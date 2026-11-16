@@ -67,7 +67,7 @@ This roadmap is the plan of record and the issue tracker map for FRESH Urban For
 | P68 Street-layer UI and calibration audit | #326 | `feature/p68-street-audit` | complete |
 | P69 Street-tree detector and trunk-base audit | #328 | `feature/p69-trunk-audit` | complete |
 | P70 v0.8.0 street-tree audit release | #330 | `release/v0.8.0` | complete |
-| P71 Street-tree ground-plane sanity gate | #332 | `feature/p71-ground-plane` | pr-open |
+| P71 Street-tree ground-plane sanity gate | #332 | `feature/p71-ground-plane` | complete |
 
 ## Lifecycle Map
 
@@ -1784,7 +1784,7 @@ Plan: `notes/design/p70-release-v0.8.0.md`.
 
 Parent issue: #332
 Branch: `feature/p71-ground-plane`
-Status: pr-open
+Status: complete
 
 Goal: test a level-camera ground-plane gate and publish a sample-only supported subset.
 
@@ -1793,7 +1793,7 @@ Plan: `notes/design/p71-ground-plane.md`.
 - [x] P71.1 Ground-plane model, reconstruction, and tests
 - [x] P71.2 200-candidate validation and sensitivity
 - [x] P71.3 External diagnostic subset and summary
-- [ ] P71.4 Report, docs, PR, and approval gate
+- [x] P71.4 Report, docs, PR, and approval gate
 
 ## Detailed Next Steps Notes
 

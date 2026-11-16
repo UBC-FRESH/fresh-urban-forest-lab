@@ -2,7 +2,7 @@
 
 Parent issue: #332
 Branch: `feature/p71-ground-plane`
-Status: active
+Status: complete
 
 ## Goal
 

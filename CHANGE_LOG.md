@@ -1764,3 +1764,10 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
   40.6% bottom-tree labels versus 45.3% for inconsistent boxes. A tighter ratio was worse.
 - Negative result: no canonical integration, no demo change, no release. P71 PR #333 is open.
 - Diagnostic sample-only GeoJSON remains external.
+
+### P71 close-out
+
+- Squash-merged PR #333 into `main` as `235ddc1`.
+- Ground-plane gate recorded as a negative result; no canonical or demo change.
+- No tag or release; v0.8.0 remains the latest release.
+- Dashboard: **GREEN**.

@@ -1,6 +1,6 @@
 # P71 street-tree ground-plane sanity gate
 
-Status: implementation complete; PR #333 open for approval.
+Status: complete. Squash-merged in PR #333 as `235ddc1`.
 
 ## Gate
 
