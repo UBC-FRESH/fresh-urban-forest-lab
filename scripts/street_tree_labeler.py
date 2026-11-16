@@ -46,12 +46,31 @@ class LabelStore:
         return rows
 
     def all(self) -> dict[str, dict[str, str]]:
-        """Return a copy of all labels."""
+        """Return a copy of all labels.
+
+        Returns
+        -------
+        dict of str to dict
+            Candidate ID to label fields.
+        """
         with self.lock:
             return {key: dict(value) for key, value in self.rows.items()}
 
     def update(self, candidate_id: str, payload: dict[str, object]) -> dict[str, str]:
-        """Validate and persist one label row."""
+        """Validate and persist one label row.
+
+        Parameters
+        ----------
+        candidate_id : str
+            Candidate identifier.
+        payload : dict
+            Label fields to persist.
+
+        Returns
+        -------
+        dict of str to str
+            Saved label fields.
+        """
         with self.lock:
             if candidate_id not in self.rows:
                 raise KeyError(candidate_id)
@@ -108,7 +127,15 @@ class LabelHandler(SimpleHTTPRequestHandler):
         super().__init__(*args, directory=str(static_dir), **kwargs)  # type: ignore[arg-type]
 
     def log_message(self, format: str, *args: object) -> None:
-        """Keep the operator console quiet."""
+        """Keep the operator console quiet.
+
+        Parameters
+        ----------
+        format : str
+            Log format string.
+        *args : object
+            Format arguments.
+        """
         return
 
     def _json(self, payload: object, status: HTTPStatus = HTTPStatus.OK) -> None:
