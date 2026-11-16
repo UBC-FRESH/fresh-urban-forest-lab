@@ -1811,3 +1811,11 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
   279/60/61 candidates.
 - Browser smoke with a temporary labels file passed; packet labels remain blank.
 - No model training, canonical data, demo, tag, or release change. P74 PR #339 is open.
+
+### P74 close-out
+
+- Squash-merged PR #339 into `main` as `c1c9498`.
+- Local labeling UI and image-grouped benchmark split are available.
+- Packet labels remain blank; no model training.
+- No canonical data, demo, tag, or release change; v0.8.0 remains latest.
+- Dashboard: **GREEN**.

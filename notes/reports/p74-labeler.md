@@ -1,6 +1,6 @@
 # P74 street-tree labeling UI and benchmark split
 
-Status: implementation complete; PR #339 open for approval.
+Status: complete. Squash-merged in PR #339 as `c1c9498`.
 
 ## Labeling UI
 

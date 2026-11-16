@@ -2,7 +2,7 @@
 
 Parent issue: #338
 Branch: `feature/p74-labeler`
-Status: pr-open
+Status: complete
 
 ## Goal
 
