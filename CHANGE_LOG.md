@@ -1749,3 +1749,18 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Tag `v0.8.0` created and pushed; GitHub release published.
 - Public Vancouver API and browser verified with 19,790 street candidates.
 - Dashboard: **GREEN**.
+
+### P71 street-tree ground-plane sanity gate start
+
+- Created parent issue #332 and branch `feature/p71-ground-plane`.
+- Scope: level-camera depth/range gate, P69 audit validation, and an external sample-only
+  supported subset. Canonical data remains unchanged.
+
+### P71 ground-plane gate audit
+
+- Added and tested a level-camera ground-plane range/ratio helper.
+- Tested camera heights 2.0/2.5/3.0 m and depth/range bounds 0.5-2.0.
+- The gate did not improve the P69 semantic audit: at 2.5 m, gate-consistent audit boxes had
+  40.6% bottom-tree labels versus 45.3% for inconsistent boxes. A tighter ratio was worse.
+- Negative result: no canonical integration, no demo change, no release. P71 PR #333 is open.
+- Diagnostic sample-only GeoJSON remains external.

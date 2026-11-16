@@ -84,6 +84,8 @@ Keep private material out of this directory.
   `reports/p69-trunk-trial.json`, and `reports/p69-confidence-sample.json`: 200-candidate
   mask audit, trunk-detection trial, and multi-view screening subset.
 - `reports/p70-release.md`: v0.8.0 release verification.
+- `reports/p71-ground-gate.md`, `reports/p71-ground-gate.json`, and
+  `reports/p71-ground-gate-tight.json`: negative ground-plane gate audit.
 - `releases/v0.2.0.md`: superseded draft; never tagged.
 - `reference/data-sources.md`: public UBC, Vancouver, and Metro Vancouver sources, with
   coverage, licences, and traps.

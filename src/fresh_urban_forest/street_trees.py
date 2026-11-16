@@ -210,6 +210,122 @@ def destination_lonlat(
     return longitude, latitude
 
 
+def ground_plane_range_m(
+    image: StreetImage,
+    pixel_y: float,
+    *,
+    camera_height_m: float = 2.5,
+) -> float | None:
+    """Estimate the horizontal ground range at a level-camera pixel.
+
+    The camera is assumed level and the image centre is treated as the horizon. This is a
+    sanity check, not a calibrated pose solution.
+
+    Parameters
+    ----------
+    image : StreetImage
+        Source image metadata.
+    pixel_y : float
+        Pixel row at the base of the detection box.
+    camera_height_m : float
+        Assumed camera height above the ground.
+
+    Returns
+    -------
+    float or None
+        Expected ground range in metres, or ``None`` above the horizon.
+    """
+    if camera_height_m <= 0:
+        raise ValueError("camera_height_m must be positive")
+    if image.width <= 0 or image.height <= 0:
+        raise ValueError("image dimensions must be positive")
+    focal = (image.width / 2.0) / math.tan(math.radians(image.horizontal_fov_deg) / 2.0)
+    offset = pixel_y - image.height / 2.0
+    if offset <= 0:
+        return None
+    angle = math.atan(offset / focal)
+    if angle <= 0:
+        return None
+    return camera_height_m / math.tan(angle)
+
+
+def ground_plane_ratio(
+    image: StreetImage,
+    pixel_y: float,
+    depth_m: float,
+    *,
+    camera_height_m: float = 2.5,
+) -> float | None:
+    """Return observed depth divided by expected level-ground range.
+
+    Parameters
+    ----------
+    image : StreetImage
+        Source image metadata.
+    pixel_y : float
+        Pixel row at the base of the detection box.
+    depth_m : float
+        Observed metric depth.
+    camera_height_m : float
+        Assumed camera height above the ground.
+
+    Returns
+    -------
+    float or None
+        Depth/range ratio, or ``None`` above the horizon.
+    """
+    if depth_m <= 0:
+        raise ValueError("depth_m must be positive")
+    expected = ground_plane_range_m(
+        image,
+        pixel_y,
+        camera_height_m=camera_height_m,
+    )
+    if expected is None:
+        return None
+    return depth_m / expected
+
+
+def is_ground_plane_consistent(
+    image: StreetImage,
+    pixel_y: float,
+    depth_m: float,
+    *,
+    camera_height_m: float = 2.5,
+    min_ratio: float = 0.5,
+    max_ratio: float = 2.0,
+) -> bool:
+    """Return whether depth is compatible with a level ground plane.
+
+    Parameters
+    ----------
+    image : StreetImage
+        Source image metadata.
+    pixel_y : float
+        Pixel row at the base of the detection box.
+    depth_m : float
+        Observed metric depth.
+    camera_height_m : float
+        Assumed camera height above the ground.
+    min_ratio, max_ratio : float
+        Accepted depth/range interval.
+
+    Returns
+    -------
+    bool
+        True when the ratio is inside the accepted interval.
+    """
+    if min_ratio <= 0 or max_ratio < min_ratio:
+        raise ValueError("invalid ground-plane ratio bounds")
+    ratio = ground_plane_ratio(
+        image,
+        pixel_y,
+        depth_m,
+        camera_height_m=camera_height_m,
+    )
+    return ratio is not None and min_ratio <= ratio <= max_ratio
+
+
 def project_pixel(
     image: StreetImage,
     pixel_x: float,

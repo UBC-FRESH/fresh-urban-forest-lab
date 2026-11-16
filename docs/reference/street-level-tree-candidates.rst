@@ -132,6 +132,18 @@ A multi-view screening subset (8,608 candidates) is available only as an externa
 file. The canonical 19,790-feature layer is unchanged. The next detector should identify a
 trunk/base or use a ground-plane constraint rather than adding more imagery.
 
+Ground-plane gate
+------------------
+
+P71 tested a level-camera check comparing ZoeDepth depth at the box bottom with the expected
+ground range. It did **not** improve the P69 semantic audit. At a 2.5 m assumed camera height,
+46.6% of candidates passed the gate, but only 40.6% of gate-consistent audit boxes had `tree`
+at the bottom centre, versus 45.3% of gate-inconsistent boxes. A tighter ratio performed
+worse. The gate is a negative result and is not integrated; camera pitch, camera height, and
+bottom-surface depth remain uncalibrated.
+
+Details: ``notes/reports/p71-ground-gate.md``.
+
 Details: ``notes/reports/p69-trunk-audit.md``,
 ``notes/reports/p69-mask-audit.json``, ``notes/reports/p69-trunk-trial.json``, and
 ``notes/reports/p69-confidence-sample.json``.

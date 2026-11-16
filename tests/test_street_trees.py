@@ -18,6 +18,9 @@ from fresh_urban_forest.street_trees import (
     candidates_geojson,
     detection_from_box,
     fuse_detections,
+    ground_plane_range_m,
+    ground_plane_ratio,
+    is_ground_plane_consistent,
     match_inventory,
     project_pixel,
     write_candidates,
@@ -364,3 +367,28 @@ def test_kartaview_image_bytes_and_write_candidates(tmp_path: Path) -> None:
     path = tmp_path / "candidates.geojson"
     write_candidates(path, candidates)
     assert path.is_file()
+
+
+def test_ground_plane_range_and_ratio() -> None:
+    """A bottom-row pixel on a level camera has a plausible ground range."""
+    image = _image()
+    expected = ground_plane_range_m(image, 750.0)
+    assert expected is not None
+    assert 5.0 < expected < 7.0
+    assert ground_plane_range_m(image, 375.0) is None
+    ratio = ground_plane_ratio(image, 750.0, expected)
+    assert ratio is not None
+    assert math.isclose(ratio, 1.0, rel_tol=1e-9)
+    assert is_ground_plane_consistent(image, 750.0, expected)
+    assert not is_ground_plane_consistent(image, 750.0, 100.0)
+
+
+def test_ground_plane_rejects_invalid_inputs() -> None:
+    """The camera-height and depth checks are explicit."""
+    image = _image()
+    with pytest.raises(ValueError, match="camera_height_m"):
+        ground_plane_range_m(image, 750.0, camera_height_m=0.0)
+    with pytest.raises(ValueError, match="depth_m"):
+        ground_plane_ratio(image, 750.0, 0.0)
+    with pytest.raises(ValueError, match="ratio bounds"):
+        is_ground_plane_consistent(image, 750.0, 5.0, min_ratio=2.0, max_ratio=1.0)
