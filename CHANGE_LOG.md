@@ -1742,3 +1742,10 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - Bumped package, citation, and runtime metadata to `0.8.0`.
 - Added release notes for the full live-host layer, demo count/caveat, and P68/P69 audits.
 - Closed out P69 and queued v0.8.0 verification, tag, release, and deployment.
+
+### P70 close-out
+
+- Squash-merged PR #331 into `main` as `a4457d7`.
+- Tag `v0.8.0` created and pushed; GitHub release published.
+- Public Vancouver API and browser verified with 19,790 street candidates.
+- Dashboard: **GREEN**.

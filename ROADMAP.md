@@ -66,7 +66,7 @@ This roadmap is the plan of record and the issue tracker map for FRESH Urban For
 | P67 Full live-host KartaView pass | #324 | `feature/p67-full-kartaview` | complete |
 | P68 Street-layer UI and calibration audit | #326 | `feature/p68-street-audit` | complete |
 | P69 Street-tree detector and trunk-base audit | #328 | `feature/p69-trunk-audit` | complete |
-| P70 v0.8.0 street-tree audit release | #330 | `release/v0.8.0` | active |
+| P70 v0.8.0 street-tree audit release | #330 | `release/v0.8.0` | complete |
 
 ## Lifecycle Map
 
@@ -1769,7 +1769,7 @@ Plan: `notes/design/p69-trunk-audit.md`.
 
 Parent issue: #330
 Branch: `release/v0.8.0`
-Status: active
+Status: complete
 
 Goal: publish the merged P67/P68/P69 street-tree work as the stable v0.8.0 checkpoint.
 
@@ -1777,7 +1777,7 @@ Plan: `notes/design/p70-release-v0.8.0.md`.
 
 - [x] P70.1 Version, citation, release notes, and status docs
 - [x] P70.2 Release verification and browser smoke
-- [ ] P70.3 Merge, tag `v0.8.0`, publish release, deploy, and close out
+- [x] P70.3 Merge, tag `v0.8.0`, publish release, deploy, and close out
 
 ## Detailed Next Steps Notes
 

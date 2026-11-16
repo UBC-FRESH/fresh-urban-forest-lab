@@ -1,6 +1,6 @@
 # P70 v0.8.0 street-tree audit release
 
-Status: release PR verification complete; tag and GitHub release pending approval.
+Status: complete. Release PR #331 merged as `a4457d7`; tag `v0.8.0` and GitHub release published.
 
 ## Verification
 
@@ -16,10 +16,10 @@ Status: release PR verification complete; tag and GitHub release pending approva
 
 ## Release actions
 
-- Merge release PR.
-- Tag `v0.8.0` at the merged release commit.
-- Publish the GitHub release from `notes/releases/v0.8.0.md`.
-- Verify the public portal and close out P70.
+- Release PR #331 squash-merged as `a4457d7`.
+- Tag `v0.8.0` points at `a4457d7`.
+- GitHub release `v0.8.0` published.
+- Public portal verified after the release.
 
 ## Limits
 

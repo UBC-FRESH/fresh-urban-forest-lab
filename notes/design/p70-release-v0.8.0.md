@@ -2,7 +2,7 @@
 
 Parent issue: #330
 Branch: `release/v0.8.0`
-Status: active
+Status: complete
 
 ## Scope
 
