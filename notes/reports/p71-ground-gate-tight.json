@@ -1,0 +1,39 @@
+{
+  "schema_version": "fresh-urban-forest.street-tree-ground-gate.v1",
+  "phase": "P71",
+  "candidate_count": 19790,
+  "detection_count": 96731,
+  "ratio_bounds": [
+    0.75,
+    1.5
+  ],
+  "heights": [
+    2.5
+  ],
+  "results": {
+    "2.5": {
+      "camera_height_m": 2.5,
+      "checked_detections": 39888,
+      "supported_detections": 6877,
+      "above_horizon_detections": 8624,
+      "supported_candidate_count": 5360,
+      "supported_candidate_fraction": 0.271,
+      "supported_inventory_matched_count": 1678,
+      "all_inventory_matched_count": 6078,
+      "all_consistent_candidate_count": 1842,
+      "audit_consistent": {
+        "count": 43,
+        "bottom_tree": 16,
+        "bottom_tree_fraction": 0.372,
+        "median_tree_mask_fraction": 0.742
+      },
+      "audit_inconsistent": {
+        "count": 154,
+        "bottom_tree": 70,
+        "bottom_tree_fraction": 0.455,
+        "median_tree_mask_fraction": 0.69
+      }
+    }
+  },
+  "note": "Level-camera sanity gate only. Camera pitch is unmodeled; the gate is not a field-validated detector or a precision/recall estimate."
+}

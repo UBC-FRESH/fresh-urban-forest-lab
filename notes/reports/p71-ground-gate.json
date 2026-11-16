@@ -1,0 +1,87 @@
+{
+  "schema_version": "fresh-urban-forest.street-tree-ground-gate.v1",
+  "phase": "P71",
+  "candidate_count": 19790,
+  "detection_count": 96731,
+  "ratio_bounds": [
+    0.5,
+    2.0
+  ],
+  "heights": [
+    2.0,
+    2.5,
+    3.0
+  ],
+  "results": {
+    "2.0": {
+      "camera_height_m": 2.0,
+      "checked_detections": 39888,
+      "supported_detections": 10330,
+      "above_horizon_detections": 8624,
+      "supported_candidate_count": 7405,
+      "supported_candidate_fraction": 0.374,
+      "supported_inventory_matched_count": 2325,
+      "all_inventory_matched_count": 6078,
+      "all_consistent_candidate_count": 2940,
+      "audit_consistent": {
+        "count": 54,
+        "bottom_tree": 22,
+        "bottom_tree_fraction": 0.407,
+        "median_tree_mask_fraction": 0.72
+      },
+      "audit_inconsistent": {
+        "count": 143,
+        "bottom_tree": 64,
+        "bottom_tree_fraction": 0.448,
+        "median_tree_mask_fraction": 0.702
+      }
+    },
+    "2.5": {
+      "camera_height_m": 2.5,
+      "checked_detections": 39888,
+      "supported_detections": 13624,
+      "above_horizon_detections": 8624,
+      "supported_candidate_count": 9216,
+      "supported_candidate_fraction": 0.466,
+      "supported_inventory_matched_count": 2835,
+      "all_inventory_matched_count": 6078,
+      "all_consistent_candidate_count": 4032,
+      "audit_consistent": {
+        "count": 69,
+        "bottom_tree": 28,
+        "bottom_tree_fraction": 0.406,
+        "median_tree_mask_fraction": 0.742
+      },
+      "audit_inconsistent": {
+        "count": 128,
+        "bottom_tree": 58,
+        "bottom_tree_fraction": 0.453,
+        "median_tree_mask_fraction": 0.69
+      }
+    },
+    "3.0": {
+      "camera_height_m": 3.0,
+      "checked_detections": 39888,
+      "supported_detections": 16834,
+      "above_horizon_detections": 8624,
+      "supported_candidate_count": 10844,
+      "supported_candidate_fraction": 0.548,
+      "supported_inventory_matched_count": 3218,
+      "all_inventory_matched_count": 6078,
+      "all_consistent_candidate_count": 5305,
+      "audit_consistent": {
+        "count": 82,
+        "bottom_tree": 31,
+        "bottom_tree_fraction": 0.378,
+        "median_tree_mask_fraction": 0.718
+      },
+      "audit_inconsistent": {
+        "count": 115,
+        "bottom_tree": 55,
+        "bottom_tree_fraction": 0.478,
+        "median_tree_mask_fraction": 0.693
+      }
+    }
+  },
+  "note": "Level-camera sanity gate only. Camera pitch is unmodeled; the gate is not a field-validated detector or a precision/recall estimate."
+}
