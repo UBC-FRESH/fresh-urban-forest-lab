@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Street-tree labeling</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <div>
+      <p class="eyebrow">FRESH street-tree detector</p>
+      <h1>Labeling packet</h1>
+    </div>
+    <div class="progress">
+      <strong id="progress-count">0 / 0</strong>
+      <span>reviewed</span>
+      <span id="save-status" class="status">saved</span>
+    </div>
+  </header>
+  <main>
+    <section class="image-panel">
+      <div class="image-wrap"><img id="crop" alt="Street-tree candidate crop"></div>
+      <div class="meta">
+        <strong id="candidate-id">—</strong>
+        <span id="candidate-meta"></span>
+      </div>
+      <nav>
+        <button id="prev" type="button">← previous</button>
+        <button id="next" type="button">next →</button>
+      </nav>
+    </section>
+    <section class="form-panel">
+      <p class="instruction">Label the candidate, not the box. The red box is the current model box.</p>
+      <fieldset>
+        <legend>Tree present</legend>
+        <label><input type="radio" name="tree_present" value="yes"> yes</label>
+        <label><input type="radio" name="tree_present" value="partial"> partial</label>
+        <label><input type="radio" name="tree_present" value="no"> no</label>
+      </fieldset>
+      <fieldset>
+        <legend>Trunk or base visible</legend>
+        <label><input type="radio" name="trunk_visible" value="yes"> yes</label>
+        <label><input type="radio" name="trunk_visible" value="no"> no</label>
+      </fieldset>
+      <fieldset>
+        <legend>Box quality</legend>
+        <label><input type="radio" name="box_quality" value="good"> good</label>
+        <label><input type="radio" name="box_quality" value="loose"> loose</label>
+        <label><input type="radio" name="box_quality" value="bad"> bad</label>
+      </fieldset>
+      <label class="notes">Notes
+        <textarea id="notes" rows="3" maxlength="500" placeholder="occluded, wrong object, edge case…"></textarea>
+      </label>
+      <p class="instruction keys">Keys: 1/2/3 tree · y/n trunk · g/l/b box · ←/→ navigation</p>
+      <p id="error" class="error" hidden></p>
+    </section>
+  </main>
+  <script type="module" src="app.js"></script>
+</body>
+</html>

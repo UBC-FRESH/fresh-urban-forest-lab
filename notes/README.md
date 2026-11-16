@@ -90,6 +90,8 @@ Keep private material out of this directory.
   `reports/p72-sequence-fov.json`: KartaView camera-pose metadata feasibility audit.
 - `reports/p73-label-packet.md`, `reports/p73-label-packet.json`, and
   `reports/p73-label-manifest.json`: 400-candidate detector labeling packet.
+- `reports/p74-labeler.md` and `reports/p74-benchmark-split.json`: local labeling UI and
+  image-grouped benchmark split.
 - `releases/v0.2.0.md`: superseded draft; never tagged.
 - `reference/data-sources.md`: public UBC, Vancouver, and Metro Vancouver sources, with
   coverage, licences, and traps.

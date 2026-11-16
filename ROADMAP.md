@@ -70,6 +70,7 @@ This roadmap is the plan of record and the issue tracker map for FRESH Urban For
 | P71 Street-tree ground-plane sanity gate | #332 | `feature/p71-ground-plane` | complete |
 | P72 KartaView camera-pose metadata audit | #334 | `feature/p72-pose-audit` | complete |
 | P73 Street-tree detector labeling packet | #336 | `feature/p73-label-packet` | complete |
+| P74 Street-tree labeling UI and benchmark split | #338 | `feature/p74-labeler` | pr-open |
 
 ## Lifecycle Map
 
@@ -1825,6 +1826,21 @@ Plan: `notes/design/p73-label-packet.md`.
 - [x] P73.1 Sampling, crop export, and manifest
 - [x] P73.2 Contact sheets and labeling protocol
 - [x] P73.3 Report, docs, PR, and approval gate
+
+## Phase 74: Street-tree labeling UI and benchmark split
+
+Parent issue: #338
+Branch: `feature/p74-labeler`
+Status: pr-open
+
+Goal: provide a local labeling UI and a leakage-safe benchmark split for the P73 packet.
+
+Plan: `notes/design/p74-labeler.md`.
+
+- [x] P74.1 Labeling server and CSV validation
+- [x] P74.2 Browser labeler and local smoke
+- [x] P74.3 Image-grouped benchmark split
+- [ ] P74.4 Report, docs, PR, and approval gate
 
 ## Detailed Next Steps Notes
 
