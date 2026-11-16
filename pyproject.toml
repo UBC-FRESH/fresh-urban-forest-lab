@@ -156,6 +156,7 @@ omit = [
     "scripts/street_tree_fov_audit.py",
     "scripts/street_tree_mask_audit.py",
     "scripts/street_tree_ground_gate.py",
+    "scripts/street_tree_label_packet.py",
 ]
 
 [tool.coverage.report]
