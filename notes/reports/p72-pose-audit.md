@@ -1,6 +1,6 @@
 # P72 KartaView camera-pose metadata audit
 
-Status: implementation complete; PR pending approval.
+Status: implementation complete; PR #335 open for approval.
 
 ## Sample
 
