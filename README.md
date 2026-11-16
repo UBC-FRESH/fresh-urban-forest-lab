@@ -83,12 +83,12 @@ Open `http://127.0.0.1:8101/`; the apps are at `/ubc/`, `/vancouver/`, `/surrey/
 
 ## Status
 
-The mainline is complete through Phase 64 and released as v0.7.0. The current
+The mainline is complete through Phase 69 and released as v0.8.0. The current
 public product includes the full Vancouver city pilot, shade/gap/heat screens, observed
 change and action/turnover products, the Optimization and site-scenario explorers, the
 full-control corrected change/action/turnover layers, Walk mode v2 with building collision,
 street spawning, compass, and minimap, and a separate open street-level tree candidate
-layer. The documentation site is live on GitHub Pages. `ROADMAP.md` is the plan of record;
+layer with a full live-host KartaView pass and screening-count UI. The documentation site is live on GitHub Pages. `ROADMAP.md` is the plan of record;
 the GitHub issues carry the live status.
 
 ## Repository map
