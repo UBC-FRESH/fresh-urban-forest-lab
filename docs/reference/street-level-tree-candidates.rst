@@ -142,6 +142,18 @@ at the bottom centre, versus 45.3% of gate-inconsistent boxes. A tighter ratio p
 worse. The gate is a negative result and is not integrated; camera pitch, camera height, and
 bottom-surface depth remain uncalibrated.
 
+Camera pose metadata
+--------------------
+
+P72 sampled 50 selected images and 50 KartaView sequences. Photo-level camera parameters and
+pitch/roll fields were absent; all photo FOV values were zero. Only **1/50** sequences had a
+nonzero sequence hFoV (67.256°); 49/50 were zero. The metadata text uses `METADATA:2.0` with
+`CAMERA`, `EXIF`, `COMPASS`, and `GRAVITY` rows, but there is no documented per-photo
+pitch/roll mapping. Direct metadata-driven pose calibration is therefore not available at
+scale.
+
+Details: ``notes/reports/p72-pose-audit.md``.
+
 Details: ``notes/reports/p71-ground-gate.md``.
 
 Details: ``notes/reports/p69-trunk-audit.md``,

@@ -1,0 +1,116 @@
+{
+  "schema_version": "fresh-urban-forest.kartaview-pose-audit.v1",
+  "phase": "P72",
+  "sample_images": 50,
+  "unique_sequences": 50,
+  "photo_field_summary": {
+    "cameraParameters": {
+      "present": 0,
+      "nonzero": 0
+    },
+    "fieldOfView": {
+      "present": 50,
+      "nonzero": 50
+    },
+    "headers": {
+      "present": 50,
+      "nonzero": 50
+    },
+    "pitch": {
+      "present": 0,
+      "nonzero": 0
+    },
+    "roll": {
+      "present": 0,
+      "nonzero": 0
+    },
+    "shotDate": {
+      "present": 50,
+      "nonzero": 50
+    },
+    "sequenceIndex": {
+      "present": 50,
+      "nonzero": 50
+    },
+    "isVideo": {
+      "present": 0,
+      "nonzero": 0
+    }
+  },
+  "sequence_field_summary": {
+    "cameraParameters": {
+      "present": 50,
+      "nonzero": 50
+    },
+    "fieldOfView": {
+      "present": 50,
+      "nonzero": 50
+    },
+    "metadataFileUrl": {
+      "present": 50,
+      "nonzero": 50
+    },
+    "deviceName": {
+      "present": 50,
+      "nonzero": 50
+    },
+    "isVideo": {
+      "present": 50,
+      "nonzero": 50
+    },
+    "sequenceType": {
+      "present": 50,
+      "nonzero": 44
+    }
+  },
+  "photo_pitch_roll_keys": false,
+  "sequence_pitch_roll_keys": false,
+  "fov_values": [
+    "0"
+  ],
+  "camera_parameters_examples": [
+    {
+      "vFoV": 52.49963,
+      "hFoV": 67.25644,
+      "fLen": 3.543,
+      "aperture": 2,
+      "width": 3264,
+      "height": 1836
+    },
+    {
+      "vFoV": 0,
+      "hFoV": 0,
+      "fLen": 0,
+      "aperture": 0,
+      "width": 0,
+      "height": 0
+    },
+    {
+      "vFoV": 0,
+      "hFoV": 0,
+      "fLen": 0,
+      "aperture": 0,
+      "width": 0,
+      "height": 0
+    }
+  ],
+  "metadata_url_examples": [
+    "https://storage13.openstreetcam.org/files/photo/2022/9/24/6137145_d875a_632f88afb6a96.txt",
+    "https://storage11.openstreetcam.org/files/photo/2019/2/2/1336201_d875a_5c55ea8646652.txt",
+    "https://storage11.openstreetcam.org/files/photo/2019/3/14/1352021_d875a_5c89a86ac13ca.txt"
+  ],
+  "metadata_first_lines": [
+    "METADATA:2.0",
+    "HEADER",
+    "ALIAS:d;DEVICE;1;1",
+    "ALIAS:g;GPS;1;1",
+    "ALIAS:o;OBD;1;1",
+    "ALIAS:cam;CAMERA;2;2",
+    "ALIAS:exif;EXIF;2;2",
+    "ALIAS:p;PRESSURE;1;1",
+    "ALIAS:c;COMPASS;1;1",
+    "ALIAS:f;PHOTO;1;1",
+    "ALIAS:a;ACCELERATION;1;1",
+    "ALIAS:y;ATTITUDE;1;1"
+  ]
+}

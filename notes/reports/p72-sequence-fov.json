@@ -1,0 +1,516 @@
+{
+  "schema_version": "fresh-urban-forest.kartaview-sequence-fov.v1",
+  "phase": "P72",
+  "sample_images": 50,
+  "unique_sequences": 50,
+  "nonzero_hfov_sequences": 1,
+  "nonzero_hfov_fraction": 0.02,
+  "hfov_values": [
+    67.25644
+  ],
+  "vfov_values": [
+    52.49963
+  ],
+  "records": [
+    {
+      "sequence_id": "6137145",
+      "hFoV": 67.25644,
+      "vFoV": 52.49963,
+      "fLen": 3.543,
+      "width": 3264,
+      "height": 1836,
+      "isVideo": "1",
+      "metadataFileUrl": "https://storage13.openstreetcam.org/files/photo/2022/9/24/6137145_d875a_632f88afb6a96.txt"
+    },
+    {
+      "sequence_id": "1336201",
+      "hFoV": 0.0,
+      "vFoV": 0.0,
+      "fLen": 0,
+      "width": 0,
+      "height": 0,
+      "isVideo": "0",
+      "metadataFileUrl": "https://storage11.openstreetcam.org/files/photo/2019/2/2/1336201_d875a_5c55ea8646652.txt"
+    },
+    {
+      "sequence_id": "1352021",
+      "hFoV": 0.0,
+      "vFoV": 0.0,
+      "fLen": 0,
+      "width": 0,
+      "height": 0,
+      "isVideo": "0",
+      "metadataFileUrl": "https://storage11.openstreetcam.org/files/photo/2019/3/14/1352021_d875a_5c89a86ac13ca.txt"
+    },
+    {
+      "sequence_id": "64882",
+      "hFoV": 0.0,
+      "vFoV": 0.0,
+      "fLen": 0,
+      "width": 0,
+      "height": 0,
+      "isVideo": "1",
+      "metadataFileUrl": "https://storage3.openstreetcam.org/files/photo/2017/3/25/64882_d875a_58d5d3f54b3d3.txt"
+    },
+    {
+      "sequence_id": "66645",
+      "hFoV": 0.0,
+      "vFoV": 0.0,
+      "fLen": 0,
+      "width": 0,
+      "height": 0,
+      "isVideo": "1",
+      "metadataFileUrl": "https://storage3.openstreetcam.org/files/photo/2017/4/2/66645_d875a_58e15ace68b3a.txt"
+    },
+    {
+      "sequence_id": "66058",
+      "hFoV": 0.0,
+      "vFoV": 0.0,
+      "fLen": 0,
+      "width": 0,
+      "height": 0,
+      "isVideo": "1",
+      "metadataFileUrl": "https://storage3.openstreetcam.org/files/photo/2017/3/31/66058_d875a_58dd9130f09af.txt"
+    },
+    {
+      "sequence_id": "163094",
+      "hFoV": 0.0,
+      "vFoV": 0.0,
+      "fLen": 0,
+      "width": 0,
+      "height": 0,
+      "isVideo": "1",
+      "metadataFileUrl": "https://storage3.openstreetcam.org/files/photo/2017/4/27/163094_d875a_590247b5a3f95.txt"
+    },
+    {
+      "sequence_id": "2070958",
+      "hFoV": 0.0,
+      "vFoV": 0.0,
+      "fLen": 0,
+      "width": 0,
+      "height": 0,
+      "isVideo": "1",
+      "metadataFileUrl": "https://storage13.openstreetcam.org/files/photo/2020/1/9/2070958_d875a_5e1675bda62e3.txt"
+    },
+    {
+      "sequence_id": "1127915",
+      "hFoV": 0.0,
+      "vFoV": 0.0,
+      "fLen": 0,
+      "width": 0,
+      "height": 0,
+      "isVideo": "1",
+      "metadataFileUrl": "https://storage8.openstreetcam.org/files/photo/2018/2/20/1127915_d875a_5a8b68aa7c487.txt"
+    },
+    {
+      "sequence_id": "1356770",
+      "hFoV": 0.0,
+      "vFoV": 0.0,
+      "fLen": 0,
+      "width": 0,
+      "height": 0,
+      "isVideo": "0",
+      "metadataFileUrl": "https://storage11.openstreetcam.org/files/photo/2019/3/23/1356770_d875a_5c96935d61b42.txt"
+    },
+    {
+      "sequence_id": "164276",
+      "hFoV": 0.0,
+      "vFoV": 0.0,
+      "fLen": 0,
+      "width": 0,
+      "height": 0,
+      "isVideo": "1",
+      "metadataFileUrl": "https://storage3.openstreetcam.org/files/photo/2017/4/29/164276_d875a_590474370e11e.txt"
+    },
+    {
+      "sequence_id": "123327",
+      "hFoV": 0.0,
+      "vFoV": 0.0,
+      "fLen": 0,
+      "width": 0,
+      "height": 0,
+      "isVideo": "1",
+      "metadataFileUrl": "https://storage3.openstreetcam.org/files/photo/2017/4/20/123327_d875a_58f7f3c37bbeb.txt"
+    },
+    {
+      "sequence_id": "1540361",
+      "hFoV": 0.0,
+      "vFoV": 0.0,
+      "fLen": 0,
+      "width": 0,
+      "height": 0,
+      "isVideo": "1",
+      "metadataFileUrl": "https://storage11.openstreetcam.org/files/photo/2019/6/20/1540361_d875a_5d0ba2a391f0c.txt"
+    },
+    {
+      "sequence_id": "163254",
+      "hFoV": 0.0,
+      "vFoV": 0.0,
+      "fLen": 0,
+      "width": 0,
+      "height": 0,
+      "isVideo": "0",
+      "metadataFileUrl": "https://storage3.openstreetcam.org/files/photo/2017/4/28/163254_d875a_5902e23e8b2a3.txt"
+    },
+    {
+      "sequence_id": "331562",
+      "hFoV": 0.0,
+      "vFoV": 0.0,
+      "fLen": 0,
+      "width": 0,
+      "height": 0,
+      "isVideo": "1",
+      "metadataFileUrl": "https://storage3.openstreetcam.org/files/photo/2017/5/21/331562_d875a_592142c86e20b.txt"
+    },
+    {
+      "sequence_id": "367398",
+      "hFoV": 0.0,
+      "vFoV": 0.0,
+      "fLen": 0,
+      "width": 0,
+      "height": 0,
+      "isVideo": "1",
+      "metadataFileUrl": "https://storage4.openstreetcam.org/files/photo/2017/5/27/367398_d875a_5928b46824c2a.txt"
+    },
+    {
+      "sequence_id": "164269",
+      "hFoV": 0.0,
+      "vFoV": 0.0,
+      "fLen": 0,
+      "width": 0,
+      "height": 0,
+      "isVideo": "1",
+      "metadataFileUrl": "https://storage3.openstreetcam.org/files/photo/2017/4/29/164269_d875a_59044aa47ee37.txt"
+    },
+    {
+      "sequence_id": "331008",
+      "hFoV": 0.0,
+      "vFoV": 0.0,
+      "fLen": 0,
+      "width": 0,
+      "height": 0,
+      "isVideo": "1",
+      "metadataFileUrl": "https://storage3.openstreetcam.org/files/photo/2017/5/20/331008_16905_591ff10718263.txt"
+    },
+    {
+      "sequence_id": "292815",
+      "hFoV": 0.0,
+      "vFoV": 0.0,
+      "fLen": 0,
+      "width": 0,
+      "height": 0,
+      "isVideo": "0",
+      "metadataFileUrl": "https://storage4.openstreetcam.org/files/photo/2017/5/17/292815_d875a_591b87bc93782.txt"
+    },
+    {
+      "sequence_id": "163856",
+      "hFoV": 0.0,
+      "vFoV": 0.0,
+      "fLen": 0,
+      "width": 0,
+      "height": 0,
+      "isVideo": "1",
+      "metadataFileUrl": "https://storage3.openstreetcam.org/files/photo/2017/4/29/163856_d875a_5903cfc58cc93.txt"
+    },
+    {
+      "sequence_id": "292629",
+      "hFoV": 0.0,
+      "vFoV": 0.0,
+      "fLen": 0,
+      "width": 0,
+      "height": 0,
+      "isVideo": "1",
+      "metadataFileUrl": "https://storage3.openstreetcam.org/files/photo/2017/5/16/292629_d875a_591b42c5d46c6.txt"
+    },
+    {
+      "sequence_id": "164251",
+      "hFoV": 0.0,
+      "vFoV": 0.0,
+      "fLen": 0,
+      "width": 0,
+      "height": 0,
+      "isVideo": "1",
+      "metadataFileUrl": "https://storage3.openstreetcam.org/files/photo/2017/4/29/164251_d875a_590426eab91d9.txt"
+    },
+    {
+      "sequence_id": "124962",
+      "hFoV": 0.0,
+      "vFoV": 0.0,
+      "fLen": 0,
+      "width": 0,
+      "height": 0,
+      "isVideo": "1",
+      "metadataFileUrl": "https://storage3.openstreetcam.org/files/photo/2017/4/22/124962_d875a_58fba8417947a.txt"
+    },
+    {
+      "sequence_id": "1326321",
+      "hFoV": 0.0,
+      "vFoV": 0.0,
+      "fLen": 0,
+      "width": 0,
+      "height": 0,
+      "isVideo": "0",
+      "metadataFileUrl": "https://storage3.openstreetcam.org/files/photo/2019/1/17/1326321_d875a_5c3ff5c820488.txt"
+    },
+    {
+      "sequence_id": "315055",
+      "hFoV": 0.0,
+      "vFoV": 0.0,
+      "fLen": 0,
+      "width": 0,
+      "height": 0,
+      "isVideo": "1",
+      "metadataFileUrl": "https://storage3.openstreetcam.org/files/photo/2017/5/19/315055_d875a_591e28f57f157.txt"
+    },
+    {
+      "sequence_id": "1127105",
+      "hFoV": 0.0,
+      "vFoV": 0.0,
+      "fLen": 0,
+      "width": 0,
+      "height": 0,
+      "isVideo": "1",
+      "metadataFileUrl": "https://storage8.openstreetcam.org/files/photo/2018/2/17/1127105_d875a_5a8775fc99dc0.txt"
+    },
+    {
+      "sequence_id": "469926",
+      "hFoV": 0.0,
+      "vFoV": 0.0,
+      "fLen": 0,
+      "width": 0,
+      "height": 0,
+      "isVideo": "1",
+      "metadataFileUrl": "https://storage5.openstreetcam.org/files/photo/2017/6/18/469926_16905_5946456fd98fe.txt"
+    },
+    {
+      "sequence_id": "467137",
+      "hFoV": 0.0,
+      "vFoV": 0.0,
+      "fLen": 0,
+      "width": 0,
+      "height": 0,
+      "isVideo": "1",
+      "metadataFileUrl": "https://storage4.openstreetcam.org/files/photo/2017/6/12/467137_d875a_593ed58eba63f.txt"
+    },
+    {
+      "sequence_id": "1253805",
+      "hFoV": 0.0,
+      "vFoV": 0.0,
+      "fLen": 0,
+      "width": 0,
+      "height": 0,
+      "isVideo": "1",
+      "metadataFileUrl": "https://storage8.openstreetcam.org/files/photo/2018/6/22/1253805_d875a_5b2c335e6ce95.txt"
+    },
+    {
+      "sequence_id": "494835",
+      "hFoV": 0.0,
+      "vFoV": 0.0,
+      "fLen": 0,
+      "width": 0,
+      "height": 0,
+      "isVideo": "1",
+      "metadataFileUrl": "https://storage5.openstreetcam.org/files/photo/2017/7/22/494835_d875a_5972946d0e3e9.txt"
+    },
+    {
+      "sequence_id": "366106",
+      "hFoV": 0.0,
+      "vFoV": 0.0,
+      "fLen": 0,
+      "width": 0,
+      "height": 0,
+      "isVideo": "1",
+      "metadataFileUrl": "https://storage3.openstreetcam.org/files/photo/2017/5/24/366106_16905_5925d551e73f6.txt"
+    },
+    {
+      "sequence_id": "1298537",
+      "hFoV": 0.0,
+      "vFoV": 0.0,
+      "fLen": 0,
+      "width": 0,
+      "height": 0,
+      "isVideo": "0",
+      "metadataFileUrl": "https://storage9.openstreetcam.org/files/photo/2018/10/14/1298537_5bc2d5df7fa08.txt"
+    },
+    {
+      "sequence_id": "165158",
+      "hFoV": 0.0,
+      "vFoV": 0.0,
+      "fLen": 0,
+      "width": 0,
+      "height": 0,
+      "isVideo": "1",
+      "metadataFileUrl": "https://storage3.openstreetcam.org/files/photo/2017/5/2/165158_d875a_5908e6f25e330.txt"
+    },
+    {
+      "sequence_id": "499697",
+      "hFoV": 0.0,
+      "vFoV": 0.0,
+      "fLen": 0,
+      "width": 0,
+      "height": 0,
+      "isVideo": "1",
+      "metadataFileUrl": "https://storage5.openstreetcam.org/files/photo/2017/7/26/499697_351f7_5977d0869ea9e.txt"
+    },
+    {
+      "sequence_id": "464948",
+      "hFoV": 0.0,
+      "vFoV": 0.0,
+      "fLen": 0,
+      "width": 0,
+      "height": 0,
+      "isVideo": "1",
+      "metadataFileUrl": "https://storage4.openstreetcam.org/files/photo/2017/6/8/464948_16905_5938dcfee3589.txt"
+    },
+    {
+      "sequence_id": "494821",
+      "hFoV": 0.0,
+      "vFoV": 0.0,
+      "fLen": 0,
+      "width": 0,
+      "height": 0,
+      "isVideo": "1",
+      "metadataFileUrl": "https://storage5.openstreetcam.org/files/photo/2017/7/22/494821_351f7_59729232e5267.txt"
+    },
+    {
+      "sequence_id": "1254293",
+      "hFoV": 0.0,
+      "vFoV": 0.0,
+      "fLen": 0,
+      "width": 0,
+      "height": 0,
+      "isVideo": "1",
+      "metadataFileUrl": "https://storage1.openstreetcam.org/files/photo/2018/6/23/1254293_d875a_5b2dface364b3.txt"
+    },
+    {
+      "sequence_id": "469904",
+      "hFoV": 0.0,
+      "vFoV": 0.0,
+      "fLen": 0,
+      "width": 0,
+      "height": 0,
+      "isVideo": "1",
+      "metadataFileUrl": "https://storage5.openstreetcam.org/files/photo/2017/6/18/469904_16905_59462fe7a61ba.txt"
+    },
+    {
+      "sequence_id": "531685",
+      "hFoV": 0.0,
+      "vFoV": 0.0,
+      "fLen": 0,
+      "width": 0,
+      "height": 0,
+      "isVideo": "1",
+      "metadataFileUrl": "https://storage6.openstreetcam.org/files/photo/2017/8/19/531685_351f7_59978ce5972db.txt"
+    },
+    {
+      "sequence_id": "492367",
+      "hFoV": 0.0,
+      "vFoV": 0.0,
+      "fLen": 0,
+      "width": 0,
+      "height": 0,
+      "isVideo": "1",
+      "metadataFileUrl": "https://storage5.openstreetcam.org/files/photo/2017/7/20/492367_351f7_59700e571d305.txt"
+    },
+    {
+      "sequence_id": "444032",
+      "hFoV": 0.0,
+      "vFoV": 0.0,
+      "fLen": 0,
+      "width": 0,
+      "height": 0,
+      "isVideo": "1",
+      "metadataFileUrl": "https://storage4.openstreetcam.org/files/photo/2017/6/4/444032_351f7_5933c41932306.txt"
+    },
+    {
+      "sequence_id": "478427",
+      "hFoV": 0.0,
+      "vFoV": 0.0,
+      "fLen": 0,
+      "width": 0,
+      "height": 0,
+      "isVideo": "1",
+      "metadataFileUrl": "https://storage5.openstreetcam.org/files/photo/2017/7/5/478427_d875a_595ce4d471c35.txt"
+    },
+    {
+      "sequence_id": "396601",
+      "hFoV": 0.0,
+      "vFoV": 0.0,
+      "fLen": 0,
+      "width": 0,
+      "height": 0,
+      "isVideo": "1",
+      "metadataFileUrl": "https://storage7.openstreetcam.org/files/photo/2017/5/30/396601_d875a_592cad7d2b9d2.txt"
+    },
+    {
+      "sequence_id": "607981",
+      "hFoV": 0.0,
+      "vFoV": 0.0,
+      "fLen": 0,
+      "width": 0,
+      "height": 0,
+      "isVideo": "1",
+      "metadataFileUrl": "https://storage6.openstreetcam.org/files/photo/2017/9/16/607981_351f7_59bc6ebc013c4.txt"
+    },
+    {
+      "sequence_id": "582373",
+      "hFoV": 0.0,
+      "vFoV": 0.0,
+      "fLen": 0,
+      "width": 0,
+      "height": 0,
+      "isVideo": "1",
+      "metadataFileUrl": "https://storage6.openstreetcam.org/files/photo/2017/9/8/582373_d875a_59b1eaa818540.txt"
+    },
+    {
+      "sequence_id": "491011",
+      "hFoV": 0.0,
+      "vFoV": 0.0,
+      "fLen": 0,
+      "width": 0,
+      "height": 0,
+      "isVideo": "1",
+      "metadataFileUrl": "https://storage5.openstreetcam.org/files/photo/2017/7/19/491011_16905_596ed060c4c8f.txt"
+    },
+    {
+      "sequence_id": "494831",
+      "hFoV": 0.0,
+      "vFoV": 0.0,
+      "fLen": 0,
+      "width": 0,
+      "height": 0,
+      "isVideo": "1",
+      "metadataFileUrl": "https://storage5.openstreetcam.org/files/photo/2017/7/22/494831_351f7_5972939829de8.txt"
+    },
+    {
+      "sequence_id": "494961",
+      "hFoV": 0.0,
+      "vFoV": 0.0,
+      "fLen": 0,
+      "width": 0,
+      "height": 0,
+      "isVideo": "1",
+      "metadataFileUrl": "https://storage5.openstreetcam.org/files/photo/2017/7/22/494961_351f7_5972a30a26354.txt"
+    },
+    {
+      "sequence_id": "476240",
+      "hFoV": 0.0,
+      "vFoV": 0.0,
+      "fLen": 0,
+      "width": 0,
+      "height": 0,
+      "isVideo": "1",
+      "metadataFileUrl": "https://storage5.openstreetcam.org/files/photo/2017/6/30/476240_d875a_5956b188d34ea.txt"
+    },
+    {
+      "sequence_id": "1163965",
+      "hFoV": 0.0,
+      "vFoV": 0.0,
+      "fLen": 0,
+      "width": 0,
+      "height": 0,
+      "isVideo": "1",
+      "metadataFileUrl": "https://storage8.openstreetcam.org/files/photo/2018/4/11/1163965_351f7_5acd584735130.txt"
+    }
+  ]
+}
