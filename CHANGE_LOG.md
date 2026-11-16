@@ -1718,3 +1718,21 @@ Newest entries last. Each milestone gets a dated entry that matches the roadmap 
 - P68 audit reports and FOV script are on `main`.
 - No tag or release was created.
 - Dashboard: **GREEN**.
+
+### P69 street-tree detector and trunk-base audit start
+
+- Created parent issue #328 and branch `feature/p69-trunk-audit`.
+- Scope: 200-candidate mask audit, open promptable segmentation trial, and a sample-only
+  confidence layer. Canonical data remains unchanged.
+
+### P69 detector and trunk-base audit
+
+- Audited 200 stratified candidates: median tree-mask coverage 0.703; 42/200 boxes below
+  half tree pixels; only 87/200 bottom-centre pixels labelled tree.
+- Multi-view candidates had better bottom-centre tree share (51/100 vs 36/100) but no
+  inventory-match advantage at 8 m.
+- Grounding DINO `tree trunk` trial found trunks in 20/20 images but only 3/20 best boxes
+  overlapped the current candidate; not integrated.
+- Published an external multi-view subset (8,608 candidates); canonical 19,790-feature layer
+  unchanged.
+- No release, tag, or canonical overwrite. P69 PR #329 is open for approval.

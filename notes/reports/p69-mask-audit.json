@@ -1,0 +1,3761 @@
+{
+  "schema_version": "fresh-urban-forest.street-tree-mask-audit.v1",
+  "phase": "P69",
+  "requested_samples": 200,
+  "sample_count": 200,
+  "stratum_targets": {
+    "single_matched": 50,
+    "single_unmatched": 50,
+    "multi_matched": 50,
+    "multi_unmatched": 50
+  },
+  "stratum_actual": {
+    "single_matched": 50,
+    "single_unmatched": 50,
+    "multi_matched": 50,
+    "multi_unmatched": 50
+  },
+  "tree_mask_fraction": {
+    "min": 0.0,
+    "median": 0.703,
+    "p25": 0.548,
+    "p75": 0.849,
+    "max": 1.0,
+    "below_0_25": 11,
+    "below_0_50": 42
+  },
+  "bottom_centre_label_counts": {
+    "tree": 87,
+    "building": 27,
+    "car": 21,
+    "sky": 14,
+    "sidewalk, pavement": 10,
+    "plant": 8,
+    "fence": 7,
+    "grass": 7,
+    "road, route": 6,
+    "person": 3,
+    "earth, ground": 3,
+    "signboard, sign": 1,
+    "wall": 1,
+    "truck": 1,
+    "rail": 1,
+    "bus": 1,
+    "street lamp": 1,
+    "traffic light": 1
+  },
+  "samples": [
+    {
+      "candidate_id": "street:100251659:5",
+      "stratum": "single_matched",
+      "image_id": "100251659",
+      "view_count": 1,
+      "score": 0.95,
+      "uncertainty_m": 3.0,
+      "nearest_inventory_m": 5.72,
+      "depth_m": 25.13,
+      "box_area_fraction": 0.02232,
+      "tree_mask_fraction": 0.591,
+      "bottom_label": "building",
+      "label_fractions": {
+        "tree": 0.591,
+        "building": 0.34,
+        "sky": 0.069
+      }
+    },
+    {
+      "candidate_id": "street:100251659:1",
+      "stratum": "single_unmatched",
+      "image_id": "100251659",
+      "view_count": 1,
+      "score": 0.6232,
+      "uncertainty_m": 3.274,
+      "nearest_inventory_m": 11.03,
+      "depth_m": 2.78,
+      "box_area_fraction": 0.00987,
+      "tree_mask_fraction": 0.849,
+      "bottom_label": "tree",
+      "label_fractions": {
+        "tree": 0.849,
+        "building": 0.151
+      }
+    },
+    {
+      "candidate_id": "street:103700009:205",
+      "stratum": "single_matched",
+      "image_id": "103700009",
+      "view_count": 1,
+      "score": 0.7213,
+      "uncertainty_m": 5.38,
+      "nearest_inventory_m": 4.44,
+      "depth_m": 39.86,
+      "box_area_fraction": 0.00887,
+      "tree_mask_fraction": 0.534,
+      "bottom_label": "car",
+      "label_fractions": {
+        "tree": 0.534,
+        "mountain, mount": 0.227,
+        "building": 0.142,
+        "car": 0.083,
+        "road, route": 0.011
+      }
+    },
+    {
+      "candidate_id": "street:104256205:16815",
+      "stratum": "multi_unmatched",
+      "image_id": "104256205",
+      "view_count": 6,
+      "score": 0.95,
+      "uncertainty_m": 7.862,
+      "nearest_inventory_m": 16.36,
+      "depth_m": 15.6,
+      "box_area_fraction": 0.05633,
+      "tree_mask_fraction": 0.877,
+      "bottom_label": "tree",
+      "label_fractions": {
+        "tree": 0.877,
+        "sky": 0.123
+      }
+    },
+    {
+      "candidate_id": "street:100429095:253",
+      "stratum": "multi_matched",
+      "image_id": "105452847",
+      "view_count": 2,
+      "score": 0.95,
+      "uncertainty_m": 5.857,
+      "nearest_inventory_m": 5.32,
+      "depth_m": 10.3,
+      "box_area_fraction": 0.02628,
+      "tree_mask_fraction": 1.0,
+      "bottom_label": "tree",
+      "label_fractions": {
+        "tree": 1.0
+      }
+    },
+    {
+      "candidate_id": "street:108858427:286",
+      "stratum": "multi_unmatched",
+      "image_id": "108858427",
+      "view_count": 2,
+      "score": 0.95,
+      "uncertainty_m": 4.78,
+      "nearest_inventory_m": 15.72,
+      "depth_m": 14.59,
+      "box_area_fraction": 0.02013,
+      "tree_mask_fraction": 0.864,
+      "bottom_label": "tree",
+      "label_fractions": {
+        "tree": 0.864,
+        "sky": 0.136
+      }
+    },
+    {
+      "candidate_id": "street:111284481:296",
+      "stratum": "single_unmatched",
+      "image_id": "111284481",
+      "view_count": 1,
+      "score": 0.95,
+      "uncertainty_m": 3.0,
+      "nearest_inventory_m": 20.21,
+      "depth_m": 53.54,
+      "box_area_fraction": 0.1073,
+      "tree_mask_fraction": 0.855,
+      "bottom_label": "sidewalk, pavement",
+      "label_fractions": {
+        "tree": 0.855,
+        "sky": 0.072,
+        "house": 0.022,
+        "plant": 0.011,
+        "building": 0.009
+      }
+    },
+    {
+      "candidate_id": "street:122683585:468",
+      "stratum": "single_matched",
+      "image_id": "122683585",
+      "view_count": 1,
+      "score": 0.95,
+      "uncertainty_m": 4.762,
+      "nearest_inventory_m": 5.74,
+      "depth_m": 26.96,
+      "box_area_fraction": 0.06159,
+      "tree_mask_fraction": 0.562,
+      "bottom_label": "tree",
+      "label_fractions": {
+        "tree": 0.562,
+        "sky": 0.415,
+        "building": 0.023
+      }
+    },
+    {
+      "candidate_id": "street:129791267:594",
+      "stratum": "single_unmatched",
+      "image_id": "129791267",
+      "view_count": 1,
+      "score": 0.95,
+      "uncertainty_m": 3.651,
+      "nearest_inventory_m": 16.49,
+      "depth_m": 20.41,
+      "box_area_fraction": 0.05893,
+      "tree_mask_fraction": 0.8,
+      "bottom_label": "fence",
+      "label_fractions": {
+        "tree": 0.8,
+        "sky": 0.173,
+        "plant": 0.021,
+        "fence": 0.005,
+        "wall": 0.0
+      }
+    },
+    {
+      "candidate_id": "street:129792257:850",
+      "stratum": "multi_matched",
+      "image_id": "129792257",
+      "view_count": 4,
+      "score": 0.95,
+      "uncertainty_m": 8.741,
+      "nearest_inventory_m": 7.13,
+      "depth_m": 23.94,
+      "box_area_fraction": 0.01227,
+      "tree_mask_fraction": 0.813,
+      "bottom_label": "tree",
+      "label_fractions": {
+        "tree": 0.813,
+        "street lamp": 0.094,
+        "sky": 0.092
+      }
+    },
+    {
+      "candidate_id": "street:137203701:677",
+      "stratum": "single_matched",
+      "image_id": "137203701",
+      "view_count": 1,
+      "score": 0.95,
+      "uncertainty_m": 5.249,
+      "nearest_inventory_m": 7.46,
+      "depth_m": 8.24,
+      "box_area_fraction": 0.01206,
+      "tree_mask_fraction": 0.856,
+      "bottom_label": "tree",
+      "label_fractions": {
+        "tree": 0.856,
+        "road, route": 0.144
+      }
+    },
+    {
+      "candidate_id": "street:137207685:18660",
+      "stratum": "multi_unmatched",
+      "image_id": "137207685",
+      "view_count": 4,
+      "score": 0.95,
+      "uncertainty_m": 4.86,
+      "nearest_inventory_m": 8.92,
+      "depth_m": 26.79,
+      "box_area_fraction": 0.03329,
+      "tree_mask_fraction": 1.0,
+      "bottom_label": "tree",
+      "label_fractions": {
+        "tree": 1.0
+      }
+    },
+    {
+      "candidate_id": "street:151838643:888",
+      "stratum": "single_unmatched",
+      "image_id": "151838643",
+      "view_count": 1,
+      "score": 0.8338,
+      "uncertainty_m": 7.926,
+      "nearest_inventory_m": 20.97,
+      "depth_m": 37.44,
+      "box_area_fraction": 0.01001,
+      "tree_mask_fraction": 0.349,
+      "bottom_label": "tree",
+      "label_fractions": {
+        "tree": 0.349,
+        "sky": 0.348,
+        "signboard, sign": 0.177,
+        "traffic light": 0.126
+      }
+    },
+    {
+      "candidate_id": "street:153728765:1199",
+      "stratum": "multi_matched",
+      "image_id": "153728765",
+      "view_count": 3,
+      "score": 0.95,
+      "uncertainty_m": 8.051,
+      "nearest_inventory_m": 5.69,
+      "depth_m": 11.06,
+      "box_area_fraction": 0.05319,
+      "tree_mask_fraction": 0.659,
+      "bottom_label": "building",
+      "label_fractions": {
+        "tree": 0.659,
+        "building": 0.177,
+        "sky": 0.094,
+        "street lamp": 0.071
+      }
+    },
+    {
+      "candidate_id": "street:155264607:943",
+      "stratum": "single_matched",
+      "image_id": "155264607",
+      "view_count": 1,
+      "score": 0.95,
+      "uncertainty_m": 3.0,
+      "nearest_inventory_m": 7.63,
+      "depth_m": 43.53,
+      "box_area_fraction": 0.0514,
+      "tree_mask_fraction": 0.602,
+      "bottom_label": "grass",
+      "label_fractions": {
+        "tree": 0.602,
+        "sky": 0.34,
+        "car": 0.04,
+        "grass": 0.006,
+        "plant": 0.005
+      }
+    },
+    {
+      "candidate_id": "street:1615057609:8785",
+      "stratum": "multi_matched",
+      "image_id": "1615057609",
+      "view_count": 3,
+      "score": 0.95,
+      "uncertainty_m": 8.328,
+      "nearest_inventory_m": 6.14,
+      "depth_m": 66.62,
+      "box_area_fraction": 0.02664,
+      "tree_mask_fraction": 0.723,
+      "bottom_label": "road, route",
+      "label_fractions": {
+        "tree": 0.723,
+        "sky": 0.091,
+        "road, route": 0.078,
+        "mountain, mount": 0.046,
+        "street lamp": 0.035
+      }
+    },
+    {
+      "candidate_id": "street:164819055:1065",
+      "stratum": "multi_unmatched",
+      "image_id": "164819055",
+      "view_count": 2,
+      "score": 0.95,
+      "uncertainty_m": 6.903,
+      "nearest_inventory_m": 11.44,
+      "depth_m": 27.45,
+      "box_area_fraction": 0.06834,
+      "tree_mask_fraction": 0.853,
+      "bottom_label": "tree",
+      "label_fractions": {
+        "tree": 0.853,
+        "sky": 0.147
+      }
+    },
+    {
+      "candidate_id": "street:170539047:1178",
+      "stratum": "single_unmatched",
+      "image_id": "170539047",
+      "view_count": 1,
+      "score": 0.796,
+      "uncertainty_m": 3.0,
+      "nearest_inventory_m": 59.81,
+      "depth_m": 41.6,
+      "box_area_fraction": 0.01611,
+      "tree_mask_fraction": 0.423,
+      "bottom_label": "tree",
+      "label_fractions": {
+        "sky": 0.439,
+        "tree": 0.423,
+        "pole": 0.125,
+        "street lamp": 0.012,
+        "building": 0.0
+      }
+    },
+    {
+      "candidate_id": "street:175067073:11888",
+      "stratum": "multi_unmatched",
+      "image_id": "175067073",
+      "view_count": 3,
+      "score": 0.95,
+      "uncertainty_m": 8.07,
+      "nearest_inventory_m": 21.66,
+      "depth_m": 31.71,
+      "box_area_fraction": 0.02518,
+      "tree_mask_fraction": 0.429,
+      "bottom_label": "tree",
+      "label_fractions": {
+        "sky": 0.571,
+        "tree": 0.429
+      }
+    },
+    {
+      "candidate_id": "street:176111727:1263",
+      "stratum": "single_matched",
+      "image_id": "176111727",
+      "view_count": 1,
+      "score": 0.95,
+      "uncertainty_m": 3.0,
+      "nearest_inventory_m": 7.89,
+      "depth_m": 35.01,
+      "box_area_fraction": 0.03232,
+      "tree_mask_fraction": 0.703,
+      "bottom_label": "building",
+      "label_fractions": {
+        "tree": 0.703,
+        "sky": 0.208,
+        "building": 0.065,
+        "street lamp": 0.023
+      }
+    },
+    {
+      "candidate_id": "street:176708007:15955",
+      "stratum": "multi_matched",
+      "image_id": "176708007",
+      "view_count": 2,
+      "score": 0.95,
+      "uncertainty_m": 7.994,
+      "nearest_inventory_m": 7.44,
+      "depth_m": 25.07,
+      "box_area_fraction": 0.02591,
+      "tree_mask_fraction": 0.351,
+      "bottom_label": "building",
+      "label_fractions": {
+        "building": 0.572,
+        "tree": 0.351,
+        "signboard, sign": 0.059,
+        "house": 0.018
+      }
+    },
+    {
+      "candidate_id": "street:179374083:12345",
+      "stratum": "multi_unmatched",
+      "image_id": "179374083",
+      "view_count": 4,
+      "score": 0.95,
+      "uncertainty_m": 8.135,
+      "nearest_inventory_m": 24.83,
+      "depth_m": 19.7,
+      "box_area_fraction": 0.00642,
+      "tree_mask_fraction": 0.592,
+      "bottom_label": "plant",
+      "label_fractions": {
+        "tree": 0.592,
+        "building": 0.153,
+        "plant": 0.145,
+        "signboard, sign": 0.111
+      }
+    },
+    {
+      "candidate_id": "street:179871395:1495",
+      "stratum": "single_unmatched",
+      "image_id": "179871395",
+      "view_count": 1,
+      "score": 0.95,
+      "uncertainty_m": 8.483,
+      "nearest_inventory_m": 30.4,
+      "depth_m": 20.14,
+      "box_area_fraction": 0.01192,
+      "tree_mask_fraction": 0.827,
+      "bottom_label": "tree",
+      "label_fractions": {
+        "tree": 0.827,
+        "street lamp": 0.108,
+        "sky": 0.062,
+        "pole": 0.003
+      }
+    },
+    {
+      "candidate_id": "street:181629707:1515",
+      "stratum": "single_matched",
+      "image_id": "181629707",
+      "view_count": 1,
+      "score": 0.95,
+      "uncertainty_m": 4.889,
+      "nearest_inventory_m": 6.66,
+      "depth_m": 21.2,
+      "box_area_fraction": 0.06333,
+      "tree_mask_fraction": 0.389,
+      "bottom_label": "sidewalk, pavement",
+      "label_fractions": {
+        "tree": 0.389,
+        "building": 0.368,
+        "plant": 0.137,
+        "sky": 0.047,
+        "sidewalk, pavement": 0.026
+      }
+    },
+    {
+      "candidate_id": "street:202191827:1766",
+      "stratum": "single_matched",
+      "image_id": "202191827",
+      "view_count": 1,
+      "score": 0.95,
+      "uncertainty_m": 7.841,
+      "nearest_inventory_m": 2.93,
+      "depth_m": 27.72,
+      "box_area_fraction": 0.02604,
+      "tree_mask_fraction": 0.789,
+      "bottom_label": "tree",
+      "label_fractions": {
+        "tree": 0.789,
+        "sky": 0.211
+      }
+    },
+    {
+      "candidate_id": "street:202480311:18525",
+      "stratum": "multi_matched",
+      "image_id": "202480311",
+      "view_count": 2,
+      "score": 0.95,
+      "uncertainty_m": 4.753,
+      "nearest_inventory_m": 7.2,
+      "depth_m": 37.73,
+      "box_area_fraction": 0.00457,
+      "tree_mask_fraction": 0.51,
+      "bottom_label": "signboard, sign",
+      "label_fractions": {
+        "tree": 0.51,
+        "signboard, sign": 0.291,
+        "sky": 0.198
+      }
+    },
+    {
+      "candidate_id": "street:20358745:1828",
+      "stratum": "single_unmatched",
+      "image_id": "20358745",
+      "view_count": 1,
+      "score": 0.4926,
+      "uncertainty_m": 4.353,
+      "nearest_inventory_m": 9.64,
+      "depth_m": 24.25,
+      "box_area_fraction": 0.00382,
+      "tree_mask_fraction": 0.688,
+      "bottom_label": "building",
+      "label_fractions": {
+        "tree": 0.688,
+        "building": 0.312
+      }
+    },
+    {
+      "candidate_id": "street:20366564:1971",
+      "stratum": "multi_unmatched",
+      "image_id": "20366564",
+      "view_count": 2,
+      "score": 0.95,
+      "uncertainty_m": 8.716,
+      "nearest_inventory_m": 9.27,
+      "depth_m": 17.75,
+      "box_area_fraction": 0.00691,
+      "tree_mask_fraction": 0.584,
+      "bottom_label": "sky",
+      "label_fractions": {
+        "tree": 0.584,
+        "sky": 0.416
+      }
+    },
+    {
+      "candidate_id": "street:212464329:10679",
+      "stratum": "multi_matched",
+      "image_id": "212464329",
+      "view_count": 2,
+      "score": 0.95,
+      "uncertainty_m": 7.225,
+      "nearest_inventory_m": 6.76,
+      "depth_m": 56.37,
+      "box_area_fraction": 0.0127,
+      "tree_mask_fraction": 0.671,
+      "bottom_label": "tree",
+      "label_fractions": {
+        "tree": 0.671,
+        "sky": 0.267,
+        "building": 0.061,
+        "street lamp": 0.0
+      }
+    },
+    {
+      "candidate_id": "street:215309289:2020",
+      "stratum": "single_matched",
+      "image_id": "215309289",
+      "view_count": 1,
+      "score": 0.4666,
+      "uncertainty_m": 3.943,
+      "nearest_inventory_m": 2.9,
+      "depth_m": 2.95,
+      "box_area_fraction": 0.00303,
+      "tree_mask_fraction": 0.597,
+      "bottom_label": "sky",
+      "label_fractions": {
+        "tree": 0.597,
+        "sky": 0.403
+      }
+    },
+    {
+      "candidate_id": "street:215317791:2590",
+      "stratum": "multi_unmatched",
+      "image_id": "215317791",
+      "view_count": 2,
+      "score": 0.95,
+      "uncertainty_m": 7.036,
+      "nearest_inventory_m": 40.75,
+      "depth_m": 23.93,
+      "box_area_fraction": 0.01583,
+      "tree_mask_fraction": 0.42,
+      "bottom_label": "building",
+      "label_fractions": {
+        "sky": 0.437,
+        "tree": 0.42,
+        "street lamp": 0.098,
+        "building": 0.045,
+        "signboard, sign": 0.0
+      }
+    },
+    {
+      "candidate_id": "street:220832897:2154",
+      "stratum": "single_unmatched",
+      "image_id": "220832897",
+      "view_count": 1,
+      "score": 0.95,
+      "uncertainty_m": 5.829,
+      "nearest_inventory_m": 11.78,
+      "depth_m": 27.5,
+      "box_area_fraction": 0.01119,
+      "tree_mask_fraction": 0.681,
+      "bottom_label": "wall",
+      "label_fractions": {
+        "tree": 0.681,
+        "wall": 0.166,
+        "sky": 0.153
+      }
+    },
+    {
+      "candidate_id": "street:22616524:12826",
+      "stratum": "multi_matched",
+      "image_id": "22616524",
+      "view_count": 8,
+      "score": 0.95,
+      "uncertainty_m": 8.908,
+      "nearest_inventory_m": 6.17,
+      "depth_m": 20.14,
+      "box_area_fraction": 0.00546,
+      "tree_mask_fraction": 0.485,
+      "bottom_label": "tree",
+      "label_fractions": {
+        "tree": 0.485,
+        "wall": 0.351,
+        "plant": 0.162,
+        "sidewalk, pavement": 0.002
+      }
+    },
+    {
+      "candidate_id": "street:226471999:2312",
+      "stratum": "single_matched",
+      "image_id": "226471999",
+      "view_count": 1,
+      "score": 0.4932,
+      "uncertainty_m": 3.0,
+      "nearest_inventory_m": 3.02,
+      "depth_m": 31.72,
+      "box_area_fraction": 0.00517,
+      "tree_mask_fraction": 0.774,
+      "bottom_label": "tree",
+      "label_fractions": {
+        "tree": 0.774,
+        "building": 0.226
+      }
+    },
+    {
+      "candidate_id": "street:22696601:2414",
+      "stratum": "single_unmatched",
+      "image_id": "22696601",
+      "view_count": 1,
+      "score": 0.95,
+      "uncertainty_m": 9.215,
+      "nearest_inventory_m": 10.32,
+      "depth_m": 21.0,
+      "box_area_fraction": 0.02699,
+      "tree_mask_fraction": 0.862,
+      "bottom_label": "building",
+      "label_fractions": {
+        "tree": 0.862,
+        "building": 0.138
+      }
+    },
+    {
+      "candidate_id": "street:22698333:19260",
+      "stratum": "multi_unmatched",
+      "image_id": "22698333",
+      "view_count": 7,
+      "score": 0.95,
+      "uncertainty_m": 7.029,
+      "nearest_inventory_m": 11.95,
+      "depth_m": 10.15,
+      "box_area_fraction": 0.00291,
+      "tree_mask_fraction": 0.665,
+      "bottom_label": "tree",
+      "label_fractions": {
+        "tree": 0.665,
+        "sky": 0.335
+      }
+    },
+    {
+      "candidate_id": "street:232303163:2621",
+      "stratum": "single_matched",
+      "image_id": "232303163",
+      "view_count": 1,
+      "score": 0.6165,
+      "uncertainty_m": 4.642,
+      "nearest_inventory_m": 2.45,
+      "depth_m": 22.85,
+      "box_area_fraction": 0.00486,
+      "tree_mask_fraction": 0.444,
+      "bottom_label": "tree",
+      "label_fractions": {
+        "sky": 0.556,
+        "tree": 0.444
+      }
+    },
+    {
+      "candidate_id": "street:102970479:182",
+      "stratum": "multi_matched",
+      "image_id": "233170043",
+      "view_count": 5,
+      "score": 0.95,
+      "uncertainty_m": 9.391,
+      "nearest_inventory_m": 5.77,
+      "depth_m": 12.93,
+      "box_area_fraction": 0.01302,
+      "tree_mask_fraction": 0.742,
+      "bottom_label": "plant",
+      "label_fractions": {
+        "tree": 0.742,
+        "plant": 0.091,
+        "mountain, mount": 0.07,
+        "building": 0.035,
+        "car": 0.034
+      }
+    },
+    {
+      "candidate_id": "street:233716595:2746",
+      "stratum": "single_unmatched",
+      "image_id": "233716595",
+      "view_count": 1,
+      "score": 0.95,
+      "uncertainty_m": 8.169,
+      "nearest_inventory_m": 21.29,
+      "depth_m": 12.38,
+      "box_area_fraction": 0.11993,
+      "tree_mask_fraction": 0.702,
+      "bottom_label": "plant",
+      "label_fractions": {
+        "tree": 0.702,
+        "plant": 0.138,
+        "building": 0.133,
+        "sky": 0.027
+      }
+    },
+    {
+      "candidate_id": "street:100266043:19492",
+      "stratum": "multi_matched",
+      "image_id": "23481001",
+      "view_count": 12,
+      "score": 0.95,
+      "uncertainty_m": 9.006,
+      "nearest_inventory_m": 4.18,
+      "depth_m": 17.42,
+      "box_area_fraction": 0.0172,
+      "tree_mask_fraction": 0.796,
+      "bottom_label": "tree",
+      "label_fractions": {
+        "tree": 0.796,
+        "sky": 0.204
+      }
+    },
+    {
+      "candidate_id": "street:23783692:2930",
+      "stratum": "single_matched",
+      "image_id": "23783692",
+      "view_count": 1,
+      "score": 0.95,
+      "uncertainty_m": 7.702,
+      "nearest_inventory_m": 2.61,
+      "depth_m": 24.16,
+      "box_area_fraction": 0.01975,
+      "tree_mask_fraction": 0.67,
+      "bottom_label": "sky",
+      "label_fractions": {
+        "tree": 0.67,
+        "sky": 0.322,
+        "building": 0.008
+      }
+    },
+    {
+      "candidate_id": "street:23997614:3053",
+      "stratum": "single_unmatched",
+      "image_id": "23997614",
+      "view_count": 1,
+      "score": 0.95,
+      "uncertainty_m": 8.395,
+      "nearest_inventory_m": 37.64,
+      "depth_m": 10.13,
+      "box_area_fraction": 0.14597,
+      "tree_mask_fraction": 0.497,
+      "bottom_label": "plant",
+      "label_fractions": {
+        "tree": 0.497,
+        "building": 0.231,
+        "sky": 0.22,
+        "plant": 0.052
+      }
+    },
+    {
+      "candidate_id": "street:194266833:6563",
+      "stratum": "multi_unmatched",
+      "image_id": "242101591",
+      "view_count": 6,
+      "score": 0.95,
+      "uncertainty_m": 5.976,
+      "nearest_inventory_m": 8.95,
+      "depth_m": 12.69,
+      "box_area_fraction": 0.0248,
+      "tree_mask_fraction": 0.41,
+      "bottom_label": "car",
+      "label_fractions": {
+        "tree": 0.41,
+        "sky": 0.312,
+        "car": 0.263,
+        "person": 0.015
+      }
+    },
+    {
+      "candidate_id": "street:155790977:18431",
+      "stratum": "multi_unmatched",
+      "image_id": "245087335",
+      "view_count": 6,
+      "score": 0.95,
+      "uncertainty_m": 8.187,
+      "nearest_inventory_m": 17.55,
+      "depth_m": 9.92,
+      "box_area_fraction": 0.05743,
+      "tree_mask_fraction": 0.458,
+      "bottom_label": "sidewalk, pavement",
+      "label_fractions": {
+        "tree": 0.458,
+        "plant": 0.375,
+        "grass": 0.108,
+        "sidewalk, pavement": 0.037,
+        "road, route": 0.022
+      }
+    },
+    {
+      "candidate_id": "street:24545838:3299",
+      "stratum": "single_matched",
+      "image_id": "24545838",
+      "view_count": 1,
+      "score": 0.8297,
+      "uncertainty_m": 5.285,
+      "nearest_inventory_m": 3.54,
+      "depth_m": 48.99,
+      "box_area_fraction": 0.01733,
+      "tree_mask_fraction": 0.315,
+      "bottom_label": "truck",
+      "label_fractions": {
+        "sky": 0.623,
+        "tree": 0.315,
+        "street lamp": 0.051,
+        "truck": 0.007,
+        "person": 0.002
+      }
+    },
+    {
+      "candidate_id": "street:24545876:3303",
+      "stratum": "single_unmatched",
+      "image_id": "24545876",
+      "view_count": 1,
+      "score": 0.95,
+      "uncertainty_m": 6.343,
+      "nearest_inventory_m": 13.01,
+      "depth_m": 31.49,
+      "box_area_fraction": 0.08278,
+      "tree_mask_fraction": 0.651,
+      "bottom_label": "tree",
+      "label_fractions": {
+        "tree": 0.651,
+        "sky": 0.309,
+        "traffic light": 0.03,
+        "signboard, sign": 0.007,
+        "street lamp": 0.003
+      }
+    },
+    {
+      "candidate_id": "street:24818304:8735",
+      "stratum": "multi_matched",
+      "image_id": "24818304",
+      "view_count": 3,
+      "score": 0.95,
+      "uncertainty_m": 7.078,
+      "nearest_inventory_m": 3.49,
+      "depth_m": 34.52,
+      "box_area_fraction": 0.02765,
+      "tree_mask_fraction": 0.554,
+      "bottom_label": "building",
+      "label_fractions": {
+        "tree": 0.554,
+        "sky": 0.377,
+        "building": 0.036,
+        "street lamp": 0.032
+      }
+    },
+    {
+      "candidate_id": "street:25404882:3586",
+      "stratum": "single_unmatched",
+      "image_id": "25404882",
+      "view_count": 1,
+      "score": 0.95,
+      "uncertainty_m": 8.762,
+      "nearest_inventory_m": 18.75,
+      "depth_m": 36.26,
+      "box_area_fraction": 0.01243,
+      "tree_mask_fraction": 0.744,
+      "bottom_label": "tree",
+      "label_fractions": {
+        "tree": 0.744,
+        "building": 0.149,
+        "sky": 0.048,
+        "clock": 0.037,
+        "traffic light": 0.021
+      }
+    },
+    {
+      "candidate_id": "street:255421875:3591",
+      "stratum": "single_matched",
+      "image_id": "255421875",
+      "view_count": 1,
+      "score": 0.95,
+      "uncertainty_m": 3.0,
+      "nearest_inventory_m": 5.6,
+      "depth_m": 17.2,
+      "box_area_fraction": 0.12631,
+      "tree_mask_fraction": 0.879,
+      "bottom_label": "plant",
+      "label_fractions": {
+        "tree": 0.879,
+        "plant": 0.069,
+        "car": 0.034,
+        "wall": 0.012,
+        "building": 0.004
+      }
+    },
+    {
+      "candidate_id": "street:259134833:10714",
+      "stratum": "multi_matched",
+      "image_id": "259134833",
+      "view_count": 2,
+      "score": 0.95,
+      "uncertainty_m": 6.797,
+      "nearest_inventory_m": 2.17,
+      "depth_m": 24.21,
+      "box_area_fraction": 0.04293,
+      "tree_mask_fraction": 0.648,
+      "bottom_label": "tree",
+      "label_fractions": {
+        "tree": 0.648,
+        "building": 0.143,
+        "plant": 0.069,
+        "car": 0.064,
+        "fence": 0.047
+      }
+    },
+    {
+      "candidate_id": "street:26820046:3880",
+      "stratum": "single_matched",
+      "image_id": "26820046",
+      "view_count": 1,
+      "score": 0.95,
+      "uncertainty_m": 5.858,
+      "nearest_inventory_m": 3.46,
+      "depth_m": 33.94,
+      "box_area_fraction": 0.01419,
+      "tree_mask_fraction": 0.902,
+      "bottom_label": "sidewalk, pavement",
+      "label_fractions": {
+        "tree": 0.902,
+        "sky": 0.062,
+        "wall": 0.021,
+        "car": 0.011,
+        "sidewalk, pavement": 0.004
+      }
+    },
+    {
+      "candidate_id": "street:269318573:3940",
+      "stratum": "single_unmatched",
+      "image_id": "269318573",
+      "view_count": 1,
+      "score": 0.95,
+      "uncertainty_m": 4.332,
+      "nearest_inventory_m": 13.75,
+      "depth_m": 9.33,
+      "box_area_fraction": 0.02994,
+      "tree_mask_fraction": 0.788,
+      "bottom_label": "car",
+      "label_fractions": {
+        "tree": 0.788,
+        "sky": 0.096,
+        "car": 0.064,
+        "building": 0.052,
+        "house": 0.0
+      }
+    },
+    {
+      "candidate_id": "street:104372599:4217",
+      "stratum": "multi_matched",
+      "image_id": "28349942",
+      "view_count": 3,
+      "score": 0.934,
+      "uncertainty_m": 7.609,
+      "nearest_inventory_m": 2.16,
+      "depth_m": 17.62,
+      "box_area_fraction": 0.01151,
+      "tree_mask_fraction": 0.661,
+      "bottom_label": "tree",
+      "label_fractions": {
+        "tree": 0.661,
+        "sky": 0.339
+      }
+    },
+    {
+      "candidate_id": "street:28353320:4265",
+      "stratum": "single_unmatched",
+      "image_id": "28353320",
+      "view_count": 1,
+      "score": 0.95,
+      "uncertainty_m": 3.0,
+      "nearest_inventory_m": 29.89,
+      "depth_m": 46.56,
+      "box_area_fraction": 0.02983,
+      "tree_mask_fraction": 0.804,
+      "bottom_label": "building",
+      "label_fractions": {
+        "tree": 0.804,
+        "building": 0.14,
+        "sky": 0.056
+      }
+    },
+    {
+      "candidate_id": "street:28356916:4284",
+      "stratum": "single_matched",
+      "image_id": "28356916",
+      "view_count": 1,
+      "score": 0.4747,
+      "uncertainty_m": 3.0,
+      "nearest_inventory_m": 2.82,
+      "depth_m": 62.46,
+      "box_area_fraction": 0.00451,
+      "tree_mask_fraction": 0.751,
+      "bottom_label": "tree",
+      "label_fractions": {
+        "tree": 0.751,
+        "mountain, mount": 0.162,
+        "signboard, sign": 0.048,
+        "car": 0.039
+      }
+    },
+    {
+      "candidate_id": "street:28415433:12681",
+      "stratum": "multi_matched",
+      "image_id": "28415433",
+      "view_count": 3,
+      "score": 0.95,
+      "uncertainty_m": 8.775,
+      "nearest_inventory_m": 1.29,
+      "depth_m": 14.06,
+      "box_area_fraction": 0.02791,
+      "tree_mask_fraction": 0.227,
+      "bottom_label": "sky",
+      "label_fractions": {
+        "sky": 0.773,
+        "tree": 0.227,
+        "street lamp": 0.0
+      }
+    },
+    {
+      "candidate_id": "street:285154393:17709",
+      "stratum": "multi_unmatched",
+      "image_id": "285154393",
+      "view_count": 4,
+      "score": 0.95,
+      "uncertainty_m": 7.873,
+      "nearest_inventory_m": 37.8,
+      "depth_m": 27.16,
+      "box_area_fraction": 0.01879,
+      "tree_mask_fraction": 0.664,
+      "bottom_label": "fence",
+      "label_fractions": {
+        "tree": 0.664,
+        "sky": 0.211,
+        "fence": 0.125,
+        "plant": 0.001
+      }
+    },
+    {
+      "candidate_id": "street:285901863:4599",
+      "stratum": "single_unmatched",
+      "image_id": "285901863",
+      "view_count": 1,
+      "score": 0.8511,
+      "uncertainty_m": 7.403,
+      "nearest_inventory_m": 27.6,
+      "depth_m": 35.78,
+      "box_area_fraction": 0.01812,
+      "tree_mask_fraction": 0.659,
+      "bottom_label": "building",
+      "label_fractions": {
+        "tree": 0.659,
+        "sky": 0.197,
+        "building": 0.11,
+        "signboard, sign": 0.033,
+        "wall": 0.001
+      }
+    },
+    {
+      "candidate_id": "street:28685688:4627",
+      "stratum": "single_matched",
+      "image_id": "28685688",
+      "view_count": 1,
+      "score": 0.95,
+      "uncertainty_m": 7.067,
+      "nearest_inventory_m": 5.74,
+      "depth_m": 35.16,
+      "box_area_fraction": 0.02781,
+      "tree_mask_fraction": 0.936,
+      "bottom_label": "tree",
+      "label_fractions": {
+        "tree": 0.936,
+        "sky": 0.054,
+        "building": 0.01
+      }
+    },
+    {
+      "candidate_id": "street:22245372:4773",
+      "stratum": "multi_matched",
+      "image_id": "28941407",
+      "view_count": 2,
+      "score": 0.95,
+      "uncertainty_m": 4.29,
+      "nearest_inventory_m": 2.23,
+      "depth_m": 28.78,
+      "box_area_fraction": 0.01122,
+      "tree_mask_fraction": 0.386,
+      "bottom_label": "tree",
+      "label_fractions": {
+        "building": 0.614,
+        "tree": 0.386
+      }
+    },
+    {
+      "candidate_id": "street:29105967:4912",
+      "stratum": "single_unmatched",
+      "image_id": "29105967",
+      "view_count": 1,
+      "score": 0.95,
+      "uncertainty_m": 3.0,
+      "nearest_inventory_m": 27.42,
+      "depth_m": 52.99,
+      "box_area_fraction": 0.02824,
+      "tree_mask_fraction": 0.678,
+      "bottom_label": "grass",
+      "label_fractions": {
+        "tree": 0.678,
+        "sky": 0.265,
+        "grass": 0.044,
+        "wall": 0.013
+      }
+    },
+    {
+      "candidate_id": "street:29221951:7595",
+      "stratum": "multi_unmatched",
+      "image_id": "29221951",
+      "view_count": 3,
+      "score": 0.782,
+      "uncertainty_m": 8.314,
+      "nearest_inventory_m": 102.47,
+      "depth_m": 44.01,
+      "box_area_fraction": 0.00496,
+      "tree_mask_fraction": 0.605,
+      "bottom_label": "car",
+      "label_fractions": {
+        "tree": 0.605,
+        "sky": 0.291,
+        "signboard, sign": 0.055,
+        "street lamp": 0.026,
+        "car": 0.019
+      }
+    },
+    {
+      "candidate_id": "street:293736389:5057",
+      "stratum": "single_matched",
+      "image_id": "293736389",
+      "view_count": 1,
+      "score": 0.852,
+      "uncertainty_m": 3.0,
+      "nearest_inventory_m": 7.02,
+      "depth_m": 2.4,
+      "box_area_fraction": 0.01813,
+      "tree_mask_fraction": 0.679,
+      "bottom_label": "tree",
+      "label_fractions": {
+        "tree": 0.679,
+        "building": 0.255,
+        "sky": 0.066
+      }
+    },
+    {
+      "candidate_id": "street:29649622:5203",
+      "stratum": "single_unmatched",
+      "image_id": "29649622",
+      "view_count": 1,
+      "score": 0.95,
+      "uncertainty_m": 4.626,
+      "nearest_inventory_m": 8.51,
+      "depth_m": 17.46,
+      "box_area_fraction": 0.23138,
+      "tree_mask_fraction": 0.822,
+      "bottom_label": "car",
+      "label_fractions": {
+        "tree": 0.822,
+        "building": 0.071,
+        "car": 0.044,
+        "sky": 0.042,
+        "plant": 0.014
+      }
+    },
+    {
+      "candidate_id": "street:297093189:18500",
+      "stratum": "multi_matched",
+      "image_id": "297093189",
+      "view_count": 2,
+      "score": 0.95,
+      "uncertainty_m": 3.493,
+      "nearest_inventory_m": 3.8,
+      "depth_m": 28.73,
+      "box_area_fraction": 0.19561,
+      "tree_mask_fraction": 0.309,
+      "bottom_label": "sky",
+      "label_fractions": {
+        "sky": 0.691,
+        "tree": 0.309
+      }
+    },
+    {
+      "candidate_id": "street:30014346:5483",
+      "stratum": "single_unmatched",
+      "image_id": "30014346",
+      "view_count": 1,
+      "score": 0.8787,
+      "uncertainty_m": 5.796,
+      "nearest_inventory_m": 36.41,
+      "depth_m": 42.49,
+      "box_area_fraction": 0.01358,
+      "tree_mask_fraction": 0.913,
+      "bottom_label": "tree",
+      "label_fractions": {
+        "tree": 0.913,
+        "traffic light": 0.023,
+        "fence": 0.021,
+        "road, route": 0.019,
+        "building": 0.017
+      }
+    },
+    {
+      "candidate_id": "street:30116512:5599",
+      "stratum": "single_matched",
+      "image_id": "30116512",
+      "view_count": 1,
+      "score": 0.95,
+      "uncertainty_m": 3.0,
+      "nearest_inventory_m": 3.74,
+      "depth_m": 32.57,
+      "box_area_fraction": 0.03232,
+      "tree_mask_fraction": 0.528,
+      "bottom_label": "person",
+      "label_fractions": {
+        "tree": 0.528,
+        "truck": 0.231,
+        "sky": 0.167,
+        "building": 0.063,
+        "car": 0.01
+      }
+    },
+    {
+      "candidate_id": "street:30332925:5773",
+      "stratum": "single_unmatched",
+      "image_id": "30332925",
+      "view_count": 1,
+      "score": 0.7658,
+      "uncertainty_m": 7.501,
+      "nearest_inventory_m": 14.31,
+      "depth_m": 21.12,
+      "box_area_fraction": 0.00423,
+      "tree_mask_fraction": 0.767,
+      "bottom_label": "tree",
+      "label_fractions": {
+        "tree": 0.767,
+        "sky": 0.233
+      }
+    },
+    {
+      "candidate_id": "street:117298731:2127",
+      "stratum": "multi_matched",
+      "image_id": "30383525",
+      "view_count": 3,
+      "score": 0.95,
+      "uncertainty_m": 8.422,
+      "nearest_inventory_m": 4.32,
+      "depth_m": 56.51,
+      "box_area_fraction": 0.03264,
+      "tree_mask_fraction": 0.723,
+      "bottom_label": "grass",
+      "label_fractions": {
+        "tree": 0.723,
+        "sky": 0.171,
+        "building": 0.102,
+        "signboard, sign": 0.002,
+        "grass": 0.001
+      }
+    },
+    {
+      "candidate_id": "street:30415103:6636",
+      "stratum": "multi_unmatched",
+      "image_id": "30415103",
+      "view_count": 3,
+      "score": 0.95,
+      "uncertainty_m": 8.424,
+      "nearest_inventory_m": 9.23,
+      "depth_m": 20.44,
+      "box_area_fraction": 0.09059,
+      "tree_mask_fraction": 0.809,
+      "bottom_label": "tree",
+      "label_fractions": {
+        "tree": 0.809,
+        "sky": 0.184,
+        "car": 0.007
+      }
+    },
+    {
+      "candidate_id": "street:30462091:6069",
+      "stratum": "single_unmatched",
+      "image_id": "30462091",
+      "view_count": 1,
+      "score": 0.95,
+      "uncertainty_m": 4.298,
+      "nearest_inventory_m": 9.15,
+      "depth_m": 45.2,
+      "box_area_fraction": 0.02983,
+      "tree_mask_fraction": 0.494,
+      "bottom_label": "road, route",
+      "label_fractions": {
+        "tree": 0.494,
+        "building": 0.227,
+        "sky": 0.181,
+        "car": 0.051,
+        "signboard, sign": 0.021
+      }
+    },
+    {
+      "candidate_id": "street:30503890:6154",
+      "stratum": "single_matched",
+      "image_id": "30503890",
+      "view_count": 1,
+      "score": 0.95,
+      "uncertainty_m": 4.744,
+      "nearest_inventory_m": 2.41,
+      "depth_m": 15.32,
+      "box_area_fraction": 0.07225,
+      "tree_mask_fraction": 0.334,
+      "bottom_label": "fence",
+      "label_fractions": {
+        "building": 0.446,
+        "tree": 0.334,
+        "sky": 0.114,
+        "fence": 0.107
+      }
+    },
+    {
+      "candidate_id": "street:30520835:8219",
+      "stratum": "multi_unmatched",
+      "image_id": "30520835",
+      "view_count": 2,
+      "score": 0.95,
+      "uncertainty_m": 3.066,
+      "nearest_inventory_m": 38.47,
+      "depth_m": 35.71,
+      "box_area_fraction": 0.01152,
+      "tree_mask_fraction": 0.788,
+      "bottom_label": "sidewalk, pavement",
+      "label_fractions": {
+        "tree": 0.788,
+        "sky": 0.136,
+        "car": 0.036,
+        "road, route": 0.021,
+        "sidewalk, pavement": 0.019
+      }
+    },
+    {
+      "candidate_id": "street:30522606:6351",
+      "stratum": "single_unmatched",
+      "image_id": "30522606",
+      "view_count": 1,
+      "score": 0.4275,
+      "uncertainty_m": 3.0,
+      "nearest_inventory_m": 44.03,
+      "depth_m": 52.96,
+      "box_area_fraction": 0.0028,
+      "tree_mask_fraction": 0.56,
+      "bottom_label": "tree",
+      "label_fractions": {
+        "tree": 0.56,
+        "building": 0.372,
+        "mountain, mount": 0.045,
+        "street lamp": 0.021,
+        "sky": 0.003
+      }
+    },
+    {
+      "candidate_id": "street:30307240:5720",
+      "stratum": "multi_unmatched",
+      "image_id": "30576689",
+      "view_count": 3,
+      "score": 0.95,
+      "uncertainty_m": 9.42,
+      "nearest_inventory_m": 167.62,
+      "depth_m": 34.56,
+      "box_area_fraction": 0.02338,
+      "tree_mask_fraction": 0.987,
+      "bottom_label": "rail",
+      "label_fractions": {
+        "tree": 0.987,
+        "rail": 0.007,
+        "car": 0.005,
+        "building": 0.001,
+        "earth, ground": 0.0
+      }
+    },
+    {
+      "candidate_id": "street:31806405:6689",
+      "stratum": "single_unmatched",
+      "image_id": "31806405",
+      "view_count": 1,
+      "score": 0.95,
+      "uncertainty_m": 6.019,
+      "nearest_inventory_m": 20.83,
+      "depth_m": 17.5,
+      "box_area_fraction": 0.06588,
+      "tree_mask_fraction": 0.933,
+      "bottom_label": "tree",
+      "label_fractions": {
+        "tree": 0.933,
+        "sky": 0.067
+      }
+    },
+    {
+      "candidate_id": "street:31887129:6727",
+      "stratum": "single_matched",
+      "image_id": "31887129",
+      "view_count": 1,
+      "score": 0.593,
+      "uncertainty_m": 5.158,
+      "nearest_inventory_m": 6.62,
+      "depth_m": 24.11,
+      "box_area_fraction": 0.00777,
+      "tree_mask_fraction": 0.795,
+      "bottom_label": "bus",
+      "label_fractions": {
+        "tree": 0.795,
+        "sky": 0.118,
+        "van": 0.062,
+        "bus": 0.018,
+        "street lamp": 0.006
+      }
+    },
+    {
+      "candidate_id": "street:129118933:11339",
+      "stratum": "multi_matched",
+      "image_id": "320232869",
+      "view_count": 8,
+      "score": 0.95,
+      "uncertainty_m": 8.286,
+      "nearest_inventory_m": 7.75,
+      "depth_m": 21.13,
+      "box_area_fraction": 0.0144,
+      "tree_mask_fraction": 0.132,
+      "bottom_label": "sidewalk, pavement",
+      "label_fractions": {
+        "building": 0.804,
+        "tree": 0.132,
+        "plant": 0.038,
+        "sidewalk, pavement": 0.026
+      }
+    },
+    {
+      "candidate_id": "street:32065115:7922",
+      "stratum": "multi_matched",
+      "image_id": "32065115",
+      "view_count": 3,
+      "score": 0.95,
+      "uncertainty_m": 8.571,
+      "nearest_inventory_m": 5.27,
+      "depth_m": 23.97,
+      "box_area_fraction": 0.00504,
+      "tree_mask_fraction": 0.993,
+      "bottom_label": "tree",
+      "label_fractions": {
+        "tree": 0.993,
+        "building": 0.005,
+        "sky": 0.002
+      }
+    },
+    {
+      "candidate_id": "street:32514304:7058",
+      "stratum": "single_matched",
+      "image_id": "32514304",
+      "view_count": 1,
+      "score": 0.44,
+      "uncertainty_m": 3.0,
+      "nearest_inventory_m": 7.93,
+      "depth_m": 56.46,
+      "box_area_fraction": 0.00326,
+      "tree_mask_fraction": 0.895,
+      "bottom_label": "tree",
+      "label_fractions": {
+        "tree": 0.895,
+        "sky": 0.069,
+        "car": 0.036
+      }
+    },
+    {
+      "candidate_id": "street:32521409:7063",
+      "stratum": "single_unmatched",
+      "image_id": "32521409",
+      "view_count": 1,
+      "score": 0.6672,
+      "uncertainty_m": 5.594,
+      "nearest_inventory_m": 41.23,
+      "depth_m": 49.69,
+      "box_area_fraction": 0.00611,
+      "tree_mask_fraction": 0.77,
+      "bottom_label": "building",
+      "label_fractions": {
+        "tree": 0.77,
+        "building": 0.122,
+        "sky": 0.101,
+        "pole": 0.004,
+        "truck": 0.002
+      }
+    },
+    {
+      "candidate_id": "street:32882686:7447",
+      "stratum": "single_unmatched",
+      "image_id": "32882686",
+      "view_count": 1,
+      "score": 0.95,
+      "uncertainty_m": 6.286,
+      "nearest_inventory_m": 58.3,
+      "depth_m": 24.57,
+      "box_area_fraction": 0.01488,
+      "tree_mask_fraction": 0.687,
+      "bottom_label": "tree",
+      "label_fractions": {
+        "tree": 0.687,
+        "sky": 0.279,
+        "building": 0.02,
+        "street lamp": 0.014
+      }
+    },
+    {
+      "candidate_id": "street:32884225:7462",
+      "stratum": "single_matched",
+      "image_id": "32884225",
+      "view_count": 1,
+      "score": 0.95,
+      "uncertainty_m": 6.264,
+      "nearest_inventory_m": 4.94,
+      "depth_m": 43.44,
+      "box_area_fraction": 0.04524,
+      "tree_mask_fraction": 0.78,
+      "bottom_label": "car",
+      "label_fractions": {
+        "tree": 0.78,
+        "sky": 0.127,
+        "grass": 0.04,
+        "car": 0.014,
+        "wall": 0.011
+      }
+    },
+    {
+      "candidate_id": "street:137213885:19687",
+      "stratum": "multi_matched",
+      "image_id": "32887713",
+      "view_count": 4,
+      "score": 0.95,
+      "uncertainty_m": 7.207,
+      "nearest_inventory_m": 6.43,
+      "depth_m": 41.9,
+      "box_area_fraction": 0.01282,
+      "tree_mask_fraction": 0.728,
+      "bottom_label": "tree",
+      "label_fractions": {
+        "tree": 0.728,
+        "sky": 0.128,
+        "wall": 0.097,
+        "car": 0.029,
+        "street lamp": 0.015
+      }
+    },
+    {
+      "candidate_id": "street:265352597:12013",
+      "stratum": "multi_unmatched",
+      "image_id": "33172527",
+      "view_count": 7,
+      "score": 0.95,
+      "uncertainty_m": 9.152,
+      "nearest_inventory_m": 9.45,
+      "depth_m": 21.34,
+      "box_area_fraction": 0.00723,
+      "tree_mask_fraction": 0.713,
+      "bottom_label": "tree",
+      "label_fractions": {
+        "tree": 0.713,
+        "sky": 0.287
+      }
+    },
+    {
+      "candidate_id": "street:33319047:7800",
+      "stratum": "single_unmatched",
+      "image_id": "33319047",
+      "view_count": 1,
+      "score": 0.95,
+      "uncertainty_m": 6.978,
+      "nearest_inventory_m": 16.22,
+      "depth_m": 8.71,
+      "box_area_fraction": 0.00881,
+      "tree_mask_fraction": 1.0,
+      "bottom_label": "tree",
+      "label_fractions": {
+        "tree": 1.0
+      }
+    },
+    {
+      "candidate_id": "street:24778034:7918",
+      "stratum": "multi_unmatched",
+      "image_id": "33492267",
+      "view_count": 3,
+      "score": 0.95,
+      "uncertainty_m": 6.325,
+      "nearest_inventory_m": 11.27,
+      "depth_m": 26.14,
+      "box_area_fraction": 0.04893,
+      "tree_mask_fraction": 0.86,
+      "bottom_label": "grass",
+      "label_fractions": {
+        "tree": 0.86,
+        "grass": 0.05,
+        "column, pillar": 0.039,
+        "street lamp": 0.033,
+        "sky": 0.019
+      }
+    },
+    {
+      "candidate_id": "street:33559915:14859",
+      "stratum": "multi_unmatched",
+      "image_id": "33559915",
+      "view_count": 2,
+      "score": 0.4429,
+      "uncertainty_m": 3.71,
+      "nearest_inventory_m": 15.11,
+      "depth_m": 35.0,
+      "box_area_fraction": 0.00289,
+      "tree_mask_fraction": 0.0,
+      "bottom_label": "sky",
+      "label_fractions": {
+        "sky": 0.95,
+        "signboard, sign": 0.05
+      }
+    },
+    {
+      "candidate_id": "street:33577217:7976",
+      "stratum": "single_matched",
+      "image_id": "33577217",
+      "view_count": 1,
+      "score": 0.8485,
+      "uncertainty_m": 8.217,
+      "nearest_inventory_m": 1.68,
+      "depth_m": 41.38,
+      "box_area_fraction": 0.018,
+      "tree_mask_fraction": 0.851,
+      "bottom_label": "building",
+      "label_fractions": {
+        "tree": 0.851,
+        "building": 0.074,
+        "sky": 0.051,
+        "pole": 0.024
+      }
+    },
+    {
+      "candidate_id": "street:26781242:8712",
+      "stratum": "multi_matched",
+      "image_id": "33594187",
+      "view_count": 3,
+      "score": 0.8962,
+      "uncertainty_m": 6.957,
+      "nearest_inventory_m": 5.35,
+      "depth_m": 29.35,
+      "box_area_fraction": 0.00538,
+      "tree_mask_fraction": 0.683,
+      "bottom_label": "tree",
+      "label_fractions": {
+        "tree": 0.683,
+        "sky": 0.317
+      }
+    },
+    {
+      "candidate_id": "street:33610250:8128",
+      "stratum": "single_unmatched",
+      "image_id": "33610250",
+      "view_count": 1,
+      "score": 0.8646,
+      "uncertainty_m": 6.838,
+      "nearest_inventory_m": 15.64,
+      "depth_m": 37.62,
+      "box_area_fraction": 0.01209,
+      "tree_mask_fraction": 0.966,
+      "bottom_label": "building",
+      "label_fractions": {
+        "tree": 0.966,
+        "building": 0.024,
+        "sky": 0.009
+      }
+    },
+    {
+      "candidate_id": "street:110442113:18715",
+      "stratum": "multi_matched",
+      "image_id": "33630714",
+      "view_count": 7,
+      "score": 0.95,
+      "uncertainty_m": 8.767,
+      "nearest_inventory_m": 7.3,
+      "depth_m": 34.0,
+      "box_area_fraction": 0.00389,
+      "tree_mask_fraction": 0.445,
+      "bottom_label": "car",
+      "label_fractions": {
+        "tree": 0.445,
+        "building": 0.241,
+        "car": 0.169,
+        "road, route": 0.085,
+        "plant": 0.042
+      }
+    },
+    {
+      "candidate_id": "street:22415805:8196",
+      "stratum": "multi_unmatched",
+      "image_id": "33685691",
+      "view_count": 2,
+      "score": 0.95,
+      "uncertainty_m": 6.824,
+      "nearest_inventory_m": 9.21,
+      "depth_m": 34.42,
+      "box_area_fraction": 0.0066,
+      "tree_mask_fraction": 0.563,
+      "bottom_label": "tree",
+      "label_fractions": {
+        "tree": 0.563,
+        "sky": 0.437
+      }
+    },
+    {
+      "candidate_id": "street:32882686:18551",
+      "stratum": "multi_unmatched",
+      "image_id": "33708447",
+      "view_count": 5,
+      "score": 0.95,
+      "uncertainty_m": 8.097,
+      "nearest_inventory_m": 49.41,
+      "depth_m": 26.26,
+      "box_area_fraction": 0.04087,
+      "tree_mask_fraction": 0.62,
+      "bottom_label": "tree",
+      "label_fractions": {
+        "tree": 0.62,
+        "sky": 0.213,
+        "street lamp": 0.077,
+        "building": 0.05,
+        "car": 0.026
+      }
+    },
+    {
+      "candidate_id": "street:33832192:9564",
+      "stratum": "multi_unmatched",
+      "image_id": "33848754",
+      "view_count": 6,
+      "score": 0.95,
+      "uncertainty_m": 9.306,
+      "nearest_inventory_m": 13.83,
+      "depth_m": 22.94,
+      "box_area_fraction": 0.02077,
+      "tree_mask_fraction": 0.379,
+      "bottom_label": "tree",
+      "label_fractions": {
+        "sky": 0.621,
+        "tree": 0.379
+      }
+    },
+    {
+      "candidate_id": "street:339371057:9193",
+      "stratum": "multi_matched",
+      "image_id": "339371057",
+      "view_count": 2,
+      "score": 0.8795,
+      "uncertainty_m": 8.159,
+      "nearest_inventory_m": 7.76,
+      "depth_m": 33.63,
+      "box_area_fraction": 0.00371,
+      "tree_mask_fraction": 0.435,
+      "bottom_label": "fence",
+      "label_fractions": {
+        "tree": 0.435,
+        "fence": 0.276,
+        "plant": 0.166,
+        "building": 0.124
+      }
+    },
+    {
+      "candidate_id": "street:27073635:8342",
+      "stratum": "multi_matched",
+      "image_id": "34002192",
+      "view_count": 12,
+      "score": 0.95,
+      "uncertainty_m": 7.928,
+      "nearest_inventory_m": 7.07,
+      "depth_m": 6.81,
+      "box_area_fraction": 0.05156,
+      "tree_mask_fraction": 0.79,
+      "bottom_label": "person",
+      "label_fractions": {
+        "tree": 0.79,
+        "car": 0.151,
+        "street lamp": 0.027,
+        "trash can": 0.013,
+        "plant": 0.011
+      }
+    },
+    {
+      "candidate_id": "street:34162116:8436",
+      "stratum": "single_matched",
+      "image_id": "34162116",
+      "view_count": 1,
+      "score": 0.95,
+      "uncertainty_m": 3.0,
+      "nearest_inventory_m": 4.49,
+      "depth_m": 44.61,
+      "box_area_fraction": 0.01729,
+      "tree_mask_fraction": 0.504,
+      "bottom_label": "car",
+      "label_fractions": {
+        "tree": 0.504,
+        "car": 0.382,
+        "sky": 0.115
+      }
+    },
+    {
+      "candidate_id": "street:34198579:8464",
+      "stratum": "single_unmatched",
+      "image_id": "34198579",
+      "view_count": 1,
+      "score": 0.95,
+      "uncertainty_m": 3.0,
+      "nearest_inventory_m": 33.7,
+      "depth_m": 19.53,
+      "box_area_fraction": 0.16809,
+      "tree_mask_fraction": 0.266,
+      "bottom_label": "road, route",
+      "label_fractions": {
+        "earth, ground": 0.308,
+        "road, route": 0.293,
+        "tree": 0.266,
+        "wall": 0.131,
+        "sky": 0.001
+      }
+    },
+    {
+      "candidate_id": "street:34802637:10482",
+      "stratum": "multi_unmatched",
+      "image_id": "34802637",
+      "view_count": 2,
+      "score": 0.95,
+      "uncertainty_m": 4.695,
+      "nearest_inventory_m": 8.13,
+      "depth_m": 18.42,
+      "box_area_fraction": 0.00878,
+      "tree_mask_fraction": 0.353,
+      "bottom_label": "plant",
+      "label_fractions": {
+        "plant": 0.625,
+        "tree": 0.353,
+        "building": 0.022
+      }
+    },
+    {
+      "candidate_id": "street:34804982:8770",
+      "stratum": "multi_matched",
+      "image_id": "34804982",
+      "view_count": 2,
+      "score": 0.95,
+      "uncertainty_m": 7.564,
+      "nearest_inventory_m": 3.6,
+      "depth_m": 25.65,
+      "box_area_fraction": 0.0043,
+      "tree_mask_fraction": 0.739,
+      "bottom_label": "tree",
+      "label_fractions": {
+        "tree": 0.739,
+        "sky": 0.261
+      }
+    },
+    {
+      "candidate_id": "street:348313735:8833",
+      "stratum": "single_matched",
+      "image_id": "348313735",
+      "view_count": 1,
+      "score": 0.8133,
+      "uncertainty_m": 5.777,
+      "nearest_inventory_m": 4.37,
+      "depth_m": 16.12,
+      "box_area_fraction": 0.01229,
+      "tree_mask_fraction": 0.909,
+      "bottom_label": "tree",
+      "label_fractions": {
+        "tree": 0.909,
+        "sky": 0.091
+      }
+    },
+    {
+      "candidate_id": "street:34841755:8880",
+      "stratum": "single_unmatched",
+      "image_id": "34841755",
+      "view_count": 1,
+      "score": 0.6901,
+      "uncertainty_m": 4.836,
+      "nearest_inventory_m": 47.03,
+      "depth_m": 38.95,
+      "box_area_fraction": 0.00923,
+      "tree_mask_fraction": 0.753,
+      "bottom_label": "fence",
+      "label_fractions": {
+        "tree": 0.753,
+        "sky": 0.119,
+        "fence": 0.071,
+        "building": 0.056
+      }
+    },
+    {
+      "candidate_id": "street:34913293:9018",
+      "stratum": "single_matched",
+      "image_id": "34913293",
+      "view_count": 1,
+      "score": 0.95,
+      "uncertainty_m": 3.0,
+      "nearest_inventory_m": 6.03,
+      "depth_m": 37.34,
+      "box_area_fraction": 0.07006,
+      "tree_mask_fraction": 0.882,
+      "bottom_label": "building",
+      "label_fractions": {
+        "tree": 0.882,
+        "sky": 0.085,
+        "building": 0.033
+      }
+    },
+    {
+      "candidate_id": "street:22697512:8326",
+      "stratum": "multi_matched",
+      "image_id": "349573039",
+      "view_count": 4,
+      "score": 0.95,
+      "uncertainty_m": 8.136,
+      "nearest_inventory_m": 5.4,
+      "depth_m": 32.19,
+      "box_area_fraction": 0.06485,
+      "tree_mask_fraction": 0.869,
+      "bottom_label": "tree",
+      "label_fractions": {
+        "tree": 0.869,
+        "sky": 0.128,
+        "building": 0.002
+      }
+    },
+    {
+      "candidate_id": "street:349889869:9254",
+      "stratum": "single_matched",
+      "image_id": "349889869",
+      "view_count": 1,
+      "score": 0.4946,
+      "uncertainty_m": 3.0,
+      "nearest_inventory_m": 2.36,
+      "depth_m": 23.72,
+      "box_area_fraction": 0.00523,
+      "tree_mask_fraction": 0.487,
+      "bottom_label": "tree",
+      "label_fractions": {
+        "sky": 0.513,
+        "tree": 0.487
+      }
+    },
+    {
+      "candidate_id": "street:35018266:9303",
+      "stratum": "single_unmatched",
+      "image_id": "35018266",
+      "view_count": 1,
+      "score": 0.95,
+      "uncertainty_m": 3.0,
+      "nearest_inventory_m": 36.89,
+      "depth_m": 58.21,
+      "box_area_fraction": 0.04305,
+      "tree_mask_fraction": 0.602,
+      "bottom_label": "sidewalk, pavement",
+      "label_fractions": {
+        "tree": 0.602,
+        "sky": 0.216,
+        "truck": 0.108,
+        "fence": 0.022,
+        "building": 0.021
+      }
+    },
+    {
+      "candidate_id": "street:27044586:16496",
+      "stratum": "multi_unmatched",
+      "image_id": "35164195",
+      "view_count": 4,
+      "score": 0.95,
+      "uncertainty_m": 9.656,
+      "nearest_inventory_m": 8.31,
+      "depth_m": 7.64,
+      "box_area_fraction": 0.00439,
+      "tree_mask_fraction": 0.0,
+      "bottom_label": "road, route",
+      "label_fractions": {
+        "road, route": 1.0
+      }
+    },
+    {
+      "candidate_id": "street:35095123:10003",
+      "stratum": "multi_unmatched",
+      "image_id": "35203742",
+      "view_count": 3,
+      "score": 0.95,
+      "uncertainty_m": 8.474,
+      "nearest_inventory_m": 18.5,
+      "depth_m": 17.81,
+      "box_area_fraction": 0.03643,
+      "tree_mask_fraction": 0.992,
+      "bottom_label": "tree",
+      "label_fractions": {
+        "tree": 0.992,
+        "street lamp": 0.008
+      }
+    },
+    {
+      "candidate_id": "street:355130063:10405",
+      "stratum": "multi_matched",
+      "image_id": "355130063",
+      "view_count": 2,
+      "score": 0.8574,
+      "uncertainty_m": 4.513,
+      "nearest_inventory_m": 2.14,
+      "depth_m": 43.34,
+      "box_area_fraction": 0.01835,
+      "tree_mask_fraction": 0.138,
+      "bottom_label": "sky",
+      "label_fractions": {
+        "sky": 0.862,
+        "tree": 0.138
+      }
+    },
+    {
+      "candidate_id": "street:355145173:9623",
+      "stratum": "single_matched",
+      "image_id": "355145173",
+      "view_count": 1,
+      "score": 0.95,
+      "uncertainty_m": 3.0,
+      "nearest_inventory_m": 7.79,
+      "depth_m": 37.39,
+      "box_area_fraction": 0.04189,
+      "tree_mask_fraction": 0.342,
+      "bottom_label": "building",
+      "label_fractions": {
+        "sky": 0.432,
+        "tree": 0.342,
+        "building": 0.226,
+        "mountain, mount": 0.0
+      }
+    },
+    {
+      "candidate_id": "street:355471943:9725",
+      "stratum": "single_unmatched",
+      "image_id": "355471943",
+      "view_count": 1,
+      "score": 0.5232,
+      "uncertainty_m": 3.0,
+      "nearest_inventory_m": 8.55,
+      "depth_m": 32.08,
+      "box_area_fraction": 0.00627,
+      "tree_mask_fraction": 0.244,
+      "bottom_label": "building",
+      "label_fractions": {
+        "sky": 0.534,
+        "tree": 0.244,
+        "building": 0.178,
+        "street lamp": 0.045
+      }
+    },
+    {
+      "candidate_id": "street:35573348:14164",
+      "stratum": "multi_unmatched",
+      "image_id": "35573348",
+      "view_count": 5,
+      "score": 0.95,
+      "uncertainty_m": 10.102,
+      "nearest_inventory_m": 8.56,
+      "depth_m": 8.19,
+      "box_area_fraction": 0.00749,
+      "tree_mask_fraction": 0.751,
+      "bottom_label": "tree",
+      "label_fractions": {
+        "tree": 0.751,
+        "sky": 0.249
+      }
+    },
+    {
+      "candidate_id": "street:28792109:8747",
+      "stratum": "multi_unmatched",
+      "image_id": "35573768",
+      "view_count": 3,
+      "score": 0.95,
+      "uncertainty_m": 7.1,
+      "nearest_inventory_m": 37.12,
+      "depth_m": 49.3,
+      "box_area_fraction": 0.00855,
+      "tree_mask_fraction": 0.972,
+      "bottom_label": "tree",
+      "label_fractions": {
+        "tree": 0.972,
+        "car": 0.014,
+        "traffic light": 0.014
+      }
+    },
+    {
+      "candidate_id": "street:24457783:9936",
+      "stratum": "multi_unmatched",
+      "image_id": "35691836",
+      "view_count": 2,
+      "score": 0.95,
+      "uncertainty_m": 6.372,
+      "nearest_inventory_m": 17.17,
+      "depth_m": 35.01,
+      "box_area_fraction": 0.00571,
+      "tree_mask_fraction": 0.597,
+      "bottom_label": "person",
+      "label_fractions": {
+        "tree": 0.597,
+        "building": 0.237,
+        "street lamp": 0.063,
+        "person": 0.035,
+        "traffic light": 0.034
+      }
+    },
+    {
+      "candidate_id": "street:102058799:3503",
+      "stratum": "multi_unmatched",
+      "image_id": "358706221",
+      "view_count": 4,
+      "score": 0.95,
+      "uncertainty_m": 7.324,
+      "nearest_inventory_m": 69.62,
+      "depth_m": 28.36,
+      "box_area_fraction": 0.02615,
+      "tree_mask_fraction": 1.0,
+      "bottom_label": "tree",
+      "label_fractions": {
+        "tree": 1.0
+      }
+    },
+    {
+      "candidate_id": "street:35974431:10100",
+      "stratum": "single_unmatched",
+      "image_id": "35974431",
+      "view_count": 1,
+      "score": 0.5793,
+      "uncertainty_m": 3.0,
+      "nearest_inventory_m": 27.02,
+      "depth_m": 29.57,
+      "box_area_fraction": 0.00829,
+      "tree_mask_fraction": 0.626,
+      "bottom_label": "tree",
+      "label_fractions": {
+        "tree": 0.626,
+        "fence": 0.107,
+        "road, route": 0.075,
+        "building": 0.074,
+        "car": 0.07
+      }
+    },
+    {
+      "candidate_id": "street:32744608:14485",
+      "stratum": "multi_unmatched",
+      "image_id": "36078595",
+      "view_count": 4,
+      "score": 0.95,
+      "uncertainty_m": 8.995,
+      "nearest_inventory_m": 58.39,
+      "depth_m": 22.25,
+      "box_area_fraction": 0.01288,
+      "tree_mask_fraction": 0.875,
+      "bottom_label": "tree",
+      "label_fractions": {
+        "tree": 0.875,
+        "sky": 0.125
+      }
+    },
+    {
+      "candidate_id": "street:117249627:10248",
+      "stratum": "multi_unmatched",
+      "image_id": "36103299",
+      "view_count": 3,
+      "score": 0.95,
+      "uncertainty_m": 7.848,
+      "nearest_inventory_m": 10.29,
+      "depth_m": 29.71,
+      "box_area_fraction": 0.02308,
+      "tree_mask_fraction": 0.794,
+      "bottom_label": "tree",
+      "label_fractions": {
+        "tree": 0.794,
+        "sky": 0.202,
+        "grass": 0.004
+      }
+    },
+    {
+      "candidate_id": "street:36107734:10256",
+      "stratum": "single_matched",
+      "image_id": "36107734",
+      "view_count": 1,
+      "score": 0.95,
+      "uncertainty_m": 5.664,
+      "nearest_inventory_m": 3.19,
+      "depth_m": 23.4,
+      "box_area_fraction": 0.0082,
+      "tree_mask_fraction": 0.97,
+      "bottom_label": "tree",
+      "label_fractions": {
+        "tree": 0.97,
+        "sky": 0.03
+      }
+    },
+    {
+      "candidate_id": "street:362659021:10800",
+      "stratum": "multi_matched",
+      "image_id": "362659021",
+      "view_count": 3,
+      "score": 0.9202,
+      "uncertainty_m": 8.505,
+      "nearest_inventory_m": 2.13,
+      "depth_m": 60.53,
+      "box_area_fraction": 0.00443,
+      "tree_mask_fraction": 0.462,
+      "bottom_label": "earth, ground",
+      "label_fractions": {
+        "building": 0.533,
+        "tree": 0.462,
+        "earth, ground": 0.005,
+        "sidewalk, pavement": 0.0
+      }
+    },
+    {
+      "candidate_id": "street:36461622:10533",
+      "stratum": "single_matched",
+      "image_id": "36461622",
+      "view_count": 1,
+      "score": 0.95,
+      "uncertainty_m": 8.791,
+      "nearest_inventory_m": 1.77,
+      "depth_m": 8.53,
+      "box_area_fraction": 0.00931,
+      "tree_mask_fraction": 0.0,
+      "bottom_label": "road, route",
+      "label_fractions": {
+        "grass": 0.514,
+        "sidewalk, pavement": 0.336,
+        "road, route": 0.15
+      }
+    },
+    {
+      "candidate_id": "street:100491663:10547",
+      "stratum": "multi_unmatched",
+      "image_id": "36462346",
+      "view_count": 4,
+      "score": 0.95,
+      "uncertainty_m": 6.277,
+      "nearest_inventory_m": 50.62,
+      "depth_m": 21.3,
+      "box_area_fraction": 0.00528,
+      "tree_mask_fraction": 0.575,
+      "bottom_label": "tree",
+      "label_fractions": {
+        "tree": 0.575,
+        "sky": 0.425
+      }
+    },
+    {
+      "candidate_id": "street:364630877:10561",
+      "stratum": "single_unmatched",
+      "image_id": "364630877",
+      "view_count": 1,
+      "score": 0.435,
+      "uncertainty_m": 3.0,
+      "nearest_inventory_m": 25.9,
+      "depth_m": 38.51,
+      "box_area_fraction": 0.00307,
+      "tree_mask_fraction": 0.0,
+      "bottom_label": "sky",
+      "label_fractions": {
+        "sky": 1.0
+      }
+    },
+    {
+      "candidate_id": "street:190632729:10789",
+      "stratum": "multi_matched",
+      "image_id": "366503025",
+      "view_count": 3,
+      "score": 0.95,
+      "uncertainty_m": 9.351,
+      "nearest_inventory_m": 6.37,
+      "depth_m": 61.49,
+      "box_area_fraction": 0.01505,
+      "tree_mask_fraction": 0.919,
+      "bottom_label": "tree",
+      "label_fractions": {
+        "tree": 0.919,
+        "sky": 0.061,
+        "signboard, sign": 0.018,
+        "building": 0.002
+      }
+    },
+    {
+      "candidate_id": "street:34920237:12934",
+      "stratum": "multi_matched",
+      "image_id": "367618941",
+      "view_count": 4,
+      "score": 0.95,
+      "uncertainty_m": 7.704,
+      "nearest_inventory_m": 7.37,
+      "depth_m": 23.18,
+      "box_area_fraction": 0.00269,
+      "tree_mask_fraction": 0.0,
+      "bottom_label": "sky",
+      "label_fractions": {
+        "sky": 1.0
+      }
+    },
+    {
+      "candidate_id": "street:367619047:10840",
+      "stratum": "single_matched",
+      "image_id": "367619047",
+      "view_count": 1,
+      "score": 0.6713,
+      "uncertainty_m": 3.0,
+      "nearest_inventory_m": 4.24,
+      "depth_m": 25.62,
+      "box_area_fraction": 0.01162,
+      "tree_mask_fraction": 0.064,
+      "bottom_label": "sky",
+      "label_fractions": {
+        "sky": 0.936,
+        "tree": 0.064
+      }
+    },
+    {
+      "candidate_id": "street:30051811:10859",
+      "stratum": "multi_unmatched",
+      "image_id": "36829483",
+      "view_count": 4,
+      "score": 0.95,
+      "uncertainty_m": 8.297,
+      "nearest_inventory_m": 25.5,
+      "depth_m": 20.64,
+      "box_area_fraction": 0.33643,
+      "tree_mask_fraction": 0.932,
+      "bottom_label": "tree",
+      "label_fractions": {
+        "tree": 0.932,
+        "sky": 0.054,
+        "signboard, sign": 0.012,
+        "pole": 0.002,
+        "plant": 0.001
+      }
+    },
+    {
+      "candidate_id": "street:370038887:11032",
+      "stratum": "single_matched",
+      "image_id": "370038887",
+      "view_count": 1,
+      "score": 0.8536,
+      "uncertainty_m": 7.222,
+      "nearest_inventory_m": 1.98,
+      "depth_m": 39.9,
+      "box_area_fraction": 0.01261,
+      "tree_mask_fraction": 0.935,
+      "bottom_label": "building",
+      "label_fractions": {
+        "tree": 0.935,
+        "building": 0.065,
+        "plant": 0.0
+      }
+    },
+    {
+      "candidate_id": "street:37184011:11106",
+      "stratum": "single_unmatched",
+      "image_id": "37184011",
+      "view_count": 1,
+      "score": 0.6312,
+      "uncertainty_m": 3.0,
+      "nearest_inventory_m": 25.1,
+      "depth_m": 40.22,
+      "box_area_fraction": 0.00763,
+      "tree_mask_fraction": 0.206,
+      "bottom_label": "building",
+      "label_fractions": {
+        "building": 0.794,
+        "tree": 0.206
+      }
+    },
+    {
+      "candidate_id": "street:23487019:11250",
+      "stratum": "multi_matched",
+      "image_id": "37500073",
+      "view_count": 2,
+      "score": 0.95,
+      "uncertainty_m": 8.086,
+      "nearest_inventory_m": 7.2,
+      "depth_m": 26.09,
+      "box_area_fraction": 0.01268,
+      "tree_mask_fraction": 0.588,
+      "bottom_label": "sky",
+      "label_fractions": {
+        "tree": 0.588,
+        "sky": 0.412
+      }
+    },
+    {
+      "candidate_id": "street:170536315:11279",
+      "stratum": "multi_matched",
+      "image_id": "375125180",
+      "view_count": 2,
+      "score": 0.95,
+      "uncertainty_m": 7.961,
+      "nearest_inventory_m": 5.91,
+      "depth_m": 32.59,
+      "box_area_fraction": 0.01978,
+      "tree_mask_fraction": 0.839,
+      "bottom_label": "tree",
+      "label_fractions": {
+        "tree": 0.839,
+        "building": 0.097,
+        "sky": 0.064
+      }
+    },
+    {
+      "candidate_id": "street:37711567:11432",
+      "stratum": "single_matched",
+      "image_id": "37711567",
+      "view_count": 1,
+      "score": 0.95,
+      "uncertainty_m": 6.828,
+      "nearest_inventory_m": 7.1,
+      "depth_m": 15.35,
+      "box_area_fraction": 0.01674,
+      "tree_mask_fraction": 0.744,
+      "bottom_label": "grass",
+      "label_fractions": {
+        "tree": 0.744,
+        "grass": 0.087,
+        "car": 0.032,
+        "building": 0.032,
+        "van": 0.03
+      }
+    },
+    {
+      "candidate_id": "street:37839740:11579",
+      "stratum": "single_unmatched",
+      "image_id": "37839740",
+      "view_count": 1,
+      "score": 0.7125,
+      "uncertainty_m": 3.0,
+      "nearest_inventory_m": 54.24,
+      "depth_m": 34.65,
+      "box_area_fraction": 0.01311,
+      "tree_mask_fraction": 0.658,
+      "bottom_label": "tree",
+      "label_fractions": {
+        "tree": 0.658,
+        "sky": 0.158,
+        "traffic light": 0.096,
+        "signboard, sign": 0.088
+      }
+    },
+    {
+      "candidate_id": "street:146337539:14233",
+      "stratum": "multi_unmatched",
+      "image_id": "37945187",
+      "view_count": 3,
+      "score": 0.95,
+      "uncertainty_m": 9.014,
+      "nearest_inventory_m": 29.18,
+      "depth_m": 21.61,
+      "box_area_fraction": 0.01111,
+      "tree_mask_fraction": 0.592,
+      "bottom_label": "car",
+      "label_fractions": {
+        "tree": 0.592,
+        "car": 0.293,
+        "sky": 0.114
+      }
+    },
+    {
+      "candidate_id": "street:121298151:11755",
+      "stratum": "multi_unmatched",
+      "image_id": "37986307",
+      "view_count": 2,
+      "score": 0.95,
+      "uncertainty_m": 8.747,
+      "nearest_inventory_m": 8.36,
+      "depth_m": 18.4,
+      "box_area_fraction": 0.06579,
+      "tree_mask_fraction": 0.797,
+      "bottom_label": "tree",
+      "label_fractions": {
+        "tree": 0.797,
+        "sky": 0.179,
+        "building": 0.024
+      }
+    },
+    {
+      "candidate_id": "street:30309599:12544",
+      "stratum": "multi_matched",
+      "image_id": "38248346",
+      "view_count": 3,
+      "score": 0.95,
+      "uncertainty_m": 9.523,
+      "nearest_inventory_m": 4.1,
+      "depth_m": 24.09,
+      "box_area_fraction": 0.04713,
+      "tree_mask_fraction": 0.536,
+      "bottom_label": "tree",
+      "label_fractions": {
+        "tree": 0.536,
+        "building": 0.212,
+        "sky": 0.206,
+        "car": 0.038,
+        "truck": 0.003
+      }
+    },
+    {
+      "candidate_id": "street:38260084:11922",
+      "stratum": "single_unmatched",
+      "image_id": "38260084",
+      "view_count": 1,
+      "score": 0.7335,
+      "uncertainty_m": 3.0,
+      "nearest_inventory_m": 10.71,
+      "depth_m": 14.34,
+      "box_area_fraction": 0.01387,
+      "tree_mask_fraction": 0.652,
+      "bottom_label": "car",
+      "label_fractions": {
+        "tree": 0.652,
+        "building": 0.273,
+        "car": 0.059,
+        "plant": 0.016,
+        "sky": 0.0
+      }
+    },
+    {
+      "candidate_id": "street:38263170:11958",
+      "stratum": "single_matched",
+      "image_id": "38263170",
+      "view_count": 1,
+      "score": 0.95,
+      "uncertainty_m": 8.303,
+      "nearest_inventory_m": 5.47,
+      "depth_m": 11.81,
+      "box_area_fraction": 0.03446,
+      "tree_mask_fraction": 0.867,
+      "bottom_label": "building",
+      "label_fractions": {
+        "tree": 0.867,
+        "building": 0.133
+      }
+    },
+    {
+      "candidate_id": "street:390345078:12233",
+      "stratum": "single_matched",
+      "image_id": "390345078",
+      "view_count": 1,
+      "score": 0.95,
+      "uncertainty_m": 4.333,
+      "nearest_inventory_m": 0.56,
+      "depth_m": 10.76,
+      "box_area_fraction": 0.04834,
+      "tree_mask_fraction": 0.852,
+      "bottom_label": "tree",
+      "label_fractions": {
+        "tree": 0.852,
+        "traffic light": 0.076,
+        "sky": 0.073
+      }
+    },
+    {
+      "candidate_id": "street:255451675:12261",
+      "stratum": "multi_unmatched",
+      "image_id": "390424362",
+      "view_count": 2,
+      "score": 0.95,
+      "uncertainty_m": 7.716,
+      "nearest_inventory_m": 13.43,
+      "depth_m": 25.23,
+      "box_area_fraction": 0.03399,
+      "tree_mask_fraction": 0.583,
+      "bottom_label": "tree",
+      "label_fractions": {
+        "tree": 0.583,
+        "sky": 0.408,
+        "traffic light": 0.01
+      }
+    },
+    {
+      "candidate_id": "street:39341386:12388",
+      "stratum": "single_unmatched",
+      "image_id": "39341386",
+      "view_count": 1,
+      "score": 0.95,
+      "uncertainty_m": 4.924,
+      "nearest_inventory_m": 27.25,
+      "depth_m": 39.2,
+      "box_area_fraction": 0.02476,
+      "tree_mask_fraction": 0.622,
+      "bottom_label": "tree",
+      "label_fractions": {
+        "tree": 0.622,
+        "sky": 0.378
+      }
+    },
+    {
+      "candidate_id": "street:33498243:18095",
+      "stratum": "multi_matched",
+      "image_id": "39465826",
+      "view_count": 3,
+      "score": 0.6621,
+      "uncertainty_m": 7.942,
+      "nearest_inventory_m": 7.15,
+      "depth_m": 39.96,
+      "box_area_fraction": 0.00311,
+      "tree_mask_fraction": 0.786,
+      "bottom_label": "building",
+      "label_fractions": {
+        "tree": 0.786,
+        "building": 0.206,
+        "sky": 0.008
+      }
+    },
+    {
+      "candidate_id": "street:395955710:12656",
+      "stratum": "single_matched",
+      "image_id": "395955710",
+      "view_count": 1,
+      "score": 0.95,
+      "uncertainty_m": 7.687,
+      "nearest_inventory_m": 5.89,
+      "depth_m": 22.13,
+      "box_area_fraction": 0.01799,
+      "tree_mask_fraction": 0.291,
+      "bottom_label": "tree",
+      "label_fractions": {
+        "sky": 0.709,
+        "tree": 0.291
+      }
+    },
+    {
+      "candidate_id": "street:31248372:12721",
+      "stratum": "multi_matched",
+      "image_id": "396669734",
+      "view_count": 2,
+      "score": 0.95,
+      "uncertainty_m": 6.323,
+      "nearest_inventory_m": 6.72,
+      "depth_m": 29.61,
+      "box_area_fraction": 0.00627,
+      "tree_mask_fraction": 0.875,
+      "bottom_label": "building",
+      "label_fractions": {
+        "tree": 0.875,
+        "sky": 0.089,
+        "building": 0.037
+      }
+    },
+    {
+      "candidate_id": "street:39915201:12852",
+      "stratum": "single_unmatched",
+      "image_id": "39915201",
+      "view_count": 1,
+      "score": 0.6068,
+      "uncertainty_m": 3.0,
+      "nearest_inventory_m": 21.65,
+      "depth_m": 51.79,
+      "box_area_fraction": 0.00928,
+      "tree_mask_fraction": 0.529,
+      "bottom_label": "car",
+      "label_fractions": {
+        "tree": 0.529,
+        "building": 0.237,
+        "mountain, mount": 0.071,
+        "car": 0.052,
+        "hill": 0.048
+      }
+    },
+    {
+      "candidate_id": "street:400645770:12952",
+      "stratum": "single_matched",
+      "image_id": "400645770",
+      "view_count": 1,
+      "score": 0.9419,
+      "uncertainty_m": 5.426,
+      "nearest_inventory_m": 3.46,
+      "depth_m": 50.49,
+      "box_area_fraction": 0.02141,
+      "tree_mask_fraction": 0.719,
+      "bottom_label": "car",
+      "label_fractions": {
+        "tree": 0.719,
+        "building": 0.238,
+        "sky": 0.03,
+        "plant": 0.011,
+        "car": 0.001
+      }
+    },
+    {
+      "candidate_id": "street:32881334:14151",
+      "stratum": "multi_matched",
+      "image_id": "40251426",
+      "view_count": 3,
+      "score": 0.95,
+      "uncertainty_m": 7.222,
+      "nearest_inventory_m": 4.57,
+      "depth_m": 64.92,
+      "box_area_fraction": 0.0299,
+      "tree_mask_fraction": 0.747,
+      "bottom_label": "tree",
+      "label_fractions": {
+        "tree": 0.747,
+        "building": 0.198,
+        "signboard, sign": 0.022,
+        "plant": 0.012,
+        "grass": 0.011
+      }
+    },
+    {
+      "candidate_id": "street:405145126:13267",
+      "stratum": "single_unmatched",
+      "image_id": "405145126",
+      "view_count": 1,
+      "score": 0.95,
+      "uncertainty_m": 3.0,
+      "nearest_inventory_m": 8.58,
+      "depth_m": 43.51,
+      "box_area_fraction": 0.12433,
+      "tree_mask_fraction": 0.779,
+      "bottom_label": "grass",
+      "label_fractions": {
+        "tree": 0.779,
+        "sky": 0.145,
+        "plant": 0.03,
+        "grass": 0.02,
+        "building": 0.013
+      }
+    },
+    {
+      "candidate_id": "street:40715595:13333",
+      "stratum": "single_matched",
+      "image_id": "40715595",
+      "view_count": 1,
+      "score": 0.95,
+      "uncertainty_m": 5.891,
+      "nearest_inventory_m": 6.44,
+      "depth_m": 40.83,
+      "box_area_fraction": 0.13145,
+      "tree_mask_fraction": 0.346,
+      "bottom_label": "sky",
+      "label_fractions": {
+        "sky": 0.65,
+        "tree": 0.346,
+        "street lamp": 0.005
+      }
+    },
+    {
+      "candidate_id": "street:408156222:15210",
+      "stratum": "multi_matched",
+      "image_id": "408156222",
+      "view_count": 2,
+      "score": 0.95,
+      "uncertainty_m": 8.667,
+      "nearest_inventory_m": 3.05,
+      "depth_m": 45.06,
+      "box_area_fraction": 0.00705,
+      "tree_mask_fraction": 0.448,
+      "bottom_label": "tree",
+      "label_fractions": {
+        "tree": 0.448,
+        "sky": 0.443,
+        "street lamp": 0.108,
+        "pole": 0.001
+      }
+    },
+    {
+      "candidate_id": "street:411185714:14649",
+      "stratum": "multi_unmatched",
+      "image_id": "411185714",
+      "view_count": 2,
+      "score": 0.9332,
+      "uncertainty_m": 5.096,
+      "nearest_inventory_m": 21.54,
+      "depth_m": 57.33,
+      "box_area_fraction": 0.02109,
+      "tree_mask_fraction": 0.583,
+      "bottom_label": "road, route",
+      "label_fractions": {
+        "tree": 0.583,
+        "sky": 0.248,
+        "car": 0.084,
+        "traffic light": 0.034,
+        "building": 0.024
+      }
+    },
+    {
+      "candidate_id": "street:41487717:13692",
+      "stratum": "single_unmatched",
+      "image_id": "41487717",
+      "view_count": 1,
+      "score": 0.724,
+      "uncertainty_m": 3.913,
+      "nearest_inventory_m": 27.87,
+      "depth_m": 38.1,
+      "box_area_fraction": 0.01015,
+      "tree_mask_fraction": 0.598,
+      "bottom_label": "car",
+      "label_fractions": {
+        "tree": 0.598,
+        "sky": 0.267,
+        "car": 0.077,
+        "signboard, sign": 0.036,
+        "building": 0.017
+      }
+    },
+    {
+      "candidate_id": "street:42036464:13768",
+      "stratum": "single_matched",
+      "image_id": "42036464",
+      "view_count": 1,
+      "score": 0.95,
+      "uncertainty_m": 6.001,
+      "nearest_inventory_m": 6.01,
+      "depth_m": 40.56,
+      "box_area_fraction": 0.03881,
+      "tree_mask_fraction": 0.493,
+      "bottom_label": "building",
+      "label_fractions": {
+        "tree": 0.493,
+        "sky": 0.289,
+        "building": 0.178,
+        "street lamp": 0.04
+      }
+    },
+    {
+      "candidate_id": "street:42729260:14236",
+      "stratum": "single_unmatched",
+      "image_id": "42729260",
+      "view_count": 1,
+      "score": 0.95,
+      "uncertainty_m": 3.0,
+      "nearest_inventory_m": 40.37,
+      "depth_m": 38.95,
+      "box_area_fraction": 0.1201,
+      "tree_mask_fraction": 0.552,
+      "bottom_label": "car",
+      "label_fractions": {
+        "tree": 0.552,
+        "sky": 0.377,
+        "car": 0.046,
+        "street lamp": 0.019,
+        "wall": 0.004
+      }
+    },
+    {
+      "candidate_id": "street:42732431:14260",
+      "stratum": "single_matched",
+      "image_id": "42732431",
+      "view_count": 1,
+      "score": 0.95,
+      "uncertainty_m": 3.0,
+      "nearest_inventory_m": 4.65,
+      "depth_m": 14.19,
+      "box_area_fraction": 0.11331,
+      "tree_mask_fraction": 0.96,
+      "bottom_label": "car",
+      "label_fractions": {
+        "tree": 0.96,
+        "building": 0.022,
+        "sky": 0.011,
+        "car": 0.008
+      }
+    },
+    {
+      "candidate_id": "street:39480956:14480",
+      "stratum": "multi_unmatched",
+      "image_id": "43156223",
+      "view_count": 3,
+      "score": 0.95,
+      "uncertainty_m": 6.735,
+      "nearest_inventory_m": 59.75,
+      "depth_m": 10.14,
+      "box_area_fraction": 0.02441,
+      "tree_mask_fraction": 1.0,
+      "bottom_label": "tree",
+      "label_fractions": {
+        "tree": 1.0
+      }
+    },
+    {
+      "candidate_id": "street:24253103:8140",
+      "stratum": "multi_unmatched",
+      "image_id": "43341787",
+      "view_count": 3,
+      "score": 0.95,
+      "uncertainty_m": 7.472,
+      "nearest_inventory_m": 26.58,
+      "depth_m": 35.11,
+      "box_area_fraction": 0.02296,
+      "tree_mask_fraction": 0.754,
+      "bottom_label": "car",
+      "label_fractions": {
+        "tree": 0.754,
+        "sky": 0.158,
+        "car": 0.067,
+        "road, route": 0.008,
+        "street lamp": 0.005
+      }
+    },
+    {
+      "candidate_id": "street:23283050:14608",
+      "stratum": "multi_matched",
+      "image_id": "44127331",
+      "view_count": 4,
+      "score": 0.95,
+      "uncertainty_m": 5.743,
+      "nearest_inventory_m": 5.37,
+      "depth_m": 32.1,
+      "box_area_fraction": 0.02624,
+      "tree_mask_fraction": 0.527,
+      "bottom_label": "building",
+      "label_fractions": {
+        "tree": 0.527,
+        "signboard, sign": 0.408,
+        "building": 0.039,
+        "sky": 0.025,
+        "fence": 0.002
+      }
+    },
+    {
+      "candidate_id": "street:44846762:14731",
+      "stratum": "single_unmatched",
+      "image_id": "44846762",
+      "view_count": 1,
+      "score": 0.95,
+      "uncertainty_m": 3.0,
+      "nearest_inventory_m": 9.03,
+      "depth_m": 35.41,
+      "box_area_fraction": 0.02466,
+      "tree_mask_fraction": 0.839,
+      "bottom_label": "tree",
+      "label_fractions": {
+        "tree": 0.839,
+        "sky": 0.161
+      }
+    },
+    {
+      "candidate_id": "street:44915701:14753",
+      "stratum": "single_matched",
+      "image_id": "44915701",
+      "view_count": 1,
+      "score": 0.95,
+      "uncertainty_m": 3.0,
+      "nearest_inventory_m": 4.34,
+      "depth_m": 34.05,
+      "box_area_fraction": 0.13043,
+      "tree_mask_fraction": 0.562,
+      "bottom_label": "tree",
+      "label_fractions": {
+        "tree": 0.562,
+        "sky": 0.4,
+        "signboard, sign": 0.026,
+        "building": 0.012
+      }
+    },
+    {
+      "candidate_id": "street:45106347:15769",
+      "stratum": "multi_unmatched",
+      "image_id": "45106347",
+      "view_count": 2,
+      "score": 0.95,
+      "uncertainty_m": 6.509,
+      "nearest_inventory_m": 32.43,
+      "depth_m": 25.72,
+      "box_area_fraction": 0.00457,
+      "tree_mask_fraction": 0.268,
+      "bottom_label": "tree",
+      "label_fractions": {
+        "sky": 0.732,
+        "tree": 0.268
+      }
+    },
+    {
+      "candidate_id": "street:463817662:15076",
+      "stratum": "single_matched",
+      "image_id": "463817662",
+      "view_count": 1,
+      "score": 0.9145,
+      "uncertainty_m": 6.44,
+      "nearest_inventory_m": 1.88,
+      "depth_m": 61.11,
+      "box_area_fraction": 0.00693,
+      "tree_mask_fraction": 0.885,
+      "bottom_label": "car",
+      "label_fractions": {
+        "tree": 0.885,
+        "car": 0.065,
+        "sky": 0.047,
+        "mountain, mount": 0.003
+      }
+    },
+    {
+      "candidate_id": "street:467408261:15172",
+      "stratum": "multi_matched",
+      "image_id": "467408261",
+      "view_count": 2,
+      "score": 0.95,
+      "uncertainty_m": 9.438,
+      "nearest_inventory_m": 4.52,
+      "depth_m": 13.7,
+      "box_area_fraction": 0.03966,
+      "tree_mask_fraction": 0.768,
+      "bottom_label": "tree",
+      "label_fractions": {
+        "tree": 0.768,
+        "sky": 0.232
+      }
+    },
+    {
+      "candidate_id": "street:390211066:15178",
+      "stratum": "multi_matched",
+      "image_id": "467408509",
+      "view_count": 3,
+      "score": 0.95,
+      "uncertainty_m": 6.654,
+      "nearest_inventory_m": 3.61,
+      "depth_m": 39.85,
+      "box_area_fraction": 0.0152,
+      "tree_mask_fraction": 0.871,
+      "bottom_label": "car",
+      "label_fractions": {
+        "tree": 0.871,
+        "sky": 0.055,
+        "signboard, sign": 0.042,
+        "car": 0.029,
+        "building": 0.002
+      }
+    },
+    {
+      "candidate_id": "street:122037727:15228",
+      "stratum": "multi_matched",
+      "image_id": "468073053",
+      "view_count": 2,
+      "score": 0.95,
+      "uncertainty_m": 7.822,
+      "nearest_inventory_m": 7.15,
+      "depth_m": 24.02,
+      "box_area_fraction": 0.0123,
+      "tree_mask_fraction": 0.734,
+      "bottom_label": "tree",
+      "label_fractions": {
+        "tree": 0.734,
+        "sky": 0.249,
+        "traffic light": 0.017
+      }
+    },
+    {
+      "candidate_id": "street:47040113:15248",
+      "stratum": "single_unmatched",
+      "image_id": "47040113",
+      "view_count": 1,
+      "score": 0.6437,
+      "uncertainty_m": 5.883,
+      "nearest_inventory_m": 23.7,
+      "depth_m": 31.48,
+      "box_area_fraction": 0.01062,
+      "tree_mask_fraction": 0.644,
+      "bottom_label": "sidewalk, pavement",
+      "label_fractions": {
+        "tree": 0.644,
+        "sky": 0.179,
+        "road, route": 0.071,
+        "building": 0.031,
+        "car": 0.024
+      }
+    },
+    {
+      "candidate_id": "street:47174061:15421",
+      "stratum": "single_matched",
+      "image_id": "47174061",
+      "view_count": 1,
+      "score": 0.95,
+      "uncertainty_m": 3.0,
+      "nearest_inventory_m": 4.77,
+      "depth_m": 26.88,
+      "box_area_fraction": 0.08312,
+      "tree_mask_fraction": 0.944,
+      "bottom_label": "tree",
+      "label_fractions": {
+        "tree": 0.944,
+        "sky": 0.056
+      }
+    },
+    {
+      "candidate_id": "street:362965887:12264",
+      "stratum": "multi_unmatched",
+      "image_id": "48256500",
+      "view_count": 3,
+      "score": 0.601,
+      "uncertainty_m": 5.689,
+      "nearest_inventory_m": 9.74,
+      "depth_m": 53.15,
+      "box_area_fraction": 0.00776,
+      "tree_mask_fraction": 0.868,
+      "bottom_label": "tree",
+      "label_fractions": {
+        "tree": 0.868,
+        "traffic light": 0.075,
+        "sky": 0.056,
+        "street lamp": 0.0
+      }
+    },
+    {
+      "candidate_id": "street:483504653:15789",
+      "stratum": "single_unmatched",
+      "image_id": "483504653",
+      "view_count": 1,
+      "score": 0.8111,
+      "uncertainty_m": 7.355,
+      "nearest_inventory_m": 31.48,
+      "depth_m": 45.15,
+      "box_area_fraction": 0.0095,
+      "tree_mask_fraction": 0.618,
+      "bottom_label": "building",
+      "label_fractions": {
+        "tree": 0.618,
+        "building": 0.236,
+        "street lamp": 0.092,
+        "sky": 0.054
+      }
+    },
+    {
+      "candidate_id": "street:37721138:18089",
+      "stratum": "multi_unmatched",
+      "image_id": "48456703",
+      "view_count": 5,
+      "score": 0.95,
+      "uncertainty_m": 7.831,
+      "nearest_inventory_m": 20.47,
+      "depth_m": 17.37,
+      "box_area_fraction": 0.06088,
+      "tree_mask_fraction": 0.511,
+      "bottom_label": "sidewalk, pavement",
+      "label_fractions": {
+        "tree": 0.511,
+        "building": 0.197,
+        "sky": 0.125,
+        "plant": 0.074,
+        "grass": 0.061
+      }
+    },
+    {
+      "candidate_id": "street:23293566:2643",
+      "stratum": "multi_unmatched",
+      "image_id": "48833619",
+      "view_count": 5,
+      "score": 0.95,
+      "uncertainty_m": 8.922,
+      "nearest_inventory_m": 14.74,
+      "depth_m": 38.4,
+      "box_area_fraction": 0.05241,
+      "tree_mask_fraction": 0.839,
+      "bottom_label": "tree",
+      "label_fractions": {
+        "tree": 0.839,
+        "sky": 0.161
+      }
+    },
+    {
+      "candidate_id": "street:121350325:16595",
+      "stratum": "multi_matched",
+      "image_id": "48876458",
+      "view_count": 6,
+      "score": 0.95,
+      "uncertainty_m": 7.554,
+      "nearest_inventory_m": 2.91,
+      "depth_m": 15.32,
+      "box_area_fraction": 0.06377,
+      "tree_mask_fraction": 0.938,
+      "bottom_label": "earth, ground",
+      "label_fractions": {
+        "tree": 0.938,
+        "earth, ground": 0.054,
+        "grass": 0.008
+      }
+    },
+    {
+      "candidate_id": "street:49222468:16015",
+      "stratum": "single_matched",
+      "image_id": "49222468",
+      "view_count": 1,
+      "score": 0.95,
+      "uncertainty_m": 4.925,
+      "nearest_inventory_m": 3.81,
+      "depth_m": 39.88,
+      "box_area_fraction": 0.00544,
+      "tree_mask_fraction": 0.903,
+      "bottom_label": "fence",
+      "label_fractions": {
+        "tree": 0.903,
+        "traffic light": 0.047,
+        "sky": 0.038,
+        "fence": 0.012
+      }
+    },
+    {
+      "candidate_id": "street:49223247:16019",
+      "stratum": "multi_unmatched",
+      "image_id": "49223247",
+      "view_count": 2,
+      "score": 0.95,
+      "uncertainty_m": 4.93,
+      "nearest_inventory_m": 35.64,
+      "depth_m": 39.62,
+      "box_area_fraction": 0.02494,
+      "tree_mask_fraction": 0.716,
+      "bottom_label": "grass",
+      "label_fractions": {
+        "tree": 0.716,
+        "truck": 0.161,
+        "sky": 0.074,
+        "grass": 0.015,
+        "street lamp": 0.015
+      }
+    },
+    {
+      "candidate_id": "street:50945890:16246",
+      "stratum": "single_unmatched",
+      "image_id": "50945890",
+      "view_count": 1,
+      "score": 0.9008,
+      "uncertainty_m": 7.827,
+      "nearest_inventory_m": 8.56,
+      "depth_m": 19.95,
+      "box_area_fraction": 0.01188,
+      "tree_mask_fraction": 0.786,
+      "bottom_label": "tree",
+      "label_fractions": {
+        "tree": 0.786,
+        "sky": 0.214
+      }
+    },
+    {
+      "candidate_id": "street:287633913:16258",
+      "stratum": "multi_matched",
+      "image_id": "50945958",
+      "view_count": 2,
+      "score": 0.95,
+      "uncertainty_m": 8.041,
+      "nearest_inventory_m": 4.17,
+      "depth_m": 37.89,
+      "box_area_fraction": 0.02167,
+      "tree_mask_fraction": 0.828,
+      "bottom_label": "plant",
+      "label_fractions": {
+        "tree": 0.828,
+        "sky": 0.13,
+        "building": 0.027,
+        "plant": 0.013,
+        "wall": 0.003
+      }
+    },
+    {
+      "candidate_id": "street:375125360:16598",
+      "stratum": "multi_matched",
+      "image_id": "53314955",
+      "view_count": 3,
+      "score": 0.95,
+      "uncertainty_m": 5.604,
+      "nearest_inventory_m": 2.67,
+      "depth_m": 34.17,
+      "box_area_fraction": 0.0322,
+      "tree_mask_fraction": 0.798,
+      "bottom_label": "tree",
+      "label_fractions": {
+        "tree": 0.798,
+        "sky": 0.171,
+        "street lamp": 0.031
+      }
+    },
+    {
+      "candidate_id": "street:53333437:16649",
+      "stratum": "single_matched",
+      "image_id": "53333437",
+      "view_count": 1,
+      "score": 0.95,
+      "uncertainty_m": 8.237,
+      "nearest_inventory_m": 1.3,
+      "depth_m": 30.2,
+      "box_area_fraction": 0.01984,
+      "tree_mask_fraction": 0.716,
+      "bottom_label": "sky",
+      "label_fractions": {
+        "tree": 0.716,
+        "sky": 0.2,
+        "street lamp": 0.046,
+        "truck": 0.038
+      }
+    },
+    {
+      "candidate_id": "street:53428795:16750",
+      "stratum": "single_unmatched",
+      "image_id": "53428795",
+      "view_count": 1,
+      "score": 0.7498,
+      "uncertainty_m": 3.0,
+      "nearest_inventory_m": 27.79,
+      "depth_m": 57.41,
+      "box_area_fraction": 0.01446,
+      "tree_mask_fraction": 0.262,
+      "bottom_label": "plant",
+      "label_fractions": {
+        "building": 0.382,
+        "sky": 0.33,
+        "tree": 0.262,
+        "plant": 0.02,
+        "wall": 0.005
+      }
+    },
+    {
+      "candidate_id": "street:141701781:16838",
+      "stratum": "multi_matched",
+      "image_id": "53493999",
+      "view_count": 2,
+      "score": 0.95,
+      "uncertainty_m": 7.635,
+      "nearest_inventory_m": 5.54,
+      "depth_m": 17.11,
+      "box_area_fraction": 0.06646,
+      "tree_mask_fraction": 1.0,
+      "bottom_label": "tree",
+      "label_fractions": {
+        "tree": 1.0
+      }
+    },
+    {
+      "candidate_id": "street:29176597:19498",
+      "stratum": "multi_matched",
+      "image_id": "55895418",
+      "view_count": 3,
+      "score": 0.95,
+      "uncertainty_m": 6.067,
+      "nearest_inventory_m": 3.84,
+      "depth_m": 46.56,
+      "box_area_fraction": 0.06444,
+      "tree_mask_fraction": 0.879,
+      "bottom_label": "earth, ground",
+      "label_fractions": {
+        "tree": 0.879,
+        "car": 0.044,
+        "plant": 0.036,
+        "sky": 0.032,
+        "earth, ground": 0.007
+      }
+    },
+    {
+      "candidate_id": "street:576628706:17223",
+      "stratum": "single_matched",
+      "image_id": "576628706",
+      "view_count": 1,
+      "score": 0.604,
+      "uncertainty_m": 3.0,
+      "nearest_inventory_m": 4.25,
+      "depth_m": 30.95,
+      "box_area_fraction": 0.00919,
+      "tree_mask_fraction": 0.695,
+      "bottom_label": "fence",
+      "label_fractions": {
+        "tree": 0.695,
+        "signboard, sign": 0.166,
+        "fence": 0.106,
+        "building": 0.023,
+        "plant": 0.01
+      }
+    },
+    {
+      "candidate_id": "street:57896023:17266",
+      "stratum": "single_unmatched",
+      "image_id": "57896023",
+      "view_count": 1,
+      "score": 0.95,
+      "uncertainty_m": 6.309,
+      "nearest_inventory_m": 9.22,
+      "depth_m": 33.16,
+      "box_area_fraction": 0.01868,
+      "tree_mask_fraction": 0.851,
+      "bottom_label": "car",
+      "label_fractions": {
+        "tree": 0.851,
+        "sky": 0.126,
+        "car": 0.017,
+        "fence": 0.005
+      }
+    },
+    {
+      "candidate_id": "street:24306436:18855",
+      "stratum": "multi_matched",
+      "image_id": "64958415",
+      "view_count": 8,
+      "score": 0.95,
+      "uncertainty_m": 8.673,
+      "nearest_inventory_m": 7.08,
+      "depth_m": 12.28,
+      "box_area_fraction": 0.04003,
+      "tree_mask_fraction": 0.791,
+      "bottom_label": "sidewalk, pavement",
+      "label_fractions": {
+        "tree": 0.791,
+        "sky": 0.124,
+        "car": 0.083,
+        "sidewalk, pavement": 0.002,
+        "wall": 0.0
+      }
+    },
+    {
+      "candidate_id": "street:65059179:17805",
+      "stratum": "single_matched",
+      "image_id": "65059179",
+      "view_count": 1,
+      "score": 0.95,
+      "uncertainty_m": 8.104,
+      "nearest_inventory_m": 7.71,
+      "depth_m": 21.49,
+      "box_area_fraction": 0.03125,
+      "tree_mask_fraction": 0.838,
+      "bottom_label": "car",
+      "label_fractions": {
+        "tree": 0.838,
+        "car": 0.089,
+        "sky": 0.057,
+        "building": 0.013,
+        "signboard, sign": 0.002
+      }
+    },
+    {
+      "candidate_id": "street:66092647:17865",
+      "stratum": "single_unmatched",
+      "image_id": "66092647",
+      "view_count": 1,
+      "score": 0.95,
+      "uncertainty_m": 3.0,
+      "nearest_inventory_m": 11.24,
+      "depth_m": 23.06,
+      "box_area_fraction": 0.11282,
+      "tree_mask_fraction": 0.672,
+      "bottom_label": "building",
+      "label_fractions": {
+        "tree": 0.672,
+        "building": 0.262,
+        "sky": 0.047,
+        "plant": 0.008,
+        "pole": 0.008
+      }
+    },
+    {
+      "candidate_id": "street:31897329:18084",
+      "stratum": "multi_unmatched",
+      "image_id": "69571353",
+      "view_count": 5,
+      "score": 0.95,
+      "uncertainty_m": 7.369,
+      "nearest_inventory_m": 9.6,
+      "depth_m": 30.69,
+      "box_area_fraction": 0.02147,
+      "tree_mask_fraction": 0.934,
+      "bottom_label": "street lamp",
+      "label_fractions": {
+        "tree": 0.934,
+        "street lamp": 0.048,
+        "sky": 0.01,
+        "building": 0.008
+      }
+    },
+    {
+      "candidate_id": "street:23486075:18088",
+      "stratum": "multi_unmatched",
+      "image_id": "69821577",
+      "view_count": 4,
+      "score": 0.95,
+      "uncertainty_m": 6.83,
+      "nearest_inventory_m": 17.36,
+      "depth_m": 20.94,
+      "box_area_fraction": 0.2001,
+      "tree_mask_fraction": 0.938,
+      "bottom_label": "tree",
+      "label_fractions": {
+        "tree": 0.938,
+        "sky": 0.061,
+        "plant": 0.002
+      }
+    },
+    {
+      "candidate_id": "street:182424269:18322",
+      "stratum": "multi_matched",
+      "image_id": "70071425",
+      "view_count": 3,
+      "score": 0.95,
+      "uncertainty_m": 8.897,
+      "nearest_inventory_m": 4.74,
+      "depth_m": 23.43,
+      "box_area_fraction": 0.02168,
+      "tree_mask_fraction": 0.483,
+      "bottom_label": "traffic light",
+      "label_fractions": {
+        "tree": 0.483,
+        "building": 0.198,
+        "sky": 0.142,
+        "signboard, sign": 0.099,
+        "street lamp": 0.035
+      }
+    },
+    {
+      "candidate_id": "street:70127023:18355",
+      "stratum": "single_matched",
+      "image_id": "70127023",
+      "view_count": 1,
+      "score": 0.7777,
+      "uncertainty_m": 3.0,
+      "nearest_inventory_m": 3.38,
+      "depth_m": 45.45,
+      "box_area_fraction": 0.01545,
+      "tree_mask_fraction": 0.693,
+      "bottom_label": "tree",
+      "label_fractions": {
+        "tree": 0.693,
+        "sky": 0.287,
+        "signboard, sign": 0.02
+      }
+    },
+    {
+      "candidate_id": "street:70141751:18409",
+      "stratum": "single_unmatched",
+      "image_id": "70141751",
+      "view_count": 1,
+      "score": 0.95,
+      "uncertainty_m": 7.866,
+      "nearest_inventory_m": 23.32,
+      "depth_m": 27.44,
+      "box_area_fraction": 0.04948,
+      "tree_mask_fraction": 0.703,
+      "bottom_label": "car",
+      "label_fractions": {
+        "tree": 0.703,
+        "sky": 0.208,
+        "grass": 0.053,
+        "car": 0.025,
+        "plant": 0.011
+      }
+    },
+    {
+      "candidate_id": "street:29847588:18477",
+      "stratum": "multi_unmatched",
+      "image_id": "70215367",
+      "view_count": 2,
+      "score": 0.8937,
+      "uncertainty_m": 5.231,
+      "nearest_inventory_m": 10.43,
+      "depth_m": 45.74,
+      "box_area_fraction": 0.01539,
+      "tree_mask_fraction": 0.644,
+      "bottom_label": "building",
+      "label_fractions": {
+        "tree": 0.644,
+        "building": 0.256,
+        "sky": 0.091,
+        "pole": 0.009
+      }
+    },
+    {
+      "candidate_id": "street:129118049:18504",
+      "stratum": "multi_unmatched",
+      "image_id": "70234131",
+      "view_count": 5,
+      "score": 0.95,
+      "uncertainty_m": 6.685,
+      "nearest_inventory_m": 16.52,
+      "depth_m": 35.98,
+      "box_area_fraction": 0.07819,
+      "tree_mask_fraction": 0.921,
+      "bottom_label": "tree",
+      "label_fractions": {
+        "tree": 0.921,
+        "sky": 0.077,
+        "street lamp": 0.001
+      }
+    },
+    {
+      "candidate_id": "street:75600399:18990",
+      "stratum": "single_unmatched",
+      "image_id": "75600399",
+      "view_count": 1,
+      "score": 0.5487,
+      "uncertainty_m": 3.0,
+      "nearest_inventory_m": 19.53,
+      "depth_m": 32.25,
+      "box_area_fraction": 0.00719,
+      "tree_mask_fraction": 0.648,
+      "bottom_label": "tree",
+      "label_fractions": {
+        "tree": 0.648,
+        "sky": 0.32,
+        "building": 0.032
+      }
+    },
+    {
+      "candidate_id": "street:75600815:19007",
+      "stratum": "single_matched",
+      "image_id": "75600815",
+      "view_count": 1,
+      "score": 0.95,
+      "uncertainty_m": 5.927,
+      "nearest_inventory_m": 3.69,
+      "depth_m": 41.68,
+      "box_area_fraction": 0.08524,
+      "tree_mask_fraction": 0.879,
+      "bottom_label": "tree",
+      "label_fractions": {
+        "tree": 0.879,
+        "sky": 0.121
+      }
+    },
+    {
+      "candidate_id": "street:28102663:19107",
+      "stratum": "multi_unmatched",
+      "image_id": "77886617",
+      "view_count": 2,
+      "score": 0.9464,
+      "uncertainty_m": 7.097,
+      "nearest_inventory_m": 25.49,
+      "depth_m": 54.15,
+      "box_area_fraction": 0.00917,
+      "tree_mask_fraction": 0.774,
+      "bottom_label": "building",
+      "label_fractions": {
+        "tree": 0.774,
+        "building": 0.137,
+        "street lamp": 0.073,
+        "sky": 0.009,
+        "signboard, sign": 0.007
+      }
+    },
+    {
+      "candidate_id": "street:30497941:19176",
+      "stratum": "multi_matched",
+      "image_id": "81845053",
+      "view_count": 6,
+      "score": 0.95,
+      "uncertainty_m": 8.831,
+      "nearest_inventory_m": 2.96,
+      "depth_m": 18.81,
+      "box_area_fraction": 0.04988,
+      "tree_mask_fraction": 0.556,
+      "bottom_label": "tree",
+      "label_fractions": {
+        "tree": 0.556,
+        "building": 0.303,
+        "fence": 0.052,
+        "signboard, sign": 0.045,
+        "sky": 0.03
+      }
+    },
+    {
+      "candidate_id": "street:100266043:12307",
+      "stratum": "multi_unmatched",
+      "image_id": "82751951",
+      "view_count": 7,
+      "score": 0.95,
+      "uncertainty_m": 7.94,
+      "nearest_inventory_m": 12.48,
+      "depth_m": 17.13,
+      "box_area_fraction": 0.06686,
+      "tree_mask_fraction": 0.808,
+      "bottom_label": "sky",
+      "label_fractions": {
+        "tree": 0.808,
+        "sky": 0.192
+      }
+    },
+    {
+      "candidate_id": "street:117247693:1749",
+      "stratum": "multi_matched",
+      "image_id": "92149381",
+      "view_count": 4,
+      "score": 0.95,
+      "uncertainty_m": 7.025,
+      "nearest_inventory_m": 4.64,
+      "depth_m": 13.36,
+      "box_area_fraction": 0.11083,
+      "tree_mask_fraction": 0.965,
+      "bottom_label": "tree",
+      "label_fractions": {
+        "tree": 0.965,
+        "sky": 0.035
+      }
+    }
+  ],
+  "contact_sheets": [
+    "/srv/shared-data/gep/ws4/external/street_trees/p69_audit_sheets/p69-audit-sheet-1.png",
+    "/srv/shared-data/gep/ws4/external/street_trees/p69_audit_sheets/p69-audit-sheet-2.png",
+    "/srv/shared-data/gep/ws4/external/street_trees/p69_audit_sheets/p69-audit-sheet-3.png",
+    "/srv/shared-data/gep/ws4/external/street_trees/p69_audit_sheets/p69-audit-sheet-4.png"
+  ],
+  "note": "Descriptive audit of the existing semantic model; not a field-validated precision or recall estimate."
+}

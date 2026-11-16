@@ -1,0 +1,13 @@
+{
+  "schema_version": "fresh-urban-forest.street-tree-confidence-sample.v1",
+  "phase": "P69",
+  "candidate_count": 19790,
+  "multi_view_count": 8608,
+  "multi_view_fraction": 0.435,
+  "multi_view_inventory_matched_count": 2610,
+  "multi_view_inventory_match_fraction": 0.3032,
+  "multi_view_median_nearest_inventory_m": 13.44,
+  "all_inventory_matched_count": 6078,
+  "tier_definition": "multi_view_screen = view_count >= 2; single_view_screen = view_count == 1",
+  "note": "Sample-only confidence tier; no canonical overwrite, probability, precision, or field-validation claim."
+}

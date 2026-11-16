@@ -114,6 +114,28 @@ precision estimates.
 The demo layer now shows a dynamic candidate count beside the `street trees` toggle and
 carries the screening caveat.
 
+Detector and trunk-base audit
+-----------------------------
+
+P69 audited 200 stratified candidates against the existing OneFormer masks. Median tree-mask
+coverage inside the box was 0.703, but 42/200 boxes had less than half tree pixels. Only
+87/200 bottom-centre pixels were labelled `tree`; the rest were building, car, sky, pavement,
+plant, fence, grass, or road. Multi-view candidates were somewhat better than single-view
+(51/100 vs 36/100 tree at the bottom centre), but the inventory-match fraction was unchanged
+at 8 m (30.3% vs 30.7%).
+
+A Grounding DINO `tree trunk` trial (Apache-2.0) found at least one trunk detection in 20/20
+sample images, but only 3/20 best trunk boxes overlapped the current candidate box; many were
+margin trunks or poles. It was not integrated.
+
+A multi-view screening subset (8,608 candidates) is available only as an external sample
+file. The canonical 19,790-feature layer is unchanged. The next detector should identify a
+trunk/base or use a ground-plane constraint rather than adding more imagery.
+
+Details: ``notes/reports/p69-trunk-audit.md``,
+``notes/reports/p69-mask-audit.json``, ``notes/reports/p69-trunk-trial.json``, and
+``notes/reports/p69-confidence-sample.json``.
+
 Details: ``notes/reports/p68-street-audit.md``,
 ``notes/reports/p68-fov-sensitivity.json``,
 ``notes/reports/p68-inventory-sensitivity.json``, and
